@@ -42,7 +42,7 @@ class _LoadScreenState extends State<LoadScreen> {
             ),
             const SizedBox(height: 10),
             const Text(
-              'Parkir Lebih Mudah',
+              'Easier to Park',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
