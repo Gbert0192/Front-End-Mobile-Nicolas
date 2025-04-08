@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/landing/step2.dart';
+import 'package:tugas_front_end_nicolas/signIn/signIn.dart';
 
 class LandingStep extends StatelessWidget {
   const LandingStep({super.key});
@@ -19,12 +21,15 @@ class LandingStep extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               const Text(
-                'Find parking around you easily\nand online',
+                'Find parking around you easily and online',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 40),
-              Image.asset('assets/img/car_blue.png', height: 200),
+              Image.asset(
+                'assets/starting/toy car turn right blue.png',
+                height: 200,
+              ),
               const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -34,9 +39,14 @@ class LandingStep extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LandingStep2()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF5C6BC0),
+                    backgroundColor: const Color(0xFF4D5DFA),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -52,15 +62,24 @@ class LandingStep extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignIn()),
+                    );
+                  },
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFCCCCCC)),
+                    backgroundColor: const Color(0x334D5DFA),
+                    side: const BorderSide(color: Color(0x334D5DFA)),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
-                  child: const Text('Skip'),
+                  child: const Text(
+                    'Skip',
+                    style: TextStyle(color: Color(0xFF4D5DFA)),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

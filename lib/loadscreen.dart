@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'landingstep.dart';
+import 'landing/step1.dart';
 
 class LoadScreen extends StatefulWidget {
   const LoadScreen({super.key});
@@ -29,7 +29,7 @@ class _LoadScreenState extends State<LoadScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/parkir_com_logo.png', height: 150),
+            Image.asset('assets/Logo.png', height: 150),
             const SizedBox(height: 30),
             const Text(
               'PARK-ID',
