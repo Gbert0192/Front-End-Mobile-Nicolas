@@ -32,7 +32,7 @@ class _LoadScreenState extends State<LoadScreen> {
             Image.asset('assets/parkir_com_logo.png', height: 150),
             const SizedBox(height: 30),
             const Text(
-              'PARKIR.COM',
+              'PARK-ID',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 28,
