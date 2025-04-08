@@ -1,4 +1,4 @@
-# tugas_front_end_nicolas
+# tugas_front_end_nicholas
 
 A new Flutter project.
 
