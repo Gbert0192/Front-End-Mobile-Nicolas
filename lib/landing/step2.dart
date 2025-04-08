@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/signIn/signIn.dart';
+import 'package:tugas_front_end_nicolas/afterLandingPage.dart';
 import 'step3.dart';
 
 class LandingStep2 extends StatelessWidget {
@@ -66,7 +66,9 @@ class LandingStep2 extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignIn()),
+                      MaterialPageRoute(
+                        builder: (context) => AfterLandingPage(),
+                      ),
                     );
                   },
                   style: OutlinedButton.styleFrom(
