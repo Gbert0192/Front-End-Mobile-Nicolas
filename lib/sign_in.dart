@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
 import 'package:tugas_front_end_nicolas/sign_up.dart';
 
 class SignIn extends StatefulWidget {
