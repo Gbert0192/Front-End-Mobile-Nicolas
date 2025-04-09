@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/afterLandingPage.dart';
+import 'package:tugas_front_end_nicolas/after_landing_page.dart';
 import 'step3.dart';
 
 class LandingStep2 extends StatelessWidget {
@@ -85,7 +85,7 @@ class LandingStep2 extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 60),
             ],
           ),
         ),
