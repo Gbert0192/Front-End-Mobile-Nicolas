@@ -38,6 +38,8 @@ class AfterLandingPage extends StatelessWidget {
               const SizedBox(height: 40),
               Image.asset('starting/lot2.png', height: 250),
               const Spacer(),
+
+              //Sign In Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -61,6 +63,8 @@ class AfterLandingPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+
+              //Sign Up Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
