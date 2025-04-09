@@ -59,7 +59,7 @@ class LandingStep3 extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 125),
+              const SizedBox(height: 105),
             ],
           ),
         ),
