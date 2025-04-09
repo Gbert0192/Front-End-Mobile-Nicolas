@@ -29,7 +29,7 @@ class _LoadScreenState extends State<LoadScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/Logo.png', height: 150),
+            Image.asset('assets/logo.png', height: 150),
             const SizedBox(height: 30),
             const Text(
               'PARK-ID',
