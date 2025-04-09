@@ -26,6 +26,22 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Sign Up')));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            children: [
+              SizedBox(height: 40),
+              const Text(
+                'WELCOME TO PARK-ID',
+                style: TextStyle(fontSize: 55, color: Color(0xFFA03CDD)),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
