@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/loadscreen.dart';
+import 'package:tugas_front_end_nicolas/sign_in.dart';
+import 'package:tugas_front_end_nicolas/sign_up.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       debugShowCheckedModeBanner: false,
-      home: LoadScreen(),
+      home: SignIn(),
     );
   }
 }
