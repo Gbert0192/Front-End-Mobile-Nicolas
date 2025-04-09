@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/sign_in.dart';
+import 'package:tugas_front_end_nicolas/user_data.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -11,7 +12,6 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
 
-  String emailText = "lisa1204@gmail.com";
   bool? isEmailEmpty;
 
   @override
@@ -91,26 +91,16 @@ class _SignUpState extends State<SignUp> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  // onPressed: () {
-                  //   if (emailController.text.isEmpty) {
-                  //     isEmailEmpty = true;
-                  //   } else {
-                  //     setState(() {
-                  //       isEmailEmpty = false;
-                  //     });
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => SignIn()),
-                  //     );
-                  //   }
-                  // },
                   onPressed: () {
                     setState(() {
                       isEmailEmpty = emailController.text.isEmpty;
                     });
                     if (!isEmailEmpty!) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Sign Up Success!')),
+                        SnackBar(
+                          content: Text('Sign Up Success!'),
+                          backgroundColor: Colors.green,
+                        ),
                       );
                     }
                   },
