@@ -25,33 +25,65 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(12),
+                elevation: 1,
+              ),
+              child: const Icon(Icons.arrow_back, color: Colors.black),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              SizedBox(height: 40),
+              // SizedBox(height: 40),
               const Text(
                 'WELCOME TO PARK-ID',
-                style: TextStyle(fontSize: 50, color: Color(0xFFA03CDD)),
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFA03CDD),
+                ),
               ),
               SizedBox(height: 40),
               Image.asset('assets/starting/Enter Park.png', height: 300),
+              // Email Field
               TextField(
                 controller: emailController,
                 decoration: InputDecoration(
+                  hintText: 'Email',
+                  labelText: 'Email',
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  labelText: 'Email',
-                  errorText:
-                      isEmailEmpty == true ? '*Email Must be Filled' : null,
+                  errorText: isEmailEmpty! ? '*Email Must be Filled' : null,
+                  filled: true,
+                  fillColor:
+                      isEmailEmpty == true
+                          ? const Color(0xFFFFEDED)
+                          : Colors.white,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 16,
                   ),
-                  errorBorder: OutlineInputBorder(
+                  errorBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.red),
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
                 ),
               ),
@@ -59,16 +91,26 @@ class _SignUpState extends State<SignUp> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
+                  // onPressed: () {
+                  //   if (emailController.text.isEmpty) {
+                  //     isEmailEmpty = true;
+                  //   } else {
+                  //     setState(() {
+                  //       isEmailEmpty = false;
+                  //     });
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => SignIn()),
+                  //     );
+                  //   }
+                  // },
                   onPressed: () {
-                    if (emailController.text.isEmpty) {
-                      isEmailEmpty = true;
-                    } else {
-                      setState(() {
-                        isEmailEmpty = false;
-                      });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignIn()),
+                    setState(() {
+                      isEmailEmpty = emailController.text.isEmpty;
+                    });
+                    if (!isEmailEmpty!) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Sign Up Success!')),
                       );
                     }
                   },
