@@ -43,12 +43,15 @@ class _SignUpState extends State<SignUp> {
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  label: const Text('Email'),
+                  labelText: 'Email',
                   errorText:
                       isEmailEmpty == true ? '*Email Must be Filled' : null,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 16,
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.red),
                   ),
                 ),
               ),
@@ -79,6 +82,54 @@ class _SignUpState extends State<SignUp> {
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              SizedBox(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 2,
+                        width: double.infinity,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        'Or',
+                        style: TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        height: 2,
+                        width: double.infinity,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Already Sign Up?',
+                style: TextStyle(color: Color(0xFF10297F)),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignIn()),
+                    );
+                  },
+                  child: const Text(
+                    'Sign In',
+                    style: TextStyle(color: Color(0xFF1F1E5B)),
                   ),
                 ),
               ),
