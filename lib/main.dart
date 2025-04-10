@@ -24,6 +24,7 @@ class MainApp extends StatelessWidget {
       nextScreen: StepperScreens(),
       splashTransition: SplashTransition.fadeTransition,
       backgroundColor: Colors.blue[800]!,
+      splashIconSize: double.infinity,
     );
   }
 }
