@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/forget_password.dart';
 import 'package:tugas_front_end_nicolas/loadscreen.dart';
 import 'package:tugas_front_end_nicolas/sign_in.dart';
 import 'package:tugas_front_end_nicolas/sign_up.dart';
 import 'package:tugas_front_end_nicolas/user_data.dart';
+import 'package:tugas_front_end_nicolas/verify_otp_email.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +38,7 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       // home: SignIn(),
-      home: UserData(),
+      home: VerifyOtpEmail(),
     );
   }
 }
