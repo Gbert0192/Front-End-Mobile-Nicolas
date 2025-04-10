@@ -1,22 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'landing/step1.dart';
+import 'package:tugas_front_end_nicolas/screens/stepper.dart';
 
-class LoadScreen extends StatefulWidget {
-  const LoadScreen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<LoadScreen> createState() => _LoadScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _LoadScreenState extends State<LoadScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const LandingStep()),
+        MaterialPageRoute(builder: (context) => StepperScreens()),
       );
     });
   }

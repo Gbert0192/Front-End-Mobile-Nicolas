@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/sign_in.dart';
-import 'package:tugas_front_end_nicolas/sign_up.dart';
+import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
+import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
 
-class AfterLandingPage extends StatelessWidget {
-  const AfterLandingPage({super.key});
+class LandingPage extends StatelessWidget {
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {

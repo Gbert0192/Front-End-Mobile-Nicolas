@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/after_landing_page.dart';
+import 'package:tugas_front_end_nicolas/screens/landing_screen.dart';
 
 class LandingStep3 extends StatelessWidget {
   const LandingStep3({super.key});
@@ -41,9 +41,7 @@ class LandingStep3 extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => AfterLandingPage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => LandingPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

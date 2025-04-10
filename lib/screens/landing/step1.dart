@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/after_landing_page.dart';
-import 'step3.dart';
+import 'package:tugas_front_end_nicolas/screens/landing/step2.dart';
+import 'package:tugas_front_end_nicolas/screens/landing_screen.dart';
 
-class LandingStep2 extends StatelessWidget {
-  const LandingStep2({super.key});
+class LandingStep extends StatelessWidget {
+  const LandingStep({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,25 +16,24 @@ class LandingStep2 extends StatelessWidget {
             children: [
               const SizedBox(height: 40),
               const Text(
-                'Book and Pay for Parking Quickly and Easily',
-                textAlign: TextAlign.center,
+                'Find Parking Easily',
                 style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               const Text(
-                'Make a booking for your parking and make a payment quickly and easier',
+                'Find parking around you easily and online',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.grey, fontSize: 16),
               ),
               const SizedBox(height: 40),
               Image.asset(
-                'assets/starting/back view of toy car turn right blue.png',
+                'assets/starting/toy car turn right blue.png',
                 height: 200,
               ),
               const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [buildDot(), buildDot(isActive: true), buildDot()],
+                children: [buildDot(isActive: true), buildDot(), buildDot()],
               ),
               const Spacer(),
               SizedBox(
@@ -43,7 +42,7 @@ class LandingStep2 extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LandingStep3()),
+                      MaterialPageRoute(builder: (context) => LandingStep2()),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -66,9 +65,7 @@ class LandingStep2 extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => AfterLandingPage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => LandingPage()),
                     );
                   },
                   style: OutlinedButton.styleFrom(

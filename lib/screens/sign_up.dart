@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/sign_in.dart';
+import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
