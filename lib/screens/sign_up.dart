@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
-import 'package:tugas_front_end_nicolas/sign_in.dart';
 import 'package:tugas_front_end_nicolas/user_data.dart';
 
 class SignUp extends StatefulWidget {
@@ -97,6 +96,10 @@ class _SignUpState extends State<SignUp> {
                       isEmailEmpty = emailController.text.isEmpty;
                     });
                     if (!isEmailEmpty!) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserData()),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Sign Up Success!'),

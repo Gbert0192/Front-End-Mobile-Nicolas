@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:tugas_front_end_nicolas/home.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});
@@ -17,6 +19,8 @@ class _UserDataState extends State<UserData> {
   bool isButtonEnabled = false;
   bool isObscure = true;
   bool isPasswordMatch = false;
+
+  File? _selectedImage;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -40,6 +44,34 @@ class _UserDataState extends State<UserData> {
     setState(() {
       isButtonEnabled = nameController.text.isNotEmpty;
     });
+  }
+
+  void _showImageSourceActionSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: Icon(Icons.photo_library),
+              title: Text('Pick from Gallery'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImageFromGallery();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.camera_alt),
+              title: Text('Pick from Camera'),
+              onTap: () {
+                Navigator.pop(context);
+                _pickImageFromCamera();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -84,11 +116,18 @@ class _UserDataState extends State<UserData> {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.grey[300],
-                    child: Icon(
-                      Icons.person_rounded,
-                      size: 100,
-                      color: Colors.grey[400],
-                    ),
+                    backgroundImage:
+                        _selectedImage != null
+                            ? FileImage(_selectedImage!)
+                            : null,
+                    child:
+                        _selectedImage == null
+                            ? const Icon(
+                              Icons.person_rounded,
+                              size: 100,
+                              color: Colors.grey,
+                            )
+                            : null,
                   ),
                   Positioned(
                     bottom: 0,
@@ -101,7 +140,9 @@ class _UserDataState extends State<UserData> {
                         border: Border.all(color: Colors.white, width: 2),
                       ),
                       child: IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _showImageSourceActionSheet();
+                        },
                         constraints: BoxConstraints(
                           minHeight: 16,
                           minWidth: 16,
@@ -296,5 +337,27 @@ class _UserDataState extends State<UserData> {
         ),
       ),
     );
+  }
+
+  Future _pickImageFromGallery() async {
+    final returnedImage = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (returnedImage == null) return;
+    setState(() {
+      _selectedImage = File(returnedImage!.path);
+    });
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnedImage = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+    );
+
+    if (returnedImage == null) return;
+    setState(() {
+      _selectedImage = File(returnedImage!.path);
+    });
   }
 }

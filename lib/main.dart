@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/stepper.dart';
+import 'package:tugas_front_end_nicolas/user_data.dart';
 
 void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "ParKID",
-      home: MainApp(),
+      home: UserData(),
     ),
   );
 }
