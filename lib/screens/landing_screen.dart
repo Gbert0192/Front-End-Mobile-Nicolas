@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
 
-class LandingPage extends StatelessWidget {
-  const LandingPage({super.key});
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class LandingPage extends StatelessWidget {
                 style: TextStyle(fontSize: 16.0, color: Colors.grey),
               ),
               const SizedBox(height: 40),
-              Image.asset('starting/lot2.png', height: 250),
+              Image.asset('assets/starting/lot2.png', height: 250),
               const Spacer(),
               SizedBox(
                 width: double.infinity,
