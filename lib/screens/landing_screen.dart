@@ -38,6 +38,8 @@ class LandingScreen extends StatelessWidget {
               const SizedBox(height: 40),
               Image.asset('assets/starting/lot2.png', height: 250),
               const Spacer(),
+
+              //Sign In Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -61,6 +63,8 @@ class LandingScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
+
+              //Sign Up Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
