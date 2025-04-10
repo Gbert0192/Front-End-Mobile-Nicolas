@@ -8,7 +8,25 @@ class StepperScreens extends StatefulWidget {
 
 class _StepperScreensState extends State<StepperScreens> {
   final PageController _controller = PageController();
-  final List<String> steps = ['Step 1', 'Step 2', 'Step 3'];
+  final List<Map<String, String>> steps = [
+    {
+      "title": "Find Parking Easily",
+      "subtitle": "Find parking around you easily and online",
+      "image": "assets/starting/toy car turn right blue.png",
+    },
+    {
+      "title": "Book and Pay for Parking Quickly and Easily",
+      "subtitle":
+          "Make a booking for your parking and make a payment quickly and easier",
+      "image": "assets/starting/back view of toy car turn right blue.png",
+    },
+    {
+      "title": "Park According to the Desired Time",
+      "subtitle":
+          "Can decide when parking time is and determine when it’s time to leave",
+      "image": "assets/starting/toy car turn left blue.png",
+    },
+  ];
 
   int currentPage = 0;
 
@@ -57,7 +75,7 @@ class _StepperScreensState extends State<StepperScreens> {
               itemCount: steps.length,
               itemBuilder: (context, index) {
                 return Center(
-                  child: Text(steps[index], style: TextStyle(fontSize: 28)),
+                  child: LandingStepper(title: steps[index][title]),
                 );
               },
             ),
