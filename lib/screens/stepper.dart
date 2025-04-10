@@ -3,6 +3,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tugas_front_end_nicolas/screens/landing_screen.dart';
 
 class StepperScreens extends StatefulWidget {
+  const StepperScreens({super.key});
+
   @override
   _StepperScreensState createState() => _StepperScreensState();
 }
@@ -113,10 +115,6 @@ class _StepperScreensState extends State<StepperScreens> {
                   child: Container(
                     child: ElevatedButton(
                       onPressed: () => nextPage(context),
-                      child: Text(
-                        'Next',
-                        style: TextStyle(color: Colors.white),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF4D5DFA),
                         padding: EdgeInsets.symmetric(vertical: 5),
@@ -124,24 +122,29 @@ class _StepperScreensState extends State<StepperScreens> {
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
+                      child: Text(
+                        'Next',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 ),
+                SizedBox(height: 10),
                 SizedBox(
                   width: 240,
                   child: Container(
                     child: ElevatedButton(
                       onPressed: () => skipToLastPage(context),
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(color: Color(0xFF4D5DFA)),
-                      ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 212, 217, 255),
                         padding: EdgeInsets.symmetric(vertical: 5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
+                      ),
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(color: Color(0xFF4D5DFA)),
                       ),
                     ),
                   ),
@@ -156,7 +159,8 @@ class _StepperScreensState extends State<StepperScreens> {
 }
 
 class LandingStepper extends StatelessWidget {
-  LandingStepper({
+  const LandingStepper({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.image,
