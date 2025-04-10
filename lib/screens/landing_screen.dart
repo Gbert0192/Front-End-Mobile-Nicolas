@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
+import 'dart:math' as math;
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -8,89 +9,114 @@ class LandingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              // Transform.rotate(
-              //   angle: -pi / 10,
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width * 1,
-              //     height: MediaQuery.of(context).size.height * 0.3,
-              //     decoration: BoxDecoration(
-              //       color: const Color(0x334D5DFA),
-              //       borderRadius: BorderRadius.circular(12),
-              //     ),
-              //   ),
-              // ),
-              const SizedBox(height: 40),
-              const Text(
-                'THIS IS PARK-ID',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0),
+      body: Stack(
+        children: [
+          // Top Rotated Box
+          Positioned(
+            top: -240,
+            left: -100,
+            child: Transform.rotate(
+              angle: -15 * math.pi / 180,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 2,
+                height: 300,
+                color: const Color(0xFFD3DEFF),
               ),
-              const Text(
-                'The first and the best parking app in Indonesia',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16.0, color: Colors.grey),
-              ),
-              const SizedBox(height: 40),
-              Image.asset('assets/starting/lot2.png', height: 250),
-              const Spacer(),
-
-              //Sign In Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignIn()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF1F1E5B),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text(
-                    'Sign In',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-
-              //Sign Up Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUp()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF4D5DFA),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              SizedBox(height: 60),
-            ],
+            ),
           ),
-        ),
+
+          // Bottom Rotated Box
+          Positioned(
+            bottom: -240,
+            right: -100,
+            child: Transform.rotate(
+              angle: -15 * math.pi / 180,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 2,
+                height: 300,
+                color: const Color(0xFFD3DEFF),
+              ),
+            ),
+          ),
+
+          // Main Content
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 90.0),
+              child: Column(
+                children: [
+                  const Text(
+                    'THIS IS PARK-ID',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35.0,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    'The first and the best parking app in Indonesia',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  Image.asset('assets/starting/lot2.png', height: 220),
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: 240,
+                    child: Container(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignIn()),
+                          );
+                        },
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF1F1E5B),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 240,
+                    child: Container(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => SignUp()),
+                          );
+                        },
+                        child: Text(
+                          'Skip',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF4D5DFA),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

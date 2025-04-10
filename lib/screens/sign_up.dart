@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
-import 'package:tugas_front_end_nicolas/sign_in.dart';
 import 'package:tugas_front_end_nicolas/user_data.dart';
 
 class SignUp extends StatefulWidget {
