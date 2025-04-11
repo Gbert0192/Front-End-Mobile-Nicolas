@@ -33,6 +33,7 @@ class _StepperScreensState extends State<StepperScreens> {
           "Can decide when parking time is and determine when it’s time to leave",
       "image": "assets/starting/toy car turn left blue.png",
       "align": "right",
+      "offset": 20.0,
     },
   ];
 
@@ -107,7 +108,7 @@ class _StepperScreensState extends State<StepperScreens> {
             effect: WormEffect(
               dotHeight: 12,
               dotWidth: 12,
-              activeDotColor: Colors.blue,
+              activeDotColor: Color(0xFF4D5DFA),
             ),
           ),
           SizedBox(height: 16),
@@ -184,11 +185,8 @@ class LandingStepper extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 30),
-        Padding(
-          padding: EdgeInsets.only(
-            left: align == "left" ? offset : 0,
-            right: align == "right" ? offset : 0,
-          ),
+        Transform.translate(
+          offset: Offset(offset, 0),
           child: Align(
             alignment:
                 align == "left"
