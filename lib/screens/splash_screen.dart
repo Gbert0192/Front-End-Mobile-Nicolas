@@ -6,6 +6,12 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size
+    final size = MediaQuery.of(context).size;
+
+    // You can use these to scale elements
+    final isSmallScreen = size.width < 600;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -17,47 +23,39 @@ class SplashScreen extends StatelessWidget {
             colors: [Color(0xFF4F4EA2), Color(0xFF9DAFEC), Color(0xFF4F4EA2)],
           ),
         ),
-        child: SizedBox(
-              height: 300,
-              width: 300,
-              child: Stack(
-                alignment: Alignment.center,
+        child: Center(
+          child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Positioned(
-                    top: 140,
-                    child: Image.asset('assets/logo.png', height: 225),
+                  // Adjust logo height based on screen size
+                  Image.asset(
+                    'assets/logo_no_padding.png',
+                    height: isSmallScreen ? 150 : 225,
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 130),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text(
-                          'PARK-ID',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                        Text(
-                          'Easier to Park',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontFamily: 'Cursive',
-                          ),
-                        ),
-                      ],
+                  const SizedBox(height: 16),
+                  Text(
+                    'PARK-ID',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: isSmallScreen ? 28 : 40,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  Text(
+                    'Easier to Park',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: isSmallScreen ? 20 : 30,
+                      fontFamily: 'Cursive',
                     ),
                   ),
                 ],
-              ),
-            )
-            .animate()
-            .slideY(begin: 1, end: 0, duration: 800.ms)
-            .fadeIn(duration: 800.ms),
+              )
+              .animate()
+              .slideY(begin: 1, end: 0, duration: 800.ms)
+              .fadeIn(duration: 800.ms),
+        ),
       ),
     );
   }

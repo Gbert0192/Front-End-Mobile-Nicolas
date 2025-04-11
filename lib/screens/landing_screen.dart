@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
 import 'dart:math' as math;
@@ -8,6 +9,9 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -18,7 +22,7 @@ class LandingScreen extends StatelessWidget {
             child: Transform.rotate(
               angle: -15 * math.pi / 180,
               child: Container(
-                width: MediaQuery.of(context).size.width * 2,
+                width: size.width * 2,
                 height: 300,
                 color: const Color(0xFFD3DEFF),
               ),
@@ -32,7 +36,7 @@ class LandingScreen extends StatelessWidget {
             child: Transform.rotate(
               angle: -15 * math.pi / 180,
               child: Container(
-                width: MediaQuery.of(context).size.width * 2,
+                width: size.width * 2,
                 height: 300,
                 color: const Color(0xFFD3DEFF),
               ),
@@ -42,76 +46,56 @@ class LandingScreen extends StatelessWidget {
           // Main Content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.only(top: 90.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 children: [
-                  const Text(
+                  SizedBox(height: isSmall ? 60 : 120),
+                  Text(
                     'THIS IS PARK-ID',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 35.0,
+                      fontSize: isSmall ? 26 : 40,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 5),
-                  const Text(
+                  const SizedBox(height: 10),
+                  Text(
                     'The first and the best parking app in Indonesia',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: isSmall ? 18 : 24,
                       color: Colors.grey,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  Image.asset('assets/starting/lot2.png', height: 220),
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    width: 240,
-                    child: Container(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignIn()),
-                          );
-                        },
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF1F1E5B),
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                      ),
-                    ),
+                  const SizedBox(height: 20),
+                  Image.asset(
+                    'assets/starting/lot2.png',
+                    height: isSmall ? 200 : 280,
+                    fit: BoxFit.contain,
                   ),
-                  SizedBox(
-                    width: 240,
-                    child: Container(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => SignUp()),
-                          );
-                        },
-                        child: Text(
-                          'Skip',
-                          style: TextStyle(color: Colors.white),
+                  const Spacer(),
+                  ResponsiveButton(
+                    isSmall: isSmall,
+                    onPressed:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => SignIn()),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF4D5DFA),
-                          padding: EdgeInsets.symmetric(vertical: 5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                      ),
-                    ),
+                    text: "Sign In",
                   ),
+                  SizedBox(height: (isSmall ? 0 : 10)),
+                  ResponsiveButton(
+                    isSmall: isSmall,
+                    onPressed:
+                        () => Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => SignUp()),
+                        ),
+                    text: "Sign Up",
+                    backgroundColor: Color(0xFF4D5DFA),
+                  ),
+                  const SizedBox(height: 24),
                 ],
               ),
             ),

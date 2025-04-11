@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/screens/landing_screen.dart';
 
 class StepperScreens extends StatefulWidget {
@@ -51,7 +52,7 @@ class _StepperScreensState extends State<StepperScreens> {
     }
   }
 
-  void skipToLastPage(BuildContext context) {
+  void skipAll(BuildContext context) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LandingScreen()),
@@ -76,6 +77,8 @@ class _StepperScreensState extends State<StepperScreens> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Scaffold(
       body: Column(
         children: [
@@ -110,44 +113,20 @@ class _StepperScreensState extends State<StepperScreens> {
             padding: const EdgeInsets.only(bottom: 24.0),
             child: Column(
               children: [
-                SizedBox(
-                  width: 240,
-                  child: Container(
-                    child: ElevatedButton(
-                      onPressed: () => nextPage(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF4D5DFA),
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: Text(
-                        'Next',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () => nextPage(context),
+                  text: "Next",
+                  textColor: Colors.white,
+                  backgroundColor: Color(0xFF4D5DFA),
                 ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: 240,
-                  child: Container(
-                    child: ElevatedButton(
-                      onPressed: () => skipToLastPage(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 212, 217, 255),
-                        padding: EdgeInsets.symmetric(vertical: 5),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                      ),
-                      child: Text(
-                        'Skip',
-                        style: TextStyle(color: Color(0xFF4D5DFA)),
-                      ),
-                    ),
-                  ),
+                SizedBox(height: isSmall ? 0 : 10),
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () => skipAll(context),
+                  text: "Skip",
+                  textColor: Color(0xFF4D5DFA),
+                  backgroundColor: Color.fromARGB(255, 212, 217, 255),
                 ),
               ],
             ),
@@ -171,49 +150,55 @@ class LandingStepper extends StatelessWidget {
   final String subtitle;
   final String image;
   final String align;
-
+  // inside your LandingStepper class:
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Poppins",
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: isSmall ? 32 : 40,
+                fontWeight: FontWeight.bold,
+                fontFamily: "Poppins",
+              ),
             ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            subtitle,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.grey,
-              fontSize: 20,
-              fontFamily: "Poppins",
+            const SizedBox(height: 12),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: isSmall ? 20 : 24,
+                fontFamily: "Poppins",
+              ),
             ),
-          ),
-          SizedBox(height: 40),
-          Padding(
-            padding: EdgeInsets.only(
-              left: align == "left" ? 20 : 0,
-              right: align == "right" ? 20 : 0,
+            const SizedBox(height: 30),
+            Padding(
+              padding: EdgeInsets.only(
+                left: align == "left" ? 20 : 0,
+                right: align == "right" ? 20 : 0,
+              ),
+              child: Align(
+                alignment:
+                    align == "left"
+                        ? Alignment.centerLeft
+                        : align == "right"
+                        ? Alignment.centerRight
+                        : Alignment.center,
+                child: Image.asset(image, height: isSmall ? 160 : 160),
+              ),
             ),
-            child: Align(
-              alignment:
-                  align == "left"
-                      ? Alignment.centerLeft
-                      : align == "right"
-                      ? Alignment.centerRight
-                      : Alignment.center,
-              child: Image.asset(image, height: 160),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
