@@ -6,11 +6,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Get screen size
     final size = MediaQuery.of(context).size;
-
-    // You can use these to scale elements
-    final isSmallScreen = size.width < 600;
+    final isSmall = size.height < 700;
 
     return Scaffold(
       body: Container(
@@ -27,27 +24,40 @@ class SplashScreen extends StatelessWidget {
           child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Adjust logo height based on screen size
                   Image.asset(
                     'assets/logo_no_padding.png',
-                    height: isSmallScreen ? 150 : 225,
+                    height: isSmall ? 150 : 255,
                   ),
                   const SizedBox(height: 16),
                   Text(
                     'PARK-ID',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isSmallScreen ? 28 : 40,
+                      fontSize: isSmall ? 28 : 48,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.5,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2, 2),
+                          blurRadius: 4.0,
+                          color: Colors.black.withOpacity(0.5),
+                        ),
+                      ],
                     ),
                   ),
                   Text(
                     'Easier to Park',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isSmallScreen ? 20 : 30,
+                      fontSize: isSmall ? 20 : 60,
                       fontFamily: 'Cursive',
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2, 2),
+                          blurRadius: 6.0,
+                          color: Colors.black.withOpacity(0.4),
+                        ),
+                      ],
                     ),
                   ),
                 ],

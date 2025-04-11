@@ -12,12 +12,13 @@ class StepperScreens extends StatefulWidget {
 
 class _StepperScreensState extends State<StepperScreens> {
   final PageController _controller = PageController();
-  final List<Map<String, String>> steps = [
+  final List<Map<String, dynamic>> steps = [
     {
       "title": "Find Parking Easily",
       "content": "Find parking around you easily and online",
       "image": "assets/starting/toy car turn right blue.png",
       "align": "left",
+      "offset": 20.0,
     },
     {
       "title": "Book and Pay for Parking Quickly and Easily",
@@ -32,6 +33,7 @@ class _StepperScreensState extends State<StepperScreens> {
           "Can decide when parking time is and determine when it’s time to leave",
       "image": "assets/starting/toy car turn left blue.png",
       "align": "right",
+      "offset": 20.0,
     },
   ];
 
@@ -94,6 +96,7 @@ class _StepperScreensState extends State<StepperScreens> {
                     subtitle: steps[index]["content"]!,
                     image: steps[index]["image"]!,
                     align: steps[index]["align"]!,
+                    offset: steps[index]["offset"] ?? 0,
                   ),
                 );
               },
@@ -105,7 +108,7 @@ class _StepperScreensState extends State<StepperScreens> {
             effect: WormEffect(
               dotHeight: 12,
               dotWidth: 12,
-              activeDotColor: Colors.blue,
+              activeDotColor: Color(0xFF4D5DFA),
             ),
           ),
           SizedBox(height: 16),
@@ -144,62 +147,57 @@ class LandingStepper extends StatelessWidget {
     required this.subtitle,
     required this.image,
     this.align = "center",
+    this.offset = 0,
   });
 
   final String title;
   final String subtitle;
   final String image;
   final String align;
+  final double offset;
+
   // inside your LandingStepper class:
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: isSmall ? 32 : 40,
-                fontWeight: FontWeight.bold,
-                fontFamily: "Poppins",
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: isSmall ? 20 : 24,
-                fontFamily: "Poppins",
-              ),
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: EdgeInsets.only(
-                left: align == "left" ? 20 : 0,
-                right: align == "right" ? 20 : 0,
-              ),
-              child: Align(
-                alignment:
-                    align == "left"
-                        ? Alignment.centerLeft
-                        : align == "right"
-                        ? Alignment.centerRight
-                        : Alignment.center,
-                child: Image.asset(image, height: isSmall ? 160 : 160),
-              ),
-            ),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: isSmall ? 32 : 40,
+            fontWeight: FontWeight.bold,
+            fontFamily: "Poppins",
+          ),
         ),
-      ),
+        const SizedBox(height: 12),
+        Text(
+          subtitle,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: isSmall ? 20 : 24,
+            fontFamily: "Poppins",
+          ),
+        ),
+        const SizedBox(height: 30),
+        Transform.translate(
+          offset: Offset(offset, 0),
+          child: Align(
+            alignment:
+                align == "left"
+                    ? Alignment.centerLeft
+                    : align == "right"
+                    ? Alignment.centerRight
+                    : Alignment.center,
+            child: Image.asset(image, height: isSmall ? 160 : 240),
+          ),
+        ),
+      ],
     );
   }
 }
