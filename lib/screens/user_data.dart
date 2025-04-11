@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:tugas_front_end_nicolas/home.dart';
+import 'package:tugas_front_end_nicolas/screens/home.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});
