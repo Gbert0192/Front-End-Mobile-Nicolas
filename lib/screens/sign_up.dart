@@ -96,6 +96,10 @@ class _SignUpState extends State<SignUp> {
                       isEmailEmpty = emailController.text.isEmpty;
                     });
                     if (!isEmailEmpty!) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserData()),
+                      );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Sign Up Success!'),

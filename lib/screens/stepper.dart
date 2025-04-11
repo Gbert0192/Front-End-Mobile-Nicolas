@@ -4,6 +4,8 @@ import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/screens/landing_screen.dart';
 
 class StepperScreens extends StatefulWidget {
+  const StepperScreens({super.key});
+
   @override
   _StepperScreensState createState() => _StepperScreensState();
 }
@@ -136,7 +138,8 @@ class _StepperScreensState extends State<StepperScreens> {
 }
 
 class LandingStepper extends StatelessWidget {
-  LandingStepper({
+  const LandingStepper({
+    super.key,
     required this.title,
     required this.subtitle,
     required this.image,
