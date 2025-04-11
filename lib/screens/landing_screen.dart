@@ -45,8 +45,7 @@ class LandingScreen extends StatelessWidget {
 
           // Main Content
           SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Container(
               child: Column(
                 children: [
                   SizedBox(height: isSmall ? 60 : 120),
@@ -95,7 +94,7 @@ class LandingScreen extends StatelessWidget {
                     text: "Sign Up",
                     backgroundColor: Color(0xFF4D5DFA),
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: isSmall ? 24 : 48),
                 ],
               ),
             ),
