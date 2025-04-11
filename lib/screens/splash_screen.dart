@@ -38,9 +38,9 @@ class SplashScreen extends StatelessWidget {
                       letterSpacing: 1.5,
                       shadows: [
                         Shadow(
-                          offset: Offset(2, 2),
+                          offset: Offset(4, 4),
                           blurRadius: 4.0,
-                          color: Colors.black.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.25),
                         ),
                       ],
                     ),
@@ -53,9 +53,9 @@ class SplashScreen extends StatelessWidget {
                       fontFamily: 'Cursive',
                       shadows: [
                         Shadow(
-                          offset: Offset(2, 2),
+                          offset: Offset(4, 4),
                           blurRadius: 6.0,
-                          color: Colors.black.withOpacity(0.4),
+                          color: Colors.black.withOpacity(0.25),
                         ),
                       ],
                     ),
