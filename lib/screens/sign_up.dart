@@ -31,7 +31,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isFocused = _focusNode.hasFocus;
+    // final bool isFocused = _focusNode.hasFocus;
     final bool hasError = isEmailEmpty;
 
     return Scaffold(
@@ -244,3 +244,5 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
+
+getColor() {}

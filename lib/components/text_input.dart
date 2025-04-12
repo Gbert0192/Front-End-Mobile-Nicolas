@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
+    super.key,
     this.controller,
     required this.onChanged,
     this.hint,
@@ -149,4 +150,6 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
       ],
     );
   }
+
+  void onChanged() {}
 }
