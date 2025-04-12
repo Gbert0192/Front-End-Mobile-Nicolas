@@ -96,7 +96,7 @@ class _StepperScreensState extends State<StepperScreens> {
                     subtitle: steps[index]["content"]!,
                     image: steps[index]["image"]!,
                     align: steps[index]["align"]!,
-                    offset: steps[index]["offset"] ?? 0,
+                    offset: steps[index]["offset"],
                   ),
                 );
               },
@@ -147,14 +147,14 @@ class LandingStepper extends StatelessWidget {
     required this.subtitle,
     required this.image,
     this.align = "center",
-    this.offset = 0,
+    this.offset,
   });
 
   final String title;
   final String subtitle;
   final String image;
   final String align;
-  final double offset;
+  final double? offset;
 
   // inside your LandingStepper class:
   @override
@@ -186,7 +186,7 @@ class LandingStepper extends StatelessWidget {
         ),
         const SizedBox(height: 30),
         Transform.translate(
-          offset: Offset(offset, 0),
+          offset: Offset(offset ?? 0.0, 0),
           child: Align(
             alignment:
                 align == "left"

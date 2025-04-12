@@ -11,40 +11,50 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   TextEditingController emailController = TextEditingController();
-
-  bool? isEmailEmpty;
+  final FocusNode _focusNode = FocusNode();
+  bool isEmailEmpty = false;
 
   @override
   void initState() {
-    isEmailEmpty = false;
-
     super.initState();
+    _focusNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    emailController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool isFocused = _focusNode.hasFocus;
+    final bool hasError = isEmailEmpty;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            ElevatedButton(
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Material(
+            color: Colors.white,
+            shape: const CircleBorder(),
+            elevation: 2,
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () {
                 Navigator.pop(context);
               },
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                padding: const EdgeInsets.all(12),
-                elevation: 1,
-              ),
-              child: const Icon(Icons.arrow_back, color: Colors.black),
+              padding: const EdgeInsets.all(8),
+              constraints: const BoxConstraints(),
             ),
-          ],
+          ),
         ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       body: SafeArea(
         child: Padding(
@@ -52,40 +62,98 @@ class _SignUpState extends State<SignUp> {
           child: Column(
             children: [
               // SizedBox(height: 40),
-              const Text(
+              Text(
                 'WELCOME TO PARK-ID',
                 style: TextStyle(
                   fontSize: 50,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w400,
                   color: Color(0xFFA03CDD),
+                  shadows: [
+                    Shadow(
+                      offset: Offset(4, 4),
+                      blurRadius: 6.0,
+                      color: Color.from(
+                        alpha: 0.35,
+                        red: 0.11,
+                        green: 0.569,
+                        blue: 1,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 40),
-              Image.asset('assets/starting/Enter Park.png', height: 300),
+              Image.asset('assets/starting/enter_park.png', height: 360),
               // Email Field
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  labelText: 'Email',
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 6,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      focusNode: _focusNode,
+                      controller: emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          isEmailEmpty = value.isEmpty;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        labelText: 'Email',
+                        hintStyle: TextStyle(color: getColor()),
+                        labelStyle: TextStyle(color: getColor()),
+                        floatingLabelStyle: TextStyle(color: getColor()),
+                        filled: true,
+                        fillColor:
+                            hasError ? const Color(0xFFFFEDED) : Colors.white,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: getColor(), width: 2.0),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: getColor()),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.red,
+                            width: .0,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
                   ),
-                  errorText: isEmailEmpty! ? '*Email Must be Filled' : null,
-                  filled: true,
-                  fillColor:
-                      isEmailEmpty == true
-                          ? const Color(0xFFFFEDED)
-                          : Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
-                  errorBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                ),
+                  const SizedBox(height: 8),
+                  if (hasError)
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text(
+                        '*Email Must be Filled',
+                        style: TextStyle(color: Colors.red, fontSize: 12),
+                      ),
+                    ),
+                ],
               ),
               SizedBox(height: 20),
               SizedBox(
