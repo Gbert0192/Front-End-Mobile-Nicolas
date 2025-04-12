@@ -27,6 +27,21 @@ class _ResetPasswordState extends State<ResetPassword> {
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
+  bool isPassword = false;
+  bool isConfirmPw = false;
+  bool isObscure = false;
+
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmpwController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void passwordVisibility() {
+    setState(() {
+      isObscure = !isObscure;
     });
   }
 
@@ -179,5 +194,6 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
       ),
     );
+    return Scaffold();
   }
 }

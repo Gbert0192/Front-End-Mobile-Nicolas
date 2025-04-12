@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});
@@ -76,15 +76,12 @@ class _UserDataState extends State<UserData> {
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
-    // final isSmall = size.height < 700;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title: Row(
           children: [
             ElevatedButton(
@@ -295,11 +292,6 @@ class _UserDataState extends State<UserData> {
               //Continue Button
               SizedBox(
                 width: double.infinity,
-                // child: ResponsiveButton(
-                //   isSmall: isSmall,
-                //   onPressed: ,
-                //   text: 'Continue',
-                // ),
                 child: ElevatedButton(
                   onPressed:
                       isButtonEnabled
@@ -354,7 +346,7 @@ class _UserDataState extends State<UserData> {
 
     if (returnedImage == null) return;
     setState(() {
-      _selectedImage = File(returnedImage!.path);
+      _selectedImage = File(returnedImage.path);
     });
   }
 
@@ -365,7 +357,7 @@ class _UserDataState extends State<UserData> {
 
     if (returnedImage == null) return;
     setState(() {
-      _selectedImage = File(returnedImage!.path);
+      _selectedImage = File(returnedImage.path);
     });
   }
 }

@@ -83,6 +83,8 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               Image.asset('assets/starting/enter_park.png', height: 360),
+              SizedBox(height: 40),
+              Image.asset('assets/starting/enter_park.png', height: 300),
               // Email Field
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
