@@ -8,13 +8,15 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
-      TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
 
   bool isPasswordEmpty = false;
   bool isConfirmPasswordEmpty = false;
   bool isPasswordNotMatch = false;
+  bool isPassword = false;
+  bool isConfirmPw = false;
+  bool isObscure = false;
 
   bool _obscureText = true;
 
@@ -27,16 +29,7 @@ class _ResetPasswordState extends State<ResetPassword> {
   void _togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
-  bool isPassword = false;
-  bool isConfirmPw = false;
-  bool isObscure = false;
-
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmpwController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
+    });
   }
 
   void passwordVisibility() {
@@ -194,6 +187,5 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
       ),
     );
-    return Scaffold();
   }
 }
