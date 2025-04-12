@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
     this.controller,
+    required this.onChanged,
     this.hint,
     this.label,
     this.type = 'text',
@@ -12,6 +13,7 @@ class ResponsiveTextInput extends StatefulWidget {
   });
 
   final TextEditingController? controller;
+  final VoidCallback onChanged;
   final String? hint;
   final String? label;
   final String type;
@@ -97,7 +99,10 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     widget.type == 'email'
                         ? TextInputType.emailAddress
                         : TextInputType.text,
-                onChanged: (_) => _validate(),
+                onChanged: (_) {
+                  _validate();
+                  onChanged();
+                },
                 decoration: InputDecoration(
                   hintText: widget.hint ?? '',
                   labelText: widget.label ?? '',
