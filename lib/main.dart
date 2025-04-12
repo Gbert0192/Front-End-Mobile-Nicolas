@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/loadscreen.dart';
-import 'package:tugas_front_end_nicolas/sign_in.dart';
-import 'package:tugas_front_end_nicolas/sign_up.dart';
-import 'package:tugas_front_end_nicolas/user_data.dart';
+import 'package:tugas_front_end_nicolas/screens/stepper.dart';
+import 'package:tugas_front_end_nicolas/screens/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatefulWidget {
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
 
-  // This widget is the root of your application.
+class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 700),
+          pageBuilder: (_, __, ___) => StepperScreens(),
+          transitionsBuilder: (_, animation, __, child) {
+            var tween = Tween(
+              begin: const Offset(0, -1),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeOut));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'PARK-ID',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      debugShowCheckedModeBanner: false,
-      // home: SignIn(),
-      home: UserData(),
-    );
+    return const SplashScreen();
   }
 }

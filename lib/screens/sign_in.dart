@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/sign_up.dart';
+import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -199,10 +199,10 @@ class _SignInState extends State<SignIn> {
                   child: OutlinedButton(
                     onPressed: () {
                       //ini jg janggan diganti dl ya
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const SignUp()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const SignUp()),
+                      // );
                       // ScaffoldMessenger.of(context).showSnackBar(
                       //   SnackBar(content: Text('Navigasi ke Sign Up')),
                       // );

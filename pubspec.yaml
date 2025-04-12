@@ -30,12 +30,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.0.5
+  shared_preferences: ^2.2.2
   intl_phone_field: ^3.2.0
   pin_code_fields: ^8.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  smooth_page_indicator: ^1.1.0
+  image_picker: ^1.1.2
+  flutter_animate: ^4.5.2
 
 dev_dependencies:
   flutter_test:
@@ -48,6 +53,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
   flutter_launcher_icons: "^0.14.3"
+  flutter_native_splash: ^2.3.3
+
+flutter_native_splash:
+  color: "#ffffff" # or any background you want
+  android: true
+  ios: true
 
 flutter_icons:
   android: true
