@@ -61,7 +61,7 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               SizedBox(height: 40),
-              Image.asset('assets/starting/Enter Park.png', height: 300),
+              Image.asset('assets/starting/enter_park.png', height: 300),
               // Email Field
               TextField(
                 controller: emailController,

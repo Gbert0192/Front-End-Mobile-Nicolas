@@ -62,7 +62,7 @@ class _SignInState extends State<SignIn> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                Image.asset('assets/starting/Park spot.png', height: 350),
+                Image.asset('assets/starting/park_spot.png', height: 350),
                 const SizedBox(height: 20),
                 const Text(
                   'Back Again! Your Perfect Spot Awaits!',
