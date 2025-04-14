@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/user_data.dart';
-import 'package:tugas_front_end_nicolas/validators/index.dart';
+import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -29,6 +30,9 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -64,7 +68,7 @@ class _SignUpState extends State<SignUp> {
                 Text(
                   'WELCOME TO PARK-ID',
                   style: TextStyle(
-                    fontSize: 50,
+                    fontSize: isSmall ? 30 : 50,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFFA03CDD),
                     shadows: [
@@ -76,10 +80,15 @@ class _SignUpState extends State<SignUp> {
                     ],
                   ),
                 ),
-                Image.asset('assets/starting/enter_park.png', height: 360),
+                Image.asset(
+                  'assets/starting/enter_park.png',
+                  height: isSmall ? 240 : 360,
+                ),
+                SizedBox(height: isSmall ? 10 : 20),
                 Column(
                   children: [
                     ResponsiveTextInput(
+                      isSmall: isSmall,
                       controller: emailController,
                       hint: 'Enter your email',
                       label: 'Email',
@@ -94,35 +103,23 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      isSubmitted = true;
-                      final isValid = validate();
-                      if (isValid) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => UserData()),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF1F1E5B),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+                SizedBox(height: isSmall ? 10 : 20),
 
-                const SizedBox(height: 20),
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () {
+                    isSubmitted = true;
+                    final isValid = validate();
+                    if (isValid) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => UserData()),
+                      );
+                    }
+                  },
+                  text: "Sign Up",
+                ),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 Row(
                   children: [
@@ -135,26 +132,25 @@ class _SignUpState extends State<SignUp> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 const Text(
                   'Already Sign Up?',
                   style: TextStyle(color: Color(0xFF10297F)),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SignIn()),
-                      );
-                    },
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(color: Color(0xFF1F1E5B)),
-                    ),
-                  ),
+
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignIn()),
+                    );
+                  },
+                  backgroundColor: Colors.white,
+                  textColor: Colors.black,
+                  buttonType: "outline",
+                  text: "Sign In",
                 ),
               ],
             ),

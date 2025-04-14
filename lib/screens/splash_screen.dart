@@ -26,7 +26,7 @@ class SplashScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/logo_no_padding.png',
-                    height: isSmall ? 150 : 255,
+                    height: isSmall ? 150 : 225,
                   ),
                   const SizedBox(height: 16),
                   Text(

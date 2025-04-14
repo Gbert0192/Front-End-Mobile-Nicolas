@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
+    required this.isSmall,
     this.controller,
     this.onChanged,
     this.hint,
@@ -10,6 +11,7 @@ class ResponsiveTextInput extends StatefulWidget {
     this.type = "text",
   });
 
+  final bool isSmall;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
   final String? hint;
@@ -82,9 +84,9 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                   floatingLabelStyle: TextStyle(color: _getColor()),
                   filled: true,
                   fillColor: hasError ? const Color(0xFFFFEDED) : Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: widget.isSmall ? 18 : 20,
+                    vertical: widget.isSmall ? 12 : 16,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
