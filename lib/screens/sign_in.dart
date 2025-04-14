@@ -33,12 +33,13 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            ElevatedButton(
+        leading: Padding(
+          padding: EdgeInsets.only(left: 12.0),
+          child: Material(
+            color: Colors.white,
+            shape: const CircleBorder(),
+            elevation: 2,
+            child: ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -50,9 +51,10 @@ class _SignInState extends State<SignIn> {
               ),
               child: const Icon(Icons.arrow_back, color: Colors.black),
             ),
-            const SizedBox(width: 10),
-          ],
+          ),
         ),
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
 
       backgroundColor: Colors.white,

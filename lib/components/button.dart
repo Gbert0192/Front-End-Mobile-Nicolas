@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ResponsiveButton extends StatelessWidget {
   final bool isSmall;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final String text;
   final Color textColor;
   final Color backgroundColor;
@@ -10,7 +10,7 @@ class ResponsiveButton extends StatelessWidget {
   const ResponsiveButton({
     Key? key,
     required this.isSmall,
-    required this.onPressed,
+    this.onPressed,
     required this.text,
     this.textColor = Colors.white,
     this.backgroundColor = const Color(0xFF1F1E5B),
