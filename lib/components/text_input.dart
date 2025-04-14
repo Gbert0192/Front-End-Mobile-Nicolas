@@ -120,4 +120,6 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
       ],
     );
   }
+
+  void onChanged() {}
 }
