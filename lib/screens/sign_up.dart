@@ -12,25 +12,19 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  Map<String, dynamic> FormField = {
-    "fields": {
-      "email": {"controller": TextEditingController(), "errorText": null},
-    },
-    "isSubmited": false,
-  };
+  bool isSubmitted = false;
+
+  final TextEditingController emailController = TextEditingController();
+  String? emailError;
 
   bool validate() {
-    bool status = true;
-    final errorEmail = validateEmail(
-      value: FormField["fields"]["email"]["controller"].text,
-    );
+    final errorEmail = validateEmail(value: emailController.text);
     if (errorEmail != null) {
-      status = false;
       setState(() {
-        FormField["fields"]["email"]["errorText"] = errorEmail;
+        emailError = errorEmail;
       });
     }
-    return status;
+    return errorEmail == null;
   }
 
   @override
@@ -86,13 +80,13 @@ class _SignUpState extends State<SignUp> {
                 Column(
                   children: [
                     ResponsiveTextInput(
-                      controller: FormField["fields"]["email"]["controller"],
+                      controller: emailController,
                       hint: 'Enter your email',
                       label: 'Email',
                       type: 'email',
-                      errorText: FormField["fields"]["email"]["errorText"],
+                      errorText: emailError,
                       onChanged: () {
-                        if (FormField["isSubmited"]) {
+                        if (isSubmitted) {
                           validate();
                         }
                       },
@@ -105,7 +99,7 @@ class _SignUpState extends State<SignUp> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      FormField["isSubmited"] = true;
+                      isSubmitted = true;
                       final isValid = validate();
                       if (isValid) {
                         Navigator.push(

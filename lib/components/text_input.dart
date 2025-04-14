@@ -8,7 +8,6 @@ class ResponsiveTextInput extends StatefulWidget {
     this.label,
     this.errorText,
     this.type = "text",
-    this.isSubmited = false,
   });
 
   final TextEditingController? controller;
@@ -17,7 +16,6 @@ class ResponsiveTextInput extends StatefulWidget {
   final String? label;
   final String? errorText;
   final String? type;
-  final bool isSubmited;
 
   @override
   State<ResponsiveTextInput> createState() => _ResponsiveTextInputState();
@@ -25,7 +23,6 @@ class ResponsiveTextInput extends StatefulWidget {
 
 class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
   late FocusNode _focusNode;
-  String? _errorText;
   bool _isFocused = false;
 
   @override
@@ -114,7 +111,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
-              _errorText ?? '',
+              widget.errorText ?? '',
               style: const TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),
