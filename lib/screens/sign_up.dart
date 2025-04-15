@@ -126,7 +126,10 @@ class _SignUpState extends State<SignUp> {
                     Expanded(child: Divider(color: Colors.grey)),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text('Or', style: TextStyle(color: Colors.grey)),
+                      child: Text(
+                        'Or',
+                        style: TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
                     ),
                     Expanded(child: Divider(color: Colors.grey)),
                   ],
@@ -147,8 +150,6 @@ class _SignUpState extends State<SignUp> {
                       MaterialPageRoute(builder: (context) => SignIn()),
                     );
                   },
-                  backgroundColor: Colors.white,
-                  textColor: Colors.black,
                   buttonType: "outline",
                   text: "Sign In",
                 ),
@@ -160,5 +161,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-
-getColor() {}

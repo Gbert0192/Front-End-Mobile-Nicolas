@@ -18,7 +18,7 @@ String? validatePassword({
     return "$key can not have more than $key characters";
   }
   if (!passwordRegex.hasMatch(value)) {
-    return '$key must contain uppercase letter, lowercase letter, number, and special character';
+    return '$key must include uppercase, lowercase, number & symbol';
   }
 }
 

@@ -33,7 +33,7 @@ class SplashScreen extends StatelessWidget {
                     'PARK-ID',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isSmall ? 28 : 48,
+                      fontSize: isSmall ? 32 : 48,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.5,
                       shadows: [
@@ -49,7 +49,7 @@ class SplashScreen extends StatelessWidget {
                     'Easier to Park',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isSmall ? 20 : 60,
+                      fontSize: isSmall ? 40 : 60,
                       fontFamily: 'Cursive',
                       shadows: [
                         Shadow(

@@ -13,12 +13,12 @@ class ResponsiveButton extends StatelessWidget {
     required this.isSmall,
     this.onPressed,
     required this.text,
-    this.textColor = Colors.white,
+    Color? textColor,
     this.buttonType = "normal",
     this.backgroundColor = const Color(0xFF1F1E5B),
-
     this.borderColor = Colors.black,
-  });
+  }) : textColor =
+           textColor ?? (buttonType == "normal" ? Colors.white : Colors.black);
 
   @override
   Widget build(BuildContext context) {

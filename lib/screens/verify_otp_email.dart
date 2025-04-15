@@ -89,6 +89,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
               ),
 
               const SizedBox(height: 20),
+
               // OTP Field
               PinCodeTextField(
                 appContext: context,
