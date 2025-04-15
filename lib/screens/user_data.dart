@@ -76,9 +76,6 @@ class _UserDataState extends State<UserData> {
 
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
-    // final isSmall = size.height < 700;
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -320,7 +317,9 @@ class _UserDataState extends State<UserData> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder:
+                                      (context) =>
+                                          HomePage(nama: nameController.text),
                                 ),
                               );
                             }
@@ -354,7 +353,7 @@ class _UserDataState extends State<UserData> {
 
     if (returnedImage == null) return;
     setState(() {
-      _selectedImage = File(returnedImage!.path);
+      _selectedImage = File(returnedImage.path);
     });
   }
 
@@ -365,7 +364,7 @@ class _UserDataState extends State<UserData> {
 
     if (returnedImage == null) return;
     setState(() {
-      _selectedImage = File(returnedImage!.path);
+      _selectedImage = File(returnedImage.path);
     });
   }
 }

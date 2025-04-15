@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
@@ -309,10 +310,11 @@ class _UserDataState extends State<UserData> {
                                 !isPassword &&
                                 !isConfirmPw &&
                                 isPasswordMatch) {
+                              String nama = nameController.text;
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => HomePage(Nama: nama),
                                 ),
                               );
                             }

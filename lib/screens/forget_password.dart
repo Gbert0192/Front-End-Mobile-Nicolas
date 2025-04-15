@@ -115,9 +115,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     });
 
                     if (!isEmailEmpty!) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text('Login sukses!')));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text('Login success!'),
+                        ),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(
