@@ -17,30 +17,30 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    // Future.delayed(const Duration(seconds: 3), () {
-    //   Navigator.pushReplacement(
-    //     //this need sincronize with the splash screen
-    //     context,
-    //     PageRouteBuilder(
-    //       transitionDuration: const Duration(milliseconds: 700),
-    //       pageBuilder: (_, __, ___) => StepperScreens(),
-    //       transitionsBuilder: (_, animation, __, child) {
-    //         var tween = Tween(
-    //           begin: const Offset(0, -1),
-    //           end: Offset.zero,
-    //         ).chain(CurveTween(curve: Curves.easeOut));
-    //         return SlideTransition(
-    //           position: animation.drive(tween),
-    //           child: child,
-    //         );
-    //       },
-    //     ),
-    //   );
-    // });
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        //this need sincronize with the splash screen
+        context,
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 700),
+          pageBuilder: (_, __, ___) => StepperScreens(),
+          transitionsBuilder: (_, animation, __, child) {
+            var tween = Tween(
+              begin: const Offset(0, -1),
+              end: Offset.zero,
+            ).chain(CurveTween(curve: Curves.easeOut));
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const ResetPassword();
+    return const SplashScreen();
   }
 }
