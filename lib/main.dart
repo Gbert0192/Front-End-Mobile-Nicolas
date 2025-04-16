@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/reset_password.dart';
-import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/splash_screen.dart';
 
@@ -19,7 +17,6 @@ class _MainAppState extends State<MainApp> {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
-        //this need sincronize with the splash screen
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
@@ -41,6 +38,7 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    return const SplashScreen();
     return const SplashScreen();
   }
 }

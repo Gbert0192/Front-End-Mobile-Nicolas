@@ -17,7 +17,7 @@ class LandingScreen extends StatelessWidget {
         children: [
           // Top Rotated Box
           Positioned(
-            top: -240,
+            top: isSmall ? -250 : -240,
             left: -100,
             child: Transform.rotate(
               angle: -15 * math.pi / 180,
@@ -31,7 +31,7 @@ class LandingScreen extends StatelessWidget {
 
           // Bottom Rotated Box
           Positioned(
-            bottom: -240,
+            bottom: isSmall ? -250 : -240,
             right: -100,
             child: Transform.rotate(
               angle: -15 * math.pi / 180,
@@ -48,12 +48,12 @@ class LandingScreen extends StatelessWidget {
             child: Container(
               child: Column(
                 children: [
-                  SizedBox(height: isSmall ? 60 : 120),
+                  SizedBox(height: isSmall ? 80 : 120),
                   Text(
                     'THIS IS PARK-ID',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: isSmall ? 26 : 40,
+                      fontSize: isSmall ? 32 : 40,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -62,14 +62,14 @@ class LandingScreen extends StatelessWidget {
                     'The first and the best parking app in Indonesia',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isSmall ? 18 : 24,
+                      fontSize: isSmall ? 20 : 24,
                       color: Colors.grey,
                       fontWeight: FontWeight.w300,
                     ),
                   ),
                   const SizedBox(height: 20),
                   Image.asset(
-                    'assets/starting/Lot2.png',
+                    'assets/starting/lot.png',
                     height: isSmall ? 200 : 280,
                     fit: BoxFit.contain,
                   ),
@@ -94,7 +94,7 @@ class LandingScreen extends StatelessWidget {
                     text: "Sign Up",
                     backgroundColor: Color(0xFF4D5DFA),
                   ),
-                  SizedBox(height: isSmall ? 24 : 48),
+                  SizedBox(height: isSmall ? 32 : 48),
                 ],
               ),
             ),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-  final String nama;
-
-  const HomePage({super.key, required this.nama});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

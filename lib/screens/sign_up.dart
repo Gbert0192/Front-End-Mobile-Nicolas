@@ -20,11 +20,9 @@ class _SignUpState extends State<SignUp> {
 
   bool validate() {
     final errorEmail = validateEmail(value: emailController.text);
-    if (errorEmail != null) {
-      setState(() {
-        emailError = errorEmail;
-      });
-    }
+    setState(() {
+      emailError = errorEmail;
+    });
     return errorEmail == null;
   }
 
@@ -92,7 +90,7 @@ class _SignUpState extends State<SignUp> {
                       controller: emailController,
                       hint: 'Enter your email',
                       label: 'Email',
-                      type: 'email',
+                      type: TextInputTypes.email,
                       errorText: emailError,
                       onChanged: () {
                         if (isSubmitted) {
@@ -126,7 +124,10 @@ class _SignUpState extends State<SignUp> {
                     Expanded(child: Divider(color: Colors.grey)),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text('Or', style: TextStyle(color: Colors.grey)),
+                      child: Text(
+                        'Or',
+                        style: TextStyle(color: Colors.grey, fontSize: 18),
+                      ),
                     ),
                     Expanded(child: Divider(color: Colors.grey)),
                   ],
@@ -147,9 +148,7 @@ class _SignUpState extends State<SignUp> {
                       MaterialPageRoute(builder: (context) => SignIn()),
                     );
                   },
-                  backgroundColor: Colors.white,
-                  textColor: Colors.black,
-                  buttonType: "outline",
+                  buttonType: ButtonTypes.outline,
                   text: "Sign In",
                 ),
               ],
@@ -160,5 +159,3 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-
-getColor() {}

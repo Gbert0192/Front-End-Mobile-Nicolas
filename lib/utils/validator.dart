@@ -18,8 +18,9 @@ String? validatePassword({
     return "$key can not have more than $key characters";
   }
   if (!passwordRegex.hasMatch(value)) {
-    return '$key must contain uppercase letter, lowercase letter, number, and special character';
+    return '$key must include uppercase, lowercase, number & symbol';
   }
+  return null;
 }
 
 String? validateEmail({
@@ -34,6 +35,7 @@ String? validateEmail({
   if (!emailRegex.hasMatch(value)) {
     return '$key is invalid email';
   }
+  return null;
 }
 
 String? validateBasic({
@@ -58,4 +60,5 @@ String? validateBasic({
   if (fieldRegex != null && !fieldRegex.hasMatch(value)) {
     return regexMessage;
   }
+  return null;
 }

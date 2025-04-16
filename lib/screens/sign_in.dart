@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/button.dart';
+import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/screens/forget_password.dart';
+import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
+import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -9,28 +14,34 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  bool isSubmitted = false;
 
-  bool? isEmailEmpty;
-  bool? isPasswordEmpty;
-  bool _obscureText = true;
+  Map<String, TextEditingController> FieldControls = {
+    "email": TextEditingController(),
+    "password": TextEditingController(),
+  };
 
-  @override
-  void initState() {
-    isEmailEmpty = false;
-    isPasswordEmpty = false;
-    super.initState();
-  }
+  Map<String, String?> FieldErrors = {"email": null, "password": null};
 
-  void _togglePasswordVisibility() {
+  bool validate() {
+    final errorEmail = validateEmail(value: FieldControls["email"]!.text);
     setState(() {
-      _obscureText = !_obscureText;
+      FieldErrors["email"] = errorEmail;
     });
+    final errorPassword = validatePassword(
+      value: FieldControls["password"]!.text,
+    );
+    setState(() {
+      FieldErrors["password"] = errorPassword;
+    });
+    return FieldErrors["email"] == null && FieldErrors["password"] == null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
@@ -64,117 +75,82 @@ class _SignInState extends State<SignIn> {
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                Image.asset('assets/starting/park_spot.png', height: 350),
-                const SizedBox(height: 20),
-                const Text(
+                Image.asset(
+                  'assets/starting/park_spot.png',
+                  height: isSmall ? 240 : 360,
+                ),
+                SizedBox(height: isSmall ? 10 : 20),
+                Text(
                   'Back Again! Your Perfect Spot Awaits!',
-                  style: TextStyle(fontSize: 24, color: Color(0xFF1879D4)),
+                  style: TextStyle(
+                    fontSize: isSmall ? 18 : 24,
+                    color: Color(0xFF1879D4),
+                    shadows: [
+                      Shadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 6.0,
+                        color: Color.fromRGBO(24, 45, 163, 0.25),
+                      ),
+                    ],
+                  ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
 
-                // Email Field
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    labelText: 'Email',
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                Column(
+                  children: [
+                    ResponsiveTextInput(
+                      isSmall: isSmall,
+                      controller: FieldControls["email"],
+                      hint: 'Enter your email',
+                      label: 'Email',
+                      type: TextInputTypes.email,
+                      errorText: FieldErrors["email"],
+                      onChanged: () {
+                        if (isSubmitted) {
+                          validate();
+                        }
+                      },
                     ),
-                    errorText: isEmailEmpty! ? '*Email Must be Filled' : null,
-                    filled: true,
-                    fillColor:
-                        isEmailEmpty == true
-                            ? const Color(0xFFFFEDED)
-                            : Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
+                    const SizedBox(height: 12),
+                    ResponsiveTextInput(
+                      isSmall: isSmall,
+                      controller: FieldControls["password"],
+                      hint: 'Enter your password',
+                      label: 'Password',
+                      type: TextInputTypes.password,
+                      errorText: FieldErrors["password"],
+                      onChanged: () {
+                        if (isSubmitted) {
+                          validate();
+                        }
+                      },
                     ),
-                    errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Password Field
-                TextField(
-                  controller: passwordController,
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    labelText: 'Password',
-                    errorText:
-                        isPasswordEmpty == true
-                            ? '*Password Must be Filled'
-                            : null,
-                    filled: true,
-                    fillColor:
-                        isPasswordEmpty == true
-                            ? const Color(0xFFFFEDED)
-                            : Colors.white,
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    focusedErrorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
-                      ),
-                      onPressed: _togglePasswordVisibility,
-                    ),
-                  ),
+                  ],
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
+
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () {
+                    isSubmitted = true;
+                    final isValid = validate();
+                    if (isValid) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text('Login sukses!')));
+                    }
+                  },
+                  text: "Sign In",
+                ),
 
                 // Sign In Button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isEmailEmpty = emailController.text.isEmpty;
-                        isPasswordEmpty = passwordController.text.isEmpty;
-                      });
-
-                      if (!isEmailEmpty! && !isPasswordEmpty!) {
-                        // NI JANGAN DIGANTI DLU YA, W MASI TES KIRIM MESSAGE SUCCESS
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Login sukses!')),
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1F1E5B),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: const Text(
-                      'Sign In',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 Row(
                   children: [
@@ -190,39 +166,45 @@ class _SignInState extends State<SignIn> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 const Text(
                   'Haven’t Sign Up?',
                   style: TextStyle(color: Color(0xFF10297F)),
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      //ini jg janggan diganti dl ya
-                      Navigator.push(
+
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUp()),
+                    );
+                  },
+                  text: "Sign Up",
+                  buttonType: ButtonTypes.outline,
+                ),
+
+                SizedBox(height: isSmall ? 5 : 10),
+                // Forgot password text
+                GestureDetector(
+                  onTap:
+                      () => Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUp()),
-                      );
-                      // ScaffoldMessenger.of(context).showSnackBar(
-                      //   SnackBar(content: Text('Navigasi ke Sign Up')),
-                      // );
-                    },
-                    child: const Text(
-                      'Sign Up',
-                      style: TextStyle(color: Color(0xFF1F1E5B)),
+                        MaterialPageRoute(
+                          builder: (context) => ForgetPassword(),
+                        ),
+                      ),
+                  child: Text(
+                    'Forget Password?',
+                    style: TextStyle(
+                      color: Color(0xFF10297F),
+                      fontSize: isSmall ? 18 : 24,
                     ),
                   ),
                 ),
 
-                // Forgot password text
-                const Text(
-                  'Forget Password?',
-                  style: TextStyle(color: Color(0xFF10297F)),
-                ),
-
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
               ],
             ),
           ),

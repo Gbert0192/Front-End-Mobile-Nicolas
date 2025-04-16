@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum TextInputTypes { password, email, text }
+
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
     required this.isSmall,
@@ -8,7 +10,7 @@ class ResponsiveTextInput extends StatefulWidget {
     this.hint,
     this.label,
     this.errorText,
-    this.type = "text",
+    this.type = TextInputTypes.text,
   });
 
   final bool isSmall;
@@ -17,7 +19,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final String? hint;
   final String? label;
   final String? errorText;
-  final String? type;
+  final TextInputTypes type;
 
   @override
   State<ResponsiveTextInput> createState() => _ResponsiveTextInputState();
@@ -26,6 +28,7 @@ class ResponsiveTextInput extends StatefulWidget {
 class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
   late FocusNode _focusNode;
   bool _isFocused = false;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -48,6 +51,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
   @override
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
+    final isPassword = widget.type == TextInputTypes.password;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,9 +72,9 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               child: TextField(
                 focusNode: _focusNode,
                 controller: widget.controller,
-                obscureText: widget.type == 'password',
+                obscureText: isPassword ? _obscureText : false,
                 keyboardType:
-                    widget.type == 'email'
+                    widget.type == TextInputTypes.email
                         ? TextInputType.emailAddress
                         : TextInputType.text,
                 onChanged: (_) {
@@ -88,6 +92,22 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     horizontal: widget.isSmall ? 18 : 20,
                     vertical: widget.isSmall ? 12 : 16,
                   ),
+                  suffixIcon:
+                      isPassword
+                          ? IconButton(
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: _getColor(),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureText = !_obscureText;
+                              });
+                            },
+                          )
+                          : null,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -108,7 +128,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         if (hasError)
           Padding(
             padding: const EdgeInsets.only(left: 12),
@@ -120,6 +140,4 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
       ],
     );
   }
-
-  void onChanged() {}
 }

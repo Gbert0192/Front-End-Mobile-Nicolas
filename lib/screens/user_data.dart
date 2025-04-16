@@ -1,8 +1,9 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});
@@ -81,7 +82,7 @@ class _UserDataState extends State<UserData> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title: Row(
           children: [
             ElevatedButton(
@@ -292,11 +293,6 @@ class _UserDataState extends State<UserData> {
               //Continue Button
               SizedBox(
                 width: double.infinity,
-                // child: ResponsiveButton(
-                //   isSmall: isSmall,
-                //   onPressed: ,
-                //   text: 'Continue',
-                // ),
                 child: ElevatedButton(
                   onPressed:
                       isButtonEnabled
@@ -317,9 +313,7 @@ class _UserDataState extends State<UserData> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (context) =>
-                                          HomePage(nama: nameController.text),
+                                  builder: (context) => HomePage(),
                                 ),
                               );
                             }
