@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+enum TextInputTypes { password, email, text }
+
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
     required this.isSmall,
@@ -8,7 +10,7 @@ class ResponsiveTextInput extends StatefulWidget {
     this.hint,
     this.label,
     this.errorText,
-    this.type = "text",
+    this.type = TextInputTypes.text,
   });
 
   final bool isSmall;
@@ -17,7 +19,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final String? hint;
   final String? label;
   final String? errorText;
-  final String? type;
+  final TextInputTypes type;
 
   @override
   State<ResponsiveTextInput> createState() => _ResponsiveTextInputState();
@@ -49,7 +51,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
   @override
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
-    final isPassword = widget.type == 'password';
+    final isPassword = widget.type == TextInputTypes.password;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +74,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 controller: widget.controller,
                 obscureText: isPassword ? _obscureText : false,
                 keyboardType:
-                    widget.type == 'email'
+                    widget.type == TextInputTypes.email
                         ? TextInputType.emailAddress
                         : TextInputType.text,
                 onChanged: (_) {

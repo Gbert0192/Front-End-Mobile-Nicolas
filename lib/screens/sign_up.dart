@@ -90,7 +90,7 @@ class _SignUpState extends State<SignUp> {
                       controller: emailController,
                       hint: 'Enter your email',
                       label: 'Email',
-                      type: 'email',
+                      type: TextInputTypes.email,
                       errorText: emailError,
                       onChanged: () {
                         if (isSubmitted) {

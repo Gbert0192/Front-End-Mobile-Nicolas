@@ -104,7 +104,7 @@ class _SignInState extends State<SignIn> {
                       controller: FieldControls["email"],
                       hint: 'Enter your email',
                       label: 'Email',
-                      type: 'email',
+                      type: TextInputTypes.email,
                       errorText: FieldErrors["email"],
                       onChanged: () {
                         if (isSubmitted) {
@@ -118,7 +118,7 @@ class _SignInState extends State<SignIn> {
                       controller: FieldControls["password"],
                       hint: 'Enter your password',
                       label: 'Password',
-                      type: 'password',
+                      type: TextInputTypes.password,
                       errorText: FieldErrors["password"],
                       onChanged: () {
                         if (isSubmitted) {

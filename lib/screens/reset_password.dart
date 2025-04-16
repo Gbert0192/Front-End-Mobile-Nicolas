@@ -162,6 +162,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         !isPasswordNotMatch) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
+                          backgroundColor: Colors.green,
                           content: Text('Password Reset Success!'),
                         ),
                       );
@@ -177,7 +178,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                   ),
                   child: const Text(
                     'Reset Password',
-
                     style: TextStyle(fontSize: 17, color: Colors.white),
                   ),
                 ),
