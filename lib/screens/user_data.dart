@@ -1,9 +1,6 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});
@@ -20,8 +17,8 @@ class _UserDataState extends State<UserData> {
   bool isButtonEnabled = false;
   bool isObscure = true;
   bool isPasswordMatch = false;
-
-  File? _selectedImage;
+  bool showIcon = true;
+  ImageProvider? profileImage;
 
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -47,32 +44,16 @@ class _UserDataState extends State<UserData> {
     });
   }
 
-  void _showImageSourceActionSheet() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Wrap(
-          children: [
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Pick from Gallery'),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImageFromGallery();
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text('Pick from Camera'),
-              onTap: () {
-                Navigator.pop(context);
-                _pickImageFromCamera();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void changeAvatar() {
+    setState(() {
+      if (showIcon) {
+        profileImage = AssetImage('assets/users/female 1.jpg');
+        showIcon = false;
+      } else {
+        profileImage = null;
+        showIcon = true;
+      }
+    });
   }
 
   @override
@@ -83,20 +64,6 @@ class _UserDataState extends State<UserData> {
         backgroundColor: Colors.white,
         elevation: 1,
         automaticallyImplyLeading: true,
-        title: Row(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: CircleBorder(),
-                backgroundColor: Colors.white,
-              ),
-              child: const Icon(Icons.arrow_back, color: Colors.black),
-            ),
-          ],
-        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -117,16 +84,13 @@ class _UserDataState extends State<UserData> {
                   CircleAvatar(
                     radius: 50,
                     backgroundColor: Colors.grey[300],
-                    backgroundImage:
-                        _selectedImage != null
-                            ? FileImage(_selectedImage!)
-                            : null,
+                    backgroundImage: profileImage,
                     child:
-                        _selectedImage == null
-                            ? const Icon(
-                              Icons.person_rounded,
-                              size: 100,
-                              color: Colors.grey,
+                        showIcon
+                            ? Icon(
+                              Icons.person,
+                              size: 75,
+                              color: Colors.grey[400],
                             )
                             : null,
                   ),
@@ -142,7 +106,7 @@ class _UserDataState extends State<UserData> {
                       ),
                       child: IconButton(
                         onPressed: () {
-                          _showImageSourceActionSheet();
+                          changeAvatar();
                         },
                         constraints: BoxConstraints(
                           minHeight: 16,
@@ -338,27 +302,5 @@ class _UserDataState extends State<UserData> {
         ),
       ),
     );
-  }
-
-  Future _pickImageFromGallery() async {
-    final returnedImage = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
-
-    if (returnedImage == null) return;
-    setState(() {
-      _selectedImage = File(returnedImage.path);
-    });
-  }
-
-  Future _pickImageFromCamera() async {
-    final returnedImage = await ImagePicker().pickImage(
-      source: ImageSource.camera,
-    );
-
-    if (returnedImage == null) return;
-    setState(() {
-      _selectedImage = File(returnedImage.path);
-    });
   }
 }
