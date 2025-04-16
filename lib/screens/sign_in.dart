@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/screens/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -188,10 +189,23 @@ class _SignInState extends State<SignIn> {
                   buttonType: "outline",
                 ),
 
+                SizedBox(height: isSmall ? 5 : 10),
                 // Forgot password text
-                const Text(
-                  'Forget Password?',
-                  style: TextStyle(color: Color(0xFF10297F)),
+                GestureDetector(
+                  onTap:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgetPassword(),
+                        ),
+                      ),
+                  child: Text(
+                    'Forget Password?',
+                    style: TextStyle(
+                      color: Color(0xFF10297F),
+                      fontSize: isSmall ? 18 : 24,
+                    ),
+                  ),
                 ),
 
                 SizedBox(height: isSmall ? 10 : 20),
