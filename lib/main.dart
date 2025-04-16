@@ -17,7 +17,6 @@ class _MainAppState extends State<MainApp> {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
-        //this need sincronize with the splash screen
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),

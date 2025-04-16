@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+enum ButtonTypes { normal, outline }
+
 class ResponsiveButton extends StatelessWidget {
   final bool isSmall;
   final VoidCallback? onPressed;
   final String text;
   final Color textColor;
   final Color backgroundColor;
-  final String buttonType;
+  final ButtonTypes buttonType;
   final Color borderColor;
 
   const ResponsiveButton({
@@ -14,11 +16,12 @@ class ResponsiveButton extends StatelessWidget {
     this.onPressed,
     required this.text,
     Color? textColor,
-    this.buttonType = "normal",
+    this.buttonType = ButtonTypes.normal,
     this.backgroundColor = const Color(0xFF1F1E5B),
     this.borderColor = Colors.black,
   }) : textColor =
-           textColor ?? (buttonType == "normal" ? Colors.white : Colors.black);
+           textColor ??
+           (buttonType == ButtonTypes.normal ? Colors.white : Colors.black);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class ResponsiveButton extends StatelessWidget {
       width: isSmall ? 240 : 300,
       height: isSmall ? null : 50,
       child:
-          buttonType == "outline"
+          buttonType == ButtonTypes.outline
               ? OutlinedButton(
                 onPressed: onPressed,
                 style: ElevatedButton.styleFrom(

@@ -25,19 +25,15 @@ class _SignInState extends State<SignIn> {
 
   bool validate() {
     final errorEmail = validateEmail(value: FieldControls["email"]!.text);
-    if (errorEmail != null) {
-      setState(() {
-        FieldErrors["email"] = errorEmail;
-      });
-    }
+    setState(() {
+      FieldErrors["email"] = errorEmail;
+    });
     final errorPassword = validatePassword(
       value: FieldControls["password"]!.text,
     );
-    if (errorPassword != null) {
-      setState(() {
-        FieldErrors["password"] = errorPassword;
-      });
-    }
+    setState(() {
+      FieldErrors["password"] = errorPassword;
+    });
     return FieldErrors["email"] == null && FieldErrors["password"] == null;
   }
 
@@ -186,7 +182,7 @@ class _SignInState extends State<SignIn> {
                     );
                   },
                   text: "Sign Up",
-                  buttonType: "outline",
+                  buttonType: ButtonTypes.outline,
                 ),
 
                 SizedBox(height: isSmall ? 5 : 10),

@@ -20,11 +20,9 @@ class _SignUpState extends State<SignUp> {
 
   bool validate() {
     final errorEmail = validateEmail(value: emailController.text);
-    if (errorEmail != null) {
-      setState(() {
-        emailError = errorEmail;
-      });
-    }
+    setState(() {
+      emailError = errorEmail;
+    });
     return errorEmail == null;
   }
 
@@ -150,7 +148,7 @@ class _SignUpState extends State<SignUp> {
                       MaterialPageRoute(builder: (context) => SignIn()),
                     );
                   },
-                  buttonType: "outline",
+                  buttonType: ButtonTypes.outline,
                   text: "Sign In",
                 ),
               ],
