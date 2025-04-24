@@ -43,171 +43,174 @@ class _SignInState extends State<SignIn> {
     final isSmall = size.height < 700;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: EdgeInsets.only(left: 12.0),
-          child: Material(
-            color: Colors.white,
-            shape: const CircleBorder(),
-            elevation: 2,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                padding: const EdgeInsets.all(12),
-                elevation: 1,
-              ),
-              child: const Icon(Icons.arrow_back, color: Colors.black),
-            ),
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
-
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/starting/park_spot.png',
-                  height: isSmall ? 240 : 360,
-                ),
-                SizedBox(height: isSmall ? 10 : 20),
-                Text(
-                  'Back Again! Your Perfect Spot Awaits!',
-                  style: TextStyle(
-                    fontSize: isSmall ? 18 : 24,
-                    color: Color(0xFF1879D4),
-                    shadows: [
-                      Shadow(
-                        offset: Offset(4, 4),
-                        blurRadius: 6.0,
-                        color: Color.fromRGBO(24, 45, 163, 0.25),
-                      ),
-                    ],
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 2,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.all(12),
+                      elevation: 1,
+                    ),
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: isSmall ? 10 : 20),
-
-                Column(
+              ),
+              backgroundColor: Colors.white,
+              elevation: 0,
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
                   children: [
-                    ResponsiveTextInput(
-                      isSmall: isSmall,
-                      controller: FieldControls["email"],
-                      hint: 'Enter your email',
-                      label: 'Email',
-                      type: TextInputTypes.email,
-                      errorText: FieldErrors["email"],
-                      onChanged: () {
-                        if (isSubmitted) {
-                          validate();
-                        }
-                      },
+                    Image.asset(
+                      'assets/starting/park_spot.png',
+                      height: isSmall ? 240 : 360,
                     ),
-                    const SizedBox(height: 12),
-                    ResponsiveTextInput(
-                      isSmall: isSmall,
-                      controller: FieldControls["password"],
-                      hint: 'Enter your password',
-                      label: 'Password',
-                      type: TextInputTypes.password,
-                      errorText: FieldErrors["password"],
-                      onChanged: () {
-                        if (isSubmitted) {
-                          validate();
-                        }
-                      },
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: isSmall ? 10 : 20),
-
-                ResponsiveButton(
-                  isSmall: isSmall,
-                  onPressed: () {
-                    isSubmitted = true;
-                    final isValid = validate();
-                    if (isValid) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text('Login sukses!')));
-                    }
-                  },
-                  text: "Sign In",
-                ),
-
-                // Sign In Button
-                SizedBox(height: isSmall ? 10 : 20),
-
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: Colors.grey)),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
-                      child: Text(
-                        'Or',
-                        style: TextStyle(color: Colors.grey, fontSize: 18),
+                    SizedBox(height: isSmall ? 10 : 20),
+                    Text(
+                      'Back Again! Your Perfect Spot Awaits!',
+                      style: TextStyle(
+                        fontSize: isSmall ? 18 : 24,
+                        color: Color(0xFF1879D4),
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    Expanded(child: Divider(color: Colors.grey)),
-                  ],
-                ),
+                    SizedBox(height: isSmall ? 10 : 20),
 
-                SizedBox(height: isSmall ? 10 : 20),
+                    Column(
+                      children: [
+                        ResponsiveTextInput(
+                          isSmall: isSmall,
+                          controller: FieldControls["email"],
+                          hint: 'Enter your email',
+                          label: 'Email',
+                          type: TextInputTypes.email,
+                          errorText: FieldErrors["email"],
+                          onChanged: () {
+                            if (isSubmitted) {
+                              validate();
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 12),
+                        ResponsiveTextInput(
+                          isSmall: isSmall,
+                          controller: FieldControls["password"],
+                          hint: 'Enter your password',
+                          label: 'Password',
+                          type: TextInputTypes.password,
+                          errorText: FieldErrors["password"],
+                          onChanged: () {
+                            if (isSubmitted) {
+                              validate();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
 
-                const Text(
-                  'Haven’t Sign Up?',
-                  style: TextStyle(color: Color(0xFF10297F)),
-                ),
+                    SizedBox(height: isSmall ? 10 : 20),
 
-                ResponsiveButton(
-                  isSmall: isSmall,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignUp()),
-                    );
-                  },
-                  text: "Sign Up",
-                  buttonType: ButtonTypes.outline,
-                ),
+                    ResponsiveButton(
+                      isSmall: isSmall,
+                      onPressed: () {
+                        isSubmitted = true;
+                        final isValid = validate();
+                        if (isValid) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Login sukses!')),
+                          );
+                        }
+                      },
+                      text: "Sign In",
+                    ),
 
-                SizedBox(height: isSmall ? 5 : 10),
-                // Forgot password text
-                GestureDetector(
-                  onTap:
-                      () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ForgetPassword(),
+                    // Sign In Button
+                    SizedBox(height: isSmall ? 10 : 20),
+
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: Colors.grey)),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            'Or',
+                            style: TextStyle(color: Colors.grey, fontSize: 18),
+                          ),
+                        ),
+                        Expanded(child: Divider(color: Colors.grey)),
+                      ],
+                    ),
+
+                    SizedBox(height: isSmall ? 10 : 20),
+
+                    const Text(
+                      'Haven’t Sign Up?',
+                      style: TextStyle(color: Color(0xFF10297F)),
+                    ),
+
+                    ResponsiveButton(
+                      isSmall: isSmall,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SignUp()),
+                        );
+                      },
+                      text: "Sign Up",
+                      buttonType: ButtonTypes.outline,
+                    ),
+
+                    SizedBox(height: isSmall ? 5 : 10),
+                    // Forgot password text
+                    GestureDetector(
+                      onTap:
+                          () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgetPassword(),
+                            ),
+                          ),
+                      child: Text(
+                        'Forget Password?',
+                        style: TextStyle(
+                          color: Color(0xFF10297F),
+                          fontSize: isSmall ? 16 : 24,
                         ),
                       ),
-                  child: Text(
-                    'Forget Password?',
-                    style: TextStyle(
-                      color: Color(0xFF10297F),
-                      fontSize: isSmall ? 18 : 24,
                     ),
-                  ),
-                ),
 
-                SizedBox(height: isSmall ? 10 : 20),
-              ],
+                    SizedBox(height: isSmall ? 10 : 20),
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

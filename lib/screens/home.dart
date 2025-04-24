@@ -34,10 +34,7 @@ class CircleIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => destination),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (_) => destination));
       },
       icon: CircleAvatar(
         radius: 25,
@@ -74,9 +71,21 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
   final List<ParkingSpot> spots = [
-    ParkingSpot(name: 'A', imageUrl: 'https://via.placeholder.com/300', price: 'Rp 3.000 / hour'),
-    ParkingSpot(name: 'B', imageUrl: 'https://via.placeholder.com/300', price: 'Rp 2.500 / hour'),
-    ParkingSpot(name: 'C', imageUrl: 'https://via.placeholder.com/300', price: 'Rp 4.000 / hour'),
+    ParkingSpot(
+      name: 'A',
+      imageUrl: 'https://via.placeholder.com/300',
+      price: 'Rp 3.000 / hour',
+    ),
+    ParkingSpot(
+      name: 'B',
+      imageUrl: 'https://via.placeholder.com/300',
+      price: 'Rp 2.500 / hour',
+    ),
+    ParkingSpot(
+      name: 'C',
+      imageUrl: 'https://via.placeholder.com/300',
+      price: 'Rp 4.000 / hour',
+    ),
   ];
 
   void _nextSpot() {
@@ -111,7 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   CircleAvatar(
-                    backgroundImage: NetworkImage('https://via.placeholder.com/150'),                                     // avatarrr
+                    backgroundImage: NetworkImage(
+                      'https://via.placeholder.com/150',
+                    ), // avatarrr
                     radius: 30,
                   ),
                 ],
@@ -140,10 +151,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Balance", style: TextStyle(color: Colors.white)),                                 // balance
-                            Text("Rp 1.000.000",
-                                style: TextStyle(
-                                    color: Colors.white, fontWeight: FontWeight.bold)),
+                            Text(
+                              "Balance",
+                              style: TextStyle(color: Colors.white),
+                            ), // balance
+                            Text(
+                              "Rp 1.000.000",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ],
                         ),
                       ],
@@ -166,7 +184,10 @@ class _HomeScreenState extends State<HomeScreen> {
               const Text(
                 "Recent Spots",
                 style: TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.deepPurple,
+                ),
               ),
               const SizedBox(height: 16),
               Container(
@@ -176,10 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    currentSpot.imageUrl,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.network(currentSpot.imageUrl, fit: BoxFit.cover),
                 ),
               ),
               const SizedBox(height: 12),
@@ -187,13 +205,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                      onPressed: _prevSpot,
-                      icon: const Icon(Icons.arrow_left, size: 36)),
+                    onPressed: _prevSpot,
+                    icon: const Icon(Icons.arrow_left, size: 36),
+                  ),
                   Column(
                     children: [
                       Text(
                         currentSpot.name,
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         currentSpot.price,
@@ -201,16 +223,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 6),
                       ElevatedButton(
-                        onPressed: () {},                                                                   //this thing the parking
-                        style:
-                            ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+                        onPressed: () {}, //this thing the parking
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                        ),
                         child: const Text("Get Parking Now"),
                       ),
                     ],
                   ),
                   IconButton(
-                      onPressed: _nextSpot,
-                      icon: const Icon(Icons.arrow_right, size: 36)),
+                    onPressed: _nextSpot,
+                    icon: const Icon(Icons.arrow_right, size: 36),
+                  ),
                 ],
               ),
               const Spacer(),
@@ -231,11 +255,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: const [
-                    CircleIconButton(icon: Icons.home, color: Colors.deepOrange, destination: HomeScreen()),  // go to whatever
-                    CircleIconButton(icon: Icons.notifications, destination: HomeScreen()),
-                    CircleIconButton(icon: Icons.local_parking, destination: HomeScreen()),
-                    CircleIconButton(icon: Icons.settings, destination: HomeScreen()),
-                    CircleIconButton(icon: Icons.person, destination: HomeScreen()),
+                    CircleIconButton(
+                      icon: Icons.home,
+                      color: Colors.deepOrange,
+                      destination: HomeScreen(),
+                    ), // go to whatever
+                    CircleIconButton(
+                      icon: Icons.notifications,
+                      destination: HomeScreen(),
+                    ),
+                    CircleIconButton(
+                      icon: Icons.local_parking,
+                      destination: HomeScreen(),
+                    ),
+                    CircleIconButton(
+                      icon: Icons.discount,
+                      destination: HomeScreen(),
+                    ),
+                    CircleIconButton(
+                      icon: Icons.person,
+                      destination: HomeScreen(),
+                    ),
                   ],
                 ),
               ),
@@ -247,4 +287,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

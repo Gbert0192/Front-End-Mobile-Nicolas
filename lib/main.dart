@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/splash_screen.dart';
 
 void main() {
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()));
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => ForgetPassProvider())],
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -38,7 +45,6 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashScreen();
     return const SplashScreen();
   }
 }

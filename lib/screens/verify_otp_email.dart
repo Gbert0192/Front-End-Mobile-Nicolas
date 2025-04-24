@@ -140,7 +140,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '*Please Enter The Code!',
+                      'Please Enter The Code!',
                       style: TextStyle(color: Colors.red, fontSize: 15),
                     ),
                   ),
