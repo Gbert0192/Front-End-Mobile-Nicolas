@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/button.dart';
+import 'package:tugas_front_end_nicolas/components/pin_input.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
@@ -12,6 +14,8 @@ class VerifyOtpEmail extends StatefulWidget {
 }
 
 class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
+  bool isSubmitted = false;
+
   TextEditingController otpController = TextEditingController();
 
   bool? isOtpEmpty;
@@ -45,6 +49,14 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     String email = obscureEmail(forgotPassProvider.email);
+
+    bool validate() {
+      if (forgotPassProvider.validateOTP(otpController.text)) {
+        showFlexibleSnackbar(context, "OTP Invalid!");
+        return false;
+      }
+      return true;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -82,16 +94,16 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'Verify',
-                      style: TextStyle(fontSize: 22),
+                      style: TextStyle(fontSize: isSmall ? 20 : 30),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(width: 5),
-                    const Text(
+                    Text(
                       'Account',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: isSmall ? 20 : 30,
                         fontWeight: FontWeight.bold,
                       ),
                       textAlign: TextAlign.center,
@@ -101,15 +113,18 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
 
                 Column(
                   children: [
-                    const Text(
+                    Text(
                       'Please enter the code sent to ',
-                      style: TextStyle(fontSize: 18, color: Color(0xFFBABABA)),
+                      style: TextStyle(
+                        fontSize: isSmall ? 15 : 18,
+                        color: Color(0xFFBABABA),
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Text(
                       email,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: isSmall ? 15 : 18,
                         color: Color(0xFFBABABA),
                         fontWeight: FontWeight.bold,
                       ),
@@ -121,46 +136,8 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // OTP Field
-                PinCodeTextField(
-                  appContext: context,
-                  length: 6,
-                  controller: otpController,
-                  autoDisposeControllers: false,
-                  animationType: AnimationType.fade,
-                  keyboardType: TextInputType.number,
-                  pinTheme: PinTheme(
-                    shape: PinCodeFieldShape.box,
-                    borderRadius: BorderRadius.circular(10),
-                    fieldHeight: 50,
-                    fieldWidth: 50,
-                    activeFillColor:
-                        isOtpEmpty == true
-                            ? const Color(0xFFFFEDED)
-                            : Colors.white,
-                    selectedFillColor:
-                        isOtpEmpty == true
-                            ? const Color(0xFFFFEDED)
-                            : Colors.white,
-                    inactiveFillColor:
-                        isOtpEmpty == true
-                            ? const Color(0xFFFFEDED)
-                            : Colors.white,
-                    activeColor: isOtpEmpty == true ? Colors.red : Colors.blue,
-                    selectedColor:
-                        isOtpEmpty == true ? Colors.red : Colors.blue,
-                    inactiveColor:
-                        isOtpEmpty == true ? Colors.red : Colors.grey,
-                  ),
-                  enableActiveFill: true,
-                  onChanged: (value) {
-                    setState(() {
-                      isOtpEmpty = false;
-                    });
-                  },
-                  beforeTextPaste: (text) {
-                    return false;
-                  },
-                ),
+                ResponsivePINInput(isSmall: isSmall),
+
                 if (isOtpEmpty == true)
                   Align(
                     alignment: Alignment.centerLeft,
@@ -169,55 +146,62 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                       style: TextStyle(color: Colors.red, fontSize: 15),
                     ),
                   ),
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 18 : 30),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Didn\'t Receive OTP?',
-                      style: TextStyle(fontSize: 18),
+                    Text(
+                      'OTP not received?',
+                      style: TextStyle(
+                        fontSize: isSmall ? 15 : 18,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(width: 5),
-                    const Text(
+                    Text(
                       'Resend OTP',
-                      style: TextStyle(fontSize: 18, color: Color(0xFF1879D4)),
+                      style: TextStyle(
+                        fontSize: isSmall ? 15 : 18,
+                        color: Color(0xFF1879D4),
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
 
-                SizedBox(height: isSmall ? 90 : 180),
+                SizedBox(height: isSmall ? 120 : 180),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        isOtpEmpty = otpController.text.length < 6;
-                      });
-
-                      if (!isOtpEmpty!) {
-                        showFlexibleSnackbar(
-                          context,
-                          "OTP is invalid",
-                          type: SnackbarType.error,
-                        );
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1F1E5B),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: const Text(
-                      'Verify OTP',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                ResponsiveButton(
+                  isSmall: isSmall,
+                  onPressed: () {
+                    isSubmitted = true;
+                    final isValid = validate();
+                    if (isValid) {
+                      forgotPassProvider.email = otpController.text;
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VerifyOtpEmail(),
+                        ),
+                      );
+                    }
+                  },
+                  text: "Continue",
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
               ],

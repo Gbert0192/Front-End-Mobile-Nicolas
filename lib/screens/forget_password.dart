@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/verify_otp_email.dart';
+import 'package:tugas_front_end_nicolas/screens/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -152,6 +153,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     final isValid = validate();
                     if (isValid) {
                       forgotPassProvider.email = emailController.text;
+                      forgotPassProvider.generateOTP();
+                      showFlexibleSnackbar(
+                        context,
+                        "Your OTP is ${forgotPassProvider.OTP}",
+                      );
                       Navigator.push(
                         context,
                         MaterialPageRoute(

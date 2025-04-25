@@ -5,10 +5,9 @@ class ForgetPassProvider with ChangeNotifier {
   int? OTP = null;
   String email = "";
 
-  int? randomizeOTP() {
+  void generateOTP() {
     final random = Random();
     OTP = 100000 + random.nextInt(900000);
-    return OTP;
   }
 
   bool validateOTP(String value) {
