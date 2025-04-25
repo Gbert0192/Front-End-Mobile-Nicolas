@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/verify_otp_email.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
@@ -27,6 +29,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -148,6 +151,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     isSubmitted = true;
                     final isValid = validate();
                     if (isValid) {
+                      forgotPassProvider.email = emailController.text;
                       Navigator.push(
                         context,
                         MaterialPageRoute(

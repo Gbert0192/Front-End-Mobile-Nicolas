@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyOtpEmail extends StatefulWidget {
@@ -20,8 +22,30 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
     super.initState();
   }
 
+  String obscureEmail(String email) {
+    final parts = email.split('@');
+    if (parts.length != 2) return email;
+
+    final name = parts[0];
+    final domain = parts[1];
+
+    if (name.length <= 2) {
+      return '*' * name.length + '@' + domain;
+    }
+
+    final lastTwo = name.substring(name.length - 2);
+    final obscured = '*' * (name.length - 2) + lastTwo;
+
+    return obscured + '@' + domain;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    String email = obscureEmail(forgotPassProvider.email);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -48,11 +72,13 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
             child: Column(
               children: [
-                Image.asset('assets/starting/otp_send.png', height: 300),
-                const SizedBox(height: 10),
+                Image.asset(
+                  'assets/starting/otp_send.png',
+                  height: isSmall ? 180 : 300,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -72,7 +98,6 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
 
                 Column(
                   children: [
@@ -81,8 +106,8 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                       style: TextStyle(fontSize: 18, color: Color(0xFFBABABA)),
                       textAlign: TextAlign.center,
                     ),
-                    const Text(
-                      'Xxxxx@gmail.com ',
+                    Text(
+                      email,
                       style: TextStyle(
                         fontSize: 18,
                         color: Color(0xFFBABABA),
@@ -93,7 +118,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                   ],
                 ),
 
-                const SizedBox(height: 20),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 // OTP Field
                 PinCodeTextField(
@@ -107,7 +132,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                     shape: PinCodeFieldShape.box,
                     borderRadius: BorderRadius.circular(10),
                     fieldHeight: 50,
-                    fieldWidth: 55,
+                    fieldWidth: 50,
                     activeFillColor:
                         isOtpEmpty == true
                             ? const Color(0xFFFFEDED)
@@ -163,7 +188,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                   ],
                 ),
 
-                SizedBox(height: 180),
+                SizedBox(height: isSmall ? 90 : 180),
 
                 SizedBox(
                   width: double.infinity,
@@ -194,6 +219,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                     ),
                   ),
                 ),
+                SizedBox(height: isSmall ? 10 : 20),
               ],
             ),
           ),
