@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+enum PinInputType { number, text, mixed }
 
 class ResponsivePINInput extends StatefulWidget {
   final bool isSmall;
@@ -10,6 +13,7 @@ class ResponsivePINInput extends StatefulWidget {
   final Color pinFillColor;
   final Color pinBorderColor;
   final Color pinActiveBorderColor;
+  final PinInputType inputType;
 
   const ResponsivePINInput({
     super.key,
@@ -21,6 +25,7 @@ class ResponsivePINInput extends StatefulWidget {
     this.pinFillColor = Colors.white,
     this.pinBorderColor = const Color.fromARGB(255, 182, 182, 182),
     this.pinActiveBorderColor = const Color.fromARGB(255, 54, 50, 159),
+    this.inputType = PinInputType.mixed,
   });
 
   @override
@@ -29,6 +34,28 @@ class ResponsivePINInput extends StatefulWidget {
 
 class _ResponsivePINInputState extends State<ResponsivePINInput> {
   final FocusNode _focusNode = FocusNode();
+
+  TextInputType get _keyboardType {
+    switch (widget.inputType) {
+      case PinInputType.number:
+        return TextInputType.number;
+      case PinInputType.text:
+        return TextInputType.text;
+      case PinInputType.mixed:
+        return TextInputType.visiblePassword;
+    }
+  }
+
+  List<TextInputFormatter> get _inputFormatters {
+    switch (widget.inputType) {
+      case PinInputType.number:
+        return [FilteringTextInputFormatter.digitsOnly];
+      case PinInputType.text:
+        return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))];
+      case PinInputType.mixed:
+        return []; // Allow any input
+    }
+  }
 
   @override
   void dispose() {
@@ -48,7 +75,8 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           focusNode: _focusNode,
           autoDisposeControllers: false,
           animationType: AnimationType.fade,
-          keyboardType: TextInputType.number,
+          keyboardType: _keyboardType,
+          inputFormatters: _inputFormatters,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
             borderRadius: BorderRadius.circular(10),
@@ -93,13 +121,13 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           ),
           enableActiveFill: true,
           onChanged: (val) {
-            widget.onChanged!();
+            widget.onChanged?.call();
           },
           beforeTextPaste: (text) => false,
         ),
         if (widget.errorText != null)
           Padding(
-            padding: const EdgeInsets.only(top: 6, left: 4),
+            padding: const EdgeInsets.only(left: 6),
             child: Text(
               widget.errorText!,
               style: const TextStyle(color: Colors.red, fontSize: 12),

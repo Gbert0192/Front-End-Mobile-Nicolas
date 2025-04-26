@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/pin_input.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/reset_password.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyOtpEmail extends StatefulWidget {
@@ -14,17 +14,9 @@ class VerifyOtpEmail extends StatefulWidget {
 }
 
 class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
-  bool isSubmitted = false;
-
   TextEditingController otpController = TextEditingController();
 
-  bool? isOtpEmpty;
-
-  @override
-  void initState() {
-    isOtpEmpty = false;
-    super.initState();
-  }
+  String? otpError;
 
   String obscureEmail(String email) {
     final parts = email.split('@');
@@ -51,6 +43,14 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
     String email = obscureEmail(forgotPassProvider.email);
 
     bool validate() {
+      final errorOtp = otpController.text == "" ? "OTP must be filled" : null;
+      if (otpController.text == "") {
+        setState(() {
+          otpError = errorOtp;
+        });
+
+        return errorOtp == null;
+      }
       if (forgotPassProvider.validateOTP(otpController.text)) {
         showFlexibleSnackbar(context, "OTP Invalid!");
         return false;
@@ -96,7 +96,16 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                   children: [
                     Text(
                       'Verify',
-                      style: TextStyle(fontSize: isSmall ? 20 : 30),
+                      style: TextStyle(
+                        fontSize: isSmall ? 20 : 30,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(width: 5),
@@ -105,6 +114,13 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                       style: TextStyle(
                         fontSize: isSmall ? 20 : 30,
                         fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -136,16 +152,13 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // OTP Field
-                ResponsivePINInput(isSmall: isSmall),
+                ResponsivePINInput(
+                  isSmall: isSmall,
+                  errorText: otpError,
+                  controller: otpController,
+                  inputType: PinInputType.number,
+                ),
 
-                if (isOtpEmpty == true)
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Please Enter The Code!',
-                      style: TextStyle(color: Colors.red, fontSize: 15),
-                    ),
-                  ),
                 SizedBox(height: isSmall ? 18 : 30),
 
                 Row(
@@ -166,20 +179,23 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(width: 5),
-                    Text(
-                      'Resend OTP',
-                      style: TextStyle(
-                        fontSize: isSmall ? 15 : 18,
-                        color: Color(0xFF1879D4),
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
-                          ),
-                        ],
+                    GestureDetector(
+                      onTap: () => {},
+                      child: Text(
+                        'Resend OTP',
+                        style: TextStyle(
+                          fontSize: isSmall ? 15 : 18,
+                          color: Color(0xFF1879D4),
+                          shadows: [
+                            Shadow(
+                              offset: Offset(4, 4),
+                              blurRadius: 6.0,
+                              color: Color.fromRGBO(24, 45, 163, 0.25),
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ],
                 ),
@@ -189,14 +205,12 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                 ResponsiveButton(
                   isSmall: isSmall,
                   onPressed: () {
-                    isSubmitted = true;
                     final isValid = validate();
                     if (isValid) {
-                      forgotPassProvider.email = otpController.text;
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => VerifyOtpEmail(),
+                          builder: (context) => ResetPassword(),
                         ),
                       );
                     }
