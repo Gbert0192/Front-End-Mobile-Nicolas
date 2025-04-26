@@ -184,7 +184,7 @@ class _VerifyOtpEmailState extends State<VerifyOtpEmail> {
                   ],
                 ),
 
-                SizedBox(height: isSmall ? 120 : 180),
+                SizedBox(height: isSmall ? 100 : 180),
 
                 ResponsiveButton(
                   isSmall: isSmall,

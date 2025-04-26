@@ -9,8 +9,10 @@ class ResponsivePINInput extends StatefulWidget {
   final String? errorText;
   final Color pinFillColor;
   final Color pinBorderColor;
+  final Color pinActiveBorderColor;
 
   const ResponsivePINInput({
+    super.key,
     required this.isSmall,
     this.pinLength = 6,
     this.controller,
@@ -18,25 +20,24 @@ class ResponsivePINInput extends StatefulWidget {
     this.errorText,
     this.pinFillColor = Colors.white,
     this.pinBorderColor = const Color.fromARGB(255, 182, 182, 182),
+    this.pinActiveBorderColor = const Color.fromARGB(255, 54, 50, 159),
   });
 
   @override
-  _ResponsivePINInputState createState() => _ResponsivePINInputState();
+  State<ResponsivePINInput> createState() => _ResponsivePINInputState();
 }
 
 class _ResponsivePINInputState extends State<ResponsivePINInput> {
-  bool isOtpEmpty = true;
-  bool allFieldsFilled = false;
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Color effectiveBorderColor =
-        widget.errorText != null ? Colors.red : widget.pinBorderColor;
-    final Color effectiveFillColor =
-        widget.errorText != null
-            ? const Color(0xFFFFEDED)
-            : widget.pinFillColor;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,42 +45,57 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           appContext: context,
           length: widget.pinLength,
           controller: widget.controller,
+          focusNode: _focusNode,
+          autoDisposeControllers: false,
           animationType: AnimationType.fade,
           keyboardType: TextInputType.number,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             fieldHeight: 50,
             fieldWidth: 50,
             activeFillColor:
-                isOtpEmpty ? const Color(0xFFFFEDED) : Colors.white,
+                widget.errorText != null
+                    ? const Color(0xFFFFEDED)
+                    : widget.pinFillColor,
             selectedFillColor:
-                isOtpEmpty ? const Color(0xFFFFEDED) : Colors.white,
+                widget.errorText != null
+                    ? const Color(0xFFFFEDED)
+                    : widget.pinFillColor,
             inactiveFillColor:
-                isOtpEmpty ? const Color(0xFFFFEDED) : Colors.white,
-            activeColor: widget.errorText != null ? Colors.red : Colors.blue,
-            selectedColor: widget.errorText != null ? Colors.red : Colors.blue,
-            inactiveColor:
+                widget.errorText != null
+                    ? const Color(0xFFFFEDED)
+                    : widget.pinFillColor,
+            activeColor:
                 widget.errorText != null
                     ? Colors.red
-                    : const Color.fromARGB(255, 182, 182, 182),
+                    : widget.pinActiveBorderColor,
+            selectedColor:
+                widget.errorText != null
+                    ? Colors.red
+                    : widget.pinActiveBorderColor,
+            inactiveColor:
+                widget.errorText != null ? Colors.red : widget.pinBorderColor,
+            activeBoxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+            inActiveBoxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           enableActiveFill: true,
-          onChanged: (_) {
-            widget.onChanged?.call();
+          onChanged: (val) {
+            widget.onChanged!();
           },
-          beforeTextPaste: (text) {
-            return false; // Disallow pasting
-          },
-          onTap: () {
-            if (allFieldsFilled) {
-              setState(() {
-                widget.controller?.clear();
-                isOtpEmpty = true;
-                allFieldsFilled = false;
-              });
-            }
-          },
+          beforeTextPaste: (text) => false,
         ),
         if (widget.errorText != null)
           Padding(
