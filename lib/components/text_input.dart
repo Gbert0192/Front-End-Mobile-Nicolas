@@ -56,84 +56,80 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 6,
-                    offset: const Offset(4, 4),
-                  ),
-                ],
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 6,
+                offset: const Offset(4, 4),
               ),
-              child: TextField(
-                focusNode: _focusNode,
-                controller: widget.controller,
-                obscureText: isPassword ? _obscureText : false,
-                keyboardType:
-                    widget.type == TextInputTypes.email
-                        ? TextInputType.emailAddress
-                        : TextInputType.text,
-                onChanged: (_) {
-                  widget.onChanged?.call();
-                },
-                decoration: InputDecoration(
-                  hintText: widget.hint ?? '',
-                  labelText: widget.label ?? '',
-                  hintStyle: TextStyle(color: _getColor()),
-                  labelStyle: TextStyle(color: _getColor()),
-                  floatingLabelStyle: TextStyle(color: _getColor()),
-                  filled: true,
-                  fillColor: hasError ? const Color(0xFFFFEDED) : Colors.white,
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: widget.isSmall ? 18 : 20,
-                    vertical: widget.isSmall ? 12 : 16,
-                  ),
-                  suffixIcon:
-                      isPassword
-                          ? IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: _getColor(),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                          )
-                          : null,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _getColor(), width: 2.0),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: _getColor()),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.red),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
+            ],
+          ),
+          child: TextField(
+            focusNode: _focusNode,
+            controller: widget.controller,
+            obscureText: isPassword ? _obscureText : false,
+            keyboardType:
+                widget.type == TextInputTypes.email
+                    ? TextInputType.emailAddress
+                    : TextInputType.text,
+            onChanged: (_) {
+              widget.onChanged?.call();
+            },
+            decoration: InputDecoration(
+              hintText: widget.hint ?? '',
+              labelText: widget.label ?? '',
+              hintStyle: TextStyle(color: _getColor()),
+              labelStyle: TextStyle(color: _getColor()),
+              floatingLabelStyle: TextStyle(color: _getColor()),
+              filled: true,
+              fillColor: hasError ? const Color(0xFFFFEDED) : Colors.white,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: widget.isSmall ? 18 : 20,
+                vertical: widget.isSmall ? 12 : 16,
+              ),
+              suffixIcon:
+                  isPassword
+                      ? IconButton(
+                        icon: Icon(
+                          _obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                          color: _getColor(),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                      )
+                      : null,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: _getColor(), width: 2.0),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: _getColor()),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.red),
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
-          ],
+          ),
         ),
         const SizedBox(height: 4),
         if (hasError)
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
-              widget.errorText ?? '',
+              widget.errorText!,
               style: const TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),

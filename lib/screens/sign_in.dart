@@ -4,6 +4,7 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/screens/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class SignIn extends StatefulWidget {
@@ -15,6 +16,7 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   bool isSubmitted = false;
+  bool isLoading = false;
 
   Map<String, TextEditingController> FieldControls = {
     "email": TextEditingController(),
@@ -28,8 +30,10 @@ class _SignInState extends State<SignIn> {
     setState(() {
       FieldErrors["email"] = errorEmail;
     });
-    final errorPassword = validatePassword(
+    final errorPassword = validateBasic(
+      key: "Password",
       value: FieldControls["password"]!.text,
+      minLength: 8,
     );
     setState(() {
       FieldErrors["password"] = errorPassword;
@@ -134,17 +138,25 @@ class _SignInState extends State<SignIn> {
 
                     ResponsiveButton(
                       isSmall: isSmall,
+                      isLoading: isLoading,
                       onPressed: () {
                         isSubmitted = true;
                         final isValid = validate();
                         if (isValid) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Login sukses!')),
-                          );
+                          setState(() => isLoading = true);
+                          Future.delayed(const Duration(seconds: 2), () {
+                            setState(() => isLoading = false);
+                            showFlexibleSnackbar(
+                              context,
+                              "Welcome Back, User!",
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HomePage(),
+                              ),
+                            );
+                          });
                         }
                       },
                       text: "Sign In",
@@ -176,6 +188,7 @@ class _SignInState extends State<SignIn> {
 
                     ResponsiveButton(
                       isSmall: isSmall,
+                      isLoading: isLoading,
                       onPressed: () {
                         Navigator.push(
                           context,

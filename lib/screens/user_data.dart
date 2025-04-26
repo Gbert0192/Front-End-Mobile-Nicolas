@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
+import 'package:intl_phone_field/countries.dart';
 
 class UserData extends StatefulWidget {
   const UserData({super.key});
@@ -58,144 +58,100 @@ class _UserDataState extends State<UserData> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 1,
-        automaticallyImplyLeading: true,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(12),
+                elevation: 1,
+              ),
+              child: const Icon(Icons.arrow_back, color: Colors.black),
+            ),
+          ],
+        ),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              SizedBox(height: 20),
-              const Text(
-                'USER DATA',
-                style: TextStyle(
-                  fontSize: 50,
-                  color: Color(0xFF2C39B8),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Colors.grey[300],
-                    backgroundImage: profileImage,
-                    child:
-                        showIcon
-                            ? Icon(
-                              Icons.person,
-                              size: 75,
-                              color: Colors.grey[400],
-                            )
-                            : null,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
+            child: Column(
+              children: [
+                Text(
+                  'USER DATA',
+                  style: TextStyle(
+                    fontSize: isSmall ? 35 : 50,
+                    color: Color(0xFF2C39B8),
+                    shadows: [
+                      Shadow(
+                        offset: Offset(4, 4),
+                        blurRadius: 6.0,
+                        color: Color.fromRGBO(24, 45, 163, 0.25),
                       ),
-                      child: IconButton(
-                        onPressed: () {
-                          changeAvatar();
-                        },
-                        constraints: BoxConstraints(
-                          minHeight: 16,
-                          minWidth: 16,
+                    ],
+                  ),
+                ),
+                Stack(
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.grey[300],
+                      backgroundImage: profileImage,
+                      child:
+                          showIcon
+                              ? Icon(
+                                Icons.person,
+                                size: 75,
+                                color: Colors.grey[400],
+                              )
+                              : null,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
                         ),
-                        icon: Icon(Icons.edit, size: 14),
+                        child: IconButton(
+                          onPressed: () {
+                            changeAvatar();
+                          },
+                          constraints: BoxConstraints(
+                            minHeight: 16,
+                            minWidth: 16,
+                          ),
+                          icon: Icon(Icons.edit, size: 14),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-
-              //FullName
-              TextField(
-                controller: nameController,
-                decoration: InputDecoration(
-                  hintText: 'Full Name',
-                  labelText: 'Full Name',
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 20),
+                SizedBox(height: 20),
 
-              //Phone
-              SizedBox(
-                child: IntlPhoneField(
-                  controller: phoneController,
+                //FullName
+                TextField(
+                  controller: nameController,
                   decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    hintText: 'Phone Number',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      borderSide: BorderSide(),
-                    ),
-                    errorText:
-                        isPhone == true ? '*Phone Number must be filled' : null,
-                    errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    filled: true,
-                    fillColor:
-                        isPhone == true ? Color(0xFFFFEDED) : Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
-                    ),
-                  ),
-                  initialCountryCode: 'ID',
-                  disableLengthCheck: true,
-                ),
-              ),
-              SizedBox(height: 20),
-
-              //Password
-              SizedBox(
-                width: double.infinity,
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: isObscure,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                    labelText: 'Password',
+                    hintText: 'Full Name',
+                    labelText: 'Full Name',
                     border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
-                      borderSide: BorderSide(),
-                    ),
-                    errorText:
-                        isPassword == true ? '*Password must be filled' : null,
-                    filled: true,
-                    fillColor:
-                        isPassword == true ? Color(0xFFFFEDED) : Colors.white,
-                    errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    suffixIcon: IconButton(
-                      onPressed: passwordVisibility,
-                      icon: Icon(
-                        isObscure ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
-                      ),
                     ),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -203,101 +159,143 @@ class _UserDataState extends State<UserData> {
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
+                SizedBox(height: 20),
 
-              //Confirm Password
-              SizedBox(
-                width: double.infinity,
-                child: TextField(
-                  controller: confirmpwController,
-                  obscureText: isObscure,
-                  decoration: InputDecoration(
-                    hintText: 'Confirm Password',
-                    labelText: 'Confirm Password',
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                      borderSide: BorderSide(),
-                    ),
-                    errorText:
-                        isConfirmPw == true
-                            ? '*Confirm Password must be filled'
-                            : (confirmpwController.text !=
-                                    passwordController.text
-                                ? '*Password is not matched'
-                                : null),
-                    filled: true,
-                    fillColor:
-                        (isConfirmPw ||
-                                confirmpwController.text !=
-                                    passwordController.text)
-                            ? Color(0xFFFFEDED)
-                            : Colors.white,
-                    errorBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    suffixIcon: IconButton(
-                      onPressed: passwordVisibility,
-                      icon: Icon(
-                        isObscure ? Icons.visibility_off : Icons.visibility,
-                        color: Colors.grey,
+                //Phone
+                SizedBox(height: 20),
+
+                //Password
+                SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: isObscure,
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                      labelText: 'Password',
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(),
                       ),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 16,
+                      errorText:
+                          isPassword == true
+                              ? '*Password must be filled'
+                              : null,
+                      filled: true,
+                      fillColor:
+                          isPassword == true ? Color(0xFFFFEDED) : Colors.white,
+                      errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: passwordVisibility,
+                        icon: Icon(
+                          isObscure ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 16,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Spacer(),
+                SizedBox(height: 20),
 
-              //Continue Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed:
-                      isButtonEnabled
-                          ? () {
-                            setState(() {
-                              isPhone = phoneController.text.isEmpty;
-                              isPassword = passwordController.text.isEmpty;
-                              isConfirmPw = confirmpwController.text.isEmpty;
-                              isPasswordMatch =
-                                  confirmpwController.text ==
-                                  passwordController.text;
-                            });
+                //Confirm Password
+                SizedBox(
+                  width: double.infinity,
+                  child: TextField(
+                    controller: confirmpwController,
+                    obscureText: isObscure,
+                    decoration: InputDecoration(
+                      hintText: 'Confirm Password',
+                      labelText: 'Confirm Password',
+                      border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        borderSide: BorderSide(),
+                      ),
+                      errorText:
+                          isConfirmPw == true
+                              ? '*Confirm Password must be filled'
+                              : (confirmpwController.text !=
+                                      passwordController.text
+                                  ? '*Password is not matched'
+                                  : null),
+                      filled: true,
+                      fillColor:
+                          (isConfirmPw ||
+                                  confirmpwController.text !=
+                                      passwordController.text)
+                              ? Color(0xFFFFEDED)
+                              : Colors.white,
+                      errorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: passwordVisibility,
+                        icon: Icon(
+                          isObscure ? Icons.visibility_off : Icons.visibility,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
 
-                            if (!isPhone &&
-                                !isPassword &&
-                                !isConfirmPw &&
-                                isPasswordMatch) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              );
+                //Continue Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed:
+                        isButtonEnabled
+                            ? () {
+                              setState(() {
+                                isPhone = phoneController.text.isEmpty;
+                                isPassword = passwordController.text.isEmpty;
+                                isConfirmPw = confirmpwController.text.isEmpty;
+                                isPasswordMatch =
+                                    confirmpwController.text ==
+                                    passwordController.text;
+                              });
+
+                              if (!isPhone &&
+                                  !isPassword &&
+                                  !isConfirmPw &&
+                                  isPasswordMatch) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              }
                             }
-                          }
-                          : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF1F1E5B),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                            : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xFF1F1E5B),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text(
-                    'Continue',
-                    style: TextStyle(color: Colors.white),
+                    child: const Text(
+                      'Continue',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 50),
-            ],
+                SizedBox(height: 50),
+              ],
+            ),
           ),
         ),
       ),

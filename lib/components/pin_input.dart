@@ -53,7 +53,7 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
       case PinInputType.text:
         return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))];
       case PinInputType.mixed:
-        return []; // Allow any input
+        return [];
     }
   }
 
@@ -126,11 +126,14 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           beforeTextPaste: (text) => false,
         ),
         if (widget.errorText != null)
-          Padding(
-            padding: const EdgeInsets.only(left: 6),
-            child: Text(
-              widget.errorText!,
-              style: const TextStyle(color: Colors.red, fontSize: 12),
+          Transform.translate(
+            offset: Offset(0, -10),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 6),
+              child: Text(
+                widget.errorText!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
             ),
           ),
       ],

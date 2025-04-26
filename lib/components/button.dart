@@ -40,7 +40,7 @@ class ResponsiveButton extends StatelessWidget {
                     valueColor: AlwaysStoppedAnimation<Color>(textColor),
                   ),
                 ),
-                SizedBox(width: 5),
+                SizedBox(width: 10),
                 Text("Loading..."),
               ],
             )
