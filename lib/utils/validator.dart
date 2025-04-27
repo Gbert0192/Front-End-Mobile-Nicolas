@@ -52,7 +52,7 @@ String? validateBasic({
   if (required && value == "") {
     return "$key is required";
   }
-  if (match != null && value != match) {
+  if (match != null && value != "" && value != match) {
     return "$key is not matched";
   }
   if (minLength != null && value.length < minLength) {

@@ -6,6 +6,7 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class UserData extends StatefulWidget {
@@ -17,25 +18,37 @@ class UserData extends StatefulWidget {
 }
 
 class _UserDataState extends State<UserData> {
-  bool isSubmitted = false;
-  bool isLoading = false;
-
   ImageProvider? profileImage;
   String country_code = "ID";
 
-  Map<String, TextEditingController> FieldControls = {
-    "fullname": TextEditingController(),
-    "phone": TextEditingController(),
-    "password": TextEditingController(),
-    "conpassword": TextEditingController(),
-  };
-
-  Map<String, String?> FieldErrors = {
-    "fullname": null,
-    "phone": null,
-    "password": null,
-    "conpassword": null,
-  };
+  final form = UseForm(
+    fields: ["fullname", "phone", "password", "conpassword"],
+    validators: {
+      "fullname":
+          (value) =>
+              validateBasic(key: "Fullname", value: value, required: true),
+      "phone":
+          (value) => validateBasic(
+            key: "Phone Number",
+            value: value,
+            minLength: 7,
+            maxLength: 12,
+            required: true,
+          ),
+      "password": (value) => validatePassword(value: value),
+      "conpassword":
+          (value) => validateBasic(
+            key: "Confirm Password",
+            value: value,
+            required: true,
+          ),
+    },
+    match: {
+      "password": [
+        {"key": "conpassword", "label": "Confirm Password"},
+      ],
+    },
+  );
 
   int choice = -1;
 
@@ -59,45 +72,6 @@ class _UserDataState extends State<UserData> {
         choice = -1;
       }
     });
-  }
-
-  bool validate() {
-    final errorFullname = validateBasic(
-      key: "Fullname",
-      value: FieldControls["fullname"]!.text,
-      required: true,
-    );
-    setState(() {
-      FieldErrors["fullname"] = errorFullname;
-    });
-    final errorPhone = validateBasic(
-      key: "Phone Number",
-      value: FieldControls["phone"]!.text,
-      minLength: 7,
-      maxLength: 12,
-      required: true,
-    );
-    setState(() {
-      FieldErrors["phone"] = errorPhone;
-    });
-    final errorPassword = validatePassword(
-      value: FieldControls["password"]!.text,
-    );
-    setState(() {
-      FieldErrors["password"] = errorPassword;
-    });
-    final errorConPassword = validateBasic(
-      key: "Confirm Password",
-      match: FieldControls["password"]!.text,
-      value: FieldControls["conpassword"]!.text,
-    );
-    setState(() {
-      FieldErrors["conpassword"] = errorConPassword;
-    });
-    return FieldErrors["fullname"] == null &&
-        FieldErrors["phone"] == null &&
-        FieldErrors["password"] == null &&
-        FieldErrors["conpassword"] == null;
   }
 
   @override
@@ -199,14 +173,16 @@ class _UserDataState extends State<UserData> {
                       children: [
                         ResponsiveTextInput(
                           isSmall: isSmall,
-                          controller: FieldControls["fullname"],
+                          controller: form.control('fullname'),
                           hint: 'Enter Fullname',
                           label: 'Fullname',
                           type: TextInputTypes.text,
-                          errorText: FieldErrors["fullname"],
+                          errorText: form.error('fullname'),
                           onChanged: () {
-                            if (isSubmitted) {
-                              validate();
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
                             }
                           },
                         ),
@@ -214,12 +190,14 @@ class _UserDataState extends State<UserData> {
                         ResponsivePhoneInput(
                           isSmall: isSmall,
                           country_code: country_code,
+                          controller: form.control("phone"),
                           hint: 'Enter Phone Number',
-                          controller: FieldControls["phone"],
-                          errorText: FieldErrors["phone"],
+                          errorText: form.error('phone'),
                           onChanged: () {
-                            if (isSubmitted) {
-                              validate();
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
                             }
                           },
                           onCountryChanged:
@@ -230,28 +208,32 @@ class _UserDataState extends State<UserData> {
                         const SizedBox(height: 10),
                         ResponsiveTextInput(
                           isSmall: isSmall,
-                          controller: FieldControls["password"],
+                          controller: form.control("password"),
                           hint: 'Enter Password',
                           label: 'Password',
                           type: TextInputTypes.password,
-                          errorText: FieldErrors["password"],
+                          errorText: form.error('password'),
                           onChanged: () {
-                            if (isSubmitted) {
-                              validate();
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
                             }
                           },
                         ),
                         const SizedBox(height: 10),
                         ResponsiveTextInput(
                           isSmall: isSmall,
-                          controller: FieldControls["conpassword"],
+                          controller: form.control("conpassword"),
                           hint: 'Enter Confirm Password',
                           label: 'Confirm Password',
                           type: TextInputTypes.password,
-                          errorText: FieldErrors["conpassword"],
+                          errorText: form.error('conpassword'),
                           onChanged: () {
-                            if (isSubmitted) {
-                              validate();
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
                             }
                           },
                         ),
@@ -262,26 +244,29 @@ class _UserDataState extends State<UserData> {
                     //Continue Button
                     ResponsiveButton(
                       isSmall: isSmall,
-                      isLoading: isLoading,
+                      isLoading: form.isLoading,
                       onPressed: () {
-                        isSubmitted = true;
-                        final isValid = validate();
+                        bool isValid = false;
+                        setState(() {
+                          form.isSubmitted = true;
+                          isValid = form.validate();
+                        });
                         if (isValid) {
-                          setState(() => isLoading = true);
+                          setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
                             userProvider.registerUser({
                               "email": widget.email,
                               "profile_pic":
                                   choice == -1 ? null : userPP[choice],
-                              "fullname": FieldControls["fullname"]!.text,
+                              "fullname": form.control("fullname").text,
                               "country_code": country_code,
-                              "phone": FieldControls["phone"]!.text,
-                              "password": FieldControls["password"]!.text,
+                              "phone": form.control("phone").text,
+                              "password": form.control("password").text,
                             });
-                            setState(() => isLoading = false);
+                            setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome to ParkID, ${FieldControls["fullname"]!.text.split(" ")[0]}!",
+                              "Welcome to ParkID, ${form.control("fullname").text.split(" ")[0]}!",
                             );
                             Navigator.push(
                               context,

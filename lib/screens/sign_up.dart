@@ -6,6 +6,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/user_data.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class SignUp extends StatefulWidget {
@@ -16,19 +17,10 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  bool isSubmitted = false;
-  bool isLoading = false;
-
-  final TextEditingController emailController = TextEditingController();
-  String? emailError;
-
-  bool validate() {
-    final errorEmail = validateEmail(value: emailController.text);
-    setState(() {
-      emailError = errorEmail;
-    });
-    return errorEmail == null;
-  }
+  final form = UseForm(
+    fields: ["email"],
+    validators: {'email': (value) => validateEmail(value: value)},
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -92,14 +84,16 @@ class _SignUpState extends State<SignUp> {
                   children: [
                     ResponsiveTextInput(
                       isSmall: isSmall,
-                      controller: emailController,
+                      controller: form.control("email"),
                       hint: 'Enter your email',
                       label: 'Email',
                       type: TextInputTypes.email,
-                      errorText: emailError,
+                      errorText: form.error("email"),
                       onChanged: () {
-                        if (isSubmitted) {
-                          validate();
+                        if (form.isSubmitted) {
+                          setState(() {
+                            form.validate();
+                          });
                         }
                       },
                     ),
@@ -110,15 +104,18 @@ class _SignUpState extends State<SignUp> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
-                  isLoading: isLoading,
+                  isLoading: form.isLoading,
                   onPressed: () {
-                    isSubmitted = true;
-                    final isValid = validate();
+                    bool isValid = false;
+                    setState(() {
+                      form.isSubmitted = true;
+                      isValid = form.validate();
+                    });
                     if (isValid) {
-                      setState(() => isLoading = true);
+                      setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
                         int user_id = userProvider.findUser(
-                          emailController.text,
+                          form.control("email").text,
                         );
                         if (user_id != -1) {
                           showFlexibleSnackbar(
@@ -126,16 +123,17 @@ class _SignUpState extends State<SignUp> {
                             "Email already used!",
                             type: SnackbarType.error,
                           );
-                          setState(() => isLoading = false);
+                          setState(() => form.isLoading = false);
                           return;
                         }
-                        setState(() => isLoading = false);
+                        setState(() => form.isLoading = false);
                         showFlexibleSnackbar(context, "Email is available!");
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) => UserData(emailController.text),
+                                (context) =>
+                                    UserData(form.control("email").text),
                           ),
                         );
                       });
@@ -168,7 +166,7 @@ class _SignUpState extends State<SignUp> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
-                  isLoading: isLoading,
+                  isLoading: form.isLoading,
                   onPressed: () {
                     Navigator.push(
                       context,
