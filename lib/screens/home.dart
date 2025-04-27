@@ -156,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: Colors.deepPurple,
+                    color: Color(0xFF1F1E5B),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                    color:Color(0xFF1F1E5B),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -249,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ElevatedButton(
                           onPressed: () {}, //this thing the parking
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
+                            backgroundColor: Color(0xFF1F1E5B),
                           ),
                           child: const Text("Get Parking Now"),
                         ),
@@ -264,7 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFF1F1E5B),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
