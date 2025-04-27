@@ -67,14 +67,23 @@ class UserProvider with ChangeNotifier {
     };
   }
 
-  void resetPassword(int index, String newPassword) {
-    userList[index]["password"] = newPassword;
+  int resetPassword(int index, String newPass) {
+    bool samePass = userList[index!]["password"] == newPass;
+    if (samePass) {
+      return 0;
+    }
+    userList[index]["password"] = newPass;
+    return 1;
   }
 
   int changePassword(String oldPass, String newPass) {
     bool passMatch = userList[currentUser!]["password"] == oldPass;
     if (!passMatch) {
       return -1;
+    }
+    bool samePass = userList[currentUser!]["password"] == newPass;
+    if (samePass) {
+      return 0;
     }
     userList[currentUser!]["password"] = newPass;
     return 1;
