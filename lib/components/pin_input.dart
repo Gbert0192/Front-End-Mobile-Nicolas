@@ -1,42 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+enum PinInputType { number, text, mixed }
+
 class ResponsivePINInput extends StatefulWidget {
-  final bool isSmall;
   final int pinLength;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
   final String? errorText;
   final Color pinFillColor;
   final Color pinBorderColor;
+  final Color pinActiveBorderColor;
+  final PinInputType inputType;
 
   const ResponsivePINInput({
-    required this.isSmall,
+    super.key,
     this.pinLength = 6,
     this.controller,
     this.onChanged,
     this.errorText,
     this.pinFillColor = Colors.white,
     this.pinBorderColor = const Color.fromARGB(255, 182, 182, 182),
+    this.pinActiveBorderColor = const Color.fromARGB(255, 54, 50, 159),
+    this.inputType = PinInputType.mixed,
   });
 
   @override
-  _ResponsivePINInputState createState() => _ResponsivePINInputState();
+  State<ResponsivePINInput> createState() => _ResponsivePINInputState();
 }
 
 class _ResponsivePINInputState extends State<ResponsivePINInput> {
-  bool isOtpEmpty = true;
-  bool allFieldsFilled = false;
+  final FocusNode _focusNode = FocusNode();
+
+  TextInputType get _keyboardType {
+    switch (widget.inputType) {
+      case PinInputType.number:
+        return TextInputType.number;
+      case PinInputType.text:
+        return TextInputType.text;
+      case PinInputType.mixed:
+        return TextInputType.visiblePassword;
+    }
+  }
+
+  List<TextInputFormatter> get _inputFormatters {
+    switch (widget.inputType) {
+      case PinInputType.number:
+        return [FilteringTextInputFormatter.digitsOnly];
+      case PinInputType.text:
+        return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))];
+      case PinInputType.mixed:
+        return [];
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Color effectiveBorderColor =
-        widget.errorText != null ? Colors.red : widget.pinBorderColor;
-    final Color effectiveFillColor =
-        widget.errorText != null
-            ? const Color(0xFFFFEDED)
-            : widget.pinFillColor;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -44,49 +70,68 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           appContext: context,
           length: widget.pinLength,
           controller: widget.controller,
+          focusNode: _focusNode,
+          autoDisposeControllers: false,
           animationType: AnimationType.fade,
-          keyboardType: TextInputType.number,
+          keyboardType: _keyboardType,
+          inputFormatters: _inputFormatters,
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             fieldHeight: 50,
             fieldWidth: 50,
             activeFillColor:
-                isOtpEmpty ? const Color(0xFFFFEDED) : Colors.white,
+                widget.errorText != null
+                    ? const Color(0xFFFFEDED)
+                    : widget.pinFillColor,
             selectedFillColor:
-                isOtpEmpty ? const Color(0xFFFFEDED) : Colors.white,
+                widget.errorText != null
+                    ? const Color(0xFFFFEDED)
+                    : widget.pinFillColor,
             inactiveFillColor:
-                isOtpEmpty ? const Color(0xFFFFEDED) : Colors.white,
-            activeColor: widget.errorText != null ? Colors.red : Colors.blue,
-            selectedColor: widget.errorText != null ? Colors.red : Colors.blue,
-            inactiveColor:
+                widget.errorText != null
+                    ? const Color(0xFFFFEDED)
+                    : widget.pinFillColor,
+            activeColor:
                 widget.errorText != null
                     ? Colors.red
-                    : const Color.fromARGB(255, 182, 182, 182),
+                    : widget.pinActiveBorderColor,
+            selectedColor:
+                widget.errorText != null
+                    ? Colors.red
+                    : widget.pinActiveBorderColor,
+            inactiveColor:
+                widget.errorText != null ? Colors.red : widget.pinBorderColor,
+            activeBoxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+            inActiveBoxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.25),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           enableActiveFill: true,
-          onChanged: (_) {
+          onChanged: (val) {
             widget.onChanged?.call();
           },
-          beforeTextPaste: (text) {
-            return false; // Disallow pasting
-          },
-          onTap: () {
-            if (allFieldsFilled) {
-              setState(() {
-                widget.controller?.clear();
-                isOtpEmpty = true;
-                allFieldsFilled = false;
-              });
-            }
-          },
+          beforeTextPaste: (text) => false,
         ),
         if (widget.errorText != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 6, left: 4),
-            child: Text(
-              widget.errorText!,
-              style: const TextStyle(color: Colors.red, fontSize: 12),
+          Transform.translate(
+            offset: Offset(0, -10),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 6),
+              child: Text(
+                widget.errorText!,
+                style: const TextStyle(color: Colors.red, fontSize: 12),
+              ),
             ),
           ),
       ],

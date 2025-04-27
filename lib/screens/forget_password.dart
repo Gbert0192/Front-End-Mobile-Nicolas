@@ -16,6 +16,7 @@ class ForgetPassword extends StatefulWidget {
 
 class _ForgetPasswordState extends State<ForgetPassword> {
   bool isSubmitted = false;
+  bool isLoading = false;
 
   final TextEditingController emailController = TextEditingController();
   String? emailError;
@@ -148,22 +149,27 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
+                  isLoading: isLoading,
                   onPressed: () {
                     isSubmitted = true;
                     final isValid = validate();
                     if (isValid) {
+                      setState(() => isLoading = true);
                       forgotPassProvider.email = emailController.text;
                       forgotPassProvider.generateOTP();
-                      showFlexibleSnackbar(
-                        context,
-                        "Your OTP is ${forgotPassProvider.OTP}",
-                      );
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => VerifyOtpEmail(),
-                        ),
-                      );
+                      Future.delayed(const Duration(seconds: 2), () {
+                        setState(() => isLoading = false);
+                        showFlexibleSnackbar(
+                          context,
+                          "Your OTP is ${forgotPassProvider.OTP}",
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VerifyAccount(),
+                          ),
+                        );
+                      });
                     }
                   },
                   text: "Continue",

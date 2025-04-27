@@ -1,16 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl_phone_field/countries.dart';
 
-enum TextInputTypes { password, email, text }
+List<String> allowedCountryCodes = [
+  'ID',
+  'MY',
+  'SG',
+  'PH',
+  'BN',
+  'TH',
+  'VN',
+  'KH',
+  'LA',
+  'MM',
+  'JP',
+  'KR',
+  'CN',
+  'TW',
+  'HK',
+];
 
-class ResponsiveTextInput extends StatefulWidget {
-  const ResponsiveTextInput({
+class ResponsivePhoneInput extends StatefulWidget {
+  const ResponsivePhoneInput({
+    super.key,
     required this.isSmall,
     this.controller,
     this.onChanged,
+    this.onCountryChanged,
     this.hint,
     this.label,
     this.errorText,
-    this.type = TextInputTypes.text,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
@@ -19,28 +38,26 @@ class ResponsiveTextInput extends StatefulWidget {
   final bool isSmall;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
+  final ValueChanged<Country>? onCountryChanged;
   final String? hint;
   final String? label;
   final String? errorText;
-  final TextInputTypes type;
   final Color fillColor;
   final Color borderColor;
   final Color borderFocusColor;
 
   @override
-  State<ResponsiveTextInput> createState() => _ResponsiveTextInputState();
+  State<ResponsivePhoneInput> createState() => _ResponsivePhoneInputState();
 }
 
-class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
+class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
   late FocusNode _focusNode;
   bool _isFocused = false;
-  bool _obscureText = true;
 
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-
     _focusNode.addListener(() {
       setState(() {
         _isFocused = _focusNode.hasFocus;
@@ -57,7 +74,6 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
   @override
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
-    final isPassword = widget.type == TextInputTypes.password;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -73,20 +89,20 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               ),
             ],
           ),
-          child: TextField(
+          child: IntlPhoneField(
             focusNode: _focusNode,
             controller: widget.controller,
-            obscureText: isPassword ? _obscureText : false,
-            keyboardType:
-                widget.type == TextInputTypes.email
-                    ? TextInputType.emailAddress
-                    : TextInputType.text,
+            onCountryChanged: widget.onCountryChanged,
             onChanged: (_) {
               widget.onChanged?.call();
             },
+            countries:
+                countries
+                    .where((c) => allowedCountryCodes.contains(c.code))
+                    .toList(),
             decoration: InputDecoration(
-              hintText: widget.hint ?? '',
-              labelText: widget.label ?? '',
+              hintText: widget.hint ?? 'Phone Number',
+              labelText: widget.label ?? 'Phone Number',
               hintStyle: TextStyle(color: _getColor()),
               labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
@@ -96,22 +112,6 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 horizontal: widget.isSmall ? 18 : 20,
                 vertical: widget.isSmall ? 12 : 16,
               ),
-              suffixIcon:
-                  isPassword
-                      ? IconButton(
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: _getColor(),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                      )
-                      : null,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -128,6 +128,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
+            initialCountryCode: 'ID',
+            disableLengthCheck: true,
           ),
         ),
         const SizedBox(height: 4),

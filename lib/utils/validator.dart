@@ -40,6 +40,7 @@ String? validateEmail({
 
 String? validateBasic({
   String key = "Field",
+  String? match,
   String value = "",
   int? minLength,
   int? maxLength,
@@ -51,11 +52,14 @@ String? validateBasic({
   if (required && value == "") {
     return "$key is required";
   }
+  if (match != null && value != match) {
+    return "$key is not matched";
+  }
   if (minLength != null && value.length < minLength) {
-    return "$key must have at least $key characters";
+    return "$key must have at least $minLength characters";
   }
   if (maxLength != null && value.length > maxLength) {
-    return "$key can not have more than $key characters";
+    return "$key can not have more than $maxLength characters";
   }
   if (fieldRegex != null && !fieldRegex.hasMatch(value)) {
     return regexMessage;
