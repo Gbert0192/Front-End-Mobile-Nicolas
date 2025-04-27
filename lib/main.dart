@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/splash_screen.dart';
 
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => ForgetPassProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => ForgetPassProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
       child: MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
     ),
   );

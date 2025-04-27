@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
@@ -43,6 +45,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -145,10 +148,27 @@ class _SignInState extends State<SignIn> {
                         if (isValid) {
                           setState(() => isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
+                            int user_id = userProvider.findUser(
+                              FieldControls["email"]!.text,
+                            );
+                            if (user_id == -1 ||
+                                userProvider.login(
+                                      user_id,
+                                      FieldControls["password"]!.text,
+                                    ) ==
+                                    -1) {
+                              showFlexibleSnackbar(
+                                context,
+                                "Invalid Credential!",
+                                type: SnackbarType.error,
+                              );
+                              setState(() => isLoading = false);
+                              return;
+                            }
                             setState(() => isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome Back, User!",
+                              "Welcome Back, ${(userProvider.userList[user_id]["fullname"] as String).split(" ")[0]}!",
                             );
                             Navigator.push(
                               context,

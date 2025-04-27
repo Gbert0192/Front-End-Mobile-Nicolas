@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/verfy_account.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -32,6 +33,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   @override
   Widget build(BuildContext context) {
     final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -155,9 +157,21 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     final isValid = validate();
                     if (isValid) {
                       setState(() => isLoading = true);
-                      forgotPassProvider.email = emailController.text;
-                      forgotPassProvider.generateOTP();
                       Future.delayed(const Duration(seconds: 2), () {
+                        int user_id = userProvider.findUser(
+                          emailController.text,
+                        );
+                        if (user_id == -1) {
+                          showFlexibleSnackbar(
+                            context,
+                            "Email not found",
+                            type: SnackbarType.error,
+                          );
+                          setState(() => isLoading = false);
+                          return;
+                        }
+                        forgotPassProvider.email = emailController.text;
+                        forgotPassProvider.generateOTP();
                         setState(() => isLoading = false);
                         showFlexibleSnackbar(
                           context,
@@ -166,7 +180,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(),
+                            builder: (context) => VerifyAccount(user_id),
                           ),
                         );
                       });

@@ -30,6 +30,7 @@ class ResponsivePhoneInput extends StatefulWidget {
     this.hint,
     this.label,
     this.errorText,
+    this.country_code,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
@@ -42,6 +43,7 @@ class ResponsivePhoneInput extends StatefulWidget {
   final String? hint;
   final String? label;
   final String? errorText;
+  final String? country_code;
   final Color fillColor;
   final Color borderColor;
   final Color borderFocusColor;
@@ -128,7 +130,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            initialCountryCode: 'ID',
+            initialCountryCode: widget.country_code,
             disableLengthCheck: true,
           ),
         ),
