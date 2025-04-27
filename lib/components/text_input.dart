@@ -11,6 +11,9 @@ class ResponsiveTextInput extends StatefulWidget {
     this.label,
     this.errorText,
     this.type = TextInputTypes.text,
+    this.fillColor = Colors.white,
+    this.borderColor = const Color(0xFF1F1E5B),
+    this.borderFocusColor = const Color(0xFF505050),
   });
 
   final bool isSmall;
@@ -20,6 +23,9 @@ class ResponsiveTextInput extends StatefulWidget {
   final String? label;
   final String? errorText;
   final TextInputTypes type;
+  final Color fillColor;
+  final Color borderColor;
+  final Color borderFocusColor;
 
   @override
   State<ResponsiveTextInput> createState() => _ResponsiveTextInputState();
@@ -44,8 +50,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
 
   Color _getColor() {
     if (widget.errorText != null) return Colors.red;
-    if (_isFocused) return const Color(0xFF1F1E5B);
-    return const Color(0xFF505050);
+    if (_isFocused) return widget.borderColor;
+    return widget.borderFocusColor;
   }
 
   @override
@@ -85,7 +91,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
               filled: true,
-              fillColor: hasError ? const Color(0xFFFFEDED) : Colors.white,
+              fillColor: hasError ? const Color(0xFFFFEDED) : widget.fillColor,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: widget.isSmall ? 18 : 20,
                 vertical: widget.isSmall ? 12 : 16,

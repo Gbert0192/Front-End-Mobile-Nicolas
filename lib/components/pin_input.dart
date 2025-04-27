@@ -5,7 +5,6 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 enum PinInputType { number, text, mixed }
 
 class ResponsivePINInput extends StatefulWidget {
-  final bool isSmall;
   final int pinLength;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
@@ -17,7 +16,6 @@ class ResponsivePINInput extends StatefulWidget {
 
   const ResponsivePINInput({
     super.key,
-    required this.isSmall,
     this.pinLength = 6,
     this.controller,
     this.onChanged,

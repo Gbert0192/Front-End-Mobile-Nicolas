@@ -152,10 +152,14 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
                 // OTP Field
                 ResponsivePINInput(
-                  isSmall: isSmall,
                   errorText: otpError,
                   controller: otpController,
                   inputType: PinInputType.number,
+                  onChanged: () {
+                    if (isSubmitted) {
+                      validate();
+                    }
+                  },
                 ),
 
                 SizedBox(height: isSmall ? 18 : 30),
@@ -261,6 +265,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
                   isSmall: isSmall,
                   isLoading: isLoading,
                   onPressed: () {
+                    setState(() {
+                      isSubmitted = true;
+                    });
                     final isValid = validate();
                     if (isValid) {
                       setState(() => isLoading = true);

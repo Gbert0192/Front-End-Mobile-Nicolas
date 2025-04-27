@@ -20,29 +20,37 @@ List<String> allowedCountryCodes = [
   'HK',
 ];
 
-class ResponsiveTextInput extends StatefulWidget {
-  const ResponsiveTextInput({
+class ResponsivePhoneInput extends StatefulWidget {
+  const ResponsivePhoneInput({
     super.key,
     required this.isSmall,
     this.controller,
     this.onChanged,
+    this.onCountryChanged,
     this.hint,
     this.label,
     this.errorText,
+    this.fillColor = Colors.white,
+    this.borderColor = const Color(0xFF1F1E5B),
+    this.borderFocusColor = const Color(0xFF505050),
   });
 
   final bool isSmall;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
+  final ValueChanged<Country>? onCountryChanged;
   final String? hint;
   final String? label;
   final String? errorText;
+  final Color fillColor;
+  final Color borderColor;
+  final Color borderFocusColor;
 
   @override
-  State<ResponsiveTextInput> createState() => _ResponsiveTextInputState();
+  State<ResponsivePhoneInput> createState() => _ResponsivePhoneInputState();
 }
 
-class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
+class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
   late FocusNode _focusNode;
   bool _isFocused = false;
 
@@ -50,7 +58,6 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-
     _focusNode.addListener(() {
       setState(() {
         _isFocused = _focusNode.hasFocus;
@@ -60,8 +67,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
 
   Color _getColor() {
     if (widget.errorText != null) return Colors.red;
-    if (_isFocused) return const Color(0xFF1F1E5B);
-    return const Color(0xFF505050);
+    if (_isFocused) return widget.borderColor;
+    return widget.borderFocusColor;
   }
 
   @override
@@ -83,35 +90,46 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
             ],
           ),
           child: IntlPhoneField(
+            focusNode: _focusNode,
             controller: widget.controller,
+            onCountryChanged: widget.onCountryChanged,
+            onChanged: (_) {
+              widget.onChanged?.call();
+            },
             countries:
                 countries
                     .where((c) => allowedCountryCodes.contains(c.code))
                     .toList(),
             decoration: InputDecoration(
-              labelText: widget.label ?? 'Phone Number',
               hintText: widget.hint ?? 'Phone Number',
-              border: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                borderSide: const BorderSide(),
-              ),
-              errorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.red),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-              ),
+              labelText: widget.label ?? 'Phone Number',
+              hintStyle: TextStyle(color: _getColor()),
+              labelStyle: TextStyle(color: _getColor()),
+              floatingLabelStyle: TextStyle(color: _getColor()),
               filled: true,
-              fillColor:
-                  widget.errorText != null
-                      ? const Color(0xFFFFEDED)
-                      : Colors.white,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 16,
+              fillColor: hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: widget.isSmall ? 18 : 20,
+                vertical: widget.isSmall ? 12 : 16,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: _getColor(), width: 2.0),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: _getColor()),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.red),
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
             initialCountryCode: 'ID',
             disableLengthCheck: true,
-            focusNode: _focusNode,
           ),
         ),
         const SizedBox(height: 4),
