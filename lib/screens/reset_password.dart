@@ -176,10 +176,19 @@ class _ResetPasswordState extends State<ResetPassword> {
                     if (isValid) {
                       setState(() => isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        userProvider.resetPassword(
+                        int success = userProvider.resetPassword(
                           widget.user_id,
                           FieldControls["password"]!.text,
                         );
+                        if (success == 0) {
+                          showFlexibleSnackbar(
+                            context,
+                            "Password can not be the same!",
+                            type: SnackbarType.error,
+                          );
+                          setState(() => isLoading = false);
+                          return;
+                        }
                         setState(() => isLoading = false);
                         showFlexibleSnackbar(
                           context,
