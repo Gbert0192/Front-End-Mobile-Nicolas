@@ -8,7 +8,8 @@ import 'package:tugas_front_end_nicolas/screens/reset_password.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {
-  const VerifyAccount({super.key});
+  const VerifyAccount(this.user_id);
+  final int user_id;
 
   @override
   State<VerifyAccount> createState() => _VerifyAccountState();
@@ -283,7 +284,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ResetPassword(),
+                              builder:
+                                  (context) => ResetPassword(widget.user_id),
                             ),
                           );
                         } else {

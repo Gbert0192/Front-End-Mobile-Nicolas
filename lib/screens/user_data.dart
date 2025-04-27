@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class UserData extends StatefulWidget {
-  const UserData({super.key});
+  const UserData(this.email);
+  final String email;
 
   @override
   State<UserData> createState() => _UserDataState();
@@ -16,9 +19,9 @@ class UserData extends StatefulWidget {
 class _UserDataState extends State<UserData> {
   bool isSubmitted = false;
   bool isLoading = false;
-  bool showIcon = false;
 
   ImageProvider? profileImage;
+  String country_code = "ID";
 
   Map<String, TextEditingController> FieldControls = {
     "fullname": TextEditingController(),
@@ -34,14 +37,26 @@ class _UserDataState extends State<UserData> {
     "conpassword": null,
   };
 
+  int choice = -1;
+
+  List<String> userPP = [
+    "assets/users/female 1.jpg",
+    "assets/users/female 2.jpg",
+    "assets/users/male 2.jpg",
+    "assets/users/female 4.jpg",
+    "assets/users/male 5.jpg",
+    "assets/users/female 5.jpg",
+    "assets/users/male 1.jpg",
+    "assets/users/female 3.jpg",
+    "assets/users/male 4.jpg",
+    "assets/users/male 3.jpg",
+  ];
+
   void changeAvatar() {
     setState(() {
-      if (showIcon) {
-        profileImage = AssetImage('assets/users/female 1.jpg');
-        showIcon = false;
-      } else {
-        profileImage = null;
-        showIcon = true;
+      choice += 1;
+      if (choice == 10) {
+        choice = -1;
       }
     });
   }
@@ -58,8 +73,8 @@ class _UserDataState extends State<UserData> {
     final errorPhone = validateBasic(
       key: "Phone Number",
       value: FieldControls["phone"]!.text,
-      minLength: 8,
-      maxLength: 17,
+      minLength: 7,
+      maxLength: 12,
       required: true,
     );
     setState(() {
@@ -87,6 +102,7 @@ class _UserDataState extends State<UserData> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
@@ -140,32 +156,38 @@ class _UserDataState extends State<UserData> {
                     Stack(
                       children: [
                         CircleAvatar(
-                          radius: 50,
+                          radius: 70,
                           backgroundColor: Colors.grey[300],
-                          backgroundImage: profileImage,
+                          backgroundImage:
+                              choice != -1 ? AssetImage(userPP[choice]) : null,
                           child:
-                              showIcon
+                              choice == -1
                                   ? Icon(
                                     Icons.person,
-                                    size: 75,
+                                    size: 100,
                                     color: Colors.grey[400],
                                   )
                                   : null,
                         ),
                         Positioned(
-                          bottom: 0,
-                          right: 0,
+                          bottom: 8,
+                          right: 8,
                           child: Container(
+                            height: 30,
+                            width: 30,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.white, width: 2),
                             ),
                             child: IconButton(
+                              padding: EdgeInsets.zero,
+                              iconSize: 16,
                               onPressed: () {
                                 changeAvatar();
                               },
-                              icon: Icon(Icons.edit, size: 12),
+                              icon: Icon(Icons.edit),
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -191,8 +213,19 @@ class _UserDataState extends State<UserData> {
                         const SizedBox(height: 10),
                         ResponsivePhoneInput(
                           isSmall: isSmall,
+                          country_code: country_code,
+                          hint: 'Enter Phone Number',
                           controller: FieldControls["phone"],
                           errorText: FieldErrors["phone"],
+                          onChanged: () {
+                            if (isSubmitted) {
+                              validate();
+                            }
+                          },
+                          onCountryChanged:
+                              (value) => setState(() {
+                                country_code = value.code;
+                              }),
                         ),
                         const SizedBox(height: 10),
                         ResponsiveTextInput(
@@ -224,7 +257,7 @@ class _UserDataState extends State<UserData> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: isSmall ? 50 : 80),
 
                     //Continue Button
                     ResponsiveButton(
@@ -236,10 +269,19 @@ class _UserDataState extends State<UserData> {
                         if (isValid) {
                           setState(() => isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
+                            userProvider.registerUser({
+                              "email": widget.email,
+                              "profile_pic":
+                                  choice == -1 ? null : userPP[choice],
+                              "fullname": FieldControls["fullname"]!.text,
+                              "country_code": country_code,
+                              "phone": FieldControls["phone"]!.text,
+                              "password": FieldControls["password"]!.text,
+                            });
                             setState(() => isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome to ParkID, User!",
+                              "Welcome to ParkID, ${FieldControls["fullname"]!.text.split(" ")[0]}!",
                             );
                             Navigator.push(
                               context,
@@ -250,9 +292,9 @@ class _UserDataState extends State<UserData> {
                           });
                         }
                       },
-                      text: "Continue",
+                      text: "Register",
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: isSmall ? 10 : 20),
                   ],
                 ),
               ),

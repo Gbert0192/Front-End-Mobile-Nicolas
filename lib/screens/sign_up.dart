@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/user_data.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class SignUp extends StatefulWidget {
@@ -14,6 +17,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool isSubmitted = false;
+  bool isLoading = false;
 
   final TextEditingController emailController = TextEditingController();
   String? emailError;
@@ -28,6 +32,7 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -105,14 +110,35 @@ class _SignUpState extends State<SignUp> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
+                  isLoading: isLoading,
                   onPressed: () {
                     isSubmitted = true;
                     final isValid = validate();
                     if (isValid) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => UserData()),
-                      );
+                      setState(() => isLoading = true);
+                      Future.delayed(const Duration(seconds: 2), () {
+                        int user_id = userProvider.findUser(
+                          emailController.text,
+                        );
+                        if (user_id != -1) {
+                          showFlexibleSnackbar(
+                            context,
+                            "Email already used!",
+                            type: SnackbarType.error,
+                          );
+                          setState(() => isLoading = false);
+                          return;
+                        }
+                        setState(() => isLoading = false);
+                        showFlexibleSnackbar(context, "Email is available!");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => UserData(emailController.text),
+                          ),
+                        );
+                      });
                     }
                   },
                   text: "Sign Up",
@@ -142,6 +168,7 @@ class _SignUpState extends State<SignUp> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
+                  isLoading: isLoading,
                   onPressed: () {
                     Navigator.push(
                       context,

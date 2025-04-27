@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword({super.key});
+  const ResetPassword(this.user_id);
+  final int user_id;
 
   @override
   State<ResetPassword> createState() => _ResetPasswordState();
@@ -44,6 +47,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -172,6 +176,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                     if (isValid) {
                       setState(() => isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
+                        userProvider.resetPassword(
+                          widget.user_id,
+                          FieldControls["password"]!.text,
+                        );
                         setState(() => isLoading = false);
                         showFlexibleSnackbar(
                           context,
