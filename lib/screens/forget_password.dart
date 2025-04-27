@@ -6,6 +6,7 @@ import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/verfy_account.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -16,20 +17,10 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  bool isSubmitted = false;
-  bool isLoading = false;
-
-  final TextEditingController emailController = TextEditingController();
-  String? emailError;
-
-  bool validate() {
-    final errorEmail = validateEmail(value: emailController.text);
-    setState(() {
-      emailError = errorEmail;
-    });
-    return errorEmail == null;
-  }
-
+  final form = UseForm(
+    fields: ["email"],
+    validators: {'email': (value) => validateEmail(value: value)},
+  );
   @override
   Widget build(BuildContext context) {
     final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
@@ -91,19 +82,22 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: isSmall ? 15 : 30),
+
                 // Email Field
                 Column(
                   children: [
                     ResponsiveTextInput(
                       isSmall: isSmall,
-                      controller: emailController,
+                      controller: form.control("email"),
                       hint: 'Enter your email',
                       label: 'Email',
                       type: TextInputTypes.email,
-                      errorText: emailError,
+                      errorText: form.error("email"),
                       onChanged: () {
-                        if (isSubmitted) {
-                          validate();
+                        if (form.isSubmitted) {
+                          setState(() {
+                            form.validate();
+                          });
                         }
                       },
                     ),
@@ -151,15 +145,18 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
-                  isLoading: isLoading,
+                  isLoading: form.isLoading,
                   onPressed: () {
-                    isSubmitted = true;
-                    final isValid = validate();
+                    bool isValid = false;
+                    setState(() {
+                      form.isSubmitted = true;
+                      isValid = form.validate();
+                    });
                     if (isValid) {
-                      setState(() => isLoading = true);
+                      setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
                         int user_id = userProvider.findUser(
-                          emailController.text,
+                          form.control("email").text,
                         );
                         if (user_id == -1) {
                           showFlexibleSnackbar(
@@ -167,12 +164,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                             "Email not found",
                             type: SnackbarType.error,
                           );
-                          setState(() => isLoading = false);
+                          setState(() => form.isLoading = false);
                           return;
                         }
-                        forgotPassProvider.email = emailController.text;
+                        forgotPassProvider.email = form.control("email").text;
                         forgotPassProvider.generateOTP();
-                        setState(() => isLoading = false);
+                        setState(() => form.isLoading = false);
                         showFlexibleSnackbar(
                           context,
                           "Your OTP is ${forgotPassProvider.OTP}",

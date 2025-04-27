@@ -7,6 +7,7 @@ import 'package:tugas_front_end_nicolas/screens/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class SignIn extends StatefulWidget {
@@ -17,31 +18,14 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  bool isSubmitted = false;
-  bool isLoading = false;
-
-  Map<String, TextEditingController> FieldControls = {
-    "email": TextEditingController(),
-    "password": TextEditingController(),
-  };
-
-  Map<String, String?> FieldErrors = {"email": null, "password": null};
-
-  bool validate() {
-    final errorEmail = validateEmail(value: FieldControls["email"]!.text);
-    setState(() {
-      FieldErrors["email"] = errorEmail;
-    });
-    final errorPassword = validateBasic(
-      key: "Password",
-      value: FieldControls["password"]!.text,
-      minLength: 8,
-    );
-    setState(() {
-      FieldErrors["password"] = errorPassword;
-    });
-    return FieldErrors["email"] == null && FieldErrors["password"] == null;
-  }
+  final form = UseForm(
+    fields: ["email", "password"],
+    validators: {
+      'email': (value) => validateEmail(value: value),
+      'password':
+          (value) => validateBasic(key: 'Password', value: value, minLength: 8),
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -109,28 +93,32 @@ class _SignInState extends State<SignIn> {
                       children: [
                         ResponsiveTextInput(
                           isSmall: isSmall,
-                          controller: FieldControls["email"],
+                          controller: form.control("email"),
                           hint: 'Enter your email',
                           label: 'Email',
                           type: TextInputTypes.email,
-                          errorText: FieldErrors["email"],
+                          errorText: form.error("email"),
                           onChanged: () {
-                            if (isSubmitted) {
-                              validate();
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
                             }
                           },
                         ),
                         const SizedBox(height: 12),
                         ResponsiveTextInput(
                           isSmall: isSmall,
-                          controller: FieldControls["password"],
+                          controller: form.control("password"),
                           hint: 'Enter your password',
                           label: 'Password',
                           type: TextInputTypes.password,
-                          errorText: FieldErrors["password"],
+                          errorText: form.error("password"),
                           onChanged: () {
-                            if (isSubmitted) {
-                              validate();
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
                             }
                           },
                         ),
@@ -141,20 +129,23 @@ class _SignInState extends State<SignIn> {
 
                     ResponsiveButton(
                       isSmall: isSmall,
-                      isLoading: isLoading,
+                      isLoading: form.isLoading,
                       onPressed: () {
-                        isSubmitted = true;
-                        final isValid = validate();
+                        bool isValid = false;
+                        setState(() {
+                          form.isSubmitted = true;
+                          isValid = form.validate();
+                        });
                         if (isValid) {
-                          setState(() => isLoading = true);
+                          setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
                             int user_id = userProvider.findUser(
-                              FieldControls["email"]!.text,
+                              form.control("email")!.text,
                             );
                             if (user_id == -1 ||
                                 userProvider.login(
                                       user_id,
-                                      FieldControls["password"]!.text,
+                                      form.control("password")!.text,
                                     ) ==
                                     -1) {
                               showFlexibleSnackbar(
@@ -162,13 +153,13 @@ class _SignInState extends State<SignIn> {
                                 "Invalid Credential!",
                                 type: SnackbarType.error,
                               );
-                              setState(() => isLoading = false);
+                              setState(() => form.isLoading = false);
                               return;
                             }
-                            setState(() => isLoading = false);
+                            setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome Back, ${(userProvider.userList[user_id]["fullname"] as String).split(" ")[0]}!",
+                              "Welcome Back, ${userProvider.userList[user_id].fullname.split(" ")[0]}!",
                             );
                             Navigator.push(
                               context,
@@ -208,7 +199,7 @@ class _SignInState extends State<SignIn> {
 
                     ResponsiveButton(
                       isSmall: isSmall,
-                      isLoading: isLoading,
+                      isLoading: form.isLoading,
                       onPressed: () {
                         Navigator.push(
                           context,

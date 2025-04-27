@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ResetPassword extends StatefulWidget {
@@ -16,34 +17,15 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
-  bool isSubmitted = false;
-  bool isLoading = false;
-
-  Map<String, TextEditingController> FieldControls = {
-    "password": TextEditingController(),
-    "conpassword": TextEditingController(),
-  };
-
-  Map<String, String?> FieldErrors = {"password": null, "conpassword": null};
-
-  bool validate() {
-    final errorPassword = validatePassword(
-      value: FieldControls["password"]!.text,
-    );
-    setState(() {
-      FieldErrors["password"] = errorPassword;
-    });
-    final errorConPassword = validateBasic(
-      key: "Confirm Password",
-      match: FieldControls["password"]!.text,
-      value: FieldControls["conpassword"]!.text,
-    );
-    setState(() {
-      FieldErrors["conpassword"] = errorConPassword;
-    });
-    return FieldErrors["password"] == null &&
-        FieldErrors["conpassword"] == null;
-  }
+  final form = UseForm(
+    fields: ["email", "password"],
+    validators: {"password": (value) => validatePassword(value: value)},
+    match: {
+      "password": [
+        {"key": "conpassword", "label": "Confirm Password"},
+      ],
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -130,28 +112,32 @@ class _ResetPasswordState extends State<ResetPassword> {
                   children: [
                     ResponsiveTextInput(
                       isSmall: isSmall,
-                      controller: FieldControls["password"],
-                      hint: 'Enter New Password',
-                      label: 'New Password',
+                      controller: form.control("password"),
+                      hint: 'Enter Password',
+                      label: 'Password',
                       type: TextInputTypes.password,
-                      errorText: FieldErrors["password"],
+                      errorText: form.error('password'),
                       onChanged: () {
-                        if (isSubmitted) {
-                          validate();
+                        if (form.isSubmitted) {
+                          setState(() {
+                            form.validate();
+                          });
                         }
                       },
                     ),
                     const SizedBox(height: 10),
                     ResponsiveTextInput(
                       isSmall: isSmall,
-                      controller: FieldControls["conpassword"],
-                      hint: 'Confirm New password',
+                      controller: form.control("conpassword"),
+                      hint: 'Enter Confirm Password',
                       label: 'Confirm Password',
                       type: TextInputTypes.password,
-                      errorText: FieldErrors["conpassword"],
+                      errorText: form.error('conpassword'),
                       onChanged: () {
-                        if (isSubmitted) {
-                          validate();
+                        if (form.isSubmitted) {
+                          setState(() {
+                            form.validate();
+                          });
                         }
                       },
                     ),
@@ -161,7 +147,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 SizedBox(
                   height:
                       isSmall
-                          ? FieldErrors["password"] == null
+                          ? form.error('password') == null
                               ? 75
                               : 40
                           : 80,
@@ -169,16 +155,19 @@ class _ResetPasswordState extends State<ResetPassword> {
 
                 ResponsiveButton(
                   isSmall: isSmall,
-                  isLoading: isLoading,
+                  isLoading: form.isLoading,
                   onPressed: () {
-                    isSubmitted = true;
-                    final isValid = validate();
+                    bool isValid = false;
+                    setState(() {
+                      form.isSubmitted = true;
+                      isValid = form.validate();
+                    });
                     if (isValid) {
-                      setState(() => isLoading = true);
+                      setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
                         int success = userProvider.resetPassword(
                           widget.user_id,
-                          FieldControls["password"]!.text,
+                          form.control("password").text,
                         );
                         if (success == 0) {
                           showFlexibleSnackbar(
@@ -186,10 +175,10 @@ class _ResetPasswordState extends State<ResetPassword> {
                             "Password can not be the same!",
                             type: SnackbarType.error,
                           );
-                          setState(() => isLoading = false);
+                          setState(() => form.isLoading = false);
                           return;
                         }
-                        setState(() => isLoading = false);
+                        setState(() => form.isLoading = false);
                         showFlexibleSnackbar(
                           context,
                           "Password has been reseted!",
