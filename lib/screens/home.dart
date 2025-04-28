@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/screens/parking.dart';
 
 void main() {
   runApp(const HomePage());
@@ -358,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CircleIconButton(
                         icon: Icons.local_parking,
-                        destination: HomeScreen(),
+                        destination: Parking(),
                       ),
                       CircleIconButton(
                         icon: Icons.discount,

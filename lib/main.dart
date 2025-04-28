@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/parking.dart';
 import 'package:tugas_front_end_nicolas/screens/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/splash_screen.dart';
 
@@ -12,12 +13,14 @@ void main() {
         ChangeNotifierProvider(create: (_) => ForgetPassProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: Parking()),
     ),
   );
 }
 
 class MainApp extends StatefulWidget {
+  const MainApp({super.key});
+
   @override
   State<MainApp> createState() => _MainAppState();
 }
