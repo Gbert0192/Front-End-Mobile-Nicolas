@@ -58,7 +58,7 @@ class _StepperScreensState extends State<StepperScreens> {
   void skipAll(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => LandingScreen()),
     );
   }
 

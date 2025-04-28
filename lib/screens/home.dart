@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const HomePage());
@@ -108,6 +109,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     final currentSpot = spots[_currentIndex];
+    final userProvider = Provider.of<UserProvider>(context);
+    Map<String, Object?> user = userProvider.getCurrentUser();
+
+    final currencyFormat = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp. ',
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -126,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Halo, Manusia!",
+                            "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
                             style: TextStyle(
                               fontSize: screenWidth * 0.08,
                               fontWeight: FontWeight.bold,
@@ -145,9 +153,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     CircleAvatar(
-                      backgroundImage: AssetImage('assets/users/female 5.jpg'),
+                      backgroundImage:
+                          user['profile_pic'] != null
+                              ? AssetImage(user['profile_pic'] as String)
+                              : null,
                       radius: screenWidth * 0.12,
                       backgroundColor: Colors.grey[300],
+                      child:
+                          user['profile_pic'] == null
+                              ? Icon(
+                                Icons.person,
+                                size: 60,
+                                color: Colors.grey[400],
+                              )
+                              : null,
                     ),
                   ],
                 ),
@@ -194,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               Text(
-                                "Rp 1.000.000",
+                                currencyFormat.format(user['balance']),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: screenWidth * 0.045,
@@ -361,9 +380,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-
-
-    // final userProvider = Provider.of<UserProvider>(context);
-    // Map<String, Object?> user = userProvider.getCurrentUser();
