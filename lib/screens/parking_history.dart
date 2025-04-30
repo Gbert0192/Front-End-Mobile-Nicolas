@@ -5,6 +5,6 @@ class ParkingHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Parkings')));
+    return Scaffold(appBar: AppBar(title: Text('Parking')));
   }
 }
