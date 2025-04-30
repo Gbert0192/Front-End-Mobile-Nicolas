@@ -155,10 +155,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     if (isValid) {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        int user_id = userProvider.findUser(
+                        int userId = userProvider.findUser(
                           form.control("email").text,
                         );
-                        if (user_id == -1) {
+                        if (userId == -1) {
                           showFlexibleSnackbar(
                             context,
                             "Email not found",
@@ -177,7 +177,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(user_id),
+                            builder: (context) => VerifyAccount(userId),
                           ),
                         );
                       });

@@ -19,14 +19,16 @@ class Parking extends StatelessWidget {
       body: Column(
         children: [
           //Button Parking
-          InkWell(
-            onTap: () {
+          ElevatedButton(
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ParkingHistory()),
               );
             },
+            child: Container(height: 180, child: Stack()),
           ),
+          SizedBox(height: 20),
           //bottomNav
           Container(
             padding: EdgeInsets.symmetric(vertical: 10),
