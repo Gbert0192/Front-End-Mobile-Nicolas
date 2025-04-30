@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 enum TextInputTypes { password, email, text }
 
 class ResponsiveTextInput extends StatefulWidget {
-  const ResponsiveTextInput({
+  const ResponsiveTextInput({super.key, 
     required this.isSmall,
     this.controller,
     this.onChanged,

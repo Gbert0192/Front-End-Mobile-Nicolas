@@ -8,7 +8,7 @@ import 'package:tugas_front_end_nicolas/screens/reset_password.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {
-  const VerifyAccount(this.user_id);
+  const VerifyAccount(this.user_id, {super.key});
   final int user_id;
 
   @override
@@ -33,13 +33,13 @@ class _VerifyAccountState extends State<VerifyAccount> {
     final domain = parts[1];
 
     if (name.length <= 2) {
-      return '*' * name.length + '@' + domain;
+      return '${'*' * name.length}@$domain';
     }
 
     final lastTwo = name.substring(name.length - 2);
     final obscured = '*' * (name.length - 2) + lastTwo;
 
-    return obscured + '@' + domain;
+    return '$obscured@$domain';
   }
 
   @override

@@ -12,12 +12,17 @@ void main() {
         ChangeNotifierProvider(create: (_) => ForgetPassProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen(),
+      ),
     ),
   );
 }
 
 class MainApp extends StatefulWidget {
+  const MainApp({super.key});
+
   @override
   State<MainApp> createState() => _MainAppState();
 }

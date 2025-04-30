@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/screens/parking.dart';
 
 void main() {
   runApp(const HomePage());
@@ -74,18 +76,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<ParkingSpot> spots = [
     ParkingSpot(
-      name: 'A',
-      imageUrl: 'https://via.placeholder.com/300',
+      name: 'Sun Plaza',
+      imageUrl: 'assets/building/Sun Plaza.jpg',
       price: 'Rp 3.000 / hour',
     ),
     ParkingSpot(
-      name: 'B',
-      imageUrl: 'https://via.placeholder.com/300',
+      name: 'Centre Point',
+      imageUrl: 'assets/building/Centre Point.jpeg',
       price: 'Rp 2.500 / hour',
     ),
     ParkingSpot(
-      name: 'C',
-      imageUrl: 'https://via.placeholder.com/300',
+      name: 'Aryaduta',
+      imageUrl: 'assets/building/Aryaduta.jpg',
       price: 'Rp 4.000 / hour',
     ),
   ];
@@ -104,27 +106,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
     Map<String, Object?> user = userProvider.getCurrentUser();
-    final currentSpot = spots[_currentIndex];
+
+    final currencyFormat = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp. ',
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
             child: Column(
               children: [
-                const SizedBox(height: 20),
+                // HEADER
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.08,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF1F1E5B),
+                            ),
+                          ),
+                          Text(
+                            "Welcome!",
+                            style: TextStyle(
+                              fontSize: screenWidth * 0.055,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF1F1E5B),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     CircleAvatar(
@@ -132,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           user['profile_pic'] != null
                               ? AssetImage(user['profile_pic'] as String)
                               : null,
-                      radius: 30,
+                      radius: screenWidth * 0.12,
                       backgroundColor: Colors.grey[300],
                       child:
                           user['profile_pic'] == null
@@ -145,133 +171,177 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Welcome!",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02),
+
                 Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(screenWidth * 0.04),
                   decoration: BoxDecoration(
-                    color: Colors.deepPurple,
+                    color: Color(0xFF1F1E5B),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
+                    children: [
                       Row(
                         children: [
-                          Icon(
-                            Icons.account_balance_wallet,
-                            color: Colors.white,
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Container(
+                                width: screenWidth * 0.15,
+                                height: screenWidth * 0.15,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                              ),
+                              Image.asset(
+                                'assets/icons/wallet.png',
+                                width: screenWidth * 0.08,
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: screenWidth * 0.04),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "Balance",
-                                style: TextStyle(color: Colors.white),
-                              ), // balance
-                              Text(
-                                "Rp 1.000.000",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenWidth * 0.06,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                currencyFormat.format(user['balance']),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: screenWidth * 0.045,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           ),
                         ],
                       ),
-                      Text("+ Top Up", style: TextStyle(color: Colors.white)),
+                      Column(
+                        children: [
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                            size: screenWidth * 0.08,
+                          ),
+                          Text(
+                            "Top Up",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth * 0.04,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02),
+
+                // SEARCH
                 TextField(
                   decoration: InputDecoration(
                     hintText: "Search",
-                    prefixIcon: const Icon(Icons.search),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: screenWidth * 0.08,
+                      color: Color(0xFF1F1E5B),
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(color: Color(0xFF1F1E5B)),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
-                const Text(
-                  "Recent Spots",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepPurple,
+                SizedBox(height: screenHeight * 0.03),
+
+                // RECENT SPOTS
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Recent Spots",
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.055,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1F1E5B),
+                    ),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02),
                 Container(
-                  height: 200,
+                  width: double.infinity,
+                  height: screenHeight * 0.3,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.network(
-                      currentSpot.imageUrl,
-                      fit: BoxFit.cover,
-                    ),
+                    child: Image.asset(currentSpot.imageUrl, fit: BoxFit.cover),
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: screenHeight * 0.015),
+
+                // ARROW + SPOT INFO
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: _prevSpot,
-                      icon: const Icon(Icons.arrow_left, size: 36),
+                      icon: Icon(Icons.arrow_left, size: screenWidth * 0.08),
                     ),
                     Column(
                       children: [
                         Text(
                           currentSpot.name,
-                          style: const TextStyle(
-                            fontSize: 20,
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.05,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           currentSpot.price,
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(fontSize: screenWidth * 0.04),
                         ),
-                        const SizedBox(height: 6),
+                        SizedBox(height: screenHeight * 0.01),
                         ElevatedButton(
-                          onPressed: () {}, //this thing the parking
+                          onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepPurple,
+                            backgroundColor: Color(0xFF1F1E5B),
+                            foregroundColor: Colors.white,
                           ),
-                          child: const Text("Get Parking Now"),
+                          child: Text("Get Parking Now"),
                         ),
                       ],
                     ),
                     IconButton(
                       onPressed: _nextSpot,
-                      icon: const Icon(Icons.arrow_right, size: 36),
+                      icon: Icon(Icons.arrow_right, size: screenWidth * 0.08),
                     ),
                   ],
                 ),
+                SizedBox(height: screenHeight * 0.03),
+
+                // BOTTOM NAVIGATION BAR
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Color(0xFF1F1E5B),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 10,
-                        offset: const Offset(0, 3),
+                        offset: Offset(0, 3),
                       ),
                     ],
                   ),
@@ -282,14 +352,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icons.home,
                         color: Colors.deepOrange,
                         destination: HomeScreen(),
-                      ), // go to whatever
+                      ),
                       CircleIconButton(
                         icon: Icons.notifications,
                         destination: HomeScreen(),
                       ),
                       CircleIconButton(
                         icon: Icons.local_parking,
-                        destination: HomeScreen(),
+                        destination: Parking(),
                       ),
                       CircleIconButton(
                         icon: Icons.discount,
@@ -302,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: screenHeight * 0.02),
               ],
             ),
           ),
