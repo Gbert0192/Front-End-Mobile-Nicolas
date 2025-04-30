@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/bottom_nav.dart';
-import 'package:tugas_front_end_nicolas/screens/home.dart';
-import 'package:tugas_front_end_nicolas/screens/parking_history.dart';
+import 'package:tugas_front_end_nicolas/screens/parking&booking.dart';
 
 class Parking extends StatelessWidget {
   const Parking({super.key});
@@ -12,10 +10,7 @@ class Parking extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(
-          'Notification',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text('Parkings', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Column(
         children: [
@@ -47,23 +42,7 @@ class Parking extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: const [
-                CircleIconButton(icon: Icons.home, destination: HomeScreen()),
-                CircleIconButton(
-                  icon: Icons.notifications,
-                  destination: HomeScreen(),
-                ),
-                CircleIconButton(
-                  icon: Icons.local_parking,
-                  color: Colors.deepOrange,
-                  destination: Parking(),
-                ),
-                CircleIconButton(
-                  icon: Icons.discount,
-                  destination: HomeScreen(),
-                ),
-                CircleIconButton(icon: Icons.person, destination: HomeScreen()),
-              ],
+              children: [Text("Parking")],
             ),
           ),
         ],

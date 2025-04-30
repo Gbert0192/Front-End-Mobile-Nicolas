@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/bottom_nav.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tugas_front_end_nicolas/screens/parking.dart';
+import 'package:tugas_front_end_nicolas/screens/parking&booking.dart';
+import 'package:tugas_front_end_nicolas/screens/parkings.dart';
 
 // Root of the app
 class HomePage extends StatelessWidget {
@@ -305,7 +306,33 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: ResponsiveBottomNav(),
+      bottomNavigationBar: ResponsiveBottomNav([
+        {
+          'icon': Icons.home,
+          'color': Colors.deepOrange,
+          'screen': const HomeScreen(),
+        },
+        {
+          'icon': Icons.notifications,
+          'color': Colors.blue,
+          'screen': const HomeScreen(),
+        },
+        {
+          'icon': Icons.local_parking,
+          'color': Colors.green,
+          'screen': const Parking(),
+        },
+        {
+          'icon': Icons.discount,
+          'color': Colors.purple,
+          'screen': const HomeScreen(),
+        },
+        {
+          'icon': Icons.person,
+          'color': Colors.teal,
+          'screen': const HomeScreen(),
+        },
+      ]),
     );
   }
 }
