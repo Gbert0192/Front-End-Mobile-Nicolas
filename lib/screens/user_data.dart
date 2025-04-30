@@ -10,7 +10,7 @@ import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class UserData extends StatefulWidget {
-  const UserData(this.email);
+  const UserData(this.email, {super.key});
   final String email;
 
   @override

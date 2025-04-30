@@ -12,7 +12,7 @@ class ResponsiveButton extends StatelessWidget {
   final Color borderColor;
   final bool isLoading;
 
-  const ResponsiveButton({
+  const ResponsiveButton({super.key, 
     required this.isSmall,
     this.onPressed,
     required this.text,

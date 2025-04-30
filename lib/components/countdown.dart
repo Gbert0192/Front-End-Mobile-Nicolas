@@ -11,7 +11,7 @@ class CountdownTimer extends StatefulWidget {
   final bool isSmall;
   final Metrics unit;
 
-  const CountdownTimer({
+  const CountdownTimer({super.key, 
     required this.isSmall,
     required this.countLong,
     this.countDownFunction,

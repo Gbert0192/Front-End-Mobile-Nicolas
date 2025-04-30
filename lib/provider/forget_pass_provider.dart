@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 
 class ForgetPassProvider with ChangeNotifier {
-  int? OTP = null;
+  int? OTP;
   String email = "";
 
   int? generateOTP() {

@@ -9,7 +9,7 @@ import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword(this.user_id);
+  const ResetPassword(this.user_id, {super.key});
   final int user_id;
 
   @override

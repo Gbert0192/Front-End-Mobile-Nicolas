@@ -139,13 +139,13 @@ class _SignInState extends State<SignIn> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            int user_id = userProvider.findUser(
-                              form.control("email")!.text,
+                            int userId = userProvider.findUser(
+                              form.control("email").text,
                             );
-                            if (user_id == -1 ||
+                            if (userId == -1 ||
                                 userProvider.login(
-                                      user_id,
-                                      form.control("password")!.text,
+                                      userId,
+                                      form.control("password").text,
                                     ) ==
                                     -1) {
                               showFlexibleSnackbar(
@@ -159,7 +159,7 @@ class _SignInState extends State<SignIn> {
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome Back, ${userProvider.userList[user_id].fullname.split(" ")[0]}!",
+                              "Welcome Back, ${userProvider.userList[userId].fullname.split(" ")[0]}!",
                             );
                             Navigator.push(
                               context,

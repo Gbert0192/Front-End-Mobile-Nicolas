@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/screens/home.dart';
 import 'package:tugas_front_end_nicolas/screens/landing_screen.dart';
 
 class StepperScreens extends StatefulWidget {
