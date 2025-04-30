@@ -18,7 +18,6 @@ class UserData extends StatefulWidget {
 }
 
 class _UserDataState extends State<UserData> {
-  ImageProvider? profileImage;
   String country_code = "ID";
 
   final form = UseForm(

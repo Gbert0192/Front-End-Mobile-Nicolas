@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/bottom_nav.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/screens/parking.dart';
-
-void main() {
-  runApp(const HomePage());
-}
 
 // Root of the app
 class HomePage extends StatelessWidget {
@@ -17,35 +14,6 @@ class HomePage extends StatelessWidget {
     return const MaterialApp(
       home: HomeScreen(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-// CircleIconButton widget
-class CircleIconButton extends StatelessWidget {
-  final IconData icon;
-  final Color color;
-  final Widget destination;
-
-  const CircleIconButton({
-    super.key,
-    required this.icon,
-    required this.destination,
-    this.color = Colors.black,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => destination));
-      },
-      icon: CircleAvatar(
-        radius: 25,
-        backgroundColor: Colors.grey.shade200,
-        child: Icon(icon, color: color),
-      ),
-      iconSize: 50,
     );
   }
 }
@@ -106,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
@@ -123,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 20),
             child: Column(
               children: [
                 // HEADER
@@ -137,17 +105,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           Text(
                             "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
                             style: TextStyle(
-                              fontSize: screenWidth * 0.08,
+                              fontSize: isSmall ? 22 : 40,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1F1E5B),
+                              color: const Color(0xFF1F1E5B),
                             ),
                           ),
                           Text(
                             "Welcome!",
                             style: TextStyle(
-                              fontSize: screenWidth * 0.055,
+                              fontSize: isSmall ? 16 : 30,
                               fontWeight: FontWeight.w600,
-                              color: Color(0xFF1F1E5B),
+                              color: const Color(0xFF1F1E5B),
                             ),
                           ),
                         ],
@@ -158,25 +126,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           user['profile_pic'] != null
                               ? AssetImage(user['profile_pic'] as String)
                               : null,
-                      radius: screenWidth * 0.12,
+                      radius: isSmall ? 30 : 40,
                       backgroundColor: Colors.grey[300],
                       child:
                           user['profile_pic'] == null
                               ? Icon(
                                 Icons.person,
-                                size: 60,
+                                size: isSmall ? 30 : 60,
                                 color: Colors.grey[400],
                               )
                               : null,
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 Container(
-                  padding: EdgeInsets.all(screenWidth * 0.04),
+                  padding: EdgeInsets.all(isSmall ? 12 : 20),
                   decoration: BoxDecoration(
-                    color: Color(0xFF1F1E5B),
+                    color: const Color(0xFF1F1E5B),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -188,20 +156,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             alignment: Alignment.center,
                             children: [
                               Container(
-                                width: screenWidth * 0.15,
-                                height: screenWidth * 0.15,
-                                decoration: BoxDecoration(
+                                width: isSmall ? 40 : 60,
+                                height: isSmall ? 40 : 60,
+                                decoration: const BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               Image.asset(
                                 'assets/icons/wallet.png',
-                                width: screenWidth * 0.08,
+                                width: isSmall ? 20 : 30,
                               ),
                             ],
                           ),
-                          SizedBox(width: screenWidth * 0.04),
+                          SizedBox(width: isSmall ? 10 : 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -209,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 "Balance",
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: screenWidth * 0.06,
+                                  fontSize: isSmall ? 16 : 20,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -217,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 currencyFormat.format(user['balance']),
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: screenWidth * 0.045,
+                                  fontSize: isSmall ? 14 : 18,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -230,13 +198,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           Icon(
                             Icons.add,
                             color: Colors.white,
-                            size: screenWidth * 0.08,
+                            size: isSmall ? 24 : 30,
                           ),
                           Text(
                             "Top Up",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: screenWidth * 0.04,
+                              fontSize: isSmall ? 12 : 14,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -245,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: isSmall ? 10 : 20),
 
                 // SEARCH
                 TextField(
@@ -253,33 +221,34 @@ class _HomeScreenState extends State<HomeScreen> {
                     hintText: "Search",
                     prefixIcon: Icon(
                       Icons.search,
-                      size: screenWidth * 0.08,
-                      color: Color(0xFF1F1E5B),
+                      size: isSmall ? 20 : 28,
+                      color: const Color(0xFF1F1E5B),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: Color(0xFF1F1E5B)),
+                      borderSide: const BorderSide(color: Color(0xFF1F1E5B)),
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.03),
+                SizedBox(height: isSmall ? 20 : 30),
 
                 // RECENT SPOTS
                 Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Text(
                     "Recent Spots",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.055,
+                      fontSize: isSmall ? 18 : 32,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF1F1E5B),
+                      color: const Color(0xFF1F1E5B),
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: isSmall ? 10 : 20),
+
                 Container(
                   width: double.infinity,
-                  height: screenHeight * 0.3,
+                  height: isSmall ? 150 : 240,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -288,96 +257,55 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Image.asset(currentSpot.imageUrl, fit: BoxFit.cover),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.015),
+                SizedBox(height: isSmall ? 10 : 16),
 
-                // ARROW + SPOT INFO
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
                       onPressed: _prevSpot,
-                      icon: Icon(Icons.arrow_left, size: screenWidth * 0.08),
+                      icon: Icon(Icons.arrow_left, size: isSmall ? 24 : 30),
                     ),
                     Column(
                       children: [
                         Text(
                           currentSpot.name,
                           style: TextStyle(
-                            fontSize: screenWidth * 0.05,
+                            fontSize: isSmall ? 16 : 24,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           currentSpot.price,
-                          style: TextStyle(fontSize: screenWidth * 0.04),
+                          style: TextStyle(fontSize: isSmall ? 14 : 18),
                         ),
-                        SizedBox(height: screenHeight * 0.01),
+                        SizedBox(height: isSmall ? 6 : 10),
                         ElevatedButton(
                           onPressed: () {},
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF1F1E5B),
+                            backgroundColor: const Color(0xFF1F1E5B),
                             foregroundColor: Colors.white,
                           ),
-                          child: Text("Get Parking Now"),
+                          child: Text(
+                            "Get Parking Now",
+                            style: TextStyle(fontSize: isSmall ? 14 : 16),
+                          ),
                         ),
                       ],
                     ),
                     IconButton(
                       onPressed: _nextSpot,
-                      icon: Icon(Icons.arrow_right, size: screenWidth * 0.08),
+                      icon: Icon(Icons.arrow_right, size: isSmall ? 24 : 30),
                     ),
                   ],
                 ),
-                SizedBox(height: screenHeight * 0.03),
-
-                // BOTTOM NAVIGATION BAR
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1F1E5B),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 10,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
-                      CircleIconButton(
-                        icon: Icons.home,
-                        color: Colors.deepOrange,
-                        destination: HomeScreen(),
-                      ),
-                      CircleIconButton(
-                        icon: Icons.notifications,
-                        destination: HomeScreen(),
-                      ),
-                      CircleIconButton(
-                        icon: Icons.local_parking,
-                        destination: Parking(),
-                      ),
-                      CircleIconButton(
-                        icon: Icons.discount,
-                        destination: HomeScreen(),
-                      ),
-                      CircleIconButton(
-                        icon: Icons.person,
-                        destination: HomeScreen(),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: isSmall ? 20 : 30),
               ],
             ),
           ),
         ),
       ),
+      bottomNavigationBar: ResponsiveBottomNav(),
     );
   }
 }

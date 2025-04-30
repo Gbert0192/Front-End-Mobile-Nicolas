@@ -7,6 +7,7 @@ class User {
   String password;
   String? birthDate;
   String? gender;
+  String? lang;
   double balance;
   bool isMember;
 
@@ -19,6 +20,7 @@ class User {
     required this.password,
     this.birthDate,
     this.gender,
+    this.lang = "EN",
     this.balance = 0,
     this.isMember = false,
   });

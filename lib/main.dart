@@ -12,10 +12,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ForgetPassProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
-      ),
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
     ),
   );
 }
