@@ -239,7 +239,7 @@ class _UserDataState extends State<UserData> {
                         ),
                       ],
                     ),
-                    SizedBox(height: isSmall ? 50 : 110),
+                    SizedBox(height: isSmall ? 50 : 100),
 
                     //Continue Button
                     ResponsiveButton(
