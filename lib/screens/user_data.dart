@@ -130,7 +130,7 @@ class _UserDataState extends State<UserData> {
                     Stack(
                       children: [
                         CircleAvatar(
-                          radius: 70,
+                          radius: isSmall ? 70 : 100,
                           backgroundColor: Colors.grey[300],
                           backgroundImage:
                               choice != -1 ? AssetImage(userPP[choice]) : null,
@@ -147,8 +147,8 @@ class _UserDataState extends State<UserData> {
                           bottom: 8,
                           right: 8,
                           child: Container(
-                            height: 30,
-                            width: 30,
+                            height: isSmall ? 30 : 45,
+                            width: isSmall ? 30 : 45,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               shape: BoxShape.circle,
@@ -239,7 +239,7 @@ class _UserDataState extends State<UserData> {
                         ),
                       ],
                     ),
-                    SizedBox(height: isSmall ? 50 : 80),
+                    SizedBox(height: isSmall ? 50 : 110),
 
                     //Continue Button
                     ResponsiveButton(

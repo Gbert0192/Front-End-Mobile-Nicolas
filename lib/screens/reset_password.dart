@@ -18,7 +18,7 @@ class ResetPassword extends StatefulWidget {
 
 class _ResetPasswordState extends State<ResetPassword> {
   final form = UseForm(
-    fields: ["email", "password"],
+    fields: ["password", "conpassword"],
     validators: {"password": (value) => validatePassword(value: value)},
     match: {
       "password": [

@@ -41,7 +41,14 @@ class ResponsiveButton extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
-                Text("Loading..."),
+                Text(
+                  "Loading...",
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: isSmall ? null : 20,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             )
             : Text(
