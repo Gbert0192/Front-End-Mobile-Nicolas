@@ -4,7 +4,7 @@ import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/countdown.dart';
 import 'package:tugas_front_end_nicolas/components/pin_input.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/reset_password.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {

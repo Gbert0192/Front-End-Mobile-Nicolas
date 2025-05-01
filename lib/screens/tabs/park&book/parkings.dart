@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/parking&booking.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/parking&booking.dart';
 
 class Parking extends StatelessWidget {
   const Parking({super.key});

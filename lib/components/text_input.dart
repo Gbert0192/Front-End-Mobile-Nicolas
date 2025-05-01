@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 enum TextInputTypes { password, email, text }
 
 class ResponsiveTextInput extends StatefulWidget {
-  const ResponsiveTextInput({super.key, 
+  const ResponsiveTextInput({
+    super.key,
     required this.isSmall,
     this.controller,
     this.onChanged,
     this.hint,
     this.label,
     this.errorText,
+    this.leading,
     this.type = TextInputTypes.text,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -23,6 +25,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final String? label;
   final String? errorText;
   final TextInputTypes type;
+  final IconData? leading;
   final Color fillColor;
   final Color borderColor;
   final Color borderFocusColor;
@@ -85,8 +88,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               widget.onChanged?.call();
             },
             decoration: InputDecoration(
-              hintText: widget.hint ?? '',
-              labelText: widget.label ?? '',
+              hintText: widget.hint ?? null,
+              labelText: widget.label ?? null,
               hintStyle: TextStyle(color: _getColor()),
               labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
@@ -96,6 +99,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 horizontal: widget.isSmall ? 18 : 20,
                 vertical: widget.isSmall ? 12 : 16,
               ),
+              prefixIcon:
+                  Icon(widget.leading, size: widget.isSmall ? 20 : 28) ?? null,
               suffixIcon:
                   isPassword
                       ? IconButton(
