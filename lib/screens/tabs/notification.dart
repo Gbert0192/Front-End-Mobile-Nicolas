@@ -8,7 +8,11 @@ class Notification_ extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Notifications'),
+        centerTitle: true,
+        title: Text(
+          'Notifications',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+        ),
       ),
     );
   }

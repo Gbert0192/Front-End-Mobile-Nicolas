@@ -8,7 +8,11 @@ class Profile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('My Profile'),
+        centerTitle: true,
+        title: Text(
+          'My Profile',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+        ),
       ),
     );
   }
