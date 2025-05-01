@@ -6,7 +6,14 @@ class Voucher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(automaticallyImplyLeading: false, title: Text('Vouchers')),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text(
+          'Vouchers',
+          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+        ),
+      ),
     );
   }
 }
