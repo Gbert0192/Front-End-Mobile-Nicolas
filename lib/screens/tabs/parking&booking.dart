@@ -49,7 +49,12 @@ class ParkingHistory extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Stack(
+                      alignment: Alignment.center,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Image.asset('assets/others/booking_view.png'),
+                        ),
                         Positioned(
                           top: 10,
                           left: 15,
@@ -59,14 +64,6 @@ class ParkingHistory extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                               fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Image.asset(
-                              'assets/others/booking_view.png',
                             ),
                           ),
                         ),
@@ -101,7 +98,7 @@ class ParkingHistory extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(30),
+                          padding: EdgeInsets.all(20),
                           child: Image.asset('assets/others/parking_view.png'),
                         ),
                         Positioned(
