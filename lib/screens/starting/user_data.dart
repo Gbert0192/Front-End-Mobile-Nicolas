@@ -267,7 +267,7 @@ class _UserDataState extends State<UserData> {
                               context,
                               "Welcome to ParkID, ${form.control("fullname").text.split(" ")[0]}!",
                             );
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MainLayout(),
