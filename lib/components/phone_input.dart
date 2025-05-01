@@ -140,7 +140,10 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: const TextStyle(color: Colors.red, fontSize: 12),
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: widget.isSmall ? 12 : 16,
+              ),
             ),
           ),
       ],

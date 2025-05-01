@@ -3,9 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/forget_password.dart';
-import 'package:tugas_front_end_nicolas/screens/home.dart';
-import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/forget_password.dart';
+import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -139,12 +139,12 @@ class _SignInState extends State<SignIn> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            int userId = userProvider.findUser(
+                            int user_id = userProvider.findUser(
                               form.control("email").text,
                             );
-                            if (userId == -1 ||
+                            if (user_id == -1 ||
                                 userProvider.login(
-                                      userId,
+                                      user_id,
                                       form.control("password").text,
                                     ) ==
                                     -1) {
@@ -159,12 +159,12 @@ class _SignInState extends State<SignIn> {
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome Back, ${userProvider.userList[userId].fullname.split(" ")[0]}!",
+                              "Welcome Back, ${userProvider.userList[user_id].fullname.split(" ")[0]}!",
                             );
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomePage(),
+                                builder: (context) => MainLayout(),
                               ),
                             );
                           });

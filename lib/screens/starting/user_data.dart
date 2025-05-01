@@ -4,7 +4,7 @@ import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/home.dart';
+import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -18,7 +18,6 @@ class UserData extends StatefulWidget {
 }
 
 class _UserDataState extends State<UserData> {
-  ImageProvider? profileImage;
   String country_code = "ID";
 
   final form = UseForm(
@@ -130,7 +129,7 @@ class _UserDataState extends State<UserData> {
                     Stack(
                       children: [
                         CircleAvatar(
-                          radius: 70,
+                          radius: isSmall ? 70 : 100,
                           backgroundColor: Colors.grey[300],
                           backgroundImage:
                               choice != -1 ? AssetImage(userPP[choice]) : null,
@@ -147,8 +146,8 @@ class _UserDataState extends State<UserData> {
                           bottom: 8,
                           right: 8,
                           child: Container(
-                            height: 30,
-                            width: 30,
+                            height: isSmall ? 30 : 45,
+                            width: isSmall ? 30 : 45,
                             decoration: BoxDecoration(
                               color: Colors.blue,
                               shape: BoxShape.circle,
@@ -239,7 +238,7 @@ class _UserDataState extends State<UserData> {
                         ),
                       ],
                     ),
-                    SizedBox(height: isSmall ? 50 : 80),
+                    SizedBox(height: isSmall ? 50 : 100),
 
                     //Continue Button
                     ResponsiveButton(
@@ -271,7 +270,7 @@ class _UserDataState extends State<UserData> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => HomePage(),
+                                builder: (context) => MainLayout(),
                               ),
                             );
                           });

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/screens/sign_in.dart';
-import 'package:tugas_front_end_nicolas/screens/sign_up.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
 import 'dart:math' as math;
 
 class LandingScreen extends StatelessWidget {

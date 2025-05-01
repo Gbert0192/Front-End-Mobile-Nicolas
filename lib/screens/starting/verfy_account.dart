@@ -4,7 +4,7 @@ import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/countdown.dart';
 import 'package:tugas_front_end_nicolas/components/pin_input.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/reset_password.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {
@@ -153,6 +153,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
                 // OTP Field
                 ResponsivePINInput(
+                  isSmall: isSmall,
                   errorText: otpError,
                   controller: otpController,
                   inputType: PinInputType.number,
@@ -218,7 +219,22 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                   SizedBox(width: 5),
                                   Text(
                                     "Resending...",
-                                    style: TextStyle(color: Color(0xFF1879D4)),
+                                    style: TextStyle(
+                                      fontSize: isSmall ? 15 : 18,
+                                      color: Color(0xFF1879D4),
+                                      shadows: [
+                                        Shadow(
+                                          offset: Offset(4, 4),
+                                          blurRadius: 6.0,
+                                          color: Color.fromRGBO(
+                                            24,
+                                            45,
+                                            163,
+                                            0.25,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               )
