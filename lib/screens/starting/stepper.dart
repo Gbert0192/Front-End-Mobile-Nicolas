@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 
 class StepModel {
@@ -73,7 +74,7 @@ class _StepperScreensState extends State<StepperScreens> {
   void skipAll(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LandingScreen()),
+      MaterialPageRoute(builder: (context) => ChangePassword()),
     );
   }
 
