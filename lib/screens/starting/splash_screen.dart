@@ -49,7 +49,7 @@ class SplashScreen extends StatelessWidget {
                     'Parking Made Easier',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isSmall ? 40 : 60,
+                      fontSize: isSmall ? 40 : 50,
                       fontFamily: 'Cursive',
                       shadows: [
                         Shadow(

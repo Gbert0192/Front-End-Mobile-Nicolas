@@ -54,17 +54,25 @@ class ParkingHistory extends StatelessWidget {
                           top: 10,
                           left: 15,
                           child: Text(
-                            'Parking',
+                            'Parkings',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: isSmall ? 20 : 25,
                             ),
                           ),
                         ),
                         Center(
                           child: Padding(
-                            padding: EdgeInsets.all(10),
+                            padding:
+                                isSmall
+                                    ? EdgeInsets.all(10)
+                                    : EdgeInsets.only(
+                                      top: 50,
+                                      left: 20,
+                                      right: 20,
+                                      bottom: 20,
+                                    ),
                             child: Image.asset(
                               'assets/others/booking_view.png',
                             ),
@@ -74,7 +82,7 @@ class ParkingHistory extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: isSmall ? 20 : 30),
 
                 // Button Booking
                 ElevatedButton(
@@ -101,7 +109,15 @@ class ParkingHistory extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(30),
+                          padding:
+                              isSmall
+                                  ? EdgeInsets.all(10)
+                                  : EdgeInsets.only(
+                                    top: 70,
+                                    left: 20,
+                                    right: 20,
+                                    bottom: 30,
+                                  ),
                           child: Image.asset('assets/others/parking_view.png'),
                         ),
                         Positioned(
@@ -112,7 +128,7 @@ class ParkingHistory extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: isSmall ? 20 : 25,
                             ),
                           ),
                         ),

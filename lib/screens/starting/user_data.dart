@@ -149,7 +149,7 @@ class _UserDataState extends State<UserData> {
                             height: isSmall ? 30 : 45,
                             width: isSmall ? 30 : 45,
                             decoration: BoxDecoration(
-                              color: Colors.blue,
+                              color: const Color(0xFF1F1E5B),
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.white, width: 2),
                             ),

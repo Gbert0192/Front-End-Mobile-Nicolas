@@ -1,3 +1,5 @@
+import 'package:intl_phone_field/countries.dart';
+
 class User {
   final String email;
   String? profilePic;
@@ -26,11 +28,16 @@ class User {
   });
 
   Map<String, Object?> call() {
+    final String? dialCode =
+        countries.firstWhere((item) => item.code == countryCode).dialCode
+            as String?;
+
     return {
       'email': email,
       'profile_pic': profilePic,
       'fullname': fullname,
       'country_code': countryCode,
+      'dial_code': dialCode,
       'phone': phone,
       'birth_date': birthDate,
       'gender': gender,
