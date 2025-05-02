@@ -99,8 +99,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 horizontal: widget.isSmall ? 18 : 20,
                 vertical: widget.isSmall ? 12 : 16,
               ),
-              prefixIcon:
-                  Icon(widget.leading, size: widget.isSmall ? 20 : 28) ?? null,
+              prefixIcon: Icon(widget.leading, size: widget.isSmall ? 20 : 28),
               suffixIcon:
                   isPassword
                       ? IconButton(

@@ -239,7 +239,11 @@ class _HomeState extends State<Home> {
                 children: [
                   IconButton(
                     onPressed: _prevSpot,
-                    icon: Icon(Icons.arrow_left, size: isSmall ? 24 : 30),
+                    icon: Icon(
+                      Icons.arrow_circle_left,
+                      size: isSmall ? 40 : 50,
+                      color: Color(0xFF1F1E5B),
+                    ),
                   ),
                   Column(
                     children: [
@@ -270,7 +274,11 @@ class _HomeState extends State<Home> {
                   ),
                   IconButton(
                     onPressed: _nextSpot,
-                    icon: Icon(Icons.arrow_right, size: isSmall ? 24 : 30),
+                    icon: Icon(
+                      Icons.arrow_circle_right,
+                      size: isSmall ? 40 : 50,
+                      color: Color(0xFF1F1E5B),
+                    ),
                   ),
                 ],
               ),

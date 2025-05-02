@@ -51,6 +51,7 @@ class _MainLayoutState extends State<MainLayout>
         backgroundColor: Colors.white,
         body: TabBarView(
           controller: controller,
+          physics: NeverScrollableScrollPhysics(),
           children: tabs.map((tab) => tab.screen).toList(),
         ),
         bottomNavigationBar: Container(
