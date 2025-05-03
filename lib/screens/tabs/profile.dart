@@ -3,7 +3,18 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  Profile({super.key});
+
+  final List<SettingButtons> acc_setting = [
+    SettingButtons(icon: "assets/icons/key.png", title: "Change Password"),
+    SettingButtons(icon: "assets/icons/calender.png", title: "Subscriptions"),
+    SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
+  ];
+  final List<SettingButtons> help_oth = [
+    SettingButtons(icon: "assets/icons/question.png", title: "FAQ"),
+    SettingButtons(icon: "assets/icons/problem.png", title: "Contact Us"),
+    SettingButtons(icon: "assets/icons/star.png", title: "Rate Our App"),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +110,65 @@ class Profile extends StatelessWidget {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Account Settings",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w400,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withOpacity(0.25),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: acc_setting.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return acc_setting[index];
+                      },
+                    ),
+                    SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Helps and Others",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w400,
+                          shadows: [
+                            Shadow(
+                              color: Colors.black.withOpacity(0.25),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: help_oth.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return help_oth[index];
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -107,11 +177,60 @@ class Profile extends StatelessWidget {
   }
 }
 
-class SettingButton extends StatelessWidget {
-  const SettingButton({super.key});
+class SettingButtons extends StatelessWidget {
+  const SettingButtons({
+    required this.icon,
+    required this.title,
+    this.tail = Icons.arrow_right_sharp,
+    this.bgColor = const Color(0xFFEDF4FF),
+  });
+
+  final String icon;
+  final String title;
+  final IconData tail;
+  final Color bgColor;
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.25),
+              blurRadius: 6,
+              offset: const Offset(4, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(icon, scale: isSmall ? 20 : 25),
+                const SizedBox(width: 12),
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: isSmall ? 14 : 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Icon(tail),
+          ],
+        ),
+      ),
+    );
   }
 }
