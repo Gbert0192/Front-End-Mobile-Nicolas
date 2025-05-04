@@ -12,6 +12,7 @@ class ResponsiveTextInput extends StatefulWidget {
     this.label,
     this.errorText,
     this.leading,
+    this.value,
     this.type = TextInputTypes.text,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -23,6 +24,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final VoidCallback? onChanged;
   final String? hint;
   final String? label;
+  final String? value;
   final String? errorText;
   final TextInputTypes type;
   final IconData? leading;

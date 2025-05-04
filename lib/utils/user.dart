@@ -1,7 +1,7 @@
 import 'package:intl_phone_field/countries.dart';
 
 class User {
-  final String email;
+  String email;
   String? profilePic;
   String fullname;
   String countryCode;
@@ -31,7 +31,6 @@ class User {
     final String? dialCode =
         countries.firstWhere((item) => item.code == countryCode).dialCode
             as String?;
-
     return {
       'email': email,
       'profile_pic': profilePic,
@@ -43,6 +42,7 @@ class User {
       'gender': gender,
       'balance': balance,
       'is_member': isMember,
+      'lang': lang,
     };
   }
 
@@ -61,14 +61,20 @@ class User {
 
   void editProfile({
     required String newFullname,
+    required String newEmail,
     required String newPhone,
+    required String newCountryCode,
     String? newBirthDate,
     String? newGender,
+    String? newProfilePic,
   }) {
+    email = newEmail;
     fullname = newFullname;
     phone = newPhone;
+    countryCode = newCountryCode;
     birthDate = newBirthDate;
     gender = newGender;
+    profilePic = newProfilePic;
   }
 
   void joinMember() {

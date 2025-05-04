@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
+import 'package:tugas_front_end_nicolas/components/date_picker.dart';
+import 'package:tugas_front_end_nicolas/components/dropdown.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
-class UserData extends StatefulWidget {
-  const UserData(this.email, {super.key});
-  final String email;
+class EditProfile extends StatefulWidget {
+  const EditProfile(this.user);
+  final Map<String, Object?> user;
 
   @override
-  State<UserData> createState() => _UserDataState();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
-class _UserDataState extends State<UserData> {
+class _EditProfileState extends State<EditProfile> {
   String country_code = "ID";
 
   final form = UseForm(
-    fields: ["fullname", "phone", "password", "conpassword"],
+    fields: ["fullname", "email", "phone", "birth_date", "gender"],
     validators: {
       "fullname":
           (value) =>
               validateBasic(key: "Fullname", value: value, required: true),
+      'email': (value) => validateEmail(value: value),
       "phone":
           (value) => validateBasic(
             key: "Phone Number",
@@ -33,12 +35,8 @@ class _UserDataState extends State<UserData> {
             minLength: 7,
             maxLength: 12,
           ),
-      "password": (value) => validatePassword(value: value),
-    },
-    match: {
-      "password": [
-        {"key": "conpassword", "label": "Confirm Password"},
-      ],
+      "birth_date": (value) => validateBasic(value: value, required: false),
+      "gender": (value) => validateBasic(value: value, required: false),
     },
   );
 
@@ -57,6 +55,24 @@ class _UserDataState extends State<UserData> {
     "assets/users/male 3.jpg",
   ];
 
+  @override
+  void initState() {
+    super.initState();
+
+    final user = widget.user;
+    form.control('fullname').text = (user['fullname'] ?? '').toString();
+    form.control('email').text = (user['email'] ?? '').toString();
+    form.control('phone').text = (user['phone'] ?? '').toString();
+    form.control('birth_date').text = (user['birth_date'] ?? '').toString();
+    form.control('gender').text = (user['gender'] ?? '').toString();
+
+    country_code = (user['country_code'] ?? 'ID').toString();
+
+    if (user['profile_pic'] != null) {
+      choice = userPP.indexWhere((item) => item == user['profile_pic']);
+    }
+  }
+
   void changeAvatar() {
     setState(() {
       choice += 1;
@@ -71,6 +87,7 @@ class _UserDataState extends State<UserData> {
     final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -106,17 +123,10 @@ class _UserDataState extends State<UserData> {
                 child: Column(
                   children: [
                     Text(
-                      'USER DATA',
+                      'Edit Profile',
                       style: TextStyle(
-                        fontSize: isSmall ? 35 : 50,
-                        color: Color(0xFF2C39B8),
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
-                          ),
-                        ],
+                        fontWeight: FontWeight.w700,
+                        fontSize: 32,
                       ),
                     ),
                     Stack(
@@ -179,6 +189,22 @@ class _UserDataState extends State<UserData> {
                           },
                         ),
                         const SizedBox(height: 10),
+                        ResponsiveTextInput(
+                          isSmall: isSmall,
+                          controller: form.control('email'),
+                          hint: 'Enter Email',
+                          label: 'Email',
+                          type: TextInputTypes.text,
+                          errorText: form.error('email'),
+                          onChanged: () {
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 10),
                         ResponsivePhoneInput(
                           isSmall: isSmall,
                           country_code: country_code,
@@ -198,42 +224,27 @@ class _UserDataState extends State<UserData> {
                               }),
                         ),
                         const SizedBox(height: 10),
-                        ResponsiveTextInput(
+                        ResponsiveDatePicker(
                           isSmall: isSmall,
-                          controller: form.control("password"),
-                          hint: 'Enter Password',
-                          label: 'Password',
-                          type: TextInputTypes.password,
-                          errorText: form.error('password'),
-                          onChanged: () {
-                            if (form.isSubmitted) {
-                              setState(() {
-                                form.validate();
-                              });
-                            }
-                          },
+                          controller: form.control("birth_date"),
+                          hint: 'Select Birth Date',
+                          label: 'Birth Date',
                         ),
                         const SizedBox(height: 10),
-                        ResponsiveTextInput(
+                        ResponsiveDropdown(
                           isSmall: isSmall,
-                          controller: form.control("conpassword"),
-                          hint: 'Enter Confirm Password',
-                          label: 'Confirm Password',
-                          type: TextInputTypes.password,
-                          errorText: form.error('conpassword'),
-                          onChanged: () {
-                            if (form.isSubmitted) {
-                              setState(() {
-                                form.validate();
-                              });
-                            }
-                          },
+                          items: [
+                            {"label": "Male", "value": "male"},
+                            {"label": "Female", "value": "female"},
+                          ],
+                          controller: form.control("gender"),
+                          hint: 'Select Gender',
+                          label: 'Gender',
                         ),
                       ],
                     ),
                     SizedBox(height: isSmall ? 50 : 100),
 
-                    //Continue Button
                     ResponsiveButton(
                       isSmall: isSmall,
                       isLoading: form.isLoading,
@@ -246,30 +257,26 @@ class _UserDataState extends State<UserData> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            userProvider.registerUser(
-                              email: widget.email,
-                              profile_pic: choice == -1 ? null : userPP[choice],
+                            print(choice == -1 ? null : userPP[choice]);
+                            userProvider.editProfile(
                               fullname: form.control("fullname").text,
-                              country_code: country_code,
+                              email: form.control("email").text,
                               phone: form.control("phone").text,
-                              password: form.control("password").text,
+                              countryCode: country_code,
+                              profilePic: choice == -1 ? null : userPP[choice],
+                              birthDate: form.control("birth_date").text,
+                              gender: form.control("gender").text,
                             );
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome to ParkID, ${form.control("fullname").text.split(" ")[0]}!",
+                              "Profile has been updated!",
                             );
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainLayout(),
-                              ),
-                              (Route<dynamic> route) => false,
-                            );
+                            Navigator.pop(context);
                           });
                         }
                       },
-                      text: "Register",
+                      text: "Save",
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                   ],
