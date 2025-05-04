@@ -116,7 +116,9 @@ class _HomeState extends State<Home> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
+                          "Halo, ${(user['fullname'] ?? 'Guest').toString().split(" ")[0]}!",
+                          // Text(
+                          //   "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
                           style: TextStyle(
                             fontSize: isSmall ? 28 : 40,
                             fontWeight: FontWeight.bold,

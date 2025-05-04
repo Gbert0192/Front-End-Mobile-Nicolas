@@ -49,7 +49,12 @@ class ParkingHistory extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Stack(
+                      alignment: Alignment.center,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.all(20),
+                          child: Image.asset('assets/others/booking_view.png'),
+                        ),
                         Positioned(
                           top: 10,
                           left: 15,
