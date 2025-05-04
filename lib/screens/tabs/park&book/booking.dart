@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/bookingParking.dart';
 
-class Parking extends StatelessWidget {
-  const Parking({super.key});
+class Booking extends StatelessWidget {
+  const Booking({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +40,14 @@ class Parking extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isSmall ? 16.0 : 24.0,
+                  horizontal: isSmall ? 14.0 : 24.0,
                 ),
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Text(
-                          'Parking',
+                          'Booking',
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.w700,
@@ -62,14 +62,21 @@ class Parking extends StatelessWidget {
                       priceText: 'Rp. 10000/h',
                       dateText: '12/12/2023',
                       placeName: 'Sun Plaza',
-                      statusText: ParkingStatus.isParking,
+                      statusText: ParkingStatus.bookingCancel,
                     ),
                     ParkingCard(
                       imageUrl: 'assets/building/Aryaduta.jpg',
                       priceText: 'Rp. 10000',
                       dateText: 'Yesterday',
                       placeName: 'Arya Duta',
-                      statusText: ParkingStatus.isExited,
+                      statusText: ParkingStatus.bookingExpired,
+                    ),
+                    ParkingCard(
+                      imageUrl: 'assets/building/Delipark.jpg',
+                      priceText: 'Rp. 10000',
+                      dateText: '20/12/2023',
+                      placeName: 'Delipark',
+                      statusText: ParkingStatus.bookingExpired,
                     ),
                   ],
                 ),
