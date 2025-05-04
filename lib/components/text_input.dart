@@ -12,6 +12,7 @@ class ResponsiveTextInput extends StatefulWidget {
     this.label,
     this.errorText,
     this.leading,
+    this.value,
     this.type = TextInputTypes.text,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -23,6 +24,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final VoidCallback? onChanged;
   final String? hint;
   final String? label;
+  final String? value;
   final String? errorText;
   final TextInputTypes type;
   final IconData? leading;
@@ -100,7 +102,9 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 vertical: widget.isSmall ? 12 : 16,
               ),
               prefixIcon:
-                  Icon(widget.leading, size: widget.isSmall ? 20 : 28) ?? null,
+                  widget.leading != null
+                      ? Icon(widget.leading, size: widget.isSmall ? 20 : 28)
+                      : null,
               suffixIcon:
                   isPassword
                       ? IconButton(

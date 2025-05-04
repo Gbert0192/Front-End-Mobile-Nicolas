@@ -161,11 +161,12 @@ class _SignInState extends State<SignIn> {
                               context,
                               "Welcome Back, ${userProvider.userList[user_id].fullname.split(" ")[0]}!",
                             );
-                            Navigator.push(
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MainLayout(),
                               ),
+                              (Route<dynamic> route) => false,
                             );
                           });
                         }

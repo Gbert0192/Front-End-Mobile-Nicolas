@@ -28,11 +28,11 @@ class _MainLayoutState extends State<MainLayout>
     with SingleTickerProviderStateMixin {
   late TabController controller;
   final List<TabModel> tabs = [
-    TabModel(icon: Icons.home, screen: const Home()),
-    TabModel(icon: Icons.notifications, screen: const Notification_()),
-    TabModel(icon: Icons.local_parking, screen: const ParkingHistory()),
-    TabModel(icon: Icons.discount, screen: const Voucher()),
-    TabModel(icon: Icons.person, screen: const Profile()),
+    TabModel(icon: Icons.home, screen: Home()),
+    TabModel(icon: Icons.notifications, screen: Notification_()),
+    TabModel(icon: Icons.local_parking, screen: ParkingHistory()),
+    TabModel(icon: Icons.discount, screen: Voucher()),
+    TabModel(icon: Icons.person, screen: Profile()),
   ];
 
   void initState() {
@@ -51,6 +51,7 @@ class _MainLayoutState extends State<MainLayout>
         backgroundColor: Colors.white,
         body: TabBarView(
           controller: controller,
+          physics: NeverScrollableScrollPhysics(),
           children: tabs.map((tab) => tab.screen).toList(),
         ),
         bottomNavigationBar: Container(
