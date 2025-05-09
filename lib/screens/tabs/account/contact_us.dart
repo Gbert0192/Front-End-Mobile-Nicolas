@@ -147,7 +147,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
             decoration: InputDecoration(
               hintText: "Enter Your $label",
               focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.red),
+                borderSide: BorderSide(color: Color(0xFF1F1E5B)),
               ),
               errorStyle: const TextStyle(height: 0), // Hide default error text
             ),

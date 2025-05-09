@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/subscription/subscription_page.dart';
 
 class Profile extends StatelessWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +19,32 @@ class Profile extends StatelessWidget {
       Navigator.push(context, MaterialPageRoute(builder: (context) => page));
     }
 
-    final List<SettingButtons> acc_setting = [
+    final List<SettingButtons> accSetting = [
       SettingButtons(icon: "assets/icons/key.png", title: "Change Password"),
-      SettingButtons(icon: "assets/icons/calender.png", title: "Subscriptions"),
+      SettingButtons(
+        icon: "assets/icons/calender.png",
+        title: "Subscriptions",
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SubscriptionPage()),
+          );
+        },
+      ),
       SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
     ];
-    final List<SettingButtons> help_oth = [
+    final List<SettingButtons> helpOth = [
       SettingButtons(icon: "assets/icons/question.png", title: "FAQ"),
-      SettingButtons(icon: "assets/icons/problem.png", title: "Contact Us"),
+      SettingButtons(
+        icon: "assets/icons/problem.png",
+        title: "Contact Us",
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ContactUsPage()),
+          );
+        },
+      ),
       SettingButtons(icon: "assets/icons/star.png", title: "Rate Our App"),
     ];
 
@@ -155,9 +175,9 @@ class Profile extends StatelessWidget {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: acc_setting.length,
+                            itemCount: accSetting.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return acc_setting[index];
+                              return accSetting[index];
                             },
                           ),
                           SizedBox(height: isSmall ? 8 : 10),
@@ -181,9 +201,9 @@ class Profile extends StatelessWidget {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: help_oth.length,
+                            itemCount: helpOth.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return help_oth[index];
+                              return helpOth[index];
                             },
                           ),
                           SizedBox(height: isSmall ? 8 : 10),
@@ -228,6 +248,7 @@ class Profile extends StatelessWidget {
 
 class SettingButtons extends StatelessWidget {
   const SettingButtons({
+    super.key,
     this.icon,
     required this.title,
     this.onPressed,

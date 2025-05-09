@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/bookingParking.dart';
 
-class Parking extends StatelessWidget {
-  const Parking({super.key});
+class Parkings extends StatelessWidget {
+  const Parkings({super.key});
 
   @override
   Widget build(BuildContext context) {
