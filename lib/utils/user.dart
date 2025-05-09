@@ -9,9 +9,11 @@ class User {
   String password;
   String? birthDate;
   String? gender;
-  String? lang;
-  double balance;
-  bool isMember;
+  String? lang = "EN";
+  double balance = 0;
+  bool isMember = false;
+  String? memberSince;
+  String? memberUntil;
 
   User({
     required this.email,
@@ -20,11 +22,6 @@ class User {
     required this.countryCode,
     required this.phone,
     required this.password,
-    this.birthDate,
-    this.gender,
-    this.lang = "EN",
-    this.balance = 0,
-    this.isMember = false,
   });
 
   Map<String, Object?> call() {
@@ -42,6 +39,8 @@ class User {
       'gender': gender,
       'balance': balance,
       'is_member': isMember,
+      'member_since': memberSince,
+      'member_until': memberUntil,
       'lang': lang,
     };
   }
@@ -77,15 +76,37 @@ class User {
     profilePic = newProfilePic;
   }
 
-  void joinMember() {
+  int joinMember({required MemberType type, required double nominal}) {
+    if (this.purchase(nominal) == -1) return -1;
+    memberSince = DateTime.now().toString();
+    switch (type) {
+      case MemberType.monthly:
+        memberUntil = DateTime.now().add(Duration(days: 30)).toString();
+        break;
+
+      case MemberType.seasonal:
+        memberUntil = DateTime.now().add(Duration(days: 90)).toString();
+        break;
+
+      case MemberType.annual:
+        memberUntil = DateTime.now().add(Duration(days: 365)).toString();
+        break;
+    }
     isMember = true;
+    return 1;
   }
 
   void topUp(double nominal) {
     balance += nominal;
   }
 
-  void purchase(double nominal) {
+  int purchase(double nominal) {
+    if (nominal > balance) {
+      return -1;
+    }
     balance -= nominal;
+    return 1;
   }
 }
+
+enum MemberType { monthly, seasonal, annual }

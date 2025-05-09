@@ -87,7 +87,7 @@ class ParkingHistory extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: isSmall ? 20 : 30),
+                SizedBox(height: isSmall ? 15 : 30),
 
                 // Button Booking
                 ElevatedButton(
@@ -116,7 +116,7 @@ class ParkingHistory extends StatelessWidget {
                         Padding(
                           padding:
                               isSmall
-                                  ? EdgeInsets.all(10)
+                                  ? EdgeInsets.all(35)
                                   : EdgeInsets.only(
                                     top: 70,
                                     left: 20,

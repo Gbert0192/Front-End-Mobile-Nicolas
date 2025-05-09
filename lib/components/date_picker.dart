@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/text_input.dart';
 
 class ResponsiveDatePicker extends StatefulWidget {
   const ResponsiveDatePicker({
@@ -13,6 +14,7 @@ class ResponsiveDatePicker extends StatefulWidget {
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
+    this.mode = StyleMode.outline,
   });
 
   final bool isSmall;
@@ -25,6 +27,7 @@ class ResponsiveDatePicker extends StatefulWidget {
   final Color fillColor;
   final Color borderColor;
   final Color borderFocusColor;
+  final StyleMode mode;
 
   @override
   State<ResponsiveDatePicker> createState() => _ResponsiveDatePickerState();
@@ -90,6 +93,7 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
   @override
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
+    final isOutline = widget.mode == StyleMode.outline;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,16 +101,22 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
         Stack(
           alignment: Alignment.centerRight,
           children: [
+            widget.mode == StyleMode.underline
+                ? Text(widget.label!, style: TextStyle(color: _getColor()))
+                : SizedBox.shrink(),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 6,
-                    offset: const Offset(4, 4),
-                  ),
-                ],
+                boxShadow:
+                    isOutline
+                        ? null
+                        : [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.25),
+                            blurRadius: 6,
+                            offset: const Offset(4, 4),
+                          ),
+                        ],
               ),
               child: GestureDetector(
                 onTap: () async {
@@ -122,7 +132,6 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                     labelStyle: TextStyle(color: _getColor()),
                     floatingLabelStyle: TextStyle(color: _getColor()),
                     filled: true,
-
                     fillColor:
                         hasError ? const Color(0xFFFFEDED) : widget.fillColor,
                     contentPadding: EdgeInsets.symmetric(
@@ -136,18 +145,39 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                               size: widget.isSmall ? 20 : 28,
                             )
                             : null,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: _getColor()),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: _getColor(), width: 2.0),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
+                    enabledBorder:
+                        isOutline
+                            ? OutlineInputBorder(
+                              borderSide: BorderSide(color: _getColor()),
+                              borderRadius: BorderRadius.circular(20),
+                            )
+                            : UnderlineInputBorder(
+                              borderSide: BorderSide(color: _getColor()),
+                            ),
+                    focusedBorder:
+                        isOutline
+                            ? OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: _getColor(),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(20),
+                            )
+                            : UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: _getColor(),
+                                width: 2.0,
+                              ),
+                            ),
+                    errorBorder:
+                        isOutline
+                            ? OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(20),
+                            )
+                            : UnderlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                            ),
                   ),
                   child: Text(
                     widget.controller.text.isNotEmpty
