@@ -20,6 +20,26 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: Padding(
+          padding: EdgeInsets.only(left: 12.0),
+          child: Material(
+            color: Colors.white,
+            shape: const CircleBorder(),
+            elevation: 2,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(12),
+                elevation: 1,
+              ),
+              child: const Icon(Icons.arrow_back, color: Colors.black),
+            ),
+          ),
+        ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
@@ -32,11 +52,15 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(isSmall ? 30 : 50),
+            padding: EdgeInsets.symmetric(horizontal: isSmall ? 20 : 40),
             child: Center(
               child: Column(
                 children: [
-                  Image.asset('assets/others/member.png'),
+                  Image.asset(
+                    'assets/others/member.png',
+                    width: isSmall ? 220 : 300,
+                  ),
+                  SizedBox(height: isSmall ? 20 : 40),
                   //Radio Button 1
                   Container(
                     decoration: BoxDecoration(
@@ -47,7 +71,7 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
 
                     child: RadioListTile(
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
+                        vertical: isSmall ? 5 : 10,
                         horizontal: 15,
                       ),
                       value: 1,
@@ -61,18 +85,21 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
                       },
                       title: Text(
                         'Annual',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: isSmall ? 16 : 20,
+                          color: Colors.black,
+                        ),
                       ),
                       subtitle: Text(
                         'Pay for a full year',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: isSmall ? 13 : 18,
                           color: Color(0xFFAAA9A9),
                         ),
                       ),
                       secondary: Text(
                         'Rp300.000',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: isSmall ? 14 : 18),
                       ),
                       selected: val == 1,
                     ),
@@ -89,7 +116,7 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
 
                     child: RadioListTile(
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
+                        vertical: isSmall ? 5 : 10,
                         horizontal: 15,
                       ),
                       value: 2,
@@ -103,18 +130,21 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
                       },
                       title: Text(
                         'Seasonal',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: isSmall ? 16 : 20,
+                          color: Colors.black,
+                        ),
                       ),
                       subtitle: Text(
-                        'Pay for 6 months',
+                        'Pay for 3 months',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: isSmall ? 13 : 18,
                           color: Color(0xFFAAA9A9),
                         ),
                       ),
                       secondary: Text(
                         'Rp150.000',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: isSmall ? 14 : 18),
                       ),
                       selected: val == 2,
                     ),
@@ -131,7 +161,7 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
 
                     child: RadioListTile(
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
+                        vertical: isSmall ? 5 : 10,
                         horizontal: 15,
                       ),
                       value: 3,
@@ -145,18 +175,21 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
                       },
                       title: Text(
                         'Monthly',
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        style: TextStyle(
+                          fontSize: isSmall ? 16 : 20,
+                          color: Colors.black,
+                        ),
                       ),
                       subtitle: Text(
                         'Pay monthly, cancel any time',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: isSmall ? 13 : 18,
                           color: Color(0xFFAAA9A9),
                         ),
                       ),
                       secondary: Text(
                         'Rp50.000',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: isSmall ? 14 : 18),
                       ),
                       selected: val == 3,
                     ),
@@ -167,20 +200,7 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
                   ResponsiveButton(
                     isSmall: isSmall,
                     onPressed: () {
-                      if (val != 1 && val != 2 && val != 3) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: Colors.red,
-                            padding: EdgeInsets.all(isSmall ? 5 : 20),
-                            content: Text(
-                              "Can't continue before selecting",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: isSmall ? 12 : 18,
-                              ),
-                            ),
-                          ),
-                        );
+                      if (val == 0) {
                         return;
                       }
                       Navigator.push(

@@ -75,7 +75,12 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+              color:
+                  widget.mode == StyleMode.outline
+                      ? hasError
+                          ? const Color(0xFFFFEDED)
+                          : widget.fillColor
+                      : null,
               borderRadius:
                   widget.mode == StyleMode.outline
                       ? BorderRadius.circular(20)
@@ -86,7 +91,12 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                         color: _getColor(),
                         width: _isFocused ? 2 : 1,
                       )
-                      : null,
+                      : Border(
+                        bottom: BorderSide(
+                          color: _getColor(),
+                          width: _isFocused ? 2 : 1,
+                        ),
+                      ),
               boxShadow:
                   widget.mode == StyleMode.underline
                       ? null
@@ -98,56 +108,46 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                         ),
                       ],
             ),
-            child: Container(
-              decoration:
-                  widget.mode == StyleMode.underline
-                      ? BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: Colors.black, width: 1.0),
-                        ),
-                      )
-                      : null,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: widget.isSmall ? 16 : 20,
-                    ),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: _selectedValue,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        style: TextStyle(
-                          fontSize: widget.isSmall ? 16 : 18,
-                          color: Colors.grey[800],
-                        ),
-                        hint: Text(
-                          widget.hint ?? '',
-                          style: TextStyle(color: _getColor()),
-                        ),
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedValue = newValue;
-                            widget.controller.text = newValue!;
-                          });
-                          widget.onChanged?.call();
-                        },
-                        items:
-                            widget.items
-                                .map(
-                                  (item) => DropdownMenuItem<String>(
-                                    value: item['value'],
-                                    child: Text(item['label']!),
-                                  ),
-                                )
-                                .toList(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: widget.isSmall ? 16 : 20,
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: _selectedValue,
+                      icon: const Icon(Icons.arrow_drop_down),
+                      style: TextStyle(
+                        fontSize: widget.isSmall ? 16 : 18,
+                        color: Colors.grey[800],
                       ),
+                      hint: Text(
+                        widget.hint ?? '',
+                        style: TextStyle(color: _getColor()),
+                      ),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _selectedValue = newValue;
+                          widget.controller.text = newValue!;
+                        });
+                        widget.onChanged?.call();
+                      },
+                      items:
+                          widget.items
+                              .map(
+                                (item) => DropdownMenuItem<String>(
+                                  value: item['value'],
+                                  child: Text(item['label']!),
+                                ),
+                              )
+                              .toList(),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

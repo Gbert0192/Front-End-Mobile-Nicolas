@@ -12,106 +12,193 @@ class SubscriptionPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          'Member',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
-        ),
-      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(isSmall ? 30 : 50),
-            child: Column(
-              children: [
-                Center(
-                  child: Text(
-                    'Get all the facilities by upgrading your account',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              centerTitle: true,
+              title: Text(
+                'Member',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+              ),
+              leading: Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 2,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.all(12),
+                      elevation: 1,
+                    ),
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
                   ),
                 ),
-                SizedBox(height: isSmall ? 15 : 30),
-
-                //Container
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFF2F5FF),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Color(0xFF4D5DFA)),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: isSmall ? 10 : 20),
-                      Center(
-                        child: Text(
-                          'Pro',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: isSmall ? 25 : 50),
-                      ...[
-                        'All Include',
-                        'Unlimited Features',
-                        'Discounts every reservation',
-                        'All Include',
-                        'All Include',
-                        'All Include',
-                      ].map(
-                        (text) => Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: isSmall ? 7 : 10,
-                            horizontal: isSmall ? 10 : 20,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.check_box,
-                                size: 20,
-                                color: Color(0xFF4D5DFA),
-                              ),
-                              SizedBox(width: isSmall ? 5 : 10),
-                              Text(
-                                text,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xFF1F1E5B),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: isSmall ? 25 : 50),
-                    ],
-                  ),
-                ),
-                SizedBox(height: isSmall ? 20 : 40),
-
-                // Button
-                ResponsiveButton(
-                  isSmall: isSmall,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SubscriptionChoice(),
-                      ),
-                    );
-                  },
-                  text: 'Proceed Member',
-                ),
-              ],
+              ),
+              backgroundColor: Colors.white,
+              elevation: 0,
             ),
-          ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: isSmall ? 30 : 50),
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        'Get all the facilities by upgrading your account',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: isSmall ? 15 : 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: isSmall ? 15 : 30),
+
+                    //Container
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF2F5FF),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: Color(0xFF4D5DFA)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: isSmall ? 10 : 20),
+                          Center(
+                            child: Text(
+                              'Join Membership',
+                              style: TextStyle(
+                                fontSize: isSmall ? 16 : 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: isSmall ? 25 : 50),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                            ),
+                            child: Text(
+                              '✅ Current Member Benefits',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: isSmall ? 14 : 16,
+                                color: Color(0xFF1F1E5B),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: isSmall ? 10 : 20),
+                          ...[
+                            'No service fee',
+                            'No-show fee waived',
+                            'Extended early arrival time (e.g., up to 45 minutes before booking)',
+                            'Extended late check-in window (up to 45 minutes late)',
+                            'Shorter cancellation deadline (cancel up to 15 minutes before)',
+                          ].map(
+                            (text) => Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: isSmall ? 5 : 8,
+                                horizontal: isSmall ? 10 : 20,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_box,
+                                    size: isSmall ? 15 : 20,
+                                    color: Color(0xFF4D5DFA),
+                                  ),
+                                  SizedBox(width: isSmall ? 5 : 10),
+                                  Expanded(
+                                    child: Text(
+                                      text,
+                                      style: TextStyle(
+                                        fontSize: isSmall ? 14 : 16,
+                                        color: Color(0xFF1F1E5B),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: isSmall ? 20 : 30),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0,
+                            ),
+                            child: Text(
+                              '🔜 Coming Soon for Members',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: isSmall ? 14 : 16,
+                                color: Color(0xFF1F1E5B),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: isSmall ? 10 : 20),
+                          ...[
+                            'Discounted hourly parking rates',
+                            'Exclusive promos and offers',
+                          ].map(
+                            (text) => Padding(
+                              padding: EdgeInsets.symmetric(
+                                vertical: isSmall ? 5 : 8,
+                                horizontal: isSmall ? 10 : 20,
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.hourglass_bottom,
+                                    size: isSmall ? 15 : 20,
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(width: isSmall ? 5 : 10),
+                                  Expanded(
+                                    child: Text(
+                                      text,
+                                      style: TextStyle(
+                                        fontSize: isSmall ? 14 : 16,
+                                        color: Color(0xFF1F1E5B),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: isSmall ? 25 : 50),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: isSmall ? 20 : 40),
+
+                    // Button
+                    ResponsiveButton(
+                      isSmall: isSmall,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SubscriptionChoice(),
+                          ),
+                        );
+                      },
+                      text: 'Proceed Member',
+                    ),
+                    SizedBox(height: isSmall ? 10 : 20),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

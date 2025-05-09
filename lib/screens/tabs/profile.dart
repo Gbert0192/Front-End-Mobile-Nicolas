@@ -56,182 +56,180 @@ class Profile extends StatelessWidget {
               ),
             ),
             SliverToBoxAdapter(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          CircleAvatar(
-                            radius: isSmall ? 50 : 70,
-                            backgroundColor: Colors.grey[300],
-                            backgroundImage:
-                                user['profile_pic'] != null
-                                    ? AssetImage(user['profile_pic'] as String)
-                                    : null,
-                            child:
-                                user['profile_pic'] == null
-                                    ? Icon(
-                                      Icons.person,
-                                      size: isSmall ? 50 : 70,
-                                      color: Colors.grey[500],
-                                    )
-                                    : null,
-                          ),
-                          SizedBox(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  user['fullname'] as String,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: isSmall ? 18 : 20,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  user['email'] as String,
-                                  style: TextStyle(
-                                    fontSize: isSmall ? 14 : 16,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        CircleAvatar(
+                          radius: isSmall ? 50 : 70,
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage:
+                              user['profile_pic'] != null
+                                  ? AssetImage(user['profile_pic'] as String)
+                                  : null,
+                          child:
+                              user['profile_pic'] == null
+                                  ? Icon(
+                                    Icons.person,
+                                    size: isSmall ? 50 : 70,
                                     color: Colors.grey[500],
-                                  ),
+                                  )
+                                  : null,
+                        ),
+                        SizedBox(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                user['fullname'] as String,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: isSmall ? 18 : 20,
                                 ),
-                                SizedBox(height: 4),
-                                Text(
-                                  '+${user['dial_code'] ?? ''}${user['phone'] ?? ''}',
-                                  style: TextStyle(
-                                    fontSize: isSmall ? 16 : 18,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                user['email'] as String,
+                                style: TextStyle(
+                                  fontSize: isSmall ? 14 : 16,
+                                  color: Colors.grey[500],
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                '+${user['dial_code'] ?? ''}${user['phone'] ?? ''}',
+                                style: TextStyle(
+                                  fontSize: isSmall ? 16 : 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topCenter,
+                          child: CircleAvatar(
+                            radius: 20,
+                            backgroundColor: const Color(0xFF1F1E5B),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.edit,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                acc_nav(
+                                  EditProfile({
+                                    "fullname": user["fullname"],
+                                    "email": user["email"],
+                                    "phone": user["phone"],
+                                    "birth_date": user["birth_date"],
+                                    "gender": user["gender"],
+                                    "profile_pic": user["profile_pic"],
+                                    "country_code": user["country_code"],
+                                  }),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: isSmall ? 4 : 8,
+                    ),
+                    child: Column(
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Account Settings",
+                            style: TextStyle(
+                              fontSize: isSmall ? 18 : 25,
+                              fontWeight: FontWeight.w400,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
                               ],
                             ),
                           ),
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: CircleAvatar(
-                              radius: 20,
-                              backgroundColor: const Color(0xFF1F1E5B),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.edit,
-                                  size: 16,
-                                  color: Colors.white,
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: acc_setting.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return acc_setting[index];
+                          },
+                        ),
+                        SizedBox(height: isSmall ? 8 : 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Helps and Others",
+                            style: TextStyle(
+                              fontSize: isSmall ? 18 : 25,
+                              fontWeight: FontWeight.w400,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
-                                onPressed: () {
-                                  acc_nav(
-                                    EditProfile({
-                                      "fullname": user["fullname"],
-                                      "email": user["email"],
-                                      "phone": user["phone"],
-                                      "birth_date": user["birth_date"],
-                                      "gender": user["gender"],
-                                      "profile_pic": user["profile_pic"],
-                                      "country_code": user["country_code"],
-                                    }),
-                                  );
-                                },
-                              ),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: help_oth.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return help_oth[index];
+                          },
+                        ),
+                        SizedBox(height: isSmall ? 8 : 10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Exit the Application",
+                            style: TextStyle(
+                              fontSize: isSmall ? 18 : 25,
+                              fontWeight: FontWeight.w400,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.25),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SettingButtons(
+                          title: "Log Out",
+                          tail: Icons.exit_to_app_rounded,
+                          tailColor: Colors.red,
+                          textColor: Colors.red,
+                          bgColor: Color(0xFFFFDCDC),
+                        ),
+                        SizedBox(height: isSmall ? 10 : 20),
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: isSmall ? 4 : 8,
-                      ),
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Account Settings",
-                              style: TextStyle(
-                                fontSize: isSmall ? 18 : 25,
-                                fontWeight: FontWeight.w400,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.25),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: acc_setting.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return acc_setting[index];
-                            },
-                          ),
-                          SizedBox(height: isSmall ? 8 : 10),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Helps and Others",
-                              style: TextStyle(
-                                fontSize: isSmall ? 18 : 25,
-                                fontWeight: FontWeight.w400,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.25),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: help_oth.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return help_oth[index];
-                            },
-                          ),
-                          SizedBox(height: isSmall ? 8 : 10),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Exit the Application",
-                              style: TextStyle(
-                                fontSize: isSmall ? 18 : 25,
-                                fontWeight: FontWeight.w400,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black.withOpacity(0.25),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SettingButtons(
-                            title: "Log Out",
-                            tail: Icons.exit_to_app_rounded,
-                            tailColor: Colors.red,
-                            textColor: Colors.red,
-                            bgColor: Color(0xFFFFDCDC),
-                          ),
-                          SizedBox(height: isSmall ? 10 : 20),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -5,6 +5,9 @@ import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'dart:math' as math;
 
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
+import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ContactUsPage extends StatefulWidget {
   const ContactUsPage({super.key});
@@ -14,20 +17,30 @@ class ContactUsPage extends StatefulWidget {
 }
 
 class _ContactUsPageState extends State<ContactUsPage> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _commentController = TextEditingController();
-  String? _selectedSubject;
+  String country_code = "ID";
 
+  final form = UseForm(
+    fields: ["fullname", "email", "phone", "subject", "comment"],
+    validators: {
+      "fullname": (value) => validateBasic(key: "Fullname", value: value),
+      "email": (value) => validateEmail(value: value),
+      "phone":
+          (value) => validateBasic(
+            key: "Phone Number",
+            value: value,
+            minLength: 7,
+            maxLength: 12,
+          ),
+      "subject": (value) => validateBasic(key: "Subject", value: value),
+    },
+  );
   final List<Map<String, String>> subjects = [
-    {'label': 'Support', 'value': 'support'},
-    {'label': 'Feedback', 'value': 'feedback'},
-    {'label': 'Membership', 'value': 'membership'},
-    {'label': 'Feature Request', 'value': 'feature_request'},
-    {'label': 'Complaint', 'value': 'complaint'},
-    {'label': 'Other', 'value': 'other'},
+    {'label': 'Support', 'value': 'Support'},
+    {'label': 'Feedback', 'value': 'Feedback'},
+    {'label': 'Membership', 'value': 'Membership'},
+    {'label': 'Feature Request', 'value': 'Feature Request'},
+    {'label': 'Complaint', 'value': 'Complaint'},
+    {'label': 'Other', 'value': 'Other'},
   ];
 
   @override
@@ -99,100 +112,99 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             style: TextStyle(
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF1F1E5B),
+                              color: Color(0xFF0060AF),
                             ),
                           ),
                         ),
+                        const SizedBox(height: 20),
                         Column(
                           children: [
                             ResponsiveTextInput(
                               isSmall: isSmall,
                               mode: StyleMode.underline,
-                              // controller: form.control("password"),
+                              controller: form.control("fullname"),
                               hint: 'Enter Fullname',
                               label: 'Fullname',
-                              // errorText: form.error('password'),
-                              // onChanged: () {
-                              //   if (form.isSubmitted) {
-                              //     setState(() {
-                              //       form.validate();
-                              //     });
-                              //   }
-                              // },
+                              errorText: form.error('fullname'),
+                              onChanged: () {
+                                if (form.isSubmitted) {
+                                  setState(() {
+                                    form.validate();
+                                  });
+                                }
+                              },
                             ),
                             const SizedBox(height: 10),
                             ResponsiveTextInput(
                               isSmall: isSmall,
                               mode: StyleMode.underline,
-                              // controller: form.control("conpassword"),
+                              controller: form.control("email"),
                               hint: 'Enter Email',
                               label: 'Email',
                               type: TextInputTypes.email,
-                              // errorText: form.error('conpassword'),
-                              // onChanged: () {
-                              //   if (form.isSubmitted) {
-                              //     setState(() {
-                              //       form.validate();
-                              //     });
-                              //   }
-                              // },
+                              errorText: form.error('email'),
+                              onChanged: () {
+                                if (form.isSubmitted) {
+                                  setState(() {
+                                    form.validate();
+                                  });
+                                }
+                              },
                             ),
                             const SizedBox(height: 10),
                             ResponsivePhoneInput(
                               isSmall: isSmall,
                               mode: StyleMode.underline,
-                              // country_code: country_code,
-                              // controller: form.control("phone"),
+                              country_code: country_code,
+                              controller: form.control("phone"),
                               hint: 'Enter Phone Number',
                               label: 'Phone',
-                              // errorText: form.error('phone'),
-                              // onChanged: () {
-                              //   if (form.isSubmitted) {
-                              //     setState(() {
-                              //       form.validate();
-                              //     });
-                              //   }
-                              // },
-                              // onCountryChanged:
-                              //     (value) => setState(() {
-                              //       country_code = value.code;
-                              //     }),
+                              errorText: form.error('phone'),
+                              onChanged: () {
+                                if (form.isSubmitted) {
+                                  setState(() {
+                                    form.validate();
+                                  });
+                                }
+                              },
+                              onCountryChanged:
+                                  (value) => setState(() {
+                                    country_code = value.code;
+                                  }),
                             ),
                             const SizedBox(height: 10),
                             ResponsiveDropdown(
                               isSmall: isSmall,
                               items: subjects,
-                              controller: TextEditingController(),
                               mode: StyleMode.underline,
-                              // country_code: country_code,
-                              // controller: form.control("phone"),
+                              controller: form.control("subject"),
                               hint: 'Enter Subject',
                               label: 'Subject',
-                              // errorText: form.error('phone'),
-                              // onChanged: () {
-                              //   if (form.isSubmitted) {
-                              //     setState(() {
-                              //       form.validate();
-                              //     });
-                              //   }
-                              // },
+                              errorText: form.error('subject'),
+                              onChanged: () {
+                                if (form.isSubmitted) {
+                                  setState(() {
+                                    form.validate();
+                                  });
+                                }
+                              },
                             ),
                             const SizedBox(height: 10),
                             ResponsiveTextInput(
                               isSmall: isSmall,
                               mode: StyleMode.underline,
-                              // country_code: country_code,
-                              // controller: form.control("phone"),
+                              controller: form.control("comment"),
                               hint: 'Enter Comment',
+                              maxLines: 3,
                               label: 'Comment',
-                              // errorText: form.error('phone'),
-                              // onChanged: () {
-                              //   if (form.isSubmitted) {
-                              //     setState(() {
-                              //       form.validate();
-                              //     });
-                              //   }
-                              // },
+                              errorText: form.error('comment'),
+                              onChanged: () {
+                                if (form.isSubmitted) {
+                                  setState(() {
+                                    form.validate();
+                                  });
+                                }
+                              },
                             ),
                           ],
                         ),
@@ -212,13 +224,24 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         const SizedBox(height: 32),
                         ResponsiveButton(
                           isSmall: isSmall,
-                          // isLoading: form.isLoading,
+                          isLoading: form.isLoading,
                           onPressed: () {
                             bool isValid = false;
-                            // setState(() {
-                            //   form.isSubmitted = true;
-                            //   isValid = form.validate();
-                            // });
+                            setState(() {
+                              form.isSubmitted = true;
+                              isValid = form.validate();
+                              if (isValid) {
+                                setState(() => form.isLoading = true);
+                                Future.delayed(const Duration(seconds: 2), () {
+                                  setState(() => form.isLoading = false);
+                                  showFlexibleSnackbar(
+                                    context,
+                                    "Message has been sent!",
+                                  );
+                                  Navigator.pop(context);
+                                });
+                              }
+                            });
                           },
                           text: "Continue",
                         ),

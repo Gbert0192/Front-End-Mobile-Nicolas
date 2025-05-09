@@ -23,9 +23,7 @@ class _UserDataState extends State<UserData> {
   final form = UseForm(
     fields: ["fullname", "phone", "password", "conpassword"],
     validators: {
-      "fullname":
-          (value) =>
-              validateBasic(key: "Fullname", value: value, required: true),
+      "fullname": (value) => validateBasic(key: "Fullname", value: value),
       "phone":
           (value) => validateBasic(
             key: "Phone Number",
