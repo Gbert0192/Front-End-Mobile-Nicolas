@@ -7,7 +7,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_page.dart';
 
 class Profile extends StatelessWidget {
-  Profile({super.key});
+  const Profile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class Profile extends StatelessWidget {
       ),
       SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
     ];
-    final List<SettingButtons> help_oth = [
+    final List<SettingButtons> helpOth = [
       SettingButtons(icon: "assets/icons/question.png", title: "FAQ"),
       SettingButtons(
         icon: "assets/icons/problem.png",
@@ -241,6 +241,7 @@ class Profile extends StatelessWidget {
 
 class SettingButtons extends StatelessWidget {
   const SettingButtons({
+    super.key,
     this.icon,
     required this.title,
     this.onPressed,

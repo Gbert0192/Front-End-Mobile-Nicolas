@@ -41,7 +41,7 @@ class SubscriptionBack extends StatelessWidget {
                   ),
                   SizedBox(height: isSmall ? 10 : 20),
                   Text(
-                    'Congrats, you have become our ${title} member',
+                    'Congrats, you have become our $title member',
                     style: TextStyle(
                       color: Color(0xFF9C9CA0),
                       fontSize: 18,
@@ -54,9 +54,9 @@ class SubscriptionBack extends StatelessWidget {
                   ResponsiveButton(
                     isSmall: isSmall,
                     onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
+                      Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => Home()),
+                        (Route<dynamic> route) => false,
                       );
                     },
                     text: 'Back to Home',
