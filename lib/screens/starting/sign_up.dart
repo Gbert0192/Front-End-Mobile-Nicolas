@@ -57,7 +57,7 @@ class _SignUpState extends State<SignUp> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
             child: Column(
               children: [
                 Text(

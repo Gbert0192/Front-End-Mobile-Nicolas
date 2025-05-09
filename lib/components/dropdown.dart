@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/text_input.dart';
 
 class ResponsiveDropdown<T> extends StatefulWidget {
   const ResponsiveDropdown({
@@ -14,6 +15,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
+    this.mode = StyleMode.outline,
   });
 
   final bool isSmall;
@@ -24,6 +26,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
   final String? hint;
   final String? errorText;
   final IconData? leading;
+  final StyleMode mode;
   final Color fillColor;
   final Color borderColor;
   final Color borderFocusColor;
@@ -64,50 +67,86 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        widget.mode == StyleMode.underline
+            ? Text(widget.label!, style: TextStyle(color: _getColor()))
+            : SizedBox.shrink(),
         GestureDetector(
           onTap: () => _focusNode.requestFocus(),
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
               color: hasError ? const Color(0xFFFFEDED) : widget.fillColor,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: _getColor(), width: _isFocused ? 2 : 1),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
-                  blurRadius: 6,
-                  offset: const Offset(4, 4),
-                ),
-              ],
+              borderRadius:
+                  widget.mode == StyleMode.outline
+                      ? BorderRadius.circular(20)
+                      : null,
+              border:
+                  widget.mode == StyleMode.outline
+                      ? Border.all(
+                        color: _getColor(),
+                        width: _isFocused ? 2 : 1,
+                      )
+                      : null,
+              boxShadow:
+                  widget.mode == StyleMode.underline
+                      ? null
+                      : [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          blurRadius: 6,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
             ),
-            padding: EdgeInsets.symmetric(horizontal: widget.isSmall ? 16 : 20),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                isExpanded: false,
-                value: _selectedValue,
-                icon: const Icon(Icons.arrow_drop_down),
-                style: TextStyle(
-                  fontSize: widget.isSmall ? 16 : 18,
-                  color: Colors.grey[800],
-                ),
-                hint: Text(
-                  widget.hint ?? '',
-                  style: TextStyle(color: _getColor()),
-                ),
-                onChanged: (newValue) {
-                  setState(() {
-                    _selectedValue = newValue;
-                    widget.controller.text = newValue!;
-                  });
-                  widget.onChanged?.call();
-                },
-                items:
-                    widget.items.map((item) {
-                      return DropdownMenuItem<String>(
-                        value: item['value'],
-                        child: Text(item['label']!),
-                      );
-                    }).toList(),
+            child: Container(
+              decoration:
+                  widget.mode == StyleMode.underline
+                      ? BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                      )
+                      : null,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: widget.isSmall ? 16 : 20,
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        value: _selectedValue,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        style: TextStyle(
+                          fontSize: widget.isSmall ? 16 : 18,
+                          color: Colors.grey[800],
+                        ),
+                        hint: Text(
+                          widget.hint ?? '',
+                          style: TextStyle(color: _getColor()),
+                        ),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedValue = newValue;
+                            widget.controller.text = newValue!;
+                          });
+                          widget.onChanged?.call();
+                        },
+                        items:
+                            widget.items
+                                .map(
+                                  (item) => DropdownMenuItem<String>(
+                                    value: item['value'],
+                                    child: Text(item['label']!),
+                                  ),
+                                )
+                                .toList(),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

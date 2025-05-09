@@ -172,7 +172,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         if (success == 0) {
                           showFlexibleSnackbar(
                             context,
-                            "Password can not be the same!",
+                            "Password can not be the same as old one!",
                             type: SnackbarType.error,
                           );
                           setState(() => form.isLoading = false);
