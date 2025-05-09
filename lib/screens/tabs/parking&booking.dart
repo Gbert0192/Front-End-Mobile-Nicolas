@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/bookings.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/booking.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/parkings.dart';
 
 class ParkingHistory extends StatelessWidget {
@@ -40,7 +40,7 @@ class ParkingHistory extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Parking()),
+                      MaterialPageRoute(builder: (context) => Parkings()),
                     );
                   },
                   child: Container(
