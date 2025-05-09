@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_page.dart';
 
 class Profile extends StatelessWidget {
   Profile({super.key});
@@ -18,13 +21,25 @@ class Profile extends StatelessWidget {
     }
 
     final List<SettingButtons> acc_setting = [
-      SettingButtons(icon: "assets/icons/key.png", title: "Change Password"),
-      SettingButtons(icon: "assets/icons/calender.png", title: "Subscriptions"),
+      SettingButtons(
+        icon: "assets/icons/key.png",
+        title: "Change Password",
+        onPressed: () => acc_nav(ChangePassword()),
+      ),
+      SettingButtons(
+        icon: "assets/icons/calender.png",
+        title: "Subscriptions",
+        onPressed: () => acc_nav(SubscriptionPage()),
+      ),
       SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
     ];
     final List<SettingButtons> help_oth = [
       SettingButtons(icon: "assets/icons/question.png", title: "FAQ"),
-      SettingButtons(icon: "assets/icons/problem.png", title: "Contact Us"),
+      SettingButtons(
+        icon: "assets/icons/problem.png",
+        title: "Contact Us",
+        onPressed: () => acc_nav(ContactUsPage()),
+      ),
       SettingButtons(icon: "assets/icons/star.png", title: "Rate Our App"),
     ];
 
@@ -53,7 +68,7 @@ class Profile extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           CircleAvatar(
-                            radius: isSmall ? 40 : 70,
+                            radius: isSmall ? 50 : 70,
                             backgroundColor: Colors.grey[300],
                             backgroundImage:
                                 user['profile_pic'] != null
@@ -63,7 +78,7 @@ class Profile extends StatelessWidget {
                                 user['profile_pic'] == null
                                     ? Icon(
                                       Icons.person,
-                                      size: isSmall ? 40 : 70,
+                                      size: isSmall ? 50 : 70,
                                       color: Colors.grey[500],
                                     )
                                     : null,
@@ -74,16 +89,16 @@ class Profile extends StatelessWidget {
                               children: [
                                 Text(
                                   user['fullname'] as String,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                                    fontSize: isSmall ? 18 : 20,
                                   ),
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
                                   user['email'] as String,
                                   style: TextStyle(
-                                    fontSize: isSmall ? 12 : 16,
+                                    fontSize: isSmall ? 14 : 16,
                                     color: Colors.grey[500],
                                   ),
                                 ),
@@ -140,7 +155,7 @@ class Profile extends StatelessWidget {
                             child: Text(
                               "Account Settings",
                               style: TextStyle(
-                                fontSize: isSmall ? 20 : 25,
+                                fontSize: isSmall ? 18 : 25,
                                 fontWeight: FontWeight.w400,
                                 shadows: [
                                   Shadow(
@@ -166,7 +181,7 @@ class Profile extends StatelessWidget {
                             child: Text(
                               "Helps and Others",
                               style: TextStyle(
-                                fontSize: isSmall ? 20 : 25,
+                                fontSize: isSmall ? 18 : 25,
                                 fontWeight: FontWeight.w400,
                                 shadows: [
                                   Shadow(
@@ -192,7 +207,7 @@ class Profile extends StatelessWidget {
                             child: Text(
                               "Exit the Application",
                               style: TextStyle(
-                                fontSize: isSmall ? 20 : 25,
+                                fontSize: isSmall ? 18 : 25,
                                 fontWeight: FontWeight.w400,
                                 shadows: [
                                   Shadow(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/subscription/subscription_choice.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_choice.dart';
 
 class SubscriptionPage extends StatelessWidget {
   const SubscriptionPage({super.key});

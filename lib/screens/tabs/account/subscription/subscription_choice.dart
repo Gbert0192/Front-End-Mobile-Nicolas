@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/subscription/subscription_back.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_back.dart';
 
 class SubscriptionChoice extends StatefulWidget {
   const SubscriptionChoice({super.key});

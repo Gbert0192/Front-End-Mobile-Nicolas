@@ -10,10 +10,6 @@ class UserProvider with ChangeNotifier {
       countryCode: "CN",
       phone: "123456789",
       password: "Asdf1234!",
-      birthDate: "12-02-2000",
-      gender: "male",
-      balance: 100000,
-      isMember: false,
     ),
   ];
 
@@ -96,8 +92,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void joinMember() {
-    userList[currentUser!].joinMember();
+  void joinMember({required MemberType type, required double nominal}) {
+    userList[currentUser!].joinMember(type: type, nominal: nominal);
     notifyListeners();
   }
 
