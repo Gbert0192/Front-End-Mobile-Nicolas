@@ -33,7 +33,7 @@ class Profile extends StatelessWidget {
       ),
       SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
     ];
-    final List<SettingButtons> helpOth = [
+    final List<SettingButtons> help_oth = [
       SettingButtons(icon: "assets/icons/question.png", title: "FAQ"),
       SettingButtons(
         icon: "assets/icons/problem.png",
