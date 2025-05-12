@@ -98,6 +98,7 @@ class _StepperScreensState extends State<StepperScreens> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Expanded(

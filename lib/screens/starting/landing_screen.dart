@@ -13,6 +13,7 @@ class LandingScreen extends StatelessWidget {
     final isSmall = size.height < 700;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // Top Rotated Box

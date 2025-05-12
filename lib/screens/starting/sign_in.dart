@@ -75,15 +75,15 @@ class _SignInState extends State<SignIn> {
                     Text(
                       'Back Again! Your Perfect Spot Awaits!',
                       style: TextStyle(
-                        fontSize: isSmall ? 18 : 24,
+                        fontSize: isSmall ? 20 : 24,
                         color: Color(0xFF1879D4),
-                        // shadows: [
-                        //   Shadow(
-                        //     offset: Offset(4, 4),
-                        //     blurRadius: 6.0,
-                        //     color: Color.fromRGBO(24, 45, 163, 0.25),
-                        //   ),
-                        // ],
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
                       ),
                       textAlign: TextAlign.center,
                     ),

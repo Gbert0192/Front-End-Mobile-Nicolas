@@ -6,7 +6,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     super.key,
     required this.isSmall,
     required this.items,
-    required this.controller,
+    this.controller,
     this.onChanged,
     this.label,
     this.hint,
@@ -20,7 +20,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
 
   final bool isSmall;
   final List<Map<String, String>> items;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final VoidCallback? onChanged;
   final String? label;
   final String? hint;
@@ -43,8 +43,10 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
   @override
   void initState() {
     super.initState();
-    _selectedValue =
-        widget.controller.text.isNotEmpty ? widget.controller.text : null;
+    if (widget.controller != null) {
+      _selectedValue =
+          widget.controller!.text.isNotEmpty ? widget.controller!.text : null;
+    }
 
     _focusNode = FocusNode();
     _focusNode.addListener(() {
@@ -131,7 +133,9 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                       onChanged: (newValue) {
                         setState(() {
                           _selectedValue = newValue;
-                          widget.controller.text = newValue!;
+                          if (widget.controller != null) {
+                            widget.controller!.text = newValue!;
+                          }
                         });
                         widget.onChanged?.call();
                       },

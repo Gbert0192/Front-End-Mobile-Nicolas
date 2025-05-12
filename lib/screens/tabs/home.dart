@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/utils/user.dart';
 
 // ParkingSpot model
 class ParkingSpot {
@@ -90,7 +91,7 @@ class _HomeState extends State<Home> {
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
-    Map<String, Object?> user = userProvider.getCurrentUser();
+    User user = userProvider.getCurrentUser();
 
     final currencyFormat = NumberFormat.currency(
       locale: 'id_ID',
@@ -117,7 +118,7 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Halo, ${(user['fullname'] ?? 'Guest').toString().split(" ")[0]}!",
+                            "Halo, ${user.fullname.split(" ")[0]}!",
                             // Text(
                             //   "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
                             style: TextStyle(
@@ -139,13 +140,13 @@ class _HomeState extends State<Home> {
                     ),
                     CircleAvatar(
                       backgroundImage:
-                          user['profile_pic'] != null
-                              ? AssetImage(user['profile_pic'] as String)
+                          user.profilePic != null
+                              ? AssetImage(user.profilePic!)
                               : null,
                       radius: isSmall ? 40 : 70,
                       backgroundColor: Colors.grey[300],
                       child:
-                          user['profile_pic'] == null
+                          user.profilePic == null
                               ? Icon(
                                 Icons.person,
                                 size: isSmall ? 40 : 70,
@@ -198,7 +199,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
-                                currencyFormat.format(user['balance']),
+                                currencyFormat.format(user.balance),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,

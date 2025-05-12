@@ -8,11 +8,12 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
+import 'package:tugas_front_end_nicolas/utils/user.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile(this.user);
-  final Map<String, Object?> user;
+  final User user;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -58,18 +59,17 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-
     final user = widget.user;
-    form.control('fullname').text = (user['fullname'] ?? '').toString();
-    form.control('email').text = (user['email'] ?? '').toString();
-    form.control('phone').text = (user['phone'] ?? '').toString();
-    form.control('birth_date').text = (user['birth_date'] ?? '').toString();
-    form.control('gender').text = (user['gender'] ?? '').toString();
+    form.control('fullname').text = (user.fullname);
+    form.control('email').text = (user.email);
+    form.control('phone').text = (user.phone);
+    form.control('birth_date').text = (user.birthDate) ?? "";
+    form.control('gender').text = (user.gender) ?? '';
 
-    country_code = (user['country_code'] ?? 'ID').toString();
+    country_code = (user.countryCode);
 
-    if (user['profile_pic'] != null) {
-      choice = userPP.indexWhere((item) => item == user['profile_pic']);
+    if (user.profilePic != null) {
+      choice = userPP.indexWhere((item) => item == user.profilePic);
     }
   }
 
@@ -264,8 +264,14 @@ class _EditProfileState extends State<EditProfile> {
                               phone: form.control("phone").text,
                               countryCode: country_code,
                               profilePic: choice == -1 ? null : userPP[choice],
-                              birthDate: form.control("birth_date").text,
-                              gender: form.control("gender").text,
+                              birthDate:
+                                  form.control("birth_date").text == ""
+                                      ? null
+                                      : form.control("birth_date").text,
+                              gender:
+                                  form.control("gender").text == ""
+                                      ? null
+                                      : form.control("gender").text,
                             );
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(

@@ -1,48 +1,31 @@
-import 'package:intl_phone_field/countries.dart';
-
 class User {
   String email;
   String? profilePic;
   String fullname;
   String countryCode;
+  String dialCode;
   String phone;
   String password;
   String? birthDate;
   String? gender;
   String? lang = "EN";
-  double balance = 0;
+  double balance = 10000000000000000;
   bool isMember = false;
-  String? memberSince;
-  String? memberUntil;
+  DateTime? memberSince;
+  DateTime? memberUntil;
 
   User({
     required this.email,
     this.profilePic,
     required this.fullname,
     required this.countryCode,
+    required this.dialCode,
     required this.phone,
     required this.password,
   });
 
-  Map<String, Object?> call() {
-    final String? dialCode =
-        countries.firstWhere((item) => item.code == countryCode).dialCode
-            as String?;
-    return {
-      'email': email,
-      'profile_pic': profilePic,
-      'fullname': fullname,
-      'country_code': countryCode,
-      'dial_code': dialCode,
-      'phone': phone,
-      'birth_date': birthDate,
-      'gender': gender,
-      'balance': balance,
-      'is_member': isMember,
-      'member_since': memberSince,
-      'member_until': memberUntil,
-      'lang': lang,
-    };
+  User call() {
+    return this;
   }
 
   int changePassword(String oldPass, String newPass) {
@@ -78,18 +61,18 @@ class User {
 
   int joinMember({required MemberType type, required double nominal}) {
     if (this.purchase(nominal) == -1) return -1;
-    memberSince = DateTime.now().toString();
+    memberSince = DateTime.now();
     switch (type) {
       case MemberType.monthly:
-        memberUntil = DateTime.now().add(Duration(days: 30)).toString();
+        memberUntil = DateTime.now().add(Duration(days: 30));
         break;
 
       case MemberType.seasonal:
-        memberUntil = DateTime.now().add(Duration(days: 90)).toString();
+        memberUntil = DateTime.now().add(Duration(days: 90));
         break;
 
       case MemberType.annual:
-        memberUntil = DateTime.now().add(Duration(days: 365)).toString();
+        memberUntil = DateTime.now().add(Duration(days: 365));
         break;
     }
     isMember = true;
