@@ -4,7 +4,8 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_page.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
+import 'package:tugas_front_end_nicolas/utils/user.dart';
 
 class Profile extends StatelessWidget {
   const Profile({super.key});
@@ -14,7 +15,7 @@ class Profile extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     final userProvider = Provider.of<UserProvider>(context);
-    Map<String, Object?> user = userProvider.getCurrentUser();
+    User user = userProvider.getCurrentUser();
 
     void acc_nav(Widget page) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => page));
@@ -29,7 +30,7 @@ class Profile extends StatelessWidget {
       SettingButtons(
         icon: "assets/icons/calender.png",
         title: "Subscriptions",
-        onPressed: () => acc_nav(SubscriptionPage()),
+        onPressed: () => acc_nav(Subscription()),
       ),
       SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
     ];
@@ -70,11 +71,11 @@ class Profile extends StatelessWidget {
                           radius: isSmall ? 50 : 70,
                           backgroundColor: Colors.grey[300],
                           backgroundImage:
-                              user['profile_pic'] != null
-                                  ? AssetImage(user['profile_pic'] as String)
+                              user.profilePic != null
+                                  ? AssetImage(user.profilePic!)
                                   : null,
                           child:
-                              user['profile_pic'] == null
+                              user.profilePic == null
                                   ? Icon(
                                     Icons.person,
                                     size: isSmall ? 50 : 70,
@@ -87,7 +88,7 @@ class Profile extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                user['fullname'] as String,
+                                user.fullname,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: isSmall ? 18 : 20,
@@ -95,7 +96,7 @@ class Profile extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                user['email'] as String,
+                                user.email,
                                 style: TextStyle(
                                   fontSize: isSmall ? 14 : 16,
                                   color: Colors.grey[500],
@@ -103,7 +104,7 @@ class Profile extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                '+${user['dial_code'] ?? ''}${user['phone'] ?? ''}',
+                                '+${user.dialCode}${user.phone}',
                                 style: TextStyle(
                                   fontSize: isSmall ? 16 : 18,
                                   fontWeight: FontWeight.w400,
@@ -124,17 +125,7 @@ class Profile extends StatelessWidget {
                                 color: Colors.white,
                               ),
                               onPressed: () {
-                                acc_nav(
-                                  EditProfile({
-                                    "fullname": user["fullname"],
-                                    "email": user["email"],
-                                    "phone": user["phone"],
-                                    "birth_date": user["birth_date"],
-                                    "gender": user["gender"],
-                                    "profile_pic": user["profile_pic"],
-                                    "country_code": user["country_code"],
-                                  }),
-                                );
+                                acc_nav(EditProfile(user));
                               },
                             ),
                           ),

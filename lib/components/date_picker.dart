@@ -18,7 +18,7 @@ class ResponsiveDatePicker extends StatefulWidget {
   });
 
   final bool isSmall;
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final VoidCallback? onChanged;
   final String? label;
   final String? hint;
@@ -35,15 +35,18 @@ class ResponsiveDatePicker extends StatefulWidget {
 
 class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
   bool _isFocused = false;
+  String? _selectedDate;
 
   Future<void> _pickDate() async {
     DateTime? initialDate;
-    final parts = widget.controller.text.split('-');
-    if (parts.length == 3) {
-      final day = int.parse(parts[0]);
-      final month = int.parse(parts[1]);
-      final year = int.parse(parts[2]);
-      initialDate = DateTime(year, month, day);
+    if (widget.controller != null) {
+      final parts = widget.controller!.text.split('/');
+      if (parts.length == 3) {
+        final day = int.parse(parts[0]);
+        final month = int.parse(parts[1]);
+        final year = int.parse(parts[2]);
+        initialDate = DateTime(year, month, day);
+      }
     }
 
     final DateTime? picked = await showDatePicker(
@@ -73,14 +76,21 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
     );
 
     if (picked != null) {
-      widget.controller.text = "${picked.day}/${picked.month}/${picked.year}";
+      _selectedDate = "${picked.day}/${picked.month}/${picked.year}";
+      if (widget.controller != null) {
+        widget.controller!.text =
+            "${picked.day}/${picked.month}/${picked.year}";
+      }
       widget.onChanged?.call();
     }
   }
 
   void _clearDate() {
     setState(() {
-      widget.controller.text = "";
+      _selectedDate = null;
+      if (widget.controller != null) {
+        widget.controller!.text = "";
+      }
     });
   }
 
@@ -180,8 +190,10 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                             ),
                   ),
                   child: Text(
-                    widget.controller.text.isNotEmpty
-                        ? widget.controller.text
+                    _selectedDate != null
+                        ? _selectedDate!
+                        : widget.controller!.text.isNotEmpty
+                        ? widget.controller!.text
                         : widget.hint ?? '',
                     style: TextStyle(
                       fontSize: widget.isSmall ? 16 : 18,
@@ -195,7 +207,7 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
               padding: EdgeInsets.only(right: widget.isSmall ? 12 : 16),
               child: IconButton(
                 onPressed: () async {
-                  if (widget.controller.text.isNotEmpty) {
+                  if (_selectedDate != null) {
                     _clearDate();
                   } else {
                     setState(() => _isFocused = true);
@@ -204,7 +216,7 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                   }
                 },
                 icon: Icon(
-                  widget.controller.text.isNotEmpty
+                  _selectedDate != null
                       ? Icons.clear_outlined
                       : Icons.date_range_rounded,
                   color: const Color(0xFF1F1E5B),

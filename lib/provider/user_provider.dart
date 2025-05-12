@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl_phone_field/countries.dart';
 import '../utils/user.dart';
 
 class UserProvider with ChangeNotifier {
@@ -8,6 +9,7 @@ class UserProvider with ChangeNotifier {
       profilePic: "assets/users/male 2.jpg",
       fullname: "JOHN DOER",
       countryCode: "CN",
+      dialCode: "86",
       phone: "123456789",
       password: "Asdf1234!",
     ),
@@ -23,12 +25,15 @@ class UserProvider with ChangeNotifier {
     required String phone,
     required String password,
   }) {
+    final String dial_code =
+        countries.firstWhere((item) => item.code == country_code).dialCode;
     userList.add(
       User(
         email: email,
         profilePic: profile_pic,
         fullname: fullname,
         countryCode: country_code,
+        dialCode: dial_code,
         phone: phone,
         password: password,
       ),
@@ -55,7 +60,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, Object?> getCurrentUser() {
+  User getCurrentUser() {
     return userList[currentUser!]();
   }
 
@@ -92,9 +97,10 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void joinMember({required MemberType type, required double nominal}) {
-    userList[currentUser!].joinMember(type: type, nominal: nominal);
+  int joinMember({required MemberType type, required double nominal}) {
+    int res = userList[currentUser!].joinMember(type: type, nominal: nominal);
     notifyListeners();
+    return res;
   }
 
   void topUp(double nominal) {
