@@ -58,7 +58,10 @@ class Profile extends StatelessWidget {
               centerTitle: true,
               title: Text(
                 'My Profile',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: isSmall ? 25 : 30,
+                ),
               ),
             ),
             SliverToBoxAdapter(

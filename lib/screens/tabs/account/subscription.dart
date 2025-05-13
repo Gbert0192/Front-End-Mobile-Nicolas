@@ -46,7 +46,6 @@ class _SubscriptionState extends State<Subscription> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -54,7 +53,10 @@ class _SubscriptionState extends State<Subscription> {
               centerTitle: true,
               title: Text(
                 'Member',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: isSmall ? 25 : 30,
+                ),
               ),
               leading: Padding(
                 padding: EdgeInsets.only(left: 12.0),
@@ -86,7 +88,6 @@ class _SubscriptionState extends State<Subscription> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(
@@ -101,8 +102,8 @@ class _SubscriptionState extends State<Subscription> {
                                       ? 30
                                       : 20
                                   : currentPage == 0
-                                  ? 50
-                                  : 40,
+                                  ? 40
+                                  : 30,
                         ),
                         child: Column(
                           children: [
@@ -112,9 +113,7 @@ class _SubscriptionState extends State<Subscription> {
                                       ? currentPage == 0
                                           ? 500
                                           : 480
-                                      : currentPage == 0
-                                      ? 600
-                                      : 560,
+                                      : 740,
                               child: PageView(
                                 controller: _controller,
                                 physics: NeverScrollableScrollPhysics(),

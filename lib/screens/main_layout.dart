@@ -48,7 +48,6 @@ class _MainLayoutState extends State<MainLayout>
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: TabBarView(
           controller: controller,
           physics: NeverScrollableScrollPhysics(),

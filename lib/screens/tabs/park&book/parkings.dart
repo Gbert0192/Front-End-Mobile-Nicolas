@@ -9,7 +9,6 @@ class Parkings extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: <Widget>[
@@ -34,7 +33,6 @@ class Parkings extends StatelessWidget {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(

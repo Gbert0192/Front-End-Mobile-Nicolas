@@ -37,12 +37,12 @@ class SubscriptionFeature extends StatelessWidget {
                 child: Text(
                   'Join Membership',
                   style: TextStyle(
-                    fontSize: isSmall ? 16 : 18,
+                    fontSize: isSmall ? 16 : 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: isSmall ? 25 : 50),
+              SizedBox(height: isSmall ? 25 : 30),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
@@ -54,7 +54,7 @@ class SubscriptionFeature extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: isSmall ? 10 : 20),
+              SizedBox(height: 10),
               ...[
                 'No service fee',
                 'No-show fee waived',

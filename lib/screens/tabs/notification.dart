@@ -5,13 +5,18 @@ class Notification_ extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
           'Notifications',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: isSmall ? 25 : 30,
+          ),
         ),
       ),
     );

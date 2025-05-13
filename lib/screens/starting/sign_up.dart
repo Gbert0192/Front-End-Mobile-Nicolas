@@ -29,9 +29,7 @@ class _SignUpState extends State<SignUp> {
     final isSmall = size.height < 700;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         leading: Padding(
           padding: EdgeInsets.only(left: 12.0),
           child: Material(

@@ -55,10 +55,8 @@ class _ResetPasswordState extends State<ResetPassword> {
             ),
           ),
         ),
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
