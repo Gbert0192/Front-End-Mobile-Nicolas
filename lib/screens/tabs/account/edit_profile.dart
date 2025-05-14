@@ -89,7 +89,6 @@ class _EditProfileState extends State<EditProfile> {
     final isSmall = size.height < 700;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -114,7 +113,6 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(
@@ -126,13 +124,13 @@ class _EditProfileState extends State<EditProfile> {
                       'Edit Profile',
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
-                        fontSize: 32,
+                        fontSize: isSmall ? 32 : 40,
                       ),
                     ),
                     Stack(
                       children: [
                         CircleAvatar(
-                          radius: isSmall ? 70 : 100,
+                          radius: isSmall ? 70 : 110,
                           backgroundColor: Colors.grey[300],
                           backgroundImage:
                               choice != -1 ? AssetImage(userPP[choice]) : null,
@@ -188,7 +186,7 @@ class _EditProfileState extends State<EditProfile> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTextInput(
                           isSmall: isSmall,
                           controller: form.control('email'),
@@ -204,7 +202,7 @@ class _EditProfileState extends State<EditProfile> {
                             }
                           },
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: isSmall ? 10 : 20),
                         ResponsivePhoneInput(
                           isSmall: isSmall,
                           country_code: country_code,
@@ -223,14 +221,14 @@ class _EditProfileState extends State<EditProfile> {
                                 country_code = value.code;
                               }),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveDatePicker(
                           isSmall: isSmall,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',
                           label: 'Birth Date',
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveDropdown(
                           isSmall: isSmall,
                           items: [
@@ -243,7 +241,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ],
                     ),
-                    SizedBox(height: isSmall ? 50 : 100),
+                    SizedBox(height: isSmall ? 50 : 70),
 
                     ResponsiveButton(
                       isSmall: isSmall,

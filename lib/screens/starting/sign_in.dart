@@ -34,7 +34,6 @@ class _SignInState extends State<SignIn> {
     final isSmall = size.height < 700;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -59,7 +58,6 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(

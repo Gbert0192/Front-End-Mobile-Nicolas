@@ -9,7 +9,7 @@ class User {
   String? birthDate;
   String? gender;
   String? lang = "EN";
-  double balance = 10000000000000000;
+  double balance = 100000;
   bool isMember = false;
   DateTime? memberSince;
   DateTime? memberUntil;

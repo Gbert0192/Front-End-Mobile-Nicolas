@@ -39,7 +39,6 @@ class _ChangePasswordState extends State<ChangePassword> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -64,7 +63,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(

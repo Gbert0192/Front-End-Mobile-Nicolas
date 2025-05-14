@@ -40,12 +40,7 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
     final isSmall = size.height < 700;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        elevation: 0,
-      ),
+      appBar: AppBar(automaticallyImplyLeading: false, elevation: 0),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(

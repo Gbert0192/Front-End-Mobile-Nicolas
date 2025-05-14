@@ -13,18 +13,24 @@ class ParkingHistory extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'Parking & Bookings',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+          'Parking & Booking',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: isSmall ? 25 : 30,
+          ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24),
+            padding: EdgeInsets.only(
+              left: isSmall ? 12 : 24,
+              right: isSmall ? 12 : 24,
+              top: isSmall ? 10 : 30,
+            ),
             child: Column(
               children: [
                 //Button Parking
@@ -52,8 +58,16 @@ class ParkingHistory extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Image.asset('assets/others/booking_view.png'),
+                          padding:
+                              isSmall
+                                  ? EdgeInsets.all(10)
+                                  : EdgeInsets.only(
+                                    top: 50,
+                                    left: 20,
+                                    right: 20,
+                                    bottom: 20,
+                                  ),
+                          child: Image.asset('assets/others/parking_view.png'),
                         ),
                         Positioned(
                           top: 10,
@@ -67,27 +81,11 @@ class ParkingHistory extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Center(
-                          child: Padding(
-                            padding:
-                                isSmall
-                                    ? EdgeInsets.all(10)
-                                    : EdgeInsets.only(
-                                      top: 50,
-                                      left: 20,
-                                      right: 20,
-                                      bottom: 20,
-                                    ),
-                            child: Image.asset(
-                              'assets/others/booking_view.png',
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: isSmall ? 15 : 30),
+                SizedBox(height: isSmall ? 15 : 45),
 
                 // Button Booking
                 ElevatedButton(
@@ -123,7 +121,7 @@ class ParkingHistory extends StatelessWidget {
                                     right: 20,
                                     bottom: 30,
                                   ),
-                          child: Image.asset('assets/others/parking_view.png'),
+                          child: Image.asset('assets/others/booking_view.png'),
                         ),
                         Positioned(
                           top: 10,

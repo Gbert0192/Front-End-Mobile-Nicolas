@@ -48,7 +48,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // Top Rotated Box
@@ -102,6 +101,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                   Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: isSmall ? 12 : 24.0,
+                      vertical: isSmall ? 0 : 28,
                     ),
                     child: Column(
                       children: [
@@ -110,7 +110,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           child: Text(
                             "Contact Us",
                             style: TextStyle(
-                              fontSize: 32,
+                              fontSize: isSmall ? 32 : 48,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF0060AF),
                             ),
@@ -208,20 +208,23 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
+                        SizedBox(height: isSmall ? 24 : 32),
                         Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              buildSocialIcon('assets/medsos/tiktok.png'),
-                              buildSocialIcon('assets/medsos/wa.png'),
-                              buildSocialIcon('assets/medsos/ig.png'),
-                              buildSocialIcon('assets/medsos/yt.png'),
-                              buildSocialIcon('assets/medsos/x.png'),
+                              buildSocialIcon(
+                                'assets/medsos/tiktok.png',
+                                isSmall,
+                              ),
+                              buildSocialIcon('assets/medsos/wa.png', isSmall),
+                              buildSocialIcon('assets/medsos/ig.png', isSmall),
+                              buildSocialIcon('assets/medsos/yt.png', isSmall),
+                              buildSocialIcon('assets/medsos/x.png', isSmall),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 32),
+                        SizedBox(height: isSmall ? 32 : 48),
                         ResponsiveButton(
                           isSmall: isSmall,
                           isLoading: form.isLoading,
@@ -243,7 +246,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               }
                             });
                           },
-                          text: "Continue",
+                          text: "Submit",
                         ),
                       ],
                     ),
@@ -257,10 +260,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
     );
   }
 
-  Widget buildSocialIcon(String assetPath) {
+  Widget buildSocialIcon(String assetPath, bool isSmall) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Image.asset(assetPath, height: 40, width: 40),
+      child: Image.asset(
+        assetPath,
+        height: isSmall ? 40 : 45,
+        width: isSmall ? 40 : 45,
+      ),
     );
   }
 }

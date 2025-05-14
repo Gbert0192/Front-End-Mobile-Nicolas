@@ -70,7 +70,6 @@ class _UserDataState extends State<UserData> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -95,7 +94,6 @@ class _UserDataState extends State<UserData> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(

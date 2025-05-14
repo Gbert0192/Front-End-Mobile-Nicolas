@@ -44,9 +44,7 @@ class SubscriptionOngoing extends StatelessWidget {
             ),
             SizedBox(height: isSmall ? 20 : 24),
             Padding(
-              padding: EdgeInsetsGeometry.symmetric(
-                horizontal: isSmall ? 30 : 45,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: isSmall ? 30 : 45),
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),

@@ -70,7 +70,13 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.mode == StyleMode.underline
-            ? Text(widget.label!, style: TextStyle(color: _getColor()))
+            ? Text(
+              widget.label!,
+              style: TextStyle(
+                color: _getColor(),
+                fontSize: widget.isSmall ? 12 : 16,
+              ),
+            )
             : SizedBox.shrink(),
         GestureDetector(
           onTap: () => _focusNode.requestFocus(),

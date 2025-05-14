@@ -12,7 +12,14 @@ void main() {
         ChangeNotifierProvider(create: (_) => ForgetPassProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
-      child: MaterialApp(debugShowCheckedModeBanner: false, home: MainApp()),
+      child: MaterialApp(
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+        ),
+        debugShowCheckedModeBanner: false,
+        home: MainApp(),
+      ),
     ),
   );
 }

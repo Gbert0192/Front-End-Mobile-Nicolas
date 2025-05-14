@@ -84,7 +84,13 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         widget.mode == StyleMode.underline
-            ? Text(widget.label!, style: TextStyle(color: _getColor()))
+            ? Text(
+              widget.label!,
+              style: TextStyle(
+                color: _getColor(),
+                fontSize: widget.isSmall ? 12 : 16,
+              ),
+            )
             : SizedBox.shrink(),
         Container(
           decoration: BoxDecoration(

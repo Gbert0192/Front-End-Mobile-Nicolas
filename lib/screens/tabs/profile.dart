@@ -4,6 +4,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
 
@@ -35,7 +36,11 @@ class Profile extends StatelessWidget {
       SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
     ];
     final List<SettingButtons> help_oth = [
-      SettingButtons(icon: "assets/icons/question.png", title: "FAQ"),
+      SettingButtons(
+        icon: "assets/icons/question.png",
+        title: "FAQ",
+        onPressed: () => acc_nav(FAQ()),
+      ),
       SettingButtons(
         icon: "assets/icons/problem.png",
         title: "Contact Us",
@@ -53,7 +58,10 @@ class Profile extends StatelessWidget {
               centerTitle: true,
               title: Text(
                 'My Profile',
-                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: isSmall ? 25 : 30,
+                ),
               ),
             ),
             SliverToBoxAdapter(
