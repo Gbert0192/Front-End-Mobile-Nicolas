@@ -115,10 +115,7 @@ class FAQ extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 16,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -127,21 +124,21 @@ class FAQ extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          fontSize: isSmall ? 25 : 30,
+                          fontSize: isSmall ? 24 : 30,
                         ),
                       ),
                       const SizedBox(height: 20),
                       ListView.builder(
-                        padding: EdgeInsets.only(bottom: 100),
+                        padding: EdgeInsets.only(bottom: 0),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: faqList.length,
                         itemBuilder: (context, index) {
                           final item = faqList[index];
                           return Card(
-                            margin: const EdgeInsets.symmetric(
+                            margin: EdgeInsets.symmetric(
                               horizontal: 8,
-                              vertical: 8,
+                              vertical: isSmall ? 6 : 16,
                             ),
                             elevation: 3,
                             color: const Color(0xFFF2F5FF),
@@ -149,38 +146,51 @@ class FAQ extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ExpansionTile(
-                              tilePadding: const EdgeInsets.symmetric(
+                              tilePadding: EdgeInsets.symmetric(
                                 horizontal: 16,
+                                vertical: isSmall ? 2 : 8,
                               ),
                               childrenPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
+                                horizontal: 4,
+                                vertical: 5,
                               ),
                               title: Text(
                                 item.title,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                  fontSize: isSmall ? 16 : 20,
                                 ),
+                              ),
+                              // Remove divider color and behavior by overriding theme
+                              backgroundColor: Colors.transparent,
+                              collapsedBackgroundColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide.none,
+                              ),
+                              collapsedShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide.none,
                               ),
                               children: [
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isSmall ? 12 : 16,
                                   ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Divider(),
+                                      Divider(),
                                       ...item.content.map(
                                         (text) => Padding(
-                                          padding: const EdgeInsets.only(
-                                            bottom: 8,
+                                          padding: EdgeInsets.only(
+                                            bottom: isSmall ? 4 : 8,
                                           ),
                                           child: Text(
                                             text,
-                                            style: const TextStyle(
-                                              fontSize: 14,
+                                            style: TextStyle(
+                                              fontSize: isSmall ? 14 : 16,
                                               height: 1.5,
                                             ),
                                           ),
@@ -198,7 +208,7 @@ class FAQ extends StatelessWidget {
                         alignment: Alignment.bottomLeft,
                         child: Image.asset(
                           "assets/starting/toy car turn right blue.png",
-                          width: 250,
+                          width: isSmall ? 150 : 250,
                         ),
                       ),
                     ],
