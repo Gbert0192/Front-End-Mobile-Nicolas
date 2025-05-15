@@ -70,6 +70,11 @@ class UserProvider with ChangeNotifier {
     return result;
   }
 
+  void rateApp(int rate) {
+    userList[currentUser!].rateApp(rate);
+    notifyListeners();
+  }
+
   int changePassword(String oldPass, String newPass) {
     final result = userList[currentUser!].changePassword(oldPass, newPass);
     notifyListeners();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/profile.dart';
+import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 
 class SubscriptionSplash extends StatefulWidget {
   const SubscriptionSplash({super.key});
@@ -18,7 +18,7 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
-          pageBuilder: (_, __, ___) => Profile(),
+          pageBuilder: (_, __, ___) => MainLayout(4),
           transitionsBuilder: (_, animation, __, child) {
             var tween = Tween(
               begin: const Offset(0, -1),

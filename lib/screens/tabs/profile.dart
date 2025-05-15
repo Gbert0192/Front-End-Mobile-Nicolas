@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/account_modals.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
@@ -8,9 +9,14 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -218,6 +224,7 @@ class Profile extends StatelessWidget {
                           ),
                         ),
                         SettingButtons(
+                          onPressed: () => {},
                           title: "Log Out",
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,

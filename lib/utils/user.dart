@@ -8,8 +8,9 @@ class User {
   String password;
   String? birthDate;
   String? gender;
+  int? rating = null;
   String? lang = "EN";
-  double balance = 100000;
+  double balance = 10000000;
   bool isMember = false;
   DateTime? memberSince;
   DateTime? memberUntil;
@@ -39,6 +40,10 @@ class User {
     if (password == newPass) return 0;
     password = newPass;
     return 1;
+  }
+
+  void rateApp(int rate) {
+    rating = rate;
   }
 
   void editProfile({
