@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showAlertDialog(BuildContext context, isLoading) {
+void showAlertDialog({required BuildContext context, bool? isLoading}) {
   showGeneralDialog(
     context: context,
     barrierLabel: "Logout",
