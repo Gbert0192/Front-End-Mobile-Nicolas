@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 
-void showAlertDialog({required BuildContext context, bool? isLoading}) {
+void showAlertDialog({
+  required BuildContext context,
+  bool isLoading = false,
+  IconData? icon,
+  String cancelText = "Cancel",
+  String continueText = "Sure",
+  String title = "Confirm",
+  String subtitle = "Are you sure?",
+  VoidCallback? onContinue,
+  Color color = const Color(0xFF1F1E5B),
+}) {
   showGeneralDialog(
     context: context,
-    barrierLabel: "Logout",
+    barrierLabel: "Dialog",
     barrierDismissible: true,
     barrierColor: Colors.black.withOpacity(0.5),
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
-      return Center(child: SizedBox());
+      return const SizedBox();
     },
     transitionBuilder: (context, animation, secondaryAnimation, child) {
       final curvedAnimation = CurvedAnimation(
@@ -25,52 +35,80 @@ void showAlertDialog({required BuildContext context, bool? isLoading}) {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 30),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 30),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.logout, size: 50, color: Colors.red),
-                SizedBox(height: 20),
+                icon != null
+                    ? Icon(icon, size: 50, color: color)
+                    : SizedBox.shrink(),
+                const SizedBox(height: 20),
                 Text(
-                  'Logout',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  title,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
-                  'Are you sure you want to logout from your account?',
+                  subtitle,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                  style: const TextStyle(fontSize: 16, color: Colors.black54),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel'),
+                        onPressed:
+                            isLoading ? null : () => Navigator.pop(context),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
-                          side: BorderSide(color: Colors.grey),
-                          padding: EdgeInsets.symmetric(vertical: 14),
+                          side: const BorderSide(color: Colors.grey),
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
+                        child:
+                            isLoading
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                                : Text(cancelText),
                       ),
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Expanded(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed:
+                            onContinue != null
+                                ? isLoading
+                                    ? null
+                                    : onContinue
+                                : () => {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          padding: EdgeInsets.symmetric(vertical: 14),
+                          backgroundColor: color,
+                          padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
-                        child: Text(
-                          'Sure',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                        child:
+                            isLoading
+                                ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                                : Text(
+                                  continueText,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                       ),
                     ),
                   ],

@@ -7,6 +7,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
+import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
 
 class Profile extends StatefulWidget {
@@ -224,7 +225,7 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SettingButtons(
-                          onPressed: () => {},
+                          onPressed: () => {showAlertDialog(context: context)},
                           title: "Log Out",
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,
