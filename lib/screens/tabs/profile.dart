@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/account_modals.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
@@ -8,6 +9,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
 
 class Profile extends StatefulWidget {
@@ -18,6 +20,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -225,7 +229,40 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                         SettingButtons(
-                          onPressed: () => {showAlertDialog(context: context)},
+                          onPressed:
+                              () => {
+                                showAlertDialog(
+                                  context: context,
+                                  isLoading: isLoading,
+                                  title: "Logout",
+                                  subtitle:
+                                      "Are you sure you want to logout from your account?",
+                                  icon: Icons.logout,
+                                  color: const Color.fromARGB(255, 204, 57, 46),
+                                  onContinue: () {
+                                    setState(() => isLoading = true);
+                                    Future.delayed(
+                                      const Duration(seconds: 2),
+                                      () {
+                                        userProvider.logout();
+                                        setState(() => isLoading = false);
+                                        showFlexibleSnackbar(
+                                          context,
+                                          "See you next time, ${user.fullname.split(" ")[0]}!",
+                                        );
+                                        Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => LandingScreen(),
+                                          ),
+                                          (Route<dynamic> route) => false,
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              },
                           title: "Log Out",
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,

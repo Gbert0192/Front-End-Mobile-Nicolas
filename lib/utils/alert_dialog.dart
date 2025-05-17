@@ -11,6 +11,9 @@ void showAlertDialog({
   VoidCallback? onContinue,
   Color color = const Color(0xFF1F1E5B),
 }) {
+  final size = MediaQuery.of(context).size;
+  final isSmall = size.height < 700;
+
   showGeneralDialog(
     context: context,
     barrierLabel: "Dialog",
@@ -35,30 +38,42 @@ void showAlertDialog({
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+          insetPadding: EdgeInsets.symmetric(horizontal: isSmall ? 35 : 30),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding:
+                isSmall
+                    ? EdgeInsets.symmetric(vertical: 15, horizontal: 30)
+                    : EdgeInsets.all(20),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                icon != null
-                    ? Icon(icon, size: 50, color: color)
-                    : SizedBox.shrink(),
-                const SizedBox(height: 20),
+                if (icon != null)
+                  Icon(icon, size: isSmall ? 40 : 50, color: color),
+                SizedBox(
+                  height:
+                      icon != null
+                          ? isSmall
+                              ? 15
+                              : 20
+                          : 0,
+                ),
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: isSmall ? 18 : 22,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: isSmall ? 8 : 10),
                 Text(
                   subtitle,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 16, color: Colors.black54),
+                  style: TextStyle(
+                    fontSize: isSmall ? 14 : 16,
+                    color: Colors.black54,
+                  ),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: isSmall ? 20 : 30),
                 Row(
                   children: [
                     Expanded(
@@ -68,7 +83,9 @@ void showAlertDialog({
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.black,
                           side: const BorderSide(color: Colors.grey),
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmall ? 10 : 14,
+                          ),
                         ),
                         child:
                             isLoading
@@ -93,7 +110,9 @@ void showAlertDialog({
                                 : () => {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: color,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding: EdgeInsets.symmetric(
+                            vertical: isSmall ? 10 : 14,
+                          ),
                         ),
                         child:
                             isLoading
