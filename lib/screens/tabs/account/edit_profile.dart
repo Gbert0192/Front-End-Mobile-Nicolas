@@ -6,6 +6,7 @@ import 'package:tugas_front_end_nicolas/components/dropdown.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
@@ -101,7 +102,36 @@ class _EditProfileState extends State<EditProfile> {
                   elevation: 2,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      final hasChanged =
+                          form.control("fullname").text !=
+                              widget.user.fullname ||
+                          form.control("email").text != widget.user.email ||
+                          form.control("phone").text != widget.user.phone ||
+                          (choice == -1 ? null : userPP[choice]) !=
+                              widget.user.profilePic ||
+                          country_code != widget.user.countryCode ||
+                          form.control("birth_date").text !=
+                              (widget.user.birthDate ?? "") ||
+                          form.control("gender").text !=
+                              (widget.user.gender ?? "");
+                      if (hasChanged) {
+                        showAlertDialog(
+                          context: context,
+                          title: "Go Back",
+                          cancelText: "Back",
+                          continueText: "Discard",
+                          subtitle:
+                              "Are you sure want to go back, all the changes will be discarded?",
+                          icon: Icons.warning,
+                          color: Color(0xFFFFC107),
+                          onContinue: () {
+                            Navigator.pop(context);
+                            Navigator.pop(context, widget.user);
+                          },
+                        );
+                      } else {
+                        Navigator.pop(context);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       shape: const CircleBorder(),
@@ -255,7 +285,6 @@ class _EditProfileState extends State<EditProfile> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            print(choice == -1 ? null : userPP[choice]);
                             userProvider.editProfile(
                               fullname: form.control("fullname").text,
                               email: form.control("email").text,

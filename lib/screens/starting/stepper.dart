@@ -169,18 +169,13 @@ class LandingStepper extends StatelessWidget {
           style: TextStyle(
             fontSize: isSmall ? 32 : 40,
             fontWeight: FontWeight.bold,
-            fontFamily: "Poppins",
           ),
         ),
         const SizedBox(height: 12),
         Text(
           step.subtitle,
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: Colors.grey,
-            fontSize: isSmall ? 20 : 24,
-            fontFamily: "Poppins",
-          ),
+          style: TextStyle(color: Colors.grey, fontSize: isSmall ? 20 : 24),
         ),
         const SizedBox(height: 30),
         Transform.translate(

@@ -18,7 +18,8 @@ class TabModel {
 }
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  const MainLayout([this.tabValue = 0]);
+  final int tabValue;
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -37,6 +38,7 @@ class _MainLayoutState extends State<MainLayout>
 
   void initState() {
     controller = TabController(length: tabs.length, vsync: this);
+    controller.index = widget.tabValue;
     super.initState();
     controller.addListener(() {
       setState(() {});

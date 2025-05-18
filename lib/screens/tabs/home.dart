@@ -119,8 +119,6 @@ class _HomeState extends State<Home> {
                         children: [
                           Text(
                             "Halo, ${user.fullname.split(" ")[0]}!",
-                            // Text(
-                            //   "Halo, ${(user['fullname'] as String).split(" ")[0]}!",
                             style: TextStyle(
                               fontSize: isSmall ? 28 : 40,
                               fontWeight: FontWeight.bold,

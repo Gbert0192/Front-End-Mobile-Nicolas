@@ -1,22 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/language_modal.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
+import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
   @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
     final userProvider = Provider.of<UserProvider>(context);
     User user = userProvider.getCurrentUser();
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
 
     void acc_nav(Widget page) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => page));
@@ -33,7 +43,15 @@ class Profile extends StatelessWidget {
         title: "Subscriptions",
         onPressed: () => acc_nav(Subscription()),
       ),
-      SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
+      SettingButtons(
+        icon: "assets/icons/language.png",
+        title: "Languages",
+        onPressed:
+            () => showModalBottomSheet(
+              context: context,
+              builder: (context) => LanguageModal(user.language),
+            ),
+      ),
     ];
     final List<SettingButtons> help_oth = [
       SettingButtons(
@@ -46,7 +64,39 @@ class Profile extends StatelessWidget {
         title: "Contact Us",
         onPressed: () => acc_nav(ContactUsPage()),
       ),
-      SettingButtons(icon: "assets/icons/star.png", title: "Rate Our App"),
+      SettingButtons(
+        icon: "assets/icons/star.png",
+        title: "Rate Our App",
+        onPressed:
+            () => showGeneralDialog(
+              context: context,
+              barrierLabel: "Dialog",
+              barrierDismissible: true,
+              barrierColor: Colors.black.withOpacity(0.5),
+              transitionDuration: const Duration(milliseconds: 300),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return const SizedBox();
+              },
+              transitionBuilder: (
+                context,
+                animation,
+                secondaryAnimation,
+                child,
+              ) {
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOut,
+                );
+                return SlideTransition(
+                  position: Tween(
+                    begin: const Offset(0, 1),
+                    end: Offset.zero,
+                  ).animate(curvedAnimation),
+                  child: RateDialog(user.rating == null ? 0 : 2),
+                );
+              },
+            ),
+      ),
     ];
 
     return Scaffold(
@@ -218,6 +268,33 @@ class Profile extends StatelessWidget {
                           ),
                         ),
                         SettingButtons(
+                          onPressed:
+                              () => {
+                                showAlertDialog(
+                                  context: context,
+                                  loading: true,
+                                  time: 1,
+                                  title: "Logout",
+                                  subtitle:
+                                      "Are you sure you want to logout from your account?",
+                                  icon: Icons.logout,
+                                  color: const Color.fromARGB(255, 220, 56, 45),
+                                  onContinue: () {
+                                    userProvider.logout();
+                                    showFlexibleSnackbar(
+                                      context,
+                                      "See you next time, ${user.fullname.split(" ")[0]}!",
+                                    );
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LandingScreen(),
+                                      ),
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  },
+                                ),
+                              },
                           title: "Log Out",
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,
