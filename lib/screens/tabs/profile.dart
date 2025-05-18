@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/account/account_modals.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/language_modal.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
@@ -20,14 +21,12 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  bool isLoading = false;
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
     final userProvider = Provider.of<UserProvider>(context);
     User user = userProvider.getCurrentUser();
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
 
     void acc_nav(Widget page) {
       Navigator.push(context, MaterialPageRoute(builder: (context) => page));
@@ -44,7 +43,15 @@ class _ProfileState extends State<Profile> {
         title: "Subscriptions",
         onPressed: () => acc_nav(Subscription()),
       ),
-      SettingButtons(icon: "assets/icons/language.png", title: "Languages"),
+      SettingButtons(
+        icon: "assets/icons/language.png",
+        title: "Languages",
+        onPressed:
+            () => showModalBottomSheet(
+              context: context,
+              builder: (context) => LanguageModal(user.language),
+            ),
+      ),
     ];
     final List<SettingButtons> help_oth = [
       SettingButtons(
@@ -57,7 +64,39 @@ class _ProfileState extends State<Profile> {
         title: "Contact Us",
         onPressed: () => acc_nav(ContactUsPage()),
       ),
-      SettingButtons(icon: "assets/icons/star.png", title: "Rate Our App"),
+      SettingButtons(
+        icon: "assets/icons/star.png",
+        title: "Rate Our App",
+        onPressed:
+            () => showGeneralDialog(
+              context: context,
+              barrierLabel: "Dialog",
+              barrierDismissible: true,
+              barrierColor: Colors.black.withOpacity(0.5),
+              transitionDuration: const Duration(milliseconds: 300),
+              pageBuilder: (context, animation, secondaryAnimation) {
+                return const SizedBox();
+              },
+              transitionBuilder: (
+                context,
+                animation,
+                secondaryAnimation,
+                child,
+              ) {
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOut,
+                );
+                return SlideTransition(
+                  position: Tween(
+                    begin: const Offset(0, 1),
+                    end: Offset.zero,
+                  ).animate(curvedAnimation),
+                  child: RateDialog(user.rating == null ? 0 : 2),
+                );
+              },
+            ),
+      ),
     ];
 
     return Scaffold(
@@ -233,32 +272,25 @@ class _ProfileState extends State<Profile> {
                               () => {
                                 showAlertDialog(
                                   context: context,
-                                  isLoading: isLoading,
+                                  loading: true,
+                                  time: 1,
                                   title: "Logout",
                                   subtitle:
                                       "Are you sure you want to logout from your account?",
                                   icon: Icons.logout,
-                                  color: const Color.fromARGB(255, 204, 57, 46),
+                                  color: const Color.fromARGB(255, 220, 56, 45),
                                   onContinue: () {
-                                    setState(() => isLoading = true);
-                                    Future.delayed(
-                                      const Duration(seconds: 2),
-                                      () {
-                                        userProvider.logout();
-                                        setState(() => isLoading = false);
-                                        showFlexibleSnackbar(
-                                          context,
-                                          "See you next time, ${user.fullname.split(" ")[0]}!",
-                                        );
-                                        Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) => LandingScreen(),
-                                          ),
-                                          (Route<dynamic> route) => false,
-                                        );
-                                      },
+                                    userProvider.logout();
+                                    showFlexibleSnackbar(
+                                      context,
+                                      "See you next time, ${user.fullname.split(" ")[0]}!",
+                                    );
+                                    Navigator.pushAndRemoveUntil(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LandingScreen(),
+                                      ),
+                                      (Route<dynamic> route) => false,
                                     );
                                   },
                                 ),

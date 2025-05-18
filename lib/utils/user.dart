@@ -9,7 +9,7 @@ class User {
   String? birthDate;
   String? gender;
   int? rating = null;
-  String? lang = "EN";
+  String language = "EN";
   double balance = 10000000;
   bool isMember = false;
   DateTime? memberSince;
@@ -44,6 +44,10 @@ class User {
 
   void rateApp(int rate) {
     rating = rate;
+  }
+
+  void switchLanguage(String lang) {
+    language = lang;
   }
 
   void editProfile({

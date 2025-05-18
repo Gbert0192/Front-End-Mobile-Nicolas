@@ -75,6 +75,11 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void switchLanguage(String lang) {
+    userList[currentUser!].switchLanguage(lang);
+    notifyListeners();
+  }
+
   int changePassword(String oldPass, String newPass) {
     final result = userList[currentUser!].changePassword(oldPass, newPass);
     notifyListeners();
