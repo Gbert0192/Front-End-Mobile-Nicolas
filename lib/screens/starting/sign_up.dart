@@ -157,9 +157,12 @@ class _SignUpState extends State<SignUp> {
 
                 SizedBox(height: isSmall ? 10 : 20),
 
-                const Text(
+                Text(
                   'Already Sign Up?',
-                  style: TextStyle(color: Color(0xFF10297F)),
+                  style: TextStyle(
+                    color: Color(0xFF10297F),
+                    fontSize: isSmall ? 16 : 20,
+                  ),
                 ),
 
                 ResponsiveButton(

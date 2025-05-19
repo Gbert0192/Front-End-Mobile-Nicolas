@@ -34,7 +34,7 @@ class SplashScreen extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: isSmall ? 32 : 48,
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Koulen',
                       letterSpacing: 1.5,
                       shadows: [
                         Shadow(
@@ -49,8 +49,8 @@ class SplashScreen extends StatelessWidget {
                     'Parking Made Easier',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isSmall ? 40 : 50,
-                      fontFamily: 'Cursive',
+                      fontSize: isSmall ? 50 : 60,
+                      fontFamily: 'KolkerBrush',
                       shadows: [
                         Shadow(
                           offset: Offset(2, 2),
