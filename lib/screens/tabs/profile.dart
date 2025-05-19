@@ -71,7 +71,7 @@ class _ProfileState extends State<Profile> {
             () => showGeneralDialog(
               context: context,
               barrierLabel: "Dialog",
-              barrierDismissible: true,
+              barrierDismissible: false,
               barrierColor: Colors.black.withOpacity(0.5),
               transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (context, animation, secondaryAnimation) {

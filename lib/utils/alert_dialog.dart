@@ -59,7 +59,7 @@ void showAlertDialog({
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: isSmall ? 18 : 22,
+                        fontSize: isSmall ? 18 : 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -68,7 +68,7 @@ void showAlertDialog({
                       subtitle,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: isSmall ? 14 : 16,
+                        fontSize: isSmall ? 14 : 18,
                         color: Colors.black54,
                       ),
                     ),
@@ -86,7 +86,10 @@ void showAlertDialog({
                                 vertical: isSmall ? 10 : 14,
                               ),
                             ),
-                            child: Text(cancelText),
+                            child: Text(
+                              cancelText,
+                              style: TextStyle(fontSize: isSmall ? null : 16),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 15),
@@ -131,8 +134,9 @@ void showAlertDialog({
                                     )
                                     : Text(
                                       continueText,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         color: Colors.white,
+                                        fontSize: isSmall ? null : 16,
                                       ),
                                     ),
                           ),
