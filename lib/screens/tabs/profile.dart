@@ -301,7 +301,6 @@ class _ProfileState extends State<Profile> {
                           textColor: Colors.red,
                           bgColor: Color(0xFFFFDCDC),
                         ),
-                        SizedBox(height: isSmall ? 10 : 20),
                       ],
                     ),
                   ),
