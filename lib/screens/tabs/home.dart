@@ -123,6 +123,13 @@ class _HomeState extends State<Home> {
                               fontSize: isSmall ? 28 : 40,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F1E5B),
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(4, 4),
+                                  blurRadius: 6.0,
+                                  color: Color.fromRGBO(0, 0, 0, 0.247),
+                                ),
+                              ],
                             ),
                           ),
                           Text(
@@ -131,6 +138,13 @@ class _HomeState extends State<Home> {
                               fontSize: isSmall ? 22 : 30,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xFF1F1E5B),
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(4, 4),
+                                  blurRadius: 6.0,
+                                  color: Color.fromRGBO(0, 0, 0, 0.247),
+                                ),
+                              ],
                             ),
                           ),
                         ],
