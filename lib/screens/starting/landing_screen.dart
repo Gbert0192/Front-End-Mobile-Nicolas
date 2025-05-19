@@ -53,7 +53,7 @@ class LandingScreen extends StatelessWidget {
                     'THIS IS PARK-ID',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: isSmall ? 32 : 40,
+                      fontSize: isSmall ? 40 : 48,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -62,7 +62,7 @@ class LandingScreen extends StatelessWidget {
                     'The first and the best parking app in Indonesia',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isSmall ? 20 : 24,
+                      fontSize: isSmall ? 24 : 30,
                       color: Colors.grey,
                       fontWeight: FontWeight.w300,
                     ),

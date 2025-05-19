@@ -16,6 +16,7 @@ void main() {
         theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+          fontFamily: 'Poppins',
         ),
         debugShowCheckedModeBanner: false,
         home: MainApp(),

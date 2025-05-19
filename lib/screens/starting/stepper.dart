@@ -168,7 +168,7 @@ class LandingStepper extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: isSmall ? 32 : 40,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 12),

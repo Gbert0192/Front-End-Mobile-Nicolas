@@ -191,9 +191,12 @@ class _SignInState extends State<SignIn> {
 
                     SizedBox(height: isSmall ? 10 : 20),
 
-                    const Text(
+                    Text(
                       'Haven’t Sign Up?',
-                      style: TextStyle(color: Color(0xFF10297F)),
+                      style: TextStyle(
+                        color: Color(0xFF10297F),
+                        fontSize: isSmall ? 16 : 20,
+                      ),
                     ),
 
                     ResponsiveButton(
@@ -223,7 +226,7 @@ class _SignInState extends State<SignIn> {
                         'Forget Password?',
                         style: TextStyle(
                           color: Color(0xFF10297F),
-                          fontSize: isSmall ? 16 : 24,
+                          fontSize: isSmall ? 18 : 25,
                         ),
                       ),
                     ),
