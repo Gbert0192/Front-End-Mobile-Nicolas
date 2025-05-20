@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/notif/notif_title.dart';
-import 'package:tugas_front_end_nicolas/components/notif/notification.dart';
 
 class Notification_ extends StatelessWidget {
   const Notification_({super.key});
@@ -116,6 +114,141 @@ class Notification_ extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+//ini gabung aja soalnya cuma dipake di satu page ini
+class NotifTitle extends StatelessWidget {
+  final String dateTitle;
+
+  const NotifTitle({super.key, required this.dateTitle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      child: Column(
+        children: [
+          Divider(color: Colors.grey, thickness: 1, indent: 5, endIndent: 5),
+          SizedBox(height: 10),
+          Row(
+            children: [
+              SizedBox(width: 15),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  dateTitle,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum NotifTypes {
+  bookSuccess,
+  bookCancel,
+  bookExp,
+  bookExit,
+  verif,
+  verif2Step,
+  paySuccess,
+}
+
+class NotifCard extends StatelessWidget {
+  final String notifIcon;
+  final NotifTypes typeText;
+  final String mall;
+
+  const NotifCard({
+    super.key,
+    required this.notifIcon,
+    this.typeText = NotifTypes.bookSuccess,
+    required this.mall,
+  });
+
+  String _cardTitle(NotifTypes type) {
+    switch (type) {
+      case NotifTypes.bookSuccess:
+        return 'Booking Successful!';
+      case NotifTypes.bookCancel:
+        return 'Parking Booking Canceled';
+      case NotifTypes.bookExit:
+        return 'Exit Parking Lot';
+      case NotifTypes.bookExp:
+        return 'Booking Has Been Expired!';
+      case NotifTypes.paySuccess:
+        return 'Payment Successful!';
+      case NotifTypes.verif:
+        return 'Verification Successful!';
+      case NotifTypes.verif2Step:
+        return '2 Step Verification Successful!';
+    }
+  }
+
+  String _cardDescription(NotifTypes type) {
+    switch (type) {
+      case NotifTypes.bookSuccess:
+        return 'Parking booking at ${mall} was successfully booked!';
+      case NotifTypes.bookCancel:
+        return 'You have canceled parking at ${mall}';
+      case NotifTypes.bookExit:
+        return 'You have exit parking lot at ${mall}';
+      case NotifTypes.bookExp:
+        return 'You missed your booking, no-show fee was charged.';
+      case NotifTypes.paySuccess:
+        return 'Parking booking at ${mall} was successfully paid';
+      case NotifTypes.verif:
+        return 'Account verification complete!';
+      case NotifTypes.verif2Step:
+        return 'Google Authenticator set successful!';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 5,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Image.asset(notifIcon, width: 50, height: 50),
+          SizedBox(width: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _cardTitle(typeText),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                _cardDescription(typeText),
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
