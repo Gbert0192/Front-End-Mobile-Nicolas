@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 // ParkingSpot model
 class ParkingSpot {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class SubscriptionChoice extends StatefulWidget {
   const SubscriptionChoice(this.onChanged);

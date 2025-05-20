@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl_phone_field/countries.dart';
-import '../utils/user.dart';
+import '../model/user.dart';
 
 class UserProvider with ChangeNotifier {
   List<User> userList = [

@@ -11,7 +11,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
