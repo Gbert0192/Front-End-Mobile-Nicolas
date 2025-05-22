@@ -44,6 +44,12 @@ class _ContactUsPageState extends State<ContactUsPage> {
   ];
 
   @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;

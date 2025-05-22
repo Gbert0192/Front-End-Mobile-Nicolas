@@ -21,6 +21,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     fields: ["email"],
     validators: {'email': (value) => validateEmail(value: value)},
   );
+
+  @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final forgotPassProvider = Provider.of<ForgetPassProvider>(context);

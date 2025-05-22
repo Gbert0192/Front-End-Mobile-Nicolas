@@ -28,6 +28,12 @@ class _ResetPasswordState extends State<ResetPassword> {
   );
 
   @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;

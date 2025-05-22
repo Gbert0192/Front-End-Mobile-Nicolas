@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/components/date_picker.dart';
+import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/components/dropdown.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
@@ -81,6 +81,12 @@ class _EditProfileState extends State<EditProfile> {
         choice = -1;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
   }
 
   @override
