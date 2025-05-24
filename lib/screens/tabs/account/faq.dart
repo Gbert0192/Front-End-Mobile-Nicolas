@@ -19,13 +19,13 @@ class FAQ extends StatelessWidget {
       FAQItem(
         title: '🅿️ Parking & Booking',
         content: [
-          '• You can book in advance or park on the spot (walk-in).',
-          '• Always check slot availability in the parking area before coming.',
-          '• Parking fees start from the time you enter, not the booked time.',
-          '• You may arrive up to 30 minutes early, but we cannot guarantee availability before your booked time.',
-          '',
-          '🔸 Tip: We recommend arriving on time to avoid confusion.',
-          '🔸 If you plan to come early, check availability on your booking QR page first.',
+          '• You can book a parking spot in advance or park as a walk-in without a reservation.',
+          '• Please check real-time slot availability in the parking area before your visit.',
+          '• Parking fees apply from the actual time of entry, not the time of booking.',
+          '• You may enter the parking area up to 30 minutes before your scheduled booking time, but early availability is not guaranteed.',
+          '• If you enter the parking area early, your booking will be automatically marked as claimed.',
+          '• Even if you leave before your scheduled check-in time, the booking will be considered used and cannot be refunded or reused.',
+          '• To avoid unintentional claiming of your booking, we recommend entering only when you are ready to begin your parking session.',
         ],
       ),
       FAQItem(

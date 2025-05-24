@@ -143,7 +143,7 @@ class _SignInState extends State<SignIn> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            int user_id = userProvider.findUser(
+                            int user_id = userProvider.findUserIdByEmail(
                               form.control("email").text,
                             );
                             if (user_id == -1 ||

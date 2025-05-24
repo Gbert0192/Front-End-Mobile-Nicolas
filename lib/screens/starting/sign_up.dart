@@ -118,7 +118,7 @@ class _SignUpState extends State<SignUp> {
                     if (isValid) {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        int userId = userProvider.findUser(
+                        int userId = userProvider.findUserIdByEmail(
                           form.control("email").text,
                         );
                         if (userId != -1) {

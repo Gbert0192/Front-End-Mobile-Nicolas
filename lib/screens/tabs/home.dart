@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
 
     final currencyFormat = NumberFormat.currency(
       locale: 'id_ID',

@@ -1,3 +1,5 @@
+import 'package:tugas_front_end_nicolas/utils/index.dart';
+
 enum SpotStatus { free, occupied, booked }
 
 class Spot {
@@ -15,19 +17,11 @@ class Floor {
   Floor({required this.number, required this.totalSpots, required this.spots});
 
   Spot? getFirstAvailableSpot() {
-    try {
-      return spots.firstWhere((spot) => spot.status == SpotStatus.free);
-    } catch (e) {
-      return null;
-    }
+    return spots.firstWhereOrNull((spot) => spot.status == SpotStatus.free);
   }
 
   Spot? findSpot(String code) {
-    try {
-      return spots.firstWhere((spot) => spot.code == code);
-    } catch (e) {
-      return null;
-    }
+    return spots.firstWhereOrNull((spot) => spot.code == code);
   }
 }
 
@@ -72,9 +66,8 @@ class ParkingLot {
   }
 
   bool occupySpot(int floorNumber, String spotCode) {
-    final floor = spots.firstWhere((f) => f.number == floorNumber);
-
-    final spot = floor.findSpot(spotCode);
+    final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
+    final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
       spot.status = SpotStatus.occupied;
       return true;
@@ -83,9 +76,8 @@ class ParkingLot {
   }
 
   bool freeSpot(int floorNumber, String spotCode) {
-    final floor = spots.firstWhere((f) => f.number == floorNumber);
-
-    final spot = floor.findSpot(spotCode);
+    final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
+    final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.occupied) {
       spot.status = SpotStatus.free;
       return true;
