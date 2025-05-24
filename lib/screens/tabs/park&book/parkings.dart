@@ -56,14 +56,14 @@ class Parkings extends StatelessWidget {
                       ],
                     ),
                     ParkingCard(
-                      imageUrl: 'assets/building/Sun Plaza.jpg',
+                      imageUrl: 'assets/images/building/Sun Plaza.jpg',
                       priceText: 'Rp. 10000/h',
                       dateText: '12/12/2023',
                       placeName: 'Sun Plaza',
                       statusText: ParkingStatus.isParking,
                     ),
                     ParkingCard(
-                      imageUrl: 'assets/building/Aryaduta.jpg',
+                      imageUrl: 'assets/images/building/Aryaduta.jpg',
                       priceText: 'Rp. 10000',
                       dateText: 'Yesterday',
                       placeName: 'Arya Duta',

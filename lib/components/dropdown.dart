@@ -169,7 +169,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
               widget.errorText!,
               style: TextStyle(
                 color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
+                fontSize: widget.isSmall ? 12 : 15,
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class LanguageModal extends StatefulWidget {
   const LanguageModal(this.value);
@@ -21,7 +21,7 @@ class _LanguageModalState extends State<LanguageModal> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Container(
@@ -101,7 +101,7 @@ class _LanguageModalState extends State<LanguageModal> {
                         child: Row(
                           children: [
                             Image.asset(
-                              'assets/others/${lang.value.toLowerCase()}.png',
+                              'assets/images/others/${lang.value.toLowerCase()}.png',
                               width: isSmall ? 24 : 36,
                             ),
                             const SizedBox(width: 12),

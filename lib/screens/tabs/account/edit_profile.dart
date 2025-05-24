@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/components/date_picker.dart';
+import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/components/dropdown.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
@@ -9,7 +9,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class EditProfile extends StatefulWidget {
@@ -45,16 +45,16 @@ class _EditProfileState extends State<EditProfile> {
   int choice = -1;
 
   List<String> userPP = [
-    "assets/users/female 1.jpg",
-    "assets/users/female 2.jpg",
-    "assets/users/male 2.jpg",
-    "assets/users/female 4.jpg",
-    "assets/users/male 5.jpg",
-    "assets/users/female 5.jpg",
-    "assets/users/male 1.jpg",
-    "assets/users/female 3.jpg",
-    "assets/users/male 4.jpg",
-    "assets/users/male 3.jpg",
+    "assets/images/users/female 1.jpg",
+    "assets/images/users/female 2.jpg",
+    "assets/images/users/male 2.jpg",
+    "assets/images/users/female 4.jpg",
+    "assets/images/users/male 5.jpg",
+    "assets/images/users/female 5.jpg",
+    "assets/images/users/male 1.jpg",
+    "assets/images/users/female 3.jpg",
+    "assets/images/users/male 4.jpg",
+    "assets/images/users/male 3.jpg",
   ];
 
   @override
@@ -81,6 +81,12 @@ class _EditProfileState extends State<EditProfile> {
         choice = -1;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
   }
 
   @override

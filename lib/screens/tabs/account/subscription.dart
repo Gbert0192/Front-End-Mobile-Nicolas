@@ -7,7 +7,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscr
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_ongoing.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription/subscription_splash.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class Subscription extends StatefulWidget {
   const Subscription({super.key});
@@ -42,7 +42,7 @@ class _SubscriptionState extends State<Subscription> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(

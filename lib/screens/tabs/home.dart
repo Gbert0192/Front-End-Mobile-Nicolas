@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 // ParkingSpot model
 class ParkingSpot {
@@ -33,17 +33,17 @@ class _HomeState extends State<Home> {
   final List<ParkingSpot> spots = [
     ParkingSpot(
       name: 'Sun Plaza',
-      imageUrl: 'assets/building/Sun Plaza.jpg',
+      imageUrl: 'assets/images/building/Sun Plaza.jpg',
       price: 3000,
     ),
     ParkingSpot(
       name: 'Centre Point',
-      imageUrl: 'assets/building/Centre Point.jpeg',
+      imageUrl: 'assets/images/building/Centre Point.jpeg',
       price: 2500,
     ),
     ParkingSpot(
       name: 'Aryaduta',
-      imageUrl: 'assets/building/Aryaduta.jpg',
+      imageUrl: 'assets/images/building/Aryaduta.jpg',
       price: 4000,
     ),
   ];
@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
 
     final currencyFormat = NumberFormat.currency(
       locale: 'id_ID',
@@ -193,7 +193,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Image.asset(
-                                'assets/icons/wallet.png',
+                                'assets/images/icons/wallet.png',
                                 width: isSmall ? 20 : 30,
                               ),
                             ],

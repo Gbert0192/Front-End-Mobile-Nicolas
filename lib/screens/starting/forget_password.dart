@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/verfy_account.dart';
@@ -21,6 +22,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     fields: ["email"],
     validators: {'email': (value) => validateEmail(value: value)},
   );
+
+  @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
@@ -59,7 +67,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/starting/forget_pass.png',
+                  'assets/images/starting/forget_pass.png',
                   height: isSmall ? 180 : 300,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
@@ -67,13 +75,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   'Forgot Your Password? Enter Your Email To Get OTP!',
                   style: TextStyle(
                     fontSize: isSmall ? 20 : 24,
-                    color: Color(0xFF1879D4),
-                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4083FF),
+                    fontWeight: FontWeight.w600,
                     shadows: [
                       Shadow(
                         offset: Offset(4, 4),
                         blurRadius: 6.0,
-                        color: Color.fromRGBO(24, 45, 163, 0.25),
+                        color: Color.fromRGBO(64, 131, 255, 0.25),
                       ),
                     ],
                   ),
@@ -139,7 +147,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   ],
                 ),
 
-                SizedBox(height: isSmall ? 120 : 200),
+                SizedBox(
+                  height:
+                      isSmall
+                          ? 120
+                          : form.error('email') == null
+                          ? 200
+                          : 185,
+                ),
 
                 ResponsiveButton(
                   isSmall: isSmall,
@@ -153,10 +168,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     if (isValid) {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        int userId = userProvider.findUser(
+                        User? user = userProvider.findUserByEmail(
                           form.control("email").text,
                         );
-                        if (userId == -1) {
+                        if (user == null) {
                           showFlexibleSnackbar(
                             context,
                             "Email not found",
@@ -175,7 +190,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(userId),
+                            builder: (context) => VerifyAccount(user.id),
                           ),
                         );
                       });
