@@ -5,6 +5,8 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/notification.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/voucher.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home.dart';
 
 void main() {
   runApp(
@@ -21,7 +23,7 @@ void main() {
         ),
         debugShowCheckedModeBanner: false,
         // home: MainApp(),
-        home: Notification_(),
+        home: VoucherScreen(),
       ),
     ),
   );
