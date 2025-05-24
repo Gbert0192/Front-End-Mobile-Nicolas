@@ -32,7 +32,7 @@ class _StepperScreensState extends State<StepperScreens> {
     StepModel(
       title: "Find Parking Easily",
       subtitle: "Find parking around you easily and online",
-      image: "assets/starting/toy car turn right blue.png",
+      image: "assets/images/starting/toy car turn right blue.png",
       align: "left",
       offset: 20.0,
     ),
@@ -40,14 +40,14 @@ class _StepperScreensState extends State<StepperScreens> {
       title: "Book and Pay for Parking Quickly and Easily",
       subtitle:
           "Make a booking for your parking and make a payment quickly and easier",
-      image: "assets/starting/back view of toy car turn right blue.png",
+      image: "assets/images/starting/back view of toy car turn right blue.png",
       align: "center",
     ),
     StepModel(
       title: "Park According to the Desired Time",
       subtitle:
           "Can decide when parking time is and determine when it’s time to leave",
-      image: "assets/starting/toy car turn left blue.png",
+      image: "assets/images/starting/toy car turn left blue.png",
       align: "right",
       offset: 20.0,
     ),
@@ -163,20 +163,31 @@ class LandingStepper extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          step.title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: isSmall ? 32 : 40,
-            fontWeight: FontWeight.w600,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: isSmall ? 10 : 0),
+          child: Column(
+            children: [
+              Text(
+                step.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: isSmall ? 30 : 40,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                step.subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: isSmall ? 18 : 24,
+                ),
+              ),
+            ],
           ),
         ),
-        const SizedBox(height: 12),
-        Text(
-          step.subtitle,
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.grey, fontSize: isSmall ? 20 : 24),
-        ),
+
         const SizedBox(height: 30),
         Transform.translate(
           offset: Offset(step.offset ?? 0.0, 0),

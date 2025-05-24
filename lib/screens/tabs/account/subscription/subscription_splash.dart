@@ -49,7 +49,7 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
               child: Column(
                     children: [
                       Image.asset(
-                        'assets/popup/subscription.png',
+                        'assets/images/popup/subscription.png',
                         width: isSmall ? 200 : 300,
                       ),
                       SizedBox(height: isSmall ? 20 : 40),

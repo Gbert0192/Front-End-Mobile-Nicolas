@@ -20,8 +20,7 @@ void main() {
           fontFamily: 'Poppins',
         ),
         debugShowCheckedModeBanner: false,
-        // home: MainApp(),
-        home: Notification_(),
+        home: MainApp(),
       ),
     ),
   );

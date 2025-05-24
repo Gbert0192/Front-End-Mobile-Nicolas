@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 
+enum DatePickerType { date, month, datetime }
+
 class ResponsiveDatePicker extends StatefulWidget {
   const ResponsiveDatePicker({
     super.key,
@@ -15,6 +17,7 @@ class ResponsiveDatePicker extends StatefulWidget {
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
     this.mode = StyleMode.outline,
+    this.type = DatePickerType.date,
   });
 
   final bool isSmall;
@@ -28,6 +31,7 @@ class ResponsiveDatePicker extends StatefulWidget {
   final Color borderColor;
   final Color borderFocusColor;
   final StyleMode mode;
+  final DatePickerType type;
 
   @override
   State<ResponsiveDatePicker> createState() => _ResponsiveDatePickerState();
@@ -38,20 +42,30 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
   String? _selectedDate;
 
   Future<void> _pickDate() async {
+    DateTime now = DateTime.now();
     DateTime? initialDate;
-    if (widget.controller != null) {
-      final parts = widget.controller!.text.split('/');
-      if (parts.length == 3) {
-        final day = int.parse(parts[0]);
-        final month = int.parse(parts[1]);
-        final year = int.parse(parts[2]);
-        initialDate = DateTime(year, month, day);
-      }
+
+    if (widget.controller != null && widget.controller!.text.isNotEmpty) {
+      try {
+        final parts = widget.controller!.text.split('/');
+        if (widget.type == DatePickerType.month && parts.length >= 2) {
+          final month = int.parse(parts[0]);
+          final year = int.parse(parts[1]);
+          initialDate = DateTime(year, month);
+        } else if (parts.length == 3) {
+          final day = int.parse(parts[0]);
+          final month = int.parse(parts[1]);
+          final year = int.parse(parts[2]);
+          initialDate = DateTime(year, month, day);
+        }
+      } catch (_) {}
     }
 
-    final DateTime? picked = await showDatePicker(
+    initialDate ??= now;
+
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: initialDate ?? DateTime.now(),
+      initialDate: initialDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
       builder: (BuildContext context, Widget? child) {
@@ -75,12 +89,41 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
       },
     );
 
-    if (picked != null) {
-      _selectedDate = "${picked.day}/${picked.month}/${picked.year}";
-      if (widget.controller != null) {
-        widget.controller!.text =
-            "${picked.day}/${picked.month}/${picked.year}";
+    if (pickedDate != null) {
+      DateTime finalDate = pickedDate;
+
+      if (widget.type == DatePickerType.datetime) {
+        final TimeOfDay? time = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(pickedDate),
+        );
+        if (time != null) {
+          finalDate = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            time.hour,
+            time.minute,
+          );
+        }
       }
+
+      String formatted;
+      switch (widget.type) {
+        case DatePickerType.date:
+          formatted = "${finalDate.day}/${finalDate.month}/${finalDate.year}";
+          break;
+        case DatePickerType.month:
+          formatted = "${finalDate.month}/${finalDate.year}";
+          break;
+        case DatePickerType.datetime:
+          formatted =
+              "${finalDate.day}/${finalDate.month}/${finalDate.year} ${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
+          break;
+      }
+
+      _selectedDate = formatted;
+      widget.controller?.text = formatted;
       widget.onChanged?.call();
     }
   }
@@ -88,9 +131,7 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
   void _clearDate() {
     setState(() {
       _selectedDate = null;
-      if (widget.controller != null) {
-        widget.controller!.text = "";
-      }
+      widget.controller?.clear();
     });
   }
 
@@ -113,13 +154,13 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
           children: [
             widget.mode == StyleMode.underline
                 ? Text(
-                  widget.label!,
+                  widget.label ?? '',
                   style: TextStyle(
                     color: _getColor(),
                     fontSize: widget.isSmall ? 12 : 16,
                   ),
                 )
-                : SizedBox.shrink(),
+                : const SizedBox.shrink(),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
@@ -191,16 +232,15 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                               borderSide: const BorderSide(color: Colors.red),
                               borderRadius: BorderRadius.circular(20),
                             )
-                            : UnderlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.red),
+                            : const UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
                             ),
                   ),
                   child: Text(
-                    _selectedDate != null
-                        ? _selectedDate!
-                        : widget.controller!.text.isNotEmpty
-                        ? widget.controller!.text
-                        : widget.hint ?? '',
+                    _selectedDate ??
+                        widget.controller?.text ??
+                        widget.hint ??
+                        '',
                     style: TextStyle(
                       fontSize: widget.isSmall ? 16 : 18,
                       color: Colors.grey[800],

@@ -11,7 +11,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -24,7 +24,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -34,17 +34,17 @@ class _ProfileState extends State<Profile> {
 
     final List<SettingButtons> acc_setting = [
       SettingButtons(
-        icon: "assets/icons/key.png",
+        icon: "assets/images/icons/key.png",
         title: "Change Password",
         onPressed: () => acc_nav(ChangePassword()),
       ),
       SettingButtons(
-        icon: "assets/icons/calender.png",
+        icon: "assets/images/icons/calender.png",
         title: "Subscriptions",
         onPressed: () => acc_nav(Subscription()),
       ),
       SettingButtons(
-        icon: "assets/icons/language.png",
+        icon: "assets/images/icons/language.png",
         title: "Languages",
         onPressed:
             () => showModalBottomSheet(
@@ -55,17 +55,17 @@ class _ProfileState extends State<Profile> {
     ];
     final List<SettingButtons> help_oth = [
       SettingButtons(
-        icon: "assets/icons/question.png",
+        icon: "assets/images/icons/question.png",
         title: "FAQ",
         onPressed: () => acc_nav(FAQ()),
       ),
       SettingButtons(
-        icon: "assets/icons/problem.png",
+        icon: "assets/images/icons/problem.png",
         title: "Contact Us",
         onPressed: () => acc_nav(ContactUsPage()),
       ),
       SettingButtons(
-        icon: "assets/icons/star.png",
+        icon: "assets/images/icons/star.png",
         title: "Rate Our App",
         onPressed:
             () => showGeneralDialog(
