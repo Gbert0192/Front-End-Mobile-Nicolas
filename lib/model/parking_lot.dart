@@ -59,20 +59,20 @@ class ParkingLot {
       final spot = floor.getFirstAvailableSpot();
       if (spot != null) {
         spot.status = SpotStatus.occupied;
-        return 'Occupied spot ${spot.code} at floor ${floor.number}';
+        return spot.code;
       }
     }
     return null;
   }
 
-  bool occupySpot(int floorNumber, String spotCode) {
+  String? occupySpot(int floorNumber, String spotCode) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
       spot.status = SpotStatus.occupied;
-      return true;
+      return spot.code;
     }
-    return false;
+    return null;
   }
 
   bool freeSpot(int floorNumber, String spotCode) {

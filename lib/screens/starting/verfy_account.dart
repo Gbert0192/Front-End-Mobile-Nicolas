@@ -205,8 +205,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SizedBox(
-                                    width: isSmall ? 16 : 24,
-                                    height: isSmall ? 16 : 24,
+                                    width: isSmall ? 16 : 20,
+                                    height: isSmall ? 16 : 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
                                       valueColor: AlwaysStoppedAnimation<Color>(

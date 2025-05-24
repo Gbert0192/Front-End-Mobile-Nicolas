@@ -115,10 +115,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                       ? null
                       : widget.label ?? null,
               hintStyle: TextStyle(color: _getColor()),
-              labelStyle:
-                  widget.mode == StyleMode.underline
-                      ? TextStyle(color: _getColor())
-                      : null,
+              labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
               filled: true,
               fillColor:
@@ -195,7 +192,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               widget.errorText!,
               style: TextStyle(
                 color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
+                fontSize: widget.isSmall ? 12 : 15,
               ),
             ),
           ),

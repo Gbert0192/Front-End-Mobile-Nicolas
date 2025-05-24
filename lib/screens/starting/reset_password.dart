@@ -154,7 +154,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                           ? form.error('password') == null
                               ? 75
                               : 40
-                          : 80,
+                          : form.error('password') == null
+                          ? 150
+                          : 110,
                 ),
 
                 ResponsiveButton(

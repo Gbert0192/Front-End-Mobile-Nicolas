@@ -74,13 +74,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   'Forgot Your Password? Enter Your Email To Get OTP!',
                   style: TextStyle(
                     fontSize: isSmall ? 20 : 24,
-                    color: Color(0xFF1879D4),
-                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4083FF),
+                    fontWeight: FontWeight.w600,
                     shadows: [
                       Shadow(
                         offset: Offset(4, 4),
                         blurRadius: 6.0,
-                        color: Color.fromRGBO(24, 45, 163, 0.25),
+                        color: Color.fromRGBO(64, 131, 255, 0.25),
                       ),
                     ],
                   ),
@@ -146,7 +146,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   ],
                 ),
 
-                SizedBox(height: isSmall ? 120 : 200),
+                SizedBox(
+                  height:
+                      isSmall
+                          ? 120
+                          : form.error('email') == null
+                          ? 200
+                          : 185,
+                ),
 
                 ResponsiveButton(
                   isSmall: isSmall,
