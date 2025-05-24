@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
@@ -72,7 +73,7 @@ class _SignInState extends State<SignIn> {
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/starting/park_spot.png',
+                      'assets/images/starting/park_spot.png',
                       height: isSmall ? 240 : 360,
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
@@ -143,12 +144,12 @@ class _SignInState extends State<SignIn> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            int user_id = userProvider.findUserIdByEmail(
+                            User? user = userProvider.findUserByEmail(
                               form.control("email").text,
                             );
-                            if (user_id == -1 ||
+                            if (user == null ||
                                 userProvider.login(
-                                      user_id,
+                                      user.id,
                                       form.control("password").text,
                                     ) ==
                                     -1) {
@@ -163,7 +164,7 @@ class _SignInState extends State<SignIn> {
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome Back, ${userProvider.userList[user_id].fullname.split(" ")[0]}!",
+                              "Welcome Back, ${user.fullname.split(" ")[0]}!",
                             );
                             Navigator.pushAndRemoveUntil(
                               context,

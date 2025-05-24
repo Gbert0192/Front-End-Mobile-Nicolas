@@ -220,13 +220,25 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               buildSocialIcon(
-                                'assets/medsos/tiktok.png',
+                                'assets/images/medsos/tiktok.png',
                                 isSmall,
                               ),
-                              buildSocialIcon('assets/medsos/wa.png', isSmall),
-                              buildSocialIcon('assets/medsos/ig.png', isSmall),
-                              buildSocialIcon('assets/medsos/yt.png', isSmall),
-                              buildSocialIcon('assets/medsos/x.png', isSmall),
+                              buildSocialIcon(
+                                'assets/images/medsos/wa.png',
+                                isSmall,
+                              ),
+                              buildSocialIcon(
+                                'assets/images/medsos/ig.png',
+                                isSmall,
+                              ),
+                              buildSocialIcon(
+                                'assets/images/medsos/yt.png',
+                                isSmall,
+                              ),
+                              buildSocialIcon(
+                                'assets/images/medsos/x.png',
+                                isSmall,
+                              ),
                             ],
                           ),
                         ),

@@ -45,16 +45,16 @@ class _EditProfileState extends State<EditProfile> {
   int choice = -1;
 
   List<String> userPP = [
-    "assets/users/female 1.jpg",
-    "assets/users/female 2.jpg",
-    "assets/users/male 2.jpg",
-    "assets/users/female 4.jpg",
-    "assets/users/male 5.jpg",
-    "assets/users/female 5.jpg",
-    "assets/users/male 1.jpg",
-    "assets/users/female 3.jpg",
-    "assets/users/male 4.jpg",
-    "assets/users/male 3.jpg",
+    "assets/images/users/female 1.jpg",
+    "assets/images/users/female 2.jpg",
+    "assets/images/users/male 2.jpg",
+    "assets/images/users/female 4.jpg",
+    "assets/images/users/male 5.jpg",
+    "assets/images/users/female 5.jpg",
+    "assets/images/users/male 1.jpg",
+    "assets/images/users/female 3.jpg",
+    "assets/images/users/male 4.jpg",
+    "assets/images/users/male 3.jpg",
   ];
 
   @override

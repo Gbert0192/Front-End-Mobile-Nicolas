@@ -86,7 +86,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/starting/otp_send.png',
+                  'assets/images/starting/otp_send.png',
                   height: isSmall ? 180 : 300,
                 ),
                 Row(

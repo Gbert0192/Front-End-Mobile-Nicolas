@@ -30,12 +30,12 @@ class Notification_ extends StatelessWidget {
                   //Today
                   NotifTitle(dateTitle: 'Today'),
                   NotifCard(
-                    notifIcon: 'assets/icons/booking.png',
+                    notifIcon: 'assets/images/icons/booking.png',
                     mall: 'Sun Plaza',
                     typeText: NotifTypes.bookSuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/cancel.png',
+                    notifIcon: 'assets/images/icons/cancel.png',
                     mall: 'Centre Point Mall',
                     typeText: NotifTypes.bookCancel,
                   ),
@@ -43,17 +43,17 @@ class Notification_ extends StatelessWidget {
                   //Yesterday
                   NotifTitle(dateTitle: 'Yesterday'),
                   NotifCard(
-                    notifIcon: 'assets/icons/payment.png',
+                    notifIcon: 'assets/images/icons/payment.png',
                     mall: 'Thamrin Plaza',
                     typeText: NotifTypes.paySuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/exit.png',
+                    notifIcon: 'assets/images/icons/exit.png',
                     mall: 'Thamrin Plaza',
                     typeText: NotifTypes.bookExit,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/locked.png',
+                    notifIcon: 'assets/images/icons/locked.png',
                     mall: '',
                     typeText: NotifTypes.verif2Step,
                   ),
@@ -61,12 +61,12 @@ class Notification_ extends StatelessWidget {
                   //December 6, 2024
                   NotifTitle(dateTitle: 'December 6, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/payment.png',
+                    notifIcon: 'assets/images/icons/payment.png',
                     mall: 'Sun Plaza',
                     typeText: NotifTypes.paySuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/exit.png',
+                    notifIcon: 'assets/images/icons/exit.png',
                     mall: 'Sun Plaza',
                     typeText: NotifTypes.bookExit,
                   ),
@@ -74,17 +74,17 @@ class Notification_ extends StatelessWidget {
                   //November 28, 2024
                   NotifTitle(dateTitle: 'November 28, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/payment.png',
+                    notifIcon: 'assets/images/icons/payment.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.paySuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/exit.png',
+                    notifIcon: 'assets/images/icons/exit.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.bookExit,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/booking.png',
+                    notifIcon: 'assets/images/icons/booking.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.bookSuccess,
                   ),
@@ -92,12 +92,12 @@ class Notification_ extends StatelessWidget {
                   //November 21, 2024
                   NotifTitle(dateTitle: 'November 21, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/expired.png',
+                    notifIcon: 'assets/images/icons/expired.png',
                     mall: '',
                     typeText: NotifTypes.bookExp,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/booking.png',
+                    notifIcon: 'assets/images/icons/booking.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.bookSuccess,
                   ),
@@ -105,7 +105,7 @@ class Notification_ extends StatelessWidget {
                   //November 18, 2024
                   NotifTitle(dateTitle: 'November 18, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/verification.png',
+                    notifIcon: 'assets/images/icons/verification.png',
                     mall: '',
                     typeText: NotifTypes.verif,
                   ),

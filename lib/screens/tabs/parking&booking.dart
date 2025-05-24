@@ -67,7 +67,9 @@ class ParkingHistory extends StatelessWidget {
                                     right: 20,
                                     bottom: 20,
                                   ),
-                          child: Image.asset('assets/others/parking_view.png'),
+                          child: Image.asset(
+                            'assets/images/others/parking_view.png',
+                          ),
                         ),
                         Positioned(
                           top: 10,
@@ -121,7 +123,9 @@ class ParkingHistory extends StatelessWidget {
                                     right: 20,
                                     bottom: 30,
                                   ),
-                          child: Image.asset('assets/others/booking_view.png'),
+                          child: Image.asset(
+                            'assets/images/others/booking_view.png',
+                          ),
                         ),
                         Positioned(
                           top: 10,

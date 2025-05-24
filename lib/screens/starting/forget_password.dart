@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/verfy_account.dart';
@@ -66,7 +67,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/starting/forget_pass.png',
+                  'assets/images/starting/forget_pass.png',
                   height: isSmall ? 180 : 300,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
@@ -167,10 +168,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     if (isValid) {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        int userId = userProvider.findUserIdByEmail(
+                        User? user = userProvider.findUserByEmail(
                           form.control("email").text,
                         );
-                        if (userId == -1) {
+                        if (user == null) {
                           showFlexibleSnackbar(
                             context,
                             "Email not found",
@@ -189,7 +190,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(userId),
+                            builder: (context) => VerifyAccount(user.id),
                           ),
                         );
                       });

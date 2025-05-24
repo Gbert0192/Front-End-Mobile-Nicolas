@@ -74,7 +74,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                     'Please Input Your New Password',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: isSmall ? 20 : 30,
+                      fontSize: isSmall ? 25 : 30,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFFA03CDD),
                       shadows: [
@@ -89,23 +89,28 @@ class _ResetPasswordState extends State<ResetPassword> {
                 ),
 
                 Image.asset(
-                  'assets/starting/reset_password.png',
+                  'assets/images/starting/reset_password.png',
                   height: isSmall ? 180 : 300,
                 ),
-                Center(
-                  child: Text(
-                    'Your new password must not be the same from previous password',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Color(0xFF7B7B7B),
-                      shadows: [
-                        Shadow(
-                          offset: Offset(4, 4),
-                          blurRadius: 6.0,
-                          color: Color.fromRGBO(100, 100, 100, 0.251),
-                        ),
-                      ],
+                Padding(
+                  padding: EdgeInsetsGeometry.symmetric(
+                    horizontal: isSmall ? 20 : 0,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Your new password must not be the same from previous password',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: isSmall ? 14 : 18,
+                        color: Color(0xFF7B7B7B),
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(100, 100, 100, 0.251),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -152,8 +157,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height:
                       isSmall
                           ? form.error('password') == null
-                              ? 75
-                              : 40
+                              ? 60
+                              : 30
                           : form.error('password') == null
                           ? 150
                           : 110,
@@ -198,7 +203,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   },
                   text: "Continue",
                 ),
-                SizedBox(height: isSmall ? 10 : 20),
+                SizedBox(height: isSmall ? 5 : 20),
               ],
             ),
           ),

@@ -101,7 +101,7 @@ class _LanguageModalState extends State<LanguageModal> {
                         child: Row(
                           children: [
                             Image.asset(
-                              'assets/others/${lang.value.toLowerCase()}.png',
+                              'assets/images/others/${lang.value.toLowerCase()}.png',
                               width: isSmall ? 24 : 36,
                             ),
                             const SizedBox(width: 12),

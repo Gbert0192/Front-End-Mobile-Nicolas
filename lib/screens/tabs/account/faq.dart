@@ -72,7 +72,7 @@ class FAQ extends StatelessWidget {
           // Static Background Image
           Positioned.fill(
             child: Image.asset(
-              "assets/others/FAQ.png",
+              "assets/images/others/FAQ.png",
               fit: BoxFit.cover,
               color: Colors.white.withOpacity(0.1),
               colorBlendMode: BlendMode.dstATop,
@@ -207,7 +207,7 @@ class FAQ extends StatelessWidget {
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: Image.asset(
-                          "assets/starting/toy car turn right blue.png",
+                          "assets/images/starting/toy car turn right blue.png",
                           width: isSmall ? 150 : 250,
                         ),
                       ),

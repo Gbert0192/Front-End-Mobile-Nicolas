@@ -94,7 +94,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       textAlign: TextAlign.center,
                     ),
                     Image.asset(
-                      "assets/starting/change_pass.png",
+                      "assets/images/starting/change_pass.png",
                       height: isSmall ? 180 : 300,
                     ),
                     SizedBox(height: isSmall ? 10 : 20),

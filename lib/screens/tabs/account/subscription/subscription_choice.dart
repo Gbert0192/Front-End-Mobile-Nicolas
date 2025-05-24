@@ -20,7 +20,10 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
     return Center(
       child: Column(
         children: [
-          Image.asset('assets/others/member.png', width: isSmall ? 220 : 340),
+          Image.asset(
+            'assets/images/others/member.png',
+            width: isSmall ? 220 : 340,
+          ),
           SizedBox(height: isSmall ? 20 : 40),
           //Radio Button 1
           Container(

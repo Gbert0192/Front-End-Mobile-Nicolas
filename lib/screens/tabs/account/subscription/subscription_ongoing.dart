@@ -22,7 +22,7 @@ class SubscriptionOngoing extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/popup/subscription.png',
+              'assets/images/popup/subscription.png',
               width: isSmall ? 180 : 260,
             ),
             const SizedBox(height: 24),

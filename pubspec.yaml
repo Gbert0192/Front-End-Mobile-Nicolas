@@ -117,9 +117,9 @@ flutter:
       fonts:
         - asset: assets/fonts/Koulen/Koulen-Regular.ttf
 
-    - family: KolkerBrush
+    - family: Fasthand
       fonts:
-        - asset: assets/fonts/Kolker_Brush/KolkerBrush-Regular.ttf
+        - asset: assets/fonts/Fasthand/Fasthand-Regular.ttf
 
     - family: Poppins
       fonts:

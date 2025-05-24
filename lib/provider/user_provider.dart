@@ -8,7 +8,7 @@ class UserProvider with ChangeNotifier {
     User(
       id: 1,
       email: "johndoer@gmail.com",
-      profilePic: "assets/users/male 2.jpg",
+      profilePic: "assets/images/users/male 2.jpg",
       fullname: "JOHN DOER",
       countryCode: "CN",
       dialCode: "86",
@@ -47,9 +47,9 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  int findUserIdByEmail(String email) {
+  User? findUserByEmail(String email) {
     final user = userList.firstWhereOrNull((u) => u.email == email);
-    return user?.id ?? -1;
+    return user;
   }
 
   int login(int id, String password) {
