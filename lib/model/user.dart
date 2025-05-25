@@ -9,7 +9,7 @@ class User {
   String password;
   String? birthDate;
   String? gender;
-  int? rating = null;
+  int? rating;
   String language = "EN";
   double balance = 10000000;
   bool isMember = false;

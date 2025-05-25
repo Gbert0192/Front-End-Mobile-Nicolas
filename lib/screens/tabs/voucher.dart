@@ -12,7 +12,7 @@ class Voucher extends StatelessWidget {
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Text(
-          'Vouchers',
+          'Available Vouchers',
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: isSmall ? 25 : 30,

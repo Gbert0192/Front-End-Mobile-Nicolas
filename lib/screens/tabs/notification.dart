@@ -127,12 +127,18 @@ class NotifTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       child: Column(
         children: [
-          Divider(color: Colors.grey, thickness: 1, indent: 5, endIndent: 5),
-          SizedBox(height: 10),
+          Divider(
+            color: const Color.fromARGB(255, 214, 214, 214),
+            thickness: 1,
+            indent: 5,
+          ),
+          SizedBox(height: isSmall ? 5 : 10),
           Row(
             children: [
               SizedBox(width: 15),
@@ -140,7 +146,10 @@ class NotifTitle extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   dateTitle,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: isSmall ? 16 : 20,
+                  ),
                 ),
               ),
             ],
@@ -213,42 +222,41 @@ class NotifCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-      padding: const EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(
+        horizontal: isSmall ? 15 : 20,
+        vertical: isSmall ? 8 : 12,
+      ),
+      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white,
+        border: Border.all(color: const Color.fromARGB(255, 221, 221, 221)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withOpacity(0.25),
             blurRadius: 5,
-            offset: const Offset(0, 2),
+            offset: const Offset(4, 4),
           ),
         ],
       ),
-      child: Row(
-        children: [
-          Image.asset(notifIcon, width: 50, height: 50),
-          SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _cardTitle(typeText),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                _cardDescription(typeText),
-                style: TextStyle(color: Colors.grey, fontSize: 14),
-              ),
-            ],
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Image.asset(notifIcon, width: isSmall ? 35 : 50),
+        title: Text(
+          _cardTitle(typeText),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: isSmall ? 16 : 18,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+        ),
+        subtitle: Text(
+          _cardDescription(typeText),
+          style: TextStyle(color: Colors.grey, fontSize: 14),
+        ),
       ),
     );
   }

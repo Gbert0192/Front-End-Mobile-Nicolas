@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                           Text(
                             "Halo, ${user.fullname.split(" ")[0]}!",
                             style: TextStyle(
-                              fontSize: isSmall ? 28 : 40,
+                              fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F1E5B),
                               shadows: [
@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
                           Text(
                             "Welcome!",
                             style: TextStyle(
-                              fontSize: isSmall ? 22 : 30,
+                              fontSize: isSmall ? 22 : 24,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xFF1F1E5B),
                               shadows: [
@@ -187,7 +187,7 @@ class _HomeState extends State<Home> {
                               Container(
                                 width: isSmall ? 40 : 60,
                                 height: isSmall ? 40 : 60,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
@@ -223,18 +223,40 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: isSmall ? 24 : 30,
+                          Container(
+                            padding: EdgeInsets.all(isSmall ? 5 : 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.15),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: isSmall ? 24 : 30,
+                            ),
                           ),
                           Text(
                             "Top Up",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: isSmall ? 12 : 14,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -258,8 +280,8 @@ class _HomeState extends State<Home> {
                   child: Text(
                     "Recent Spots",
                     style: TextStyle(
-                      fontSize: isSmall ? 18 : 32,
-                      fontWeight: FontWeight.w700,
+                      fontSize: isSmall ? 24 : 30,
+                      fontWeight: FontWeight.w500,
                       color: const Color(0xFF1F1E5B),
                       shadows: [
                         Shadow(
@@ -306,7 +328,7 @@ class _HomeState extends State<Home> {
                           currentSpot.name,
                           style: TextStyle(
                             fontSize: isSmall ? 16 : 24,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
