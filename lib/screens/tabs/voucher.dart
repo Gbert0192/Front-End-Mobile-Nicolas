@@ -27,7 +27,15 @@ class VoucherCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 5,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+        side: BorderSide(
+          color: const Color.fromARGB(255, 217, 217, 217),
+          width: 2,
+        ),
+      ),
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -39,7 +47,10 @@ class VoucherCard extends StatelessWidget {
                 children: [
                   Text(
                     voucher.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                   Text(voucher.location),
                   if (voucher.benefit.isNotEmpty)
@@ -96,11 +107,11 @@ class VoucherCard extends StatelessWidget {
             ),
             const SizedBox(width: 10),
             ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(30),
               child: Image.asset(
                 voucher.image,
-                width: 80,
-                height: 80,
+                width: 120,
+                height: 120,
                 fit: BoxFit.cover,
               ),
             ),
@@ -123,7 +134,7 @@ class VoucherScreen extends StatelessWidget {
         benefit: 'Free',
         maxUse: 'Max Uses 6',
         validUntil: DateTime(2025, 12, 25),
-        image: 'assets/images/building/Delipark.jpg',
+        image: 'assets/images/building/Sun Plaza.png',
       ),
       Voucher(
         title: 'Free Parking Voucher',
@@ -131,15 +142,15 @@ class VoucherScreen extends StatelessWidget {
         benefit: 'Disc 50%',
         maxUse: 'Unlimited',
         validUntil: DateTime(2025, 12, 28),
-        image: 'assets/images/building/Thambrin Plaza.jpg',
+        image: 'assets/images/building/Delipark.png',
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Thamrin Plaza',
+        location: 'Valid at Plaza Medan Fair',
         benefit: 'Disc Rp 7,000.00',
         maxUse: 'Max Uses 3',
         validUntil: DateTime(2025, 12, 23),
-        image: 'assets/images/building/Thambrin Plaza.jpg',
+        image: 'assets/images/building/Plaza Medan Fair.png',
       ),
       Voucher(
         title: 'Free Parking Voucher',
@@ -147,40 +158,22 @@ class VoucherScreen extends StatelessWidget {
         benefit: 'Disc Rp 5,000.00',
         maxUse: 'Max Uses 10',
         validUntil: DateTime(2026, 1, 7),
-        image: 'assets/images/building/Centre Point.jpeg',
+        image: 'assets/images/building/Centre Point.png',
       ),
       Voucher(
         title: 'Discount 20% Voucher',
-        location: 'Valid at Thamrin Plaza',
+        location: 'Valid at Lippo Plaza',
         benefit: 'Disc Rp 5,000.00',
         maxUse: 'Max Uses 10',
         validUntil: null,
-        image: 'assets/images/building/Thambrin Plaza.jpg',
+        image: 'assets/images/building/Lippo Plaza.png',
       ),
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF9C4),
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Vouchers',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            const Text(
-              'Available Vouchers',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
             Expanded(
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),

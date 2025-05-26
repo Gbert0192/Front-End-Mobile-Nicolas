@@ -88,7 +88,7 @@ class SplashScreen extends StatelessWidget {
                       duration: 700.ms,
                       curve: Curves.easeOutBack,
                     )
-                    .fadeIn(duration: 500.ms),
+                    .fadeIn(duration: 1000.ms),
 
                 Text(
                       'Parking Made Easier',
@@ -114,7 +114,7 @@ class SplashScreen extends StatelessWidget {
                       curve: Curves.easeOut,
                     )
                     .fadeIn(duration: 600.ms)
-                    .shimmer(duration: 2000.ms, delay: 1000.ms),
+                    .shimmer(duration: 3000.ms, delay: 1000.ms),
               ],
             ),
           ),

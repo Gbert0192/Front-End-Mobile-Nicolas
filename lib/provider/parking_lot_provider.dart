@@ -993,7 +993,7 @@ class ParkingLotProvider with ChangeNotifier {
   }
 
   SpotStatus _randomSpotStatus() {
-    return _random.nextBool() ? SpotStatus.free : SpotStatus.occupied;
+    return _random.nextDouble() < 0.8 ? SpotStatus.free : SpotStatus.occupied;
   }
 
   int _countFreeSpots(ParkingLot lot) {
