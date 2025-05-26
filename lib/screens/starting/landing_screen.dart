@@ -53,23 +53,25 @@ class LandingScreen extends StatelessWidget {
                     'THIS IS PARK-ID',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: isSmall ? 32 : 40,
+                      fontSize: isSmall ? 36 : 48,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                    'The first and the best parking app in Indonesia',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: isSmall ? 20 : 24,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.w300,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: isSmall ? 10 : 0),
+                    child: Text(
+                      'The first and the best parking app in Indonesia',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: isSmall ? 20 : 30,
+                        color: Colors.grey,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Image.asset(
-                    'assets/starting/lot.png',
+                    'assets/images/starting/lot.png',
                     height: isSmall ? 200 : 280,
                     fit: BoxFit.contain,
                   ),

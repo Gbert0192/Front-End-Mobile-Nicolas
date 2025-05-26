@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/user_data.dart';
@@ -21,6 +22,12 @@ class _SignUpState extends State<SignUp> {
     fields: ["email"],
     validators: {'email': (value) => validateEmail(value: value)},
   );
+
+  @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +81,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
                 Image.asset(
-                  'assets/starting/enter_park.png',
+                  'assets/images/starting/enter_park.png',
                   height: isSmall ? 240 : 360,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
@@ -112,10 +119,10 @@ class _SignUpState extends State<SignUp> {
                     if (isValid) {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        int userId = userProvider.findUser(
+                        User? user = userProvider.findUserByEmail(
                           form.control("email").text,
                         );
-                        if (userId != -1) {
+                        if (user != null) {
                           showFlexibleSnackbar(
                             context,
                             "Email already used!",
@@ -157,9 +164,12 @@ class _SignUpState extends State<SignUp> {
 
                 SizedBox(height: isSmall ? 10 : 20),
 
-                const Text(
+                Text(
                   'Already Sign Up?',
-                  style: TextStyle(color: Color(0xFF10297F)),
+                  style: TextStyle(
+                    color: Color(0xFF10297F),
+                    fontSize: isSmall ? 16 : 20,
+                  ),
                 ),
 
                 ResponsiveButton(

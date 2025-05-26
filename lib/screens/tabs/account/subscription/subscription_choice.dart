@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class SubscriptionChoice extends StatefulWidget {
   const SubscriptionChoice(this.onChanged, {super.key});
@@ -20,7 +20,10 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
     return Center(
       child: Column(
         children: [
-          Image.asset('assets/others/member.png', width: isSmall ? 220 : 340),
+          Image.asset(
+            'assets/images/others/member.png',
+            width: isSmall ? 220 : 340,
+          ),
           SizedBox(height: isSmall ? 20 : 40),
           //Radio Button 1
           Container(

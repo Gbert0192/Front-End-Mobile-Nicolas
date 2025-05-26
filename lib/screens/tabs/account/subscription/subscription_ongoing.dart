@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 
 class SubscriptionOngoing extends StatelessWidget {
@@ -9,7 +10,7 @@ class SubscriptionOngoing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    final user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     final dateFormat = DateFormat('dd MMMM yyyy');
@@ -21,7 +22,7 @@ class SubscriptionOngoing extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Image.asset(
-              'assets/popup/subscription.png',
+              'assets/images/popup/subscription.png',
               width: isSmall ? 180 : 260,
             ),
             const SizedBox(height: 24),
@@ -54,7 +55,7 @@ class SubscriptionOngoing extends StatelessWidget {
                   border: Border.all(color: const Color(0xFF1F1E5B), width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withAlpha(13),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     ),

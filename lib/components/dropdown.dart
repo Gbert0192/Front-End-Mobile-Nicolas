@@ -110,7 +110,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                       ? null
                       : [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
+                          color: Colors.black.withAlpha(64),
                           blurRadius: 6,
                           offset: const Offset(4, 4),
                         ),
@@ -169,7 +169,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
               widget.errorText!,
               style: TextStyle(
                 color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
+                fontSize: widget.isSmall ? 12 : 15,
               ),
             ),
           ),

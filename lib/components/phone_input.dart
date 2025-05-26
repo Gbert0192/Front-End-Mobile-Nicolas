@@ -100,7 +100,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                     ? null
                     : [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.25),
+                        color: Colors.black.withAlpha(64),
                         blurRadius: 6,
                         offset: const Offset(4, 4),
                       ),
@@ -183,7 +183,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
               widget.errorText!,
               style: TextStyle(
                 color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
+                fontSize: widget.isSmall ? 12 : 15,
               ),
             ),
           ),

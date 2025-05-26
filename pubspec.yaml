@@ -35,6 +35,7 @@ dependencies:
   intl_phone_field: ^3.2.0
   pin_code_fields: ^8.0.0
   intl: ^0.17.0
+  lottie: ^3.3.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -80,16 +81,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
-    - assets/building/
-    - assets/empty/
-    - assets/icons/
-    - assets/medsos/
-    - assets/others/
-    - assets/popup/
-    - assets/starting/
-    - assets/topup/
-    - assets/users/
+    - assets/images/
+    - assets/images/building/
+    - assets/images/empty/
+    - assets/images/icons/
+    - assets/images/medsos/
+    - assets/images/others/
+    - assets/images/popup/
+    - assets/images/starting/
+    - assets/images/topup/
+    - assets/images/users/
 
     # An image asset can refer to one or more resolution-specific "variants", see
     # https://flutter.dev/to/resolution-aware-images
@@ -102,12 +103,44 @@ flutter:
     # "family" key with the font family name, and a "fonts" key with a
     # list giving the asset and other descriptors for the font. For
     # example:
-  # fonts:
-  #   - family: Poppins
-  #     fonts:
-  #       - asset: assets/fonts/Poppins-Bold.ttf
-  #       - asset: assets/fonts/Poppins-Regular.ttf
-  #         weight: 700
+  fonts:
+    - family: Kalam
+      fonts:
+        - asset: assets/fonts/Kalam/Kalam-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Kalam/Kalam-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Kalam/Kalam-Bold.ttf
+          weight: 700
+
+    - family: Koulen
+      fonts:
+        - asset: assets/fonts/Koulen/Koulen-Regular.ttf
+
+    - family: Fasthand
+      fonts:
+        - asset: assets/fonts/Fasthand/Fasthand-Regular.ttf
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Poppins/Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Poppins/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins/Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Poppins/Poppins-Black.ttf
+          weight: 900
 
   # - family: Schyler
   #   fonts:

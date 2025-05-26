@@ -67,13 +67,13 @@ class _RateDialogState extends State<RateDialog> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: isSmall ? 10 : 20),
                       Text(
                         "If you enjoy using this app, please take a moment to rate it. "
                         "Thank you for your support!",
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: isSmall ? 14 : 16,
+                          fontSize: isSmall ? 14 : 18,
                           color: Colors.grey,
                         ),
                       ),
@@ -89,7 +89,7 @@ class _RateDialogState extends State<RateDialog> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: isSmall ? 10 : 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(5, (index) {
@@ -103,7 +103,7 @@ class _RateDialogState extends State<RateDialog> {
                               padding: EdgeInsets.symmetric(horizontal: 4),
                               child: Icon(
                                 Icons.star,
-                                size: isSmall ? 30 : 36,
+                                size: isSmall ? 30 : 40,
                                 color:
                                     index < selectedRating
                                         ? Colors.amber
@@ -118,7 +118,7 @@ class _RateDialogState extends State<RateDialog> {
                       Text(
                         "Tap a star to rate!",
                         style: TextStyle(
-                          fontSize: isSmall ? 14 : 16,
+                          fontSize: isSmall ? 14 : 18,
                           color: Colors.grey,
                         ),
                       ),
@@ -134,12 +134,12 @@ class _RateDialogState extends State<RateDialog> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      SizedBox(height: isSmall ? 10 : 20),
                       Text(
                         "Your feedback helps us evaluate our app’s quality and improve your experience.",
                         textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: isSmall ? 14 : 16,
+                          fontSize: isSmall ? 14 : 18,
                           color: Colors.grey,
                         ),
                       ),
@@ -163,10 +163,19 @@ class _RateDialogState extends State<RateDialog> {
                         : currentPage == 1
                         ? "Dismiss"
                         : "Done",
-                    style: TextStyle(fontSize: currentPage != 0 ? 16 : null),
+                    style: TextStyle(
+                      fontSize:
+                          isSmall
+                              ? currentPage != 0
+                                  ? 16
+                                  : null
+                              : currentPage != 0
+                              ? 22
+                              : 18,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                (currentPage != 2) ? SizedBox(width: 8) : SizedBox.shrink(),
                 (currentPage != 2)
                     ? TextButton(
                       onPressed:
@@ -201,13 +210,20 @@ class _RateDialogState extends State<RateDialog> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.white,
+                                  color: Color.fromARGB(255, 196, 196, 196),
                                 ),
                               )
                               : Text(
                                 currentPage == 0 ? "Rate Now" : "Submit",
                                 style: TextStyle(
-                                  fontSize: currentPage != 0 ? 16 : null,
+                                  fontSize:
+                                      isSmall
+                                          ? currentPage != 0
+                                              ? 16
+                                              : null
+                                          : currentPage != 0
+                                          ? 22
+                                          : 18,
                                 ),
                               ),
                     )

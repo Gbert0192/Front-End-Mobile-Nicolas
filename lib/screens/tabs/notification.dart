@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/notif/notif_title.dart';
-import 'package:tugas_front_end_nicolas/components/notif/notification.dart';
 
 class Notification_ extends StatelessWidget {
   const Notification_({super.key});
@@ -32,12 +30,12 @@ class Notification_ extends StatelessWidget {
                   //Today
                   NotifTitle(dateTitle: 'Today'),
                   NotifCard(
-                    notifIcon: 'assets/icons/booking.png',
+                    notifIcon: 'assets/images/icons/booking.png',
                     mall: 'Sun Plaza',
                     typeText: NotifTypes.bookSuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/cancel.png',
+                    notifIcon: 'assets/images/icons/cancel.png',
                     mall: 'Centre Point Mall',
                     typeText: NotifTypes.bookCancel,
                   ),
@@ -45,17 +43,17 @@ class Notification_ extends StatelessWidget {
                   //Yesterday
                   NotifTitle(dateTitle: 'Yesterday'),
                   NotifCard(
-                    notifIcon: 'assets/icons/payment.png',
+                    notifIcon: 'assets/images/icons/payment.png',
                     mall: 'Thamrin Plaza',
                     typeText: NotifTypes.paySuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/exit.png',
+                    notifIcon: 'assets/images/icons/exit.png',
                     mall: 'Thamrin Plaza',
                     typeText: NotifTypes.bookExit,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/locked.png',
+                    notifIcon: 'assets/images/icons/locked.png',
                     mall: '',
                     typeText: NotifTypes.verif2Step,
                   ),
@@ -63,12 +61,12 @@ class Notification_ extends StatelessWidget {
                   //December 6, 2024
                   NotifTitle(dateTitle: 'December 6, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/payment.png',
+                    notifIcon: 'assets/images/icons/payment.png',
                     mall: 'Sun Plaza',
                     typeText: NotifTypes.paySuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/exit.png',
+                    notifIcon: 'assets/images/icons/exit.png',
                     mall: 'Sun Plaza',
                     typeText: NotifTypes.bookExit,
                   ),
@@ -76,17 +74,17 @@ class Notification_ extends StatelessWidget {
                   //November 28, 2024
                   NotifTitle(dateTitle: 'November 28, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/payment.png',
+                    notifIcon: 'assets/images/icons/payment.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.paySuccess,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/exit.png',
+                    notifIcon: 'assets/images/icons/exit.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.bookExit,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/booking.png',
+                    notifIcon: 'assets/images/icons/booking.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.bookSuccess,
                   ),
@@ -94,12 +92,12 @@ class Notification_ extends StatelessWidget {
                   //November 21, 2024
                   NotifTitle(dateTitle: 'November 21, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/expired.png',
+                    notifIcon: 'assets/images/icons/expired.png',
                     mall: '',
                     typeText: NotifTypes.bookExp,
                   ),
                   NotifCard(
-                    notifIcon: 'assets/icons/booking.png',
+                    notifIcon: 'assets/images/icons/booking.png',
                     mall: 'Medan Mall',
                     typeText: NotifTypes.bookSuccess,
                   ),
@@ -107,7 +105,7 @@ class Notification_ extends StatelessWidget {
                   //November 18, 2024
                   NotifTitle(dateTitle: 'November 18, 2024'),
                   NotifCard(
-                    notifIcon: 'assets/icons/verification.png',
+                    notifIcon: 'assets/images/icons/verification.png',
                     mall: '',
                     typeText: NotifTypes.verif,
                   ),
@@ -115,6 +113,149 @@ class Notification_ extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+//ini gabung aja soalnya cuma dipake di satu page ini
+class NotifTitle extends StatelessWidget {
+  final String dateTitle;
+
+  const NotifTitle({super.key, required this.dateTitle});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 5),
+      child: Column(
+        children: [
+          Divider(
+            color: const Color.fromARGB(255, 214, 214, 214),
+            thickness: 1,
+            indent: 5,
+          ),
+          SizedBox(height: isSmall ? 5 : 10),
+          Row(
+            children: [
+              SizedBox(width: 15),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  dateTitle,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: isSmall ? 16 : 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+enum NotifTypes {
+  bookSuccess,
+  bookCancel,
+  bookExp,
+  bookExit,
+  verif,
+  verif2Step,
+  paySuccess,
+}
+
+class NotifCard extends StatelessWidget {
+  final String notifIcon;
+  final NotifTypes typeText;
+  final String mall;
+
+  const NotifCard({
+    super.key,
+    required this.notifIcon,
+    this.typeText = NotifTypes.bookSuccess,
+    required this.mall,
+  });
+
+  String _cardTitle(NotifTypes type) {
+    switch (type) {
+      case NotifTypes.bookSuccess:
+        return 'Booking Successful!';
+      case NotifTypes.bookCancel:
+        return 'Parking Booking Canceled';
+      case NotifTypes.bookExit:
+        return 'Exit Parking Lot';
+      case NotifTypes.bookExp:
+        return 'Booking Has Been Expired!';
+      case NotifTypes.paySuccess:
+        return 'Payment Successful!';
+      case NotifTypes.verif:
+        return 'Verification Successful!';
+      case NotifTypes.verif2Step:
+        return '2 Step Verification Successful!';
+    }
+  }
+
+  String _cardDescription(NotifTypes type) {
+    switch (type) {
+      case NotifTypes.bookSuccess:
+        return 'Parking booking at ${mall} was successfully booked!';
+      case NotifTypes.bookCancel:
+        return 'You have canceled parking at ${mall}';
+      case NotifTypes.bookExit:
+        return 'You have exit parking lot at ${mall}';
+      case NotifTypes.bookExp:
+        return 'You missed your booking, no-show fee was charged.';
+      case NotifTypes.paySuccess:
+        return 'Parking booking at ${mall} was successfully paid';
+      case NotifTypes.verif:
+        return 'Account verification complete!';
+      case NotifTypes.verif2Step:
+        return 'Google Authenticator set successful!';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: isSmall ? 15 : 20,
+        vertical: isSmall ? 8 : 12,
+      ),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.white,
+        border: Border.all(color: const Color.fromARGB(255, 221, 221, 221)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(64),
+            blurRadius: 5,
+            offset: const Offset(4, 4),
+          ),
+        ],
+      ),
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Image.asset(notifIcon, width: isSmall ? 35 : 50),
+        title: Text(
+          _cardTitle(typeText),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: isSmall ? 16 : 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        subtitle: Text(
+          _cardDescription(typeText),
+          style: TextStyle(color: Colors.grey, fontSize: 14),
         ),
       ),
     );

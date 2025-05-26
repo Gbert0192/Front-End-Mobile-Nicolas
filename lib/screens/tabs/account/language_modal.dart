@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class LanguageModal extends StatefulWidget {
   const LanguageModal(this.value, {super.key});
@@ -21,7 +21,9 @@ class _LanguageModalState extends State<LanguageModal> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -32,8 +34,8 @@ class _LanguageModalState extends State<LanguageModal> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-            width: 40,
-            height: 5,
+            width: isSmall ? 40 : 50,
+            height: isSmall ? 5 : 7,
             margin: const EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 223, 223, 223),
@@ -43,16 +45,19 @@ class _LanguageModalState extends State<LanguageModal> {
 
           Text(
             'Switch Language',
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: isSmall ? 20 : 28,
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
-          SizedBox(height: 5),
+          SizedBox(height: isSmall ? 5 : 10),
           Divider(
-            indent: 10,
-            thickness: 1.5,
+            indent: isSmall ? 10 : 12,
+            thickness: isSmall ? 1.5 : 2.2,
             color: const Color.fromARGB(255, 223, 223, 223),
           ),
-          SizedBox(height: 15),
+          SizedBox(height: isSmall ? 15 : 22),
 
           Container(
             padding: EdgeInsets.all(12),
@@ -61,7 +66,7 @@ class _LanguageModalState extends State<LanguageModal> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
+                  color: Colors.black.withAlpha(64),
                   blurRadius: 6,
                   offset: const Offset(2, 2),
                 ),
@@ -87,7 +92,7 @@ class _LanguageModalState extends State<LanguageModal> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.black.withAlpha(64),
                               blurRadius: 6,
                               offset: const Offset(2, 2),
                             ),
@@ -96,15 +101,15 @@ class _LanguageModalState extends State<LanguageModal> {
                         child: Row(
                           children: [
                             Image.asset(
-                              'assets/others/${lang.value.toLowerCase()}.png',
-                              width: 24,
+                              'assets/images/others/${lang.value.toLowerCase()}.png',
+                              width: isSmall ? 24 : 36,
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 "${lang.label} (${lang.value})",
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: isSmall ? 14 : 18,
                                   fontWeight:
                                       isSelected
                                           ? FontWeight.bold
@@ -113,10 +118,10 @@ class _LanguageModalState extends State<LanguageModal> {
                               ),
                             ),
                             if (isSelected)
-                              const Icon(
+                              Icon(
                                 Icons.check_circle,
                                 color: Colors.lightGreenAccent,
-                                size: 20,
+                                size: isSmall ? 20 : 28,
                               ),
                           ],
                         ),

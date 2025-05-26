@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:tugas_front_end_nicolas/utils/user.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 
 // ParkingSpot model
 class ParkingSpot {
@@ -33,17 +33,17 @@ class _HomeState extends State<Home> {
   final List<ParkingSpot> spots = [
     ParkingSpot(
       name: 'Sun Plaza',
-      imageUrl: 'assets/building/Sun Plaza.jpg',
+      imageUrl: 'assets/images/building/Sun Plaza.jpg',
       price: 3000,
     ),
     ParkingSpot(
       name: 'Centre Point',
-      imageUrl: 'assets/building/Centre Point.jpeg',
+      imageUrl: 'assets/images/building/Centre Point.jpeg',
       price: 2500,
     ),
     ParkingSpot(
       name: 'Aryaduta',
-      imageUrl: 'assets/building/Aryaduta.jpg',
+      imageUrl: 'assets/images/building/Aryaduta.jpg',
       price: 4000,
     ),
   ];
@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.getCurrentUser();
+    User user = userProvider.currentUser!;
 
     final currencyFormat = NumberFormat.currency(
       locale: 'id_ID',
@@ -120,17 +120,31 @@ class _HomeState extends State<Home> {
                           Text(
                             "Halo, ${user.fullname.split(" ")[0]}!",
                             style: TextStyle(
-                              fontSize: isSmall ? 28 : 40,
+                              fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F1E5B),
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(4, 4),
+                                  blurRadius: 6.0,
+                                  color: Color.fromRGBO(0, 0, 0, 0.247),
+                                ),
+                              ],
                             ),
                           ),
                           Text(
                             "Welcome!",
                             style: TextStyle(
-                              fontSize: isSmall ? 22 : 30,
+                              fontSize: isSmall ? 22 : 24,
                               fontWeight: FontWeight.w600,
                               color: const Color(0xFF1F1E5B),
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(4, 4),
+                                  blurRadius: 6.0,
+                                  color: Color.fromRGBO(0, 0, 0, 0.247),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -173,13 +187,13 @@ class _HomeState extends State<Home> {
                               Container(
                                 width: isSmall ? 40 : 60,
                                 height: isSmall ? 40 : 60,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   color: Colors.white,
                                   shape: BoxShape.circle,
                                 ),
                               ),
                               Image.asset(
-                                'assets/icons/wallet.png',
+                                'assets/images/icons/wallet.png',
                                 width: isSmall ? 20 : 30,
                               ),
                             ],
@@ -209,18 +223,40 @@ class _HomeState extends State<Home> {
                         ],
                       ),
                       Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
-                            Icons.add,
-                            color: Colors.white,
-                            size: isSmall ? 24 : 30,
+                          Container(
+                            padding: EdgeInsets.all(isSmall ? 5 : 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withAlpha(38),
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withAlpha(51),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: isSmall ? 24 : 30,
+                            ),
                           ),
                           Text(
                             "Top Up",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: isSmall ? 12 : 14,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black.withAlpha(77),
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 1),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -244,8 +280,8 @@ class _HomeState extends State<Home> {
                   child: Text(
                     "Recent Spots",
                     style: TextStyle(
-                      fontSize: isSmall ? 18 : 32,
-                      fontWeight: FontWeight.w700,
+                      fontSize: isSmall ? 24 : 30,
+                      fontWeight: FontWeight.w500,
                       color: const Color(0xFF1F1E5B),
                       shadows: [
                         Shadow(
@@ -292,7 +328,7 @@ class _HomeState extends State<Home> {
                           currentSpot.name,
                           style: TextStyle(
                             fontSize: isSmall ? 16 : 24,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         Text(
