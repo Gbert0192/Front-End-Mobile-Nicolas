@@ -4,7 +4,6 @@ import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/notification.dart';
 
 void main() {
   runApp(
