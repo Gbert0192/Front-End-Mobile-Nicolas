@@ -123,10 +123,12 @@ class VoucherCard extends StatelessWidget {
 }
 
 class VoucherScreen extends StatelessWidget {
-  const VoucherScreen({super.key});
+  VoucherScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final vouchers = [
       Voucher(
         title: 'Free Parking Voucher',
@@ -172,15 +174,28 @@ class VoucherScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: vouchers.length,
-                itemBuilder: (context, index) {
-                  return VoucherCard(voucher: vouchers[index]);
-                },
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: Text(
+                'Available Voucher',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: isSmall ? 25 : 30,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children:
+                      vouchers
+                          .map((voucher) => VoucherCard(voucher: voucher))
+                          .toList(),
+                ),
               ),
             ),
           ],
