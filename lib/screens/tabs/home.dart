@@ -33,17 +33,17 @@ class _HomeState extends State<Home> {
   final List<ParkingSpot> spots = [
     ParkingSpot(
       name: 'Sun Plaza',
-      imageUrl: 'assets/images/building/Sun Plaza.jpg',
+      imageUrl: 'assets/images/building/Sun Plaza.png',
       price: 3000,
     ),
     ParkingSpot(
       name: 'Centre Point',
-      imageUrl: 'assets/images/building/Centre Point.jpeg',
+      imageUrl: 'assets/images/building/Centre Point.png',
       price: 2500,
     ),
     ParkingSpot(
       name: 'Aryaduta',
-      imageUrl: 'assets/images/building/Aryaduta.jpg',
+      imageUrl: 'assets/images/building/Aryaduta.png',
       price: 4000,
     ),
   ];
