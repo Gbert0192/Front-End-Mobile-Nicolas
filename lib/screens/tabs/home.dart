@@ -228,11 +228,11 @@ class _HomeState extends State<Home> {
                           Container(
                             padding: EdgeInsets.all(isSmall ? 5 : 10),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.15),
+                              color: Colors.white.withAlpha(38),
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withAlpha(51),
                                   blurRadius: 6,
                                   offset: const Offset(0, 3),
                                 ),
@@ -252,7 +252,7 @@ class _HomeState extends State<Home> {
                               fontWeight: FontWeight.w600,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.black.withAlpha(77),
                                   blurRadius: 3,
                                   offset: const Offset(0, 1),
                                 ),

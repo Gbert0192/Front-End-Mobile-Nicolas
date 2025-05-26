@@ -93,9 +93,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                   height: isSmall ? 180 : 300,
                 ),
                 Padding(
-                  padding: EdgeInsetsGeometry.symmetric(
-                    horizontal: isSmall ? 20 : 0,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: isSmall ? 20 : 0),
                   child: Center(
                     child: Text(
                       'Your new password must not be the same from previous password',

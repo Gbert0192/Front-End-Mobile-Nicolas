@@ -59,9 +59,7 @@ class LandingScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Padding(
-                    padding: EdgeInsetsGeometry.symmetric(
-                      horizontal: isSmall ? 10 : 0,
-                    ),
+                    padding: EdgeInsets.symmetric(horizontal: isSmall ? 10 : 0),
                     child: Text(
                       'The first and the best parking app in Indonesia',
                       textAlign: TextAlign.center,
