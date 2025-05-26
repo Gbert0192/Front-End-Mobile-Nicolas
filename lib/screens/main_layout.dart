@@ -32,7 +32,7 @@ class _MainLayoutState extends State<MainLayout>
     TabModel(icon: Icons.home, screen: Home()),
     TabModel(icon: Icons.notifications, screen: Notification_()),
     TabModel(icon: Icons.local_parking, screen: ParkingHistory()),
-    TabModel(icon: Icons.discount, screen: Voucher()),
+    TabModel(icon: Icons.discount, screen: VoucherScreen()),
     TabModel(icon: Icons.person, screen: Profile()),
   ];
 
@@ -62,7 +62,7 @@ class _MainLayoutState extends State<MainLayout>
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withAlpha(51),
                 spreadRadius: 2,
                 blurRadius: 10,
                 offset: const Offset(0, 3),

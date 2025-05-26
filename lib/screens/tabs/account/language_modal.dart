@@ -66,7 +66,7 @@ class _LanguageModalState extends State<LanguageModal> {
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.25),
+                  color: Colors.black.withAlpha(64),
                   blurRadius: 6,
                   offset: const Offset(2, 2),
                 ),
@@ -92,7 +92,7 @@ class _LanguageModalState extends State<LanguageModal> {
                           borderRadius: BorderRadius.circular(10),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
+                              color: Colors.black.withAlpha(64),
                               blurRadius: 6,
                               offset: const Offset(2, 2),
                             ),

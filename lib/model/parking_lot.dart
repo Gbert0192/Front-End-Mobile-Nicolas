@@ -9,12 +9,11 @@ class Spot {
   Spot({required this.status, required this.code});
 }
 
-class Floor {
-  final int number;
-  final int totalSpots;
+class Area {
+  final String name;
   final List<Spot> spots;
 
-  Floor({required this.number, required this.totalSpots, required this.spots});
+  Area({required this.name, required this.spots});
 
   Spot? getFirstAvailableSpot() {
     return spots.firstWhereOrNull((spot) => spot.status == SpotStatus.free);
@@ -25,16 +24,39 @@ class Floor {
   }
 }
 
+class Floor {
+  final String number;
+  final List<Area> areas;
+
+  Floor({required this.number, required this.areas});
+
+  Spot? getFirstAvailableSpot() {
+    for (final area in areas) {
+      final spot = area.getFirstAvailableSpot();
+      if (spot != null) return spot;
+    }
+    return null;
+  }
+
+  Spot? findSpot(String code) {
+    for (final area in areas) {
+      final spot = area.findSpot(code);
+      if (spot != null) return spot;
+    }
+    return null;
+  }
+}
+
 class ParkingLot {
   final int id;
   final String name;
   final String address;
   final String openTime;
   final String closeTime;
-  final double starterPrice;
+  final double? starterPrice;
   final double hourlyPrice;
   final String image;
-  final int spotCount;
+  int spotCount;
   final int floor;
   final List<Floor> spots;
 
@@ -44,12 +66,12 @@ class ParkingLot {
     required this.address,
     required this.openTime,
     required this.closeTime,
-    required this.starterPrice,
     required this.hourlyPrice,
     required this.image,
     required this.spotCount,
     required this.floor,
     required this.spots,
+    this.starterPrice,
   });
 
   String? occupyNearestSpot() {
@@ -59,6 +81,7 @@ class ParkingLot {
       final spot = floor.getFirstAvailableSpot();
       if (spot != null) {
         spot.status = SpotStatus.occupied;
+        spotCount -= 1;
         return spot.code;
       }
     }
@@ -70,6 +93,7 @@ class ParkingLot {
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
       spot.status = SpotStatus.occupied;
+      spotCount -= 1;
       return spot.code;
     }
     return null;
@@ -80,8 +104,13 @@ class ParkingLot {
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.occupied) {
       spot.status = SpotStatus.free;
+      spotCount += 1;
       return true;
     }
     return false;
+  }
+
+  double calculateAmount(int hour) {
+    return (starterPrice ?? hourlyPrice) + (hour - 1) * hourlyPrice;
   }
 }

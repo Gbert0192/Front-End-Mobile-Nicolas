@@ -55,7 +55,7 @@ class SubscriptionOngoing extends StatelessWidget {
                   border: Border.all(color: const Color(0xFF1F1E5B), width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withAlpha(13),
                       blurRadius: 12,
                       offset: const Offset(0, 6),
                     ),

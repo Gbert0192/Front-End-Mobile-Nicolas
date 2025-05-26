@@ -10,58 +10,58 @@ class FAQ extends StatelessWidget {
 
     final List<FAQItem> faqList = [
       FAQItem(
-        title: '🚗 About Us',
+        title: 'ℹ️ About Us',
         content: [
-          'Park-ID is a smart parking app that lets you book a spot in advance or park right away. '
-              'Pay only for the time you use — simple, fast, and reliable.',
+          'Park-ID is a smart parking app where you can book in advance or park instantly. '
+              'Pay only for what you use — **simple**, **fast**, and **reliable**!',
         ],
       ),
       FAQItem(
         title: '🅿️ Parking & Booking',
         content: [
-          '• You can book a parking spot in advance or park as a walk-in without a reservation.',
-          '• Please check real-time slot availability in the parking area before your visit.',
-          '• Parking fees apply from the actual time of entry, not the time of booking.',
-          '• You may enter the parking area up to 30 minutes before your scheduled booking time, but early availability is not guaranteed.',
-          '• If you enter the parking area early, your booking will be automatically marked as claimed.',
-          '• Even if you leave before your scheduled check-in time, the booking will be considered used and cannot be refunded or reused.',
-          '• To avoid unintentional claiming of your booking, we recommend entering only when you are ready to begin your parking session.',
+          '➤ Book in advance or walk in — no reservation needed.',
+          '➤ Always check **real-time availability** before arriving.',
+          '➤ Parking fees start from your **entry time**, not booking time.',
+          '➤ You can enter **up to 30 minutes early**, but availability is not guaranteed.',
+          '➤ Entering early will **automatically claim** your booking.',
+          '➤ Leaving before check-in time still counts as a **used** booking.',
+          '➤ For best results, enter only when you’re **ready to park**.',
         ],
       ),
       FAQItem(
-        title: '❌ Cancel & Expired Booking',
+        title: '🚫 Cancel & Expired Booking',
         content: [
-          '• You can cancel up to 1 hour before your booking starts — no fee.',
-          '• If you don’t check in within 30 minutes after your booking starts, it will expire automatically.',
-          '• A no-show fee of 10,000 will be charged from your balance.',
-          '• If your balance isn’t enough, it may go negative and you\'ll need to top up before your next booking.',
+          '➤ Cancel **up to 1 hour** before your booking — no charge.',
+          '➤ Booking expires if not checked in **within 30 minutes**.',
+          '➤ A **no-show fee of Rp10,000** applies.',
+          '➤ If balance goes negative, you must **top up** to book again.',
         ],
       ),
       FAQItem(
-        title: '⭐ Become a Member',
+        title: '🎯 Become a Member',
         content: [
-          'Subscribe to a Monthly, Seasonal, or Annual Plan and enjoy these benefits:',
+          'Subscribe to a Monthly, Seasonal, or Annual Plan to unlock benefits:',
           '',
-          '✅ Current Member Benefits',
-          '• No service fee',
-          '• No-show fee waived',
-          '• Extended early arrival time (up to 45 minutes before booking)',
-          '• Extended late check-in window (up to 45 minutes late)',
-          '• Shorter cancellation deadline (cancel up to 15 minutes before)',
+          '🎉 **Current Member Perks**',
+          '✔️ No service fee.',
+          '✔️ No-show fee waived.',
+          '✔️ Early arrival up to **45 minutes**.',
+          '✔️ Late check-in up to **45 minutes**.',
+          '✔️ Cancel up to **15 minutes** before booking.',
           '',
-          '🔜 Coming Soon for Members',
-          '• Discounted hourly parking rates',
-          '• Exclusive promos and offers',
+          '🚀 **Coming Soon**',
+          '✔️ Discounted parking rates.',
+          '✔️ Exclusive promos & offers.',
           '',
-          '🎁 Being a member gives you more flexibility, savings, and fewer penalties.',
+          '💡 Being a member means more **flexibility**, more **savings**, and fewer **penalties**.',
         ],
       ),
       FAQItem(
-        title: '💳 Top Up Balance',
+        title: '💰 Top Up Balance',
         content: [
-          '• Top up via bank transfer, e-wallet, or credit card.',
-          '• Your balance is used for parking fees and no-show charges.',
-          '• If your balance goes negative, top up is required to book again.',
+          '➤ Top up via **bank transfer**, **e-wallet**, or **credit card**.',
+          '➤ Balance is used for **parking fees** and **no-show charges**.',
+          '➤ If balance is negative, you’ll need to **top up** before booking.',
         ],
       ),
     ];
@@ -74,7 +74,7 @@ class FAQ extends StatelessWidget {
             child: Image.asset(
               "assets/images/others/FAQ.png",
               fit: BoxFit.cover,
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withAlpha(26),
               colorBlendMode: BlendMode.dstATop,
             ),
           ),
@@ -115,7 +115,7 @@ class FAQ extends StatelessWidget {
               ),
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: isSmall ? 10 : 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -146,10 +146,7 @@ class FAQ extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: ExpansionTile(
-                              tilePadding: EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: isSmall ? 2 : 8,
-                              ),
+                              tilePadding: EdgeInsets.symmetric(horizontal: 16),
                               childrenPadding: const EdgeInsets.symmetric(
                                 horizontal: 4,
                                 vertical: 5,
@@ -181,17 +178,21 @@ class FAQ extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Divider(),
+                                      Divider(height: 0),
+                                      SizedBox(height: 10),
                                       ...item.content.map(
                                         (text) => Padding(
                                           padding: EdgeInsets.only(
                                             bottom: isSmall ? 4 : 8,
                                           ),
-                                          child: Text(
-                                            text,
+                                          child: Text.rich(
+                                            TextSpan(
+                                              children: _buildTextSpans(text),
+                                            ),
                                             style: TextStyle(
                                               fontSize: isSmall ? 14 : 16,
                                               height: 1.5,
+                                              color: Colors.black,
                                             ),
                                           ),
                                         ),
@@ -228,4 +229,29 @@ class FAQItem {
   final List<String> content;
 
   FAQItem({required this.title, required this.content});
+}
+
+List<TextSpan> _buildTextSpans(String text) {
+  final spans = <TextSpan>[];
+  final regex = RegExp(r'\*\*(.*?)\*\*');
+  int currentIndex = 0;
+
+  for (final match in regex.allMatches(text)) {
+    if (match.start > currentIndex) {
+      spans.add(TextSpan(text: text.substring(currentIndex, match.start)));
+    }
+    spans.add(
+      TextSpan(
+        text: match.group(1),
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
+    );
+    currentIndex = match.end;
+  }
+
+  if (currentIndex < text.length) {
+    spans.add(TextSpan(text: text.substring(currentIndex)));
+  }
+
+  return spans;
 }

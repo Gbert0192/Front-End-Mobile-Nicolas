@@ -100,7 +100,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                     ? null
                     : [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.25),
+                        color: Colors.black.withAlpha(64),
                         blurRadius: 6,
                         offset: const Offset(4, 4),
                       ),

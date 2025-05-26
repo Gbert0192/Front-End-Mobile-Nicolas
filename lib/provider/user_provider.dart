@@ -17,10 +17,7 @@ class UserProvider with ChangeNotifier {
     ),
   ];
 
-  int? currentUserId;
-
-  User? get currentUser =>
-      userList.firstWhereOrNull((u) => u.id == currentUserId);
+  User? currentUser;
 
   void registerUser({
     required String email,
@@ -31,7 +28,9 @@ class UserProvider with ChangeNotifier {
     required String password,
   }) {
     final String dial_code =
-        countries.firstWhere((item) => item.code == country_code).dialCode;
+        countries
+            .firstWhereOrNull((item) => item.code == country_code)!
+            .dialCode;
     final newUser = User(
       id: userList.length + 1,
       email: email,
@@ -43,7 +42,7 @@ class UserProvider with ChangeNotifier {
       password: password,
     );
     userList.add(newUser);
-    currentUserId = newUser.id;
+    currentUser = newUser;
     notifyListeners();
   }
 
@@ -55,7 +54,7 @@ class UserProvider with ChangeNotifier {
   int login(int id, String password) {
     final user = userList.firstWhereOrNull((u) => u.id == id);
     if (user != null && user.password == password) {
-      currentUserId = user.id;
+      currentUser = user;
       notifyListeners();
       return 1;
     }
@@ -63,7 +62,7 @@ class UserProvider with ChangeNotifier {
   }
 
   void logout() {
-    currentUserId = null;
+    currentUser = null;
     notifyListeners();
   }
 

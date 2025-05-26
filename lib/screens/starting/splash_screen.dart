@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
             gradient: RadialGradient(
               center: Alignment.center,
               radius: 1.0,
-              colors: [Colors.white.withOpacity(0.1), Colors.transparent],
+              colors: [Colors.white.withAlpha(26), Colors.transparent],
             ),
           ),
           child: Center(
@@ -71,12 +71,12 @@ class SplashScreen extends StatelessWidget {
                           Shadow(
                             offset: const Offset(0, 3),
                             blurRadius: 8.0,
-                            color: Colors.black.withOpacity(0.6),
+                            color: Colors.black.withAlpha(153),
                           ),
                           Shadow(
                             offset: const Offset(0, 1),
                             blurRadius: 2.0,
-                            color: Colors.black.withOpacity(0.8),
+                            color: Colors.black.withAlpha(204),
                           ),
                         ],
                       ),
@@ -93,7 +93,7 @@ class SplashScreen extends StatelessWidget {
                 Text(
                       'Parking Made Easier',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.95),
+                        color: Colors.white.withAlpha(242),
                         fontSize: isSmall ? 35 : 45,
                         fontFamily: 'Fasthand',
                         letterSpacing: 0.5,
@@ -101,7 +101,7 @@ class SplashScreen extends StatelessWidget {
                           Shadow(
                             offset: const Offset(0, 2),
                             blurRadius: 6.0,
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withAlpha(128),
                           ),
                         ],
                       ),

@@ -72,7 +72,7 @@ class _ProfileState extends State<Profile> {
               context: context,
               barrierLabel: "Dialog",
               barrierDismissible: false,
-              barrierColor: Colors.black.withOpacity(0.5),
+              barrierColor: Colors.black.withAlpha(128),
               transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (context, animation, secondaryAnimation) {
                 return const SizedBox();
@@ -207,7 +207,7 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w400,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withOpacity(0.25),
+                                  color: Colors.black.withAlpha(64),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -233,7 +233,7 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w400,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withOpacity(0.25),
+                                  color: Colors.black.withAlpha(64),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -259,7 +259,7 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w400,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withOpacity(0.25),
+                                  color: Colors.black.withAlpha(64),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -355,7 +355,7 @@ class SettingButtons extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.25),
+                color: Colors.black.withAlpha(64),
                 blurRadius: 6,
                 offset: const Offset(4, 4),
               ),

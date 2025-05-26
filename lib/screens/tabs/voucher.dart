@@ -1,23 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-class VoucherScreen extends StatelessWidget {
-  const VoucherScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Vouchers',
-      theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        fontFamily: 'Inter',
-      ),
-      home: const VoucherPage(),
-    );
-  }
-}
-
 class Voucher {
   final String title;
   final String location;
@@ -62,27 +45,39 @@ class VoucherCard extends StatelessWidget {
                   if (voucher.benefit.isNotEmpty)
                     Container(
                       margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFF1E1E61),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         voucher.benefit,
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   if (voucher.maxUse.isNotEmpty)
                     Container(
                       margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFF1E1E61),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
                         voucher.maxUse,
-                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   if (voucher.validUntil != null)
@@ -90,7 +85,10 @@ class VoucherCard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 4),
                       child: Text(
                         'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                     ),
                 ],
@@ -113,9 +111,8 @@ class VoucherCard extends StatelessWidget {
   }
 }
 
-
-class VoucherPage extends StatelessWidget {
-  const VoucherPage({super.key});
+class VoucherScreen extends StatelessWidget {
+  const VoucherScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +170,10 @@ class VoucherPage extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Vouchers',
-                  style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -193,21 +193,6 @@ class VoucherPage extends StatelessWidget {
           ],
         ),
       ),
-      /*bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF1E1E61),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white60,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.local_parking), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.percent), label: ''),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: ''),
-        ],
-      ),*/
     );
   }
 }
-
-

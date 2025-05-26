@@ -19,7 +19,7 @@ void showAlertDialog({
     context: context,
     barrierLabel: "Dialog",
     barrierDismissible: true,
-    barrierColor: Colors.black.withOpacity(0.5),
+    barrierColor: Colors.black.withAlpha(128),
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
       return const SizedBox();
