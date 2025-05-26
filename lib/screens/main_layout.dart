@@ -36,6 +36,7 @@ class _MainLayoutState extends State<MainLayout>
     TabModel(icon: Icons.person, screen: Profile()),
   ];
 
+  @override
   void initState() {
     controller = TabController(length: tabs.length, vsync: this);
     controller.index = widget.tabValue;

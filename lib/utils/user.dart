@@ -8,7 +8,7 @@ class User {
   String password;
   String? birthDate;
   String? gender;
-  int? rating = null;
+  int? rating;
   String language = "EN";
   double balance = 10000000;
   bool isMember = false;
@@ -69,7 +69,7 @@ class User {
   }
 
   int joinMember({required MemberType type, required double nominal}) {
-    if (this.purchase(nominal) == -1) return -1;
+    if (purchase(nominal) == -1) return -1;
     memberSince = DateTime.now();
     switch (type) {
       case MemberType.monthly:

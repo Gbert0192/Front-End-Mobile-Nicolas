@@ -13,7 +13,7 @@ import 'package:tugas_front_end_nicolas/utils/user.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile(this.user);
+  const EditProfile(this.user, {super.key});
   final User user;
 
   @override

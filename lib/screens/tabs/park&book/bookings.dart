@@ -12,38 +12,38 @@ class Booking extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: <Widget>[
-            SliverAppBar(
-              leading: Padding(
-                padding: EdgeInsets.only(left: isSmall ? 12.0 : 15.0),
-                child: Material(
-                  color: Colors.white,
-                  shape: const CircleBorder(),
-                  elevation: 2,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.all(12),
-                      elevation: 1,
-                    ),
-                    child: const Icon(Icons.arrow_back, color: Colors.black),
-                  ),
-                ),
-              ),
-              elevation: 0,
-            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: isSmall ? 14.0 : 24.0,
+                  horizontal: isSmall ? 10.0 : 15.0,
+                  vertical: isSmall ? 10.0 : 15.0,
                 ),
                 child: Column(
                   children: [
                     Row(
                       children: [
+                        Material(
+                          color: Colors.white,
+                          shape: const CircleBorder(),
+                          elevation: 2,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: Colors.white,
+                              padding: const EdgeInsets.all(18),
+                              elevation: 1,
+                            ),
+                            child: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
                         Text(
                           'Booking',
                           style: TextStyle(

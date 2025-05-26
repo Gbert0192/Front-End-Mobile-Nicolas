@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/utils/user.dart';
 
 class SubscriptionChoice extends StatefulWidget {
-  const SubscriptionChoice(this.onChanged);
+  const SubscriptionChoice(this.onChanged, {super.key});
   final Function(MemberChoice) onChanged;
 
   @override
