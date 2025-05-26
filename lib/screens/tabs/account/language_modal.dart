@@ -4,7 +4,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 
 class LanguageModal extends StatefulWidget {
-  const LanguageModal(this.value);
+  const LanguageModal(this.value, {super.key});
   final String value;
 
   @override
@@ -128,7 +128,7 @@ class _LanguageModalState extends State<LanguageModal> {
                       ),
                     ),
                   );
-                }).toList(),
+                }),
               ],
             ),
           ),

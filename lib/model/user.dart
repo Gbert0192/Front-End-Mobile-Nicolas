@@ -71,7 +71,7 @@ class User {
   }
 
   int joinMember({required MemberType type, required double nominal}) {
-    if (this.purchase(nominal) == -1) return -1;
+    if (purchase(nominal) == -1) return -1;
     memberSince = DateTime.now();
     switch (type) {
       case MemberType.monthly:
