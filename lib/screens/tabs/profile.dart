@@ -117,16 +117,31 @@ class _ProfileState extends State<Profile> {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  Padding(
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withAlpha(51),
+                          blurRadius: 6,
+                          offset: const Offset(4, 4),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: const Color.fromARGB(255, 225, 225, 225),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: const Color.fromARGB(255, 235, 245, 255),
+                    ),
+                    margin: EdgeInsets.all(10),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
+                      horizontal: 8,
                       vertical: 12,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CircleAvatar(
-                          radius: isSmall ? 50 : 70,
+                          radius: isSmall ? 50 : 60,
                           backgroundColor: Colors.grey[300],
                           backgroundImage:
                               user.profilePic != null
@@ -165,7 +180,7 @@ class _ProfileState extends State<Profile> {
                                 '+${user.dialCode}${user.phone}',
                                 style: TextStyle(
                                   fontSize: isSmall ? 16 : 18,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ],
@@ -203,8 +218,8 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             "Account Settings",
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 25,
-                              fontWeight: FontWeight.w400,
+                              fontSize: isSmall ? 18 : 24,
+                              fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
                                   color: Colors.black.withAlpha(64),
@@ -229,8 +244,8 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             "Helps and Others",
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 25,
-                              fontWeight: FontWeight.w400,
+                              fontSize: isSmall ? 18 : 24,
+                              fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
                                   color: Colors.black.withAlpha(64),
@@ -255,8 +270,8 @@ class _ProfileState extends State<Profile> {
                           child: Text(
                             "Exit the Application",
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 25,
-                              fontWeight: FontWeight.w400,
+                              fontSize: isSmall ? 18 : 24,
+                              fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
                                   color: Colors.black.withAlpha(64),
@@ -298,6 +313,7 @@ class _ProfileState extends State<Profile> {
                           title: "Log Out",
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,
+                          borderColor: const Color.fromARGB(255, 253, 213, 209),
                           textColor: Colors.red,
                           bgColor: Color(0xFFFFDCDC),
                         ),
@@ -320,8 +336,9 @@ class SettingButtons extends StatelessWidget {
     this.icon,
     required this.title,
     this.onPressed,
-    this.tail = Icons.arrow_right_sharp,
-    this.bgColor = const Color(0xFFEDF4FF),
+    this.tail = Icons.arrow_forward_ios_rounded,
+    this.bgColor = Colors.white,
+    this.borderColor = const Color.fromARGB(255, 228, 228, 228),
     this.textColor = Colors.black,
     this.iconColor = Colors.black,
     this.tailColor = Colors.black,
@@ -332,6 +349,7 @@ class SettingButtons extends StatelessWidget {
   final IconData tail;
   final Color bgColor;
   final Color textColor;
+  final Color borderColor;
   final Color tailColor;
   final Color iconColor;
   final VoidCallback? onPressed;
@@ -348,14 +366,15 @@ class SettingButtons extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(
             horizontal: isSmall ? 12 : 16,
-            vertical: isSmall ? 10 : 12,
+            vertical: isSmall ? 8 : 12,
           ),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(12),
+            border: Border.all(width: 2, color: borderColor),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(64),
+                color: Colors.black.withAlpha(51),
                 blurRadius: 6,
                 offset: const Offset(4, 4),
               ),
