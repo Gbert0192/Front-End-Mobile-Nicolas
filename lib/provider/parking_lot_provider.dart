@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ParkingLotProvider with ChangeNotifier {
   final Random _random = Random();
 
   List<ParkingLot> lots = [];
+  List<UserSearchHistory> searches = [];
 
   ParkingLotProvider() {
     lots = [
@@ -334,7 +336,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 4,
         name: "Lippo Plaza",
@@ -430,7 +431,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 5,
         name: "Grand City Hall",
@@ -526,7 +526,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 6,
         name: "Sun Plaza",
@@ -595,7 +594,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 7,
         name: "Radisson",
@@ -691,7 +689,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 8,
         name: "Manhattan Time Square",
@@ -814,7 +811,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 9,
         name: "Plaza Medan Fair",
@@ -910,7 +906,6 @@ class ParkingLotProvider with ChangeNotifier {
           ),
         ],
       ),
-
       ParkingLot(
         id: 10,
         name: "Delipark",
@@ -1009,4 +1004,21 @@ class ParkingLotProvider with ChangeNotifier {
     }
     return count;
   }
+
+  UserSearchHistory? loadHistory(int user_id) {
+    return searches.firstWhereOrNull((item) => item.user_id == user_id);
+  }
+
+  UserSearchHistory? addHistory(int user_id, String key) {
+    final history = searches.firstWhereOrNull(
+      (item) => item.user_id == user_id,
+    );
+  }
+}
+
+class UserSearchHistory {
+  final int user_id;
+  final List<String> searchHistory;
+
+  UserSearchHistory(this.user_id, this.searchHistory);
 }

@@ -26,15 +26,14 @@ class VoucherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Card(
       elevation: 5,
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-        side: BorderSide(
-          color: const Color.fromARGB(255, 217, 217, 217),
-          width: 2,
-        ),
+        side: BorderSide(color: const Color.fromARGB(255, 217, 217, 217)),
       ),
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -47,12 +46,15 @@ class VoucherCard extends StatelessWidget {
                 children: [
                   Text(
                     voucher.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: isSmall ? 16 : 18,
                     ),
                   ),
-                  Text(voucher.location),
+                  Text(
+                    voucher.location,
+                    style: TextStyle(fontSize: isSmall ? 12 : 14),
+                  ),
                   if (voucher.benefit.isNotEmpty)
                     Container(
                       margin: const EdgeInsets.only(top: 4),
@@ -110,8 +112,8 @@ class VoucherCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               child: Image.asset(
                 voucher.image,
-                width: 120,
-                height: 120,
+                width: isSmall ? 100 : 120,
+                height: isSmall ? 100 : 120,
                 fit: BoxFit.cover,
               ),
             ),
@@ -167,7 +169,7 @@ class VoucherScreen extends StatelessWidget {
         location: 'Valid at Lippo Plaza',
         benefit: 'Disc Rp 5,000.00',
         maxUse: 'Max Uses 10',
-        validUntil: null,
+        validUntil: DateTime(2025, 10, 7),
         image: 'assets/images/building/Lippo Plaza.png',
       ),
     ];
