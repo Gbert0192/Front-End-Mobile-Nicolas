@@ -173,7 +173,16 @@ class _HomeState extends State<Home> {
                 Container(
                   padding: EdgeInsets.all(isSmall ? 12 : 20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1F1E5B),
+                    // color: const Color(0xFF1F1E5B),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color.fromARGB(255, 52, 49, 145),
+                        const Color.fromARGB(255, 6, 10, 70),
+                        const Color.fromARGB(255, 52, 49, 145),
+                      ],
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(

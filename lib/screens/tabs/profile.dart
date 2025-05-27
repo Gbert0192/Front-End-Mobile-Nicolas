@@ -124,8 +124,8 @@ class _ProfileState extends State<Profile> {
                         end: Alignment.bottomRight,
                         colors: [
                           const Color.fromARGB(255, 52, 49, 145),
-                          const Color.fromARGB(255, 100, 47, 131),
-                          const Color.fromARGB(255, 100, 47, 131),
+                          const Color.fromARGB(255, 6, 10, 70),
+                          const Color.fromARGB(255, 6, 10, 70),
                           const Color.fromARGB(255, 52, 49, 145),
                         ],
                       ),

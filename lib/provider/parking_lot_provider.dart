@@ -1009,7 +1009,7 @@ class ParkingLotProvider with ChangeNotifier {
     return searches.firstWhereOrNull((item) => item.user_id == user_id);
   }
 
-  UserSearchHistory? addHistory(int user_id, String key) {
+  List<ParkingLot>? searchLot(int user_id, String key) {
     final history = searches.firstWhereOrNull(
       (item) => item.user_id == user_id,
     );
