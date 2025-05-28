@@ -119,20 +119,27 @@ class TopUpDetailPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.copy, size: 20, color: Color(0xFF98A5FD)),
+                  Icon(
+                    Icons.copy,
+                    size: isSmall ? 20 : 30,
+                    color: Color(0xFF98A5FD),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "VIRTUAL ACCOUNT NO.",
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: isSmall ? 12 : 16,
+                            color: Colors.grey,
+                          ),
                         ),
                         Text(
                           vaNumber,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: isSmall ? 12 : 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -158,9 +165,12 @@ class TopUpDetailPage extends StatelessWidget {
                         "VA successfully copied to clipboard!",
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       "Copy",
-                      style: TextStyle(fontSize: 12, color: Color(0xFF98A5FD)),
+                      style: TextStyle(
+                        fontSize: isSmall ? 12 : 14,
+                        color: Color(0xFF98A5FD),
+                      ),
                     ),
                   ),
                 ],
@@ -169,7 +179,7 @@ class TopUpDetailPage extends StatelessWidget {
 
             // Instruction
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
@@ -178,64 +188,43 @@ class TopUpDetailPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withAlpha(64),
+                    blurRadius: 6,
+                    offset: const Offset(2, 4),
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "How to top up from $bankName:",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "How to top up from $bankName:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: isSmall ? 16 : 20,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        const Text(
+                          "ADMIN FEE Rp2.500 – MIN. TOP UP Rp10.000",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "ADMIN FEE Rp2.500 – MIN. TOP UP Rp10.000",
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                  const Divider(height: 24),
-                  ...steps.asMap().entries.map((entry) {
-                    final index = entry.key + 1;
-                    final step = entry.value;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFB1BCFF),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '$index',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              step,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                  const Divider(height: 24, color: Colors.black),
+                  SizedBox(height: 20),
+                  MethodStepper(steps),
+                  SizedBox(height: 50),
                 ],
               ),
             ),
@@ -255,6 +244,86 @@ class TopUpDetailPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MethodStepper extends StatelessWidget {
+  final List<String> steps;
+
+  const MethodStepper(this.steps, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    return Column(
+      children:
+          steps.asMap().entries.map((entry) {
+            final index = entry.key;
+            final step = entry.value;
+            final isLast = index == steps.length - 1;
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    if (index != 0)
+                      Container(
+                        width: 5,
+                        height: 8,
+                        color: const Color(0xFFD3D3F3),
+                      ),
+                    Container(
+                      width: 40,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF98A5FD),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Line below
+                    if (!isLast)
+                      Container(
+                        width: 5,
+                        height: 20,
+                        color: const Color(0xFFD3D3F3),
+                      ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: Text(
+                      step,
+                      style: TextStyle(
+                        fontSize: isSmall ? 14 : 18,
+                        shadows: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(64),
+                            blurRadius: 6,
+                            offset: const Offset(4, 4),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
     );
   }
 }

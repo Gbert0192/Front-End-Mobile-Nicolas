@@ -137,7 +137,7 @@ class _HomeState extends State<Home> {
                             "Welcome!",
                             style: TextStyle(
                               fontSize: isSmall ? 22 : 24,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F1E5B),
                               shadows: [
                                 Shadow(

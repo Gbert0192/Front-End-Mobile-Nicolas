@@ -143,7 +143,7 @@ class _ProfileState extends State<Profile> {
                       horizontal: isSmall ? 12 : 16,
                       vertical: isSmall ? 6 : 10,
                     ),
-                    padding: EdgeInsets.all(isSmall ? 14 : 20),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -159,7 +159,7 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           child: CircleAvatar(
-                            radius: isSmall ? 50 : 70,
+                            radius: isSmall ? 50 : 60,
                             backgroundColor: Colors.white,
                             backgroundImage:
                                 user.profilePic != null
@@ -169,7 +169,7 @@ class _ProfileState extends State<Profile> {
                                 user.profilePic == null
                                     ? Icon(
                                       Icons.person,
-                                      size: isSmall ? 50 : 70,
+                                      size: isSmall ? 50 : 60,
                                       color: Colors.grey[400],
                                     )
                                     : null,

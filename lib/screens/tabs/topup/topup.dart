@@ -168,13 +168,21 @@ class TopUpPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "Via Bank (Virtual Account)",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: isSmall ? 20 : 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.only(
+                left: 12,
+                right: 12,
+                top: 12,
+                bottom: isSmall ? 12 : 30,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -232,13 +240,21 @@ class TopUpPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               "Via Cash (Scan Barcode)",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: isSmall ? 20 : 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: EdgeInsets.only(
+                left: 12,
+                right: 12,
+                top: 12,
+                bottom: isSmall ? 12 : 30,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
@@ -261,7 +277,26 @@ class TopUpPage extends StatelessWidget {
                 mainAxisSpacing: 10,
                 children:
                     cashList.map((path) {
-                      return Image.asset(path, width: 50, height: 50);
+                      return Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 6,
+                            color: const Color.fromARGB(255, 228, 239, 255),
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        clipBehavior: Clip.hardEdge,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: Image.asset(
+                            path,
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
                     }).toList(),
               ),
             ),
