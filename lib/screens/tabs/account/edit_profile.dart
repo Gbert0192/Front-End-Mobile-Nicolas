@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/components/dropdown.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
@@ -258,7 +258,7 @@ class _EditProfileState extends State<EditProfile> {
                               }),
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
-                        ResponsiveDatePicker(
+                        ResponsiveTimePicker(
                           isSmall: isSmall,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',

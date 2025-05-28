@@ -4,7 +4,6 @@ import 'package:tugas_front_end_nicolas/screens/tabs/notification.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/parking&booking.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/voucher.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/wallet.dart';
 
 class TabModel {
   final IconData icon;

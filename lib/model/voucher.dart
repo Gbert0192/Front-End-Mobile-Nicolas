@@ -3,6 +3,7 @@ enum VoucherFlag { flat, percent, free }
 class Voucher {
   final int lot_id;
   final int user_id;
+  final int? minimumHour;
   final String voucherName;
   final DateTime validUntil;
   final double? nominal;
@@ -12,14 +13,19 @@ class Voucher {
   Voucher({
     required this.lot_id,
     required this.user_id,
+    this.minimumHour,
     required this.voucherName,
     required this.validUntil,
     required this.nominal,
     this.type = VoucherFlag.flat,
   });
 
-  double useVoucher(double total) {
+  double useVoucher(double total, int hours) {
     if (DateTime.now().isAfter(validUntil)) {
+      return 0;
+    }
+
+    if (minimumHour != null && hours < minimumHour!) {
       return 0;
     }
 

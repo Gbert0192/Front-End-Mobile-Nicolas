@@ -4,6 +4,7 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
 
 // ParkingSpot model
 class ParkingSpot {
@@ -173,7 +174,16 @@ class _HomeState extends State<Home> {
                 Container(
                   padding: EdgeInsets.all(isSmall ? 12 : 20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1F1E5B),
+                    // color: const Color(0xFF1F1E5B),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color.fromARGB(255, 52, 49, 145),
+                        const Color.fromARGB(255, 6, 10, 70),
+                        const Color.fromARGB(255, 52, 49, 145),
+                      ],
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -222,44 +232,53 @@ class _HomeState extends State<Home> {
                           ),
                         ],
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(isSmall ? 5 : 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(38),
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(51),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
+                      GestureDetector(
+                        onTap:
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TopUpPage(),
+                              ),
                             ),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: isSmall ? 24 : 30,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(isSmall ? 5 : 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(38),
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(51),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: isSmall ? 24 : 30,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Top Up",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: isSmall ? 12 : 14,
-                              fontWeight: FontWeight.w600,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black.withAlpha(77),
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
+                            Text(
+                              "Top Up",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isSmall ? 12 : 14,
+                                fontWeight: FontWeight.w600,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withAlpha(77),
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),

@@ -16,10 +16,8 @@ class Notification_ extends StatelessWidget {
               title: Text(
                 'Notifications',
                 style: TextStyle(
-                  fontSize: isSmall ? 30 : 40,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F1E5B),
-                  fontFamily: 'Poppins',
+                  fontSize: isSmall ? 25 : 30,
                 ),
               ),
               centerTitle: true,

@@ -62,7 +62,8 @@ class Booking {
       amount = lot.calculateAmount(hours!);
       tax = amount! * 0.11;
       service = isMember ? 0 : 6000;
-      total = voucher.useVoucher(amount! + tax! + service!);
+      this.voucher = voucher.useVoucher(amount! + tax! + service!, hours!);
+      total = total! - this.voucher!;
     }
   }
 
