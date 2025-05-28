@@ -1009,10 +1009,30 @@ class ParkingLotProvider with ChangeNotifier {
     return searches.firstWhereOrNull((item) => item.user_id == user_id);
   }
 
-  List<ParkingLot>? searchLot(int user_id, String key) {
+  UserSearchHistory? searchLot(int user_id, String key) {
     final history = searches.firstWhereOrNull(
       (item) => item.user_id == user_id,
     );
+
+    if (history == null) return null;
+
+    history.searchHistory.remove(key);
+
+    history.searchHistory.insert(0, key);
+
+    return history;
+  }
+
+  UserSearchHistory? deleteLot(int user_id, String key) {
+    final history = searches.firstWhereOrNull(
+      (item) => item.user_id == user_id,
+    );
+
+    if (history == null) return null;
+
+    history.searchHistory.remove(key);
+
+    return history;
   }
 }
 
