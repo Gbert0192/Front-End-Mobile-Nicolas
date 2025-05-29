@@ -181,7 +181,7 @@ class TopUpPage extends StatelessWidget {
                 left: 12,
                 right: 12,
                 top: 12,
-                bottom: isSmall ? 12 : 30,
+                bottom: isSmall ? 0 : 30,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -253,7 +253,7 @@ class TopUpPage extends StatelessWidget {
                 left: 12,
                 right: 12,
                 top: 12,
-                bottom: isSmall ? 12 : 30,
+                bottom: isSmall ? 0 : 30,
               ),
               decoration: BoxDecoration(
                 color: Colors.white,

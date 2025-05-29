@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
-import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/verfy_account.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
@@ -190,7 +191,16 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(user.id),
+                            builder:
+                                (context) => VerifyAccount(() {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => ResetPassword(user.id),
+                                    ),
+                                  );
+                                }),
                           ),
                         );
                       });

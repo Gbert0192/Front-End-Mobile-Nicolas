@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
@@ -25,8 +25,9 @@ void main() {
             },
           ),
           scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(backgroundColor: Colors.white),
+          appBarTheme: const AppBarTheme(backgroundColor: Colors.white),
           fontFamily: 'Poppins',
+          popupMenuTheme: PopupMenuThemeData(color: Colors.white),
         ),
         debugShowCheckedModeBanner: false,
         home: MainApp(),

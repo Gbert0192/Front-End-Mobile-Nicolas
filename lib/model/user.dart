@@ -13,6 +13,7 @@ class User {
   String language = "EN";
   double balance = 10000000;
   bool isMember = false;
+  bool twoFactor = false;
   DateTime? memberSince;
   DateTime? memberUntil;
 

@@ -119,7 +119,11 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Halo, ${user.fullname.split(" ")[0]}!",
+                            "${user.language == "EN"
+                                ? "Hallo"
+                                : user.language == "ID"
+                                ? "Halo"
+                                : "你好"}, ${user.fullname.split(" ")[0]}!",
                             style: TextStyle(
                               fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
@@ -134,7 +138,11 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "Welcome!",
+                            "${user.language == "EN"
+                                ? "Welcome"
+                                : user.language == "ID"
+                                ? "Selamat Datang"
+                                : "欢迎"}!",
                             style: TextStyle(
                               fontSize: isSmall ? 22 : 24,
                               fontWeight: FontWeight.bold,
@@ -213,7 +221,11 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Balance",
+                                user.language == "EN"
+                                    ? "Welcome"
+                                    : user.language == "ID"
+                                    ? "Saldo"
+                                    : "平衡",
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
@@ -263,7 +275,11 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Text(
-                              "Top Up",
+                              user.language == "EN"
+                                  ? "Top Up"
+                                  : user.language == "ID"
+                                  ? "Top Up"
+                                  : "充值",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: isSmall ? 12 : 14,
@@ -288,7 +304,12 @@ class _HomeState extends State<Home> {
                 // SEARCH
                 ResponsiveTextInput(
                   isSmall: isSmall,
-                  hint: "Search",
+                  hint:
+                      user.language == "EN"
+                          ? "Search"
+                          : user.language == "ID"
+                          ? "Telusuri"
+                          : "搜索",
                   leading: Icons.search,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
@@ -297,7 +318,11 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Recent Spots",
+                    user.language == "EN"
+                        ? "Search"
+                        : user.language == "ID"
+                        ? "Telusuri"
+                        : "搜索",
                     style: TextStyle(
                       fontSize: isSmall ? 24 : 30,
                       fontWeight: FontWeight.w500,

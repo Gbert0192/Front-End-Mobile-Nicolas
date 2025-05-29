@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:flutter/services.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
@@ -51,16 +50,19 @@ class TopUpDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(bottom: isSmall ? 10 : 16),
               decoration: BoxDecoration(
                 color: Colors.white,
+                border: Border.all(
+                  color: const Color.fromARGB(255, 235, 235, 235),
+                ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withAlpha(64),
+                    blurRadius: 6,
+                    offset: const Offset(2, 2),
                   ),
                 ],
               ),
@@ -81,11 +83,11 @@ class TopUpDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Transform.translate(
-                        offset: Offset(0, 8),
+                        offset: Offset(0, isSmall ? 6 : -8),
                         child: Text(
                           bankName,
-                          style: const TextStyle(
-                            fontSize: 35,
+                          style: TextStyle(
+                            fontSize: isSmall ? 30 : 35,
                             fontFamily: "Kalam",
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF1F1E5B),
@@ -93,11 +95,11 @@ class TopUpDetailPage extends StatelessWidget {
                         ),
                       ),
                       Transform.translate(
-                        offset: Offset(0, -8),
+                        offset: Offset(0, isSmall ? -6 : -8),
                         child: Text(
                           bankName,
-                          style: const TextStyle(
-                            fontSize: 20,
+                          style: TextStyle(
+                            fontSize: isSmall ? 14 : 20,
                             color: Color(0xFF9998CA),
                           ),
                         ),
@@ -110,8 +112,8 @@ class TopUpDetailPage extends StatelessWidget {
 
             // VA Number Section
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              margin: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: EdgeInsets.only(bottom: isSmall ? 10 : 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -198,19 +200,21 @@ class TopUpDetailPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isSmall ? 10 : 16,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "How to top up from $bankName:",
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w600,
                             fontSize: isSmall ? 16 : 20,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        const Text(
+                        Text(
                           "ADMIN FEE Rp2.500 – MIN. TOP UP Rp10.000",
                           style: TextStyle(
                             fontSize: 13,
@@ -221,24 +225,11 @@ class TopUpDetailPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Divider(height: 24, color: Colors.black),
-                  SizedBox(height: 20),
+                  Divider(height: isSmall ? 12 : 24, color: Colors.black),
+                  SizedBox(height: isSmall ? 10 : 20),
                   MethodStepper(steps),
-                  SizedBox(height: 50),
+                  SizedBox(height: isSmall ? 25 : 50),
                 ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            Center(
-              child: ResponsiveButton(
-                backgroundColor: const Color(0xFF1F1E5B),
-                isSmall: isSmall,
-                text: 'Back to home',
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
             ),
           ],
@@ -272,12 +263,12 @@ class MethodStepper extends StatelessWidget {
                     if (index != 0)
                       Container(
                         width: 5,
-                        height: 8,
+                        height: isSmall ? 3 : 8,
                         color: const Color(0xFFD3D3F3),
                       ),
                     Container(
-                      width: 40,
-                      height: 50,
+                      width: isSmall ? 30 : 40,
+                      height: isSmall ? 40 : 50,
                       decoration: BoxDecoration(
                         color: const Color(0xFF98A5FD),
                         borderRadius: BorderRadius.circular(30),
@@ -286,7 +277,7 @@ class MethodStepper extends StatelessWidget {
                         child: Text(
                           '${index + 1}',
                           style: TextStyle(
-                            fontSize: 20,
+                            fontSize: isSmall ? 15 : 20,
                             color: Colors.black,
                             fontWeight: FontWeight.w400,
                           ),
@@ -297,7 +288,7 @@ class MethodStepper extends StatelessWidget {
                     if (!isLast)
                       Container(
                         width: 5,
-                        height: 20,
+                        height: isSmall ? 12 : 20,
                         color: const Color(0xFFD3D3F3),
                       ),
                   ],
@@ -305,7 +296,7 @@ class MethodStepper extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 14),
+                    padding: EdgeInsets.only(top: isSmall ? 10 : 14),
                     child: Text(
                       step,
                       style: TextStyle(

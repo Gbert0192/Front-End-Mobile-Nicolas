@@ -3,13 +3,12 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/countdown.dart';
 import 'package:tugas_front_end_nicolas/components/pin_input.dart';
-import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {
-  const VerifyAccount(this.user_id, {super.key});
-  final int user_id;
+  const VerifyAccount(this.onSubmit);
+  final VoidCallback onSubmit;
 
   @override
   State<VerifyAccount> createState() => _VerifyAccountState();
@@ -290,18 +289,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
                         final otpValid = forgotPassProvider.validateOTP(
                           otpController.text,
                         );
-                        setState(() {
-                          isLoading = false;
-                        });
                         if (otpValid) {
                           showFlexibleSnackbar(context, "OTP Valid!");
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => ResetPassword(widget.user_id),
-                            ),
-                          );
+                          widget.onSubmit.call();
                         } else {
                           showFlexibleSnackbar(
                             context,
@@ -309,6 +299,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
                             type: SnackbarType.error,
                           );
                         }
+                        setState(() {
+                          isLoading = false;
+                        });
                       });
                     }
                   },
