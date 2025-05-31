@@ -50,7 +50,7 @@ class LandingScreen extends StatelessWidget {
           ),
 
           Positioned(
-            top: 50,
+            top: isSmall ? 30 : 50,
             right: 20,
             child: InkWell(
               onTap:

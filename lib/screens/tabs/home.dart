@@ -376,7 +376,7 @@ class _HomeState extends State<Home> {
                             translate(
                               context,
                               "Get Parking Now",
-                              "Dapatkan Parkir Sekarang",
+                              "Parkir Sekarang",
                               "立即停车",
                             ),
                             style: TextStyle(fontSize: isSmall ? 14 : 16),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class Voucher {
   final String title;
@@ -54,7 +55,7 @@ class VoucherCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    voucher.location,
+                    "${translate(context, "Valid at", "Berlaku di", "适用于")} ${voucher.location}",
                     style: TextStyle(fontSize: isSmall ? 12 : 14),
                   ),
                   Container(
@@ -86,8 +87,18 @@ class VoucherCard extends StatelessWidget {
                         ),
                         child: Text(
                           voucher.maxUse == null
-                              ? "Unlimited"
-                              : 'Max Uses ${voucher.maxUse!.toString()}',
+                              ? translate(
+                                context,
+                                "Unlimited",
+                                "Tanpa Batas",
+                                "无限制",
+                              )
+                              : translate(
+                                context,
+                                'Max Uses ${voucher.maxUse!.toString()}',
+                                'Maks ${voucher.maxUse!.toString()} Kali',
+                                '最多使用${voucher.maxUse!.toString()}次',
+                              ),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -107,7 +118,12 @@ class VoucherCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            "Min ${voucher.minHour} Hours",
+                            translate(
+                              context,
+                              "Min ${voucher.minHour} Hours",
+                              "Min ${voucher.minHour} Jam",
+                              "最少${voucher.minHour}小时",
+                            ),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -119,7 +135,12 @@ class VoucherCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                      'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
+                      translate(
+                        context,
+                        'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
+                        'Berlaku Hingga ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
+                        '有效期至${DateFormat.yMMMMd().format(voucher.validUntil!)}',
+                      ),
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ),
@@ -153,7 +174,7 @@ class VoucherScreen extends StatelessWidget {
     final vouchers = [
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Sun Plaza',
+        location: 'Sun Plaza',
         benefit: 'Free',
         maxUse: 6,
         minHour: 5,
@@ -162,7 +183,7 @@ class VoucherScreen extends StatelessWidget {
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Delipark',
+        location: 'Delipark',
         benefit: 'Disc 50%',
         maxUse: null,
         validUntil: DateTime(2025, 12, 28),
@@ -170,7 +191,7 @@ class VoucherScreen extends StatelessWidget {
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Plaza Medan Fair',
+        location: 'Plaza Medan Fair',
         benefit: 'Disc Rp 7,000.00',
         maxUse: 3,
         minHour: 3,
@@ -179,7 +200,7 @@ class VoucherScreen extends StatelessWidget {
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Centre Point',
+        location: 'Centre Point',
         benefit: 'Disc Rp 5,000.00',
         maxUse: 10,
         validUntil: DateTime(2026, 1, 7),
@@ -187,7 +208,7 @@ class VoucherScreen extends StatelessWidget {
       ),
       Voucher(
         title: 'Discount 20% Voucher',
-        location: 'Valid at Lippo Plaza',
+        location: 'Lippo Plaza',
         benefit: 'Disc Rp 5,000.00',
         maxUse: 10,
         minHour: 6,
@@ -204,7 +225,12 @@ class VoucherScreen extends StatelessWidget {
               automaticallyImplyLeading: false,
               centerTitle: true,
               title: Text(
-                'Available Voucher',
+                translate(
+                  context,
+                  'Available Voucher',
+                  'Voucher Tersedia',
+                  '可用优惠券',
+                ),
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: isSmall ? 25 : 30,
