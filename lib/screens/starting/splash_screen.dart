@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -91,7 +92,12 @@ class SplashScreen extends StatelessWidget {
                     .fadeIn(duration: 1000.ms),
 
                 Text(
-                      'Parking Made Easier',
+                      translate(
+                        context,
+                        "Parking Made Easier",
+                        "Parkir Jadi Lebih Mudah",
+                        "停车更便捷",
+                      ),
                       style: TextStyle(
                         color: Colors.white.withAlpha(242),
                         fontSize: isSmall ? 35 : 45,

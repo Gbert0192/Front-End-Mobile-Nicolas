@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
@@ -24,6 +25,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final langProvider = Provider.of<LanguageProvider>(context);
     User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -49,7 +51,7 @@ class _ProfileState extends State<Profile> {
         onPressed:
             () => showModalBottomSheet(
               context: context,
-              builder: (context) => LanguageModal(user.language),
+              builder: (context) => LanguageModal(langProvider.language),
             ),
       ),
     ];

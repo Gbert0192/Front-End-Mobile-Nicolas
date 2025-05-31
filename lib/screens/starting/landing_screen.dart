@@ -4,6 +4,8 @@ import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
 import 'dart:math' as math;
 
+import 'package:tugas_front_end_nicolas/utils/index.dart';
+
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
 
@@ -50,7 +52,12 @@ class LandingScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: isSmall ? 80 : 120),
                   Text(
-                    'THIS IS PARK-ID',
+                    translate(
+                      context,
+                      'THIS IS PARK-ID',
+                      "PARK-ID INDONESIA",
+                      "这是公园标识",
+                    ),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: isSmall ? 36 : 48,
@@ -61,7 +68,12 @@ class LandingScreen extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: isSmall ? 10 : 0),
                     child: Text(
-                      'The first and the best parking app in Indonesia',
+                      translate(
+                        context,
+                        'The first and the best parking app in Indonesia',
+                        "Aplikasi parkir pertama dan terbaik di Indonesia",
+                        "印度尼西亚第一个也是最好的停车应用程序",
+                      ),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: isSmall ? 20 : 30,
@@ -83,7 +95,7 @@ class LandingScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (_) => SignIn()),
                         ),
-                    text: "Sign In",
+                    text: translate(context, 'Sign In', "Masuk", "登入"),
                   ),
                   SizedBox(height: (isSmall ? 0 : 10)),
                   ResponsiveButton(
@@ -93,7 +105,7 @@ class LandingScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(builder: (_) => SignUp()),
                         ),
-                    text: "Sign Up",
+                    text: translate(context, 'Sign Up', "Daftar", "报名"),
                     backgroundColor: Color(0xFF4D5DFA),
                   ),
                   SizedBox(height: isSmall ? 32 : 48),

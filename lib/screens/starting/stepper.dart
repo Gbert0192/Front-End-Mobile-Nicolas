@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class StepModel {
   final String title;
@@ -28,35 +29,11 @@ class StepperScreens extends StatefulWidget {
 
 class _StepperScreensState extends State<StepperScreens> {
   final PageController _controller = PageController();
-  final List<StepModel> steps = [
-    StepModel(
-      title: "Find Parking Easily",
-      subtitle: "Find parking around you easily and online",
-      image: "assets/images/starting/toy car turn right blue.png",
-      align: "left",
-      offset: 20.0,
-    ),
-    StepModel(
-      title: "Book and Pay for Parking Quickly and Easily",
-      subtitle:
-          "Make a booking for your parking and make a payment quickly and easier",
-      image: "assets/images/starting/back view of toy car turn right blue.png",
-      align: "center",
-    ),
-    StepModel(
-      title: "Park According to the Desired Time",
-      subtitle:
-          "Can decide when parking time is and determine when it’s time to leave",
-      image: "assets/images/starting/toy car turn left blue.png",
-      align: "right",
-      offset: 20.0,
-    ),
-  ];
 
   int currentPage = 0;
 
   void nextPage(BuildContext context) {
-    if (currentPage < steps.length - 1) {
+    if (currentPage < 2) {
       _controller.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -97,6 +74,59 @@ class _StepperScreensState extends State<StepperScreens> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+    final List<StepModel> steps = [
+      StepModel(
+        title: translate(
+          context,
+          "Find Parking Easily",
+          "Temukan Parkir dengan Mudah",
+          "轻松找车位",
+        ),
+        subtitle: translate(
+          context,
+          "Find parking around you easily and online",
+          "Cari tempat parkir di sekitar Anda dengan mudah dan online",
+          "轻松在线查找您周围的停车位",
+        ),
+        image: "assets/images/starting/toy car turn right blue.png",
+        align: "left",
+        offset: 20.0,
+      ),
+      StepModel(
+        title: translate(
+          context,
+          "Book and Pay for Parking Quickly and Easily",
+          "Pesan dan Bayar Parkir dengan Cepat dan Mudah",
+          "快速轻松地预订和支付停车位",
+        ),
+        subtitle: translate(
+          context,
+          "Make a booking for your parking and make a payment quickly and easier",
+          "Lakukan pemesanan dan pembayaran parkir dengan cepat dan mudah",
+          "快速轻松地预订车位并完成支付",
+        ),
+        image:
+            "assets/images/starting/back view of toy car turn right blue.png",
+        align: "center",
+      ),
+      StepModel(
+        title: translate(
+          context,
+          "Park According to the Desired Time",
+          "Parkir Sesuai Waktu yang Diinginkan",
+          "按需选择停车时间",
+        ),
+        subtitle: translate(
+          context,
+          "Can decide when parking time is and determine when it’s time to leave",
+          "Bisa menentukan kapan waktu parkir dan kapan waktu untuk pergi",
+          "您可以决定停车和离开的时间",
+        ),
+        image: "assets/images/starting/toy car turn left blue.png",
+        align: "right",
+        offset: 20.0,
+      ),
+    ];
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(

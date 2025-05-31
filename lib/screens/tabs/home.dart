@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 // ParkingSpot model
 class ParkingSpot {
@@ -119,11 +120,7 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${user.language == "EN"
-                                ? "Hallo"
-                                : user.language == "ID"
-                                ? "Halo"
-                                : "你好"}, ${user.fullname.split(" ")[0]}!",
+                            translate(context, "Hallo", "Halo", "你好"),
                             style: TextStyle(
                               fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
@@ -138,11 +135,12 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "${user.language == "EN"
-                                ? "Welcome"
-                                : user.language == "ID"
-                                ? "Selamat Datang"
-                                : "欢迎"}!",
+                            translate(
+                              context,
+                              "Welcome",
+                              "Selamat Datang",
+                              "欢迎",
+                            ),
                             style: TextStyle(
                               fontSize: isSmall ? 22 : 24,
                               fontWeight: FontWeight.bold,
@@ -221,11 +219,7 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                user.language == "EN"
-                                    ? "Welcome"
-                                    : user.language == "ID"
-                                    ? "Saldo"
-                                    : "平衡",
+                                translate(context, "Balance", "Saldo", "平衡"),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
@@ -275,11 +269,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Text(
-                              user.language == "EN"
-                                  ? "Top Up"
-                                  : user.language == "ID"
-                                  ? "Top Up"
-                                  : "充值",
+                              translate(context, "Top Up", "Top Up", "充值"),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: isSmall ? 12 : 14,
@@ -304,12 +294,7 @@ class _HomeState extends State<Home> {
                 // SEARCH
                 ResponsiveTextInput(
                   isSmall: isSmall,
-                  hint:
-                      user.language == "EN"
-                          ? "Search"
-                          : user.language == "ID"
-                          ? "Telusuri"
-                          : "搜索",
+                  hint: translate(context, "Search", "Telusuri", "搜索"),
                   leading: Icons.search,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
@@ -318,11 +303,12 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    user.language == "EN"
-                        ? "Search"
-                        : user.language == "ID"
-                        ? "Telusuri"
-                        : "搜索",
+                    translate(
+                      context,
+                      "Frequent Spots",
+                      "Spot Favorit",
+                      "常见景点",
+                    ),
                     style: TextStyle(
                       fontSize: isSmall ? 24 : 30,
                       fontWeight: FontWeight.w500,
