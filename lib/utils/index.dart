@@ -12,7 +12,7 @@ extension FirstWhereOrNullExtension<E> on Iterable<E> {
 }
 
 String translate(BuildContext context, String en, String id, String cn) {
-  final langProvider = Provider.of<LanguageProvider>(context);
+  final langProvider = Provider.of<LanguageProvider>(context, listen: false);
   return langProvider.language == "EN"
       ? en
       : langProvider.language == "ID"

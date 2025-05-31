@@ -11,6 +11,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 
@@ -37,17 +38,17 @@ class _ProfileState extends State<Profile> {
     final List<SettingButtons> acc_setting = [
       SettingButtons(
         icon: "assets/images/icons/key.png",
-        title: "Change Password",
+        title: translate(context, "Change Password", "Ubah Kata Sandi", "更改密码"),
         onPressed: () => acc_nav(ChangePassword()),
       ),
       SettingButtons(
         icon: "assets/images/icons/calender.png",
-        title: "Subscriptions",
+        title: translate(context, "Subscriptions", "Langganan", "订阅"),
         onPressed: () => acc_nav(Subscription()),
       ),
       SettingButtons(
         icon: "assets/images/icons/language.png",
-        title: "Languages",
+        title: translate(context, "Languages", "Bahasa", "语言"),
         onPressed:
             () => showModalBottomSheet(
               context: context,
@@ -55,20 +56,26 @@ class _ProfileState extends State<Profile> {
             ),
       ),
     ];
+
     final List<SettingButtons> help_oth = [
       SettingButtons(
         icon: "assets/images/icons/question.png",
-        title: "FAQ",
+        title: translate(context, "FAQ", "Pertanyaan Umum", "常见问题"),
         onPressed: () => acc_nav(FAQ()),
       ),
       SettingButtons(
         icon: "assets/images/icons/problem.png",
-        title: "Contact Us",
+        title: translate(context, "Contact Us", "Hubungi Kami", "联系我们"),
         onPressed: () => acc_nav(ContactUsPage()),
       ),
       SettingButtons(
         icon: "assets/images/icons/star.png",
-        title: "Rate Our App",
+        title: translate(
+          context,
+          "Rate Our App",
+          "Beri Rating Aplikasi",
+          "为应用评分",
+        ),
         onPressed:
             () => showGeneralDialog(
               context: context,
@@ -109,7 +116,7 @@ class _ProfileState extends State<Profile> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               title: Text(
-                'My Profile',
+                translate(context, "My Profile", "Profil Saya", "我的资料"),
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: isSmall ? 25 : 30,
@@ -252,9 +259,14 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Account Settings",
+                            translate(
+                              context,
+                              "Account Settings",
+                              "Pengaturan Akun",
+                              "账户设置",
+                            ),
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 24,
+                              fontSize: isSmall ? 20 : 24,
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
@@ -278,9 +290,14 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Helps and Others",
+                            translate(
+                              context,
+                              "Help and Others",
+                              "Bantuan dan Lainnya",
+                              "帮助和其他",
+                            ),
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 24,
+                              fontSize: isSmall ? 20 : 24,
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
@@ -304,9 +321,14 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Exit the Application",
+                            translate(
+                              context,
+                              "Exit the Application",
+                              "Keluar dari Aplikasi",
+                              "退出应用程序",
+                            ),
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 24,
+                              fontSize: isSmall ? 20 : 24,
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
@@ -325,16 +347,30 @@ class _ProfileState extends State<Profile> {
                                   context: context,
                                   loading: true,
                                   time: 1,
-                                  title: "Logout",
-                                  subtitle:
-                                      "Are you sure you want to logout from your account?",
+                                  title: translate(
+                                    context,
+                                    "Logout",
+                                    "Keluar",
+                                    "登出",
+                                  ),
+                                  subtitle: translate(
+                                    context,
+                                    "Are you sure you want to logout from your account?",
+                                    "Apakah Anda yakin ingin keluar dari akun Anda?",
+                                    "您确定要退出您的账户吗？",
+                                  ),
                                   icon: Icons.logout,
                                   color: const Color.fromARGB(255, 220, 56, 45),
                                   onContinue: () {
                                     userProvider.logout();
                                     showFlexibleSnackbar(
                                       context,
-                                      "See you next time, ${user.fullname.split(" ")[0]}!",
+                                      translate(
+                                        context,
+                                        "See you next time, ${user.fullname.split(" ")[0]}!",
+                                        "Sampai jumpa lagi, ${user.fullname.split(" ")[0]}!",
+                                        "下次见，${user.fullname.split(" ")[0]}！",
+                                      ),
                                     );
                                     Navigator.pushAndRemoveUntil(
                                       context,
@@ -346,7 +382,7 @@ class _ProfileState extends State<Profile> {
                                   },
                                 ),
                               },
-                          title: "Log Out",
+                          title: translate(context, "Log Out", "Keluar", "登出"),
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,
                           borderColor: const Color.fromARGB(255, 253, 213, 209),
