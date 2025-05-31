@@ -73,7 +73,10 @@ class _LanguageModalState extends State<LanguageModal> {
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     child: GestureDetector(
                       onTap: () {
-                        langProvider.switchLanguage(lang.value);
+                        Navigator.of(context).pop();
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          langProvider.switchLanguage(lang.value);
+                        });
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

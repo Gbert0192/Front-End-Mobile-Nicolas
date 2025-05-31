@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
+import 'package:tugas_front_end_nicolas/components/language_modal.dart';
+import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
 import 'dart:math' as math;
@@ -11,6 +14,7 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final langProvider = Provider.of<LanguageProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -45,6 +49,64 @@ class LandingScreen extends StatelessWidget {
             ),
           ),
 
+          Positioned(
+            top: 50,
+            right: 20,
+            child: InkWell(
+              onTap:
+                  () => showModalBottomSheet(
+                    context: context,
+                    builder: (context) => LanguageModal(langProvider.language),
+                  ),
+              borderRadius: BorderRadius.circular(25),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          "assets/images/others/${langProvider.language.toLowerCase()}.png",
+                          width: isSmall ? 24 : 36,
+                        ),
+                        Text(
+                          langProvider.language,
+                          style: TextStyle(
+                            fontSize: isSmall ? 14 : 16,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.keyboard_arrow_down,
+                      size: isSmall ? 14 : 16,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           // Main Content
           SafeArea(
             child: Container(
@@ -55,7 +117,7 @@ class LandingScreen extends StatelessWidget {
                     translate(
                       context,
                       'THIS IS PARK-ID',
-                      "PARK-ID INDONESIA",
+                      "INI PARK-ID",
                       "这是公园标识",
                     ),
                     style: TextStyle(

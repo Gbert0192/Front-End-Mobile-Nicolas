@@ -120,7 +120,7 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            translate(context, "Hallo", "Halo", "你好"),
+                            "${translate(context, "Hallo", "Halo", "你好")} ${user.fullname.split(" ")[0]}!",
                             style: TextStyle(
                               fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
@@ -362,7 +362,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Text(
-                          "${currencyFormat.format(spots[_currentIndex].price)} / Hour",
+                          "${currencyFormat.format(spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
                           style: TextStyle(fontSize: isSmall ? 14 : 18),
                         ),
                         SizedBox(height: isSmall ? 6 : 10),
@@ -373,7 +373,12 @@ class _HomeState extends State<Home> {
                             foregroundColor: Colors.white,
                           ),
                           child: Text(
-                            "Get Parking Now",
+                            translate(
+                              context,
+                              "Get Parking Now",
+                              "Dapatkan Parkir Sekarang",
+                              "立即停车",
+                            ),
                             style: TextStyle(fontSize: isSmall ? 14 : 16),
                           ),
                         ),

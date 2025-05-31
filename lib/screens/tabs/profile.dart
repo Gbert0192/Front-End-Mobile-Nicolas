@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/language_modal.dart';
 import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
@@ -7,7 +8,6 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dar
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/account/language_modal.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';

@@ -212,7 +212,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       });
                     }
                   },
-                  text: "Continue",
+                  text: translate(context, "Continue", "Lanjut", "继续"),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
               ],
