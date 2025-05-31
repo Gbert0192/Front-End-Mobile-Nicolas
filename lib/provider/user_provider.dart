@@ -79,8 +79,8 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void switchLanguage(String lang) {
-    currentUser?.switchLanguage(lang);
+  void setUp2Fac() {
+    currentUser?.setUp2Fac();
     notifyListeners();
   }
 

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/language_modal.dart';
+import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/account/language_modal.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
@@ -24,6 +25,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final langProvider = Provider.of<LanguageProvider>(context);
     User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -49,7 +51,7 @@ class _ProfileState extends State<Profile> {
         onPressed:
             () => showModalBottomSheet(
               context: context,
-              builder: (context) => LanguageModal(user.language),
+              builder: (context) => LanguageModal(langProvider.language),
             ),
       ),
     ];
@@ -143,7 +145,7 @@ class _ProfileState extends State<Profile> {
                       horizontal: isSmall ? 12 : 16,
                       vertical: isSmall ? 6 : 10,
                     ),
-                    padding: EdgeInsets.all(isSmall ? 14 : 20),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -159,7 +161,7 @@ class _ProfileState extends State<Profile> {
                             ],
                           ),
                           child: CircleAvatar(
-                            radius: isSmall ? 50 : 70,
+                            radius: isSmall ? 50 : 60,
                             backgroundColor: Colors.white,
                             backgroundImage:
                                 user.profilePic != null
@@ -169,7 +171,7 @@ class _ProfileState extends State<Profile> {
                                 user.profilePic == null
                                     ? Icon(
                                       Icons.person,
-                                      size: isSmall ? 50 : 70,
+                                      size: isSmall ? 50 : 60,
                                       color: Colors.grey[400],
                                     )
                                     : null,

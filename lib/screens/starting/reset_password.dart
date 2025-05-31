@@ -4,6 +4,7 @@ import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -181,7 +182,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         if (success == 0) {
                           showFlexibleSnackbar(
                             context,
-                            "Password can not be the same as old one!",
+                            "${translate(context, "Password has been reseted", "Kata sandi tidak boleh sama dengan yang lama", "密码不能与旧密码相同")}!",
                             type: SnackbarType.error,
                           );
                           setState(() => form.isLoading = false);
@@ -190,7 +191,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                         setState(() => form.isLoading = false);
                         showFlexibleSnackbar(
                           context,
-                          "Password has been reseted!",
+                          "${translate(context, "Password has been reseted", "Kata sandi telah disetel ulang", "密码已重置")}!",
                         );
                         Navigator.push(
                           context,
@@ -199,7 +200,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       });
                     }
                   },
-                  text: "Continue",
+                  text: translate(context, "Continue", "Lanjut", "继续"),
                 ),
                 SizedBox(height: isSmall ? 5 : 20),
               ],

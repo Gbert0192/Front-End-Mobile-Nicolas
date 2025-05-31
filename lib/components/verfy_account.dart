@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/countdown.dart';
 import 'package:tugas_front_end_nicolas/components/pin_input.dart';
-import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {
-  const VerifyAccount(this.user_id, {super.key});
-  final int user_id;
+  const VerifyAccount(this.onSubmit);
+  final VoidCallback onSubmit;
 
   @override
   State<VerifyAccount> createState() => _VerifyAccountState();
@@ -44,7 +44,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
   @override
   Widget build(BuildContext context) {
-    final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
+    final forgotPassProvider = Provider.of<OTPProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     String email = obscureEmail(forgotPassProvider.email);
@@ -93,7 +93,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Verify',
+                      translate(context, "Verify", "Verifikasi", "验证"),
                       style: TextStyle(
                         fontSize: isSmall ? 20 : 30,
                         shadows: [
@@ -108,7 +108,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      'Account',
+                      translate(context, "Account", "Akun", "账户"),
                       style: TextStyle(
                         fontSize: isSmall ? 20 : 30,
                         fontWeight: FontWeight.bold,
@@ -128,7 +128,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                 Column(
                   children: [
                     Text(
-                      'Please enter the code sent to ',
+                      translate(
+                        context,
+                        "Please enter the code sent to",
+                        "Silakan masukkan kode yang dikirim ke",
+                        "请输入发送至",
+                      ),
                       style: TextStyle(
                         fontSize: isSmall ? 15 : 18,
                         color: Color(0xFFBABABA),
@@ -168,7 +173,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'OTP not received?',
+                      translate(
+                        context,
+                        "OTP not received?",
+                        "OTP tidak diterima?",
+                        "没有收到 OTP？",
+                      ),
                       style: TextStyle(
                         fontSize: isSmall ? 15 : 18,
                         shadows: [
@@ -194,7 +204,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                             });
                             showFlexibleSnackbar(
                               context,
-                              "Your OTP is ${forgotPassProvider.generateOTP()}",
+                              "${translate(context, "Your OTP is", "OTP Anda adalah", "您的一次性密码是")} ${forgotPassProvider.generateOTP()}",
                             );
                           });
                         }
@@ -216,7 +226,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                   ),
                                   SizedBox(width: 5),
                                   Text(
-                                    "Resending...",
+                                    "${translate(context, "Resending", "Mengirim ulang", "重新发送")}...",
                                     style: TextStyle(
                                       fontSize: isSmall ? 15 : 18,
                                       color: Color(0xFF1879D4),
@@ -238,7 +248,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               )
                               : count == 0
                               ? Text(
-                                'Resend OTP',
+                                translate(
+                                  context,
+                                  "Resend OTP",
+                                  "Kirim ulang",
+                                  "重新发送OTP",
+                                ),
                                 style: TextStyle(
                                   fontSize: isSmall ? 15 : 18,
                                   color: Color(0xFF1879D4),
@@ -290,29 +305,26 @@ class _VerifyAccountState extends State<VerifyAccount> {
                         final otpValid = forgotPassProvider.validateOTP(
                           otpController.text,
                         );
-                        setState(() {
-                          isLoading = false;
-                        });
                         if (otpValid) {
-                          showFlexibleSnackbar(context, "OTP Valid!");
-                          Navigator.push(
+                          showFlexibleSnackbar(
                             context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) => ResetPassword(widget.user_id),
-                            ),
+                            "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
                           );
+                          widget.onSubmit.call();
                         } else {
                           showFlexibleSnackbar(
                             context,
-                            "OTP Invalid!",
+                            "${translate(context, "OTP Invalid", "OTP Tidak Valid", "OTP 无效")}!",
                             type: SnackbarType.error,
                           );
                         }
+                        setState(() {
+                          isLoading = false;
+                        });
                       });
                     }
                   },
-                  text: "Continue",
+                  text: translate(context, "Continue", "Lanjut", "继续"),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
               ],

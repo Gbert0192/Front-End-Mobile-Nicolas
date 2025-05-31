@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 // ParkingSpot model
 class ParkingSpot {
@@ -119,7 +120,7 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Halo, ${user.fullname.split(" ")[0]}!",
+                            "${translate(context, "Hallo", "Halo", "你好")} ${user.fullname.split(" ")[0]}!",
                             style: TextStyle(
                               fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
@@ -134,10 +135,15 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "Welcome!",
+                            translate(
+                              context,
+                              "Welcome",
+                              "Selamat Datang",
+                              "欢迎",
+                            ),
                             style: TextStyle(
                               fontSize: isSmall ? 22 : 24,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F1E5B),
                               shadows: [
                                 Shadow(
@@ -213,7 +219,7 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Balance",
+                                translate(context, "Balance", "Saldo", "平衡"),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
@@ -263,7 +269,7 @@ class _HomeState extends State<Home> {
                               ),
                             ),
                             Text(
-                              "Top Up",
+                              translate(context, "Top Up", "Top Up", "充值"),
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: isSmall ? 12 : 14,
@@ -288,7 +294,7 @@ class _HomeState extends State<Home> {
                 // SEARCH
                 ResponsiveTextInput(
                   isSmall: isSmall,
-                  hint: "Search",
+                  hint: translate(context, "Search", "Telusuri", "搜索"),
                   leading: Icons.search,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
@@ -297,7 +303,12 @@ class _HomeState extends State<Home> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Recent Spots",
+                    translate(
+                      context,
+                      "Frequent Spots",
+                      "Spot Favorit",
+                      "常见景点",
+                    ),
                     style: TextStyle(
                       fontSize: isSmall ? 24 : 30,
                       fontWeight: FontWeight.w500,
@@ -351,7 +362,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Text(
-                          "${currencyFormat.format(spots[_currentIndex].price)} / Hour",
+                          "${currencyFormat.format(spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
                           style: TextStyle(fontSize: isSmall ? 14 : 18),
                         ),
                         SizedBox(height: isSmall ? 6 : 10),
@@ -362,7 +373,12 @@ class _HomeState extends State<Home> {
                             foregroundColor: Colors.white,
                           ),
                           child: Text(
-                            "Get Parking Now",
+                            translate(
+                              context,
+                              "Get Parking Now",
+                              "Dapatkan Parkir Sekarang",
+                              "立即停车",
+                            ),
                             style: TextStyle(fontSize: isSmall ? 14 : 16),
                           ),
                         ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:flutter/services.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
@@ -51,16 +50,19 @@ class TopUpDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.all(8),
+              margin: EdgeInsets.only(bottom: isSmall ? 10 : 16),
               decoration: BoxDecoration(
                 color: Colors.white,
+                border: Border.all(
+                  color: const Color.fromARGB(255, 235, 235, 235),
+                ),
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withAlpha(64),
+                    blurRadius: 6,
+                    offset: const Offset(2, 2),
                   ),
                 ],
               ),
@@ -81,11 +83,11 @@ class TopUpDetailPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Transform.translate(
-                        offset: Offset(0, 8),
+                        offset: Offset(0, isSmall ? 6 : -8),
                         child: Text(
                           bankName,
-                          style: const TextStyle(
-                            fontSize: 35,
+                          style: TextStyle(
+                            fontSize: isSmall ? 30 : 35,
                             fontFamily: "Kalam",
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF1F1E5B),
@@ -93,11 +95,11 @@ class TopUpDetailPage extends StatelessWidget {
                         ),
                       ),
                       Transform.translate(
-                        offset: Offset(0, -8),
+                        offset: Offset(0, isSmall ? -6 : -8),
                         child: Text(
                           bankName,
-                          style: const TextStyle(
-                            fontSize: 20,
+                          style: TextStyle(
+                            fontSize: isSmall ? 14 : 20,
                             color: Color(0xFF9998CA),
                           ),
                         ),
@@ -110,8 +112,8 @@ class TopUpDetailPage extends StatelessWidget {
 
             // VA Number Section
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              margin: const EdgeInsets.only(bottom: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              margin: EdgeInsets.only(bottom: isSmall ? 10 : 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -119,20 +121,27 @@ class TopUpDetailPage extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.copy, size: 20, color: Color(0xFF98A5FD)),
+                  Icon(
+                    Icons.copy,
+                    size: isSmall ? 20 : 30,
+                    color: Color(0xFF98A5FD),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "VIRTUAL ACCOUNT NO.",
-                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                          style: TextStyle(
+                            fontSize: isSmall ? 12 : 16,
+                            color: Colors.grey,
+                          ),
                         ),
                         Text(
                           vaNumber,
-                          style: const TextStyle(
-                            fontSize: 14,
+                          style: TextStyle(
+                            fontSize: isSmall ? 12 : 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -158,9 +167,12 @@ class TopUpDetailPage extends StatelessWidget {
                         "VA successfully copied to clipboard!",
                       );
                     },
-                    child: const Text(
+                    child: Text(
                       "Copy",
-                      style: TextStyle(fontSize: 12, color: Color(0xFF98A5FD)),
+                      style: TextStyle(
+                        fontSize: isSmall ? 12 : 14,
+                        color: Color(0xFF98A5FD),
+                      ),
                     ),
                   ),
                 ],
@@ -169,7 +181,7 @@ class TopUpDetailPage extends StatelessWidget {
 
             // Instruction
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
@@ -178,83 +190,131 @@ class TopUpDetailPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.shade300,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
+                    color: Colors.black.withAlpha(64),
+                    blurRadius: 6,
+                    offset: const Offset(2, 4),
                   ),
                 ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "How to top up from $bankName:",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isSmall ? 10 : 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "How to top up from $bankName:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: isSmall ? 16 : 20,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "ADMIN FEE Rp2.500 – MIN. TOP UP Rp10.000",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    "ADMIN FEE Rp2.500 – MIN. TOP UP Rp10.000",
-                    style: TextStyle(fontSize: 12, color: Colors.black54),
-                  ),
-                  const Divider(height: 24),
-                  ...steps.asMap().entries.map((entry) {
-                    final index = entry.key + 1;
-                    final step = entry.value;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFB1BCFF),
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '$index',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              step,
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
+                  Divider(height: isSmall ? 12 : 24, color: Colors.black),
+                  SizedBox(height: isSmall ? 10 : 20),
+                  MethodStepper(steps),
+                  SizedBox(height: isSmall ? 25 : 50),
                 ],
-              ),
-            ),
-
-            const SizedBox(height: 30),
-
-            Center(
-              child: ResponsiveButton(
-                backgroundColor: const Color(0xFF1F1E5B),
-                isSmall: isSmall,
-                text: 'Back to home',
-                onPressed: () {
-                  Navigator.pop(context);
-                },
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class MethodStepper extends StatelessWidget {
+  final List<String> steps;
+
+  const MethodStepper(this.steps, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    return Column(
+      children:
+          steps.asMap().entries.map((entry) {
+            final index = entry.key;
+            final step = entry.value;
+            final isLast = index == steps.length - 1;
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    if (index != 0)
+                      Container(
+                        width: 5,
+                        height: isSmall ? 3 : 8,
+                        color: const Color(0xFFD3D3F3),
+                      ),
+                    Container(
+                      width: isSmall ? 30 : 40,
+                      height: isSmall ? 40 : 50,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF98A5FD),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            fontSize: isSmall ? 15 : 20,
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Line below
+                    if (!isLast)
+                      Container(
+                        width: 5,
+                        height: isSmall ? 12 : 20,
+                        color: const Color(0xFFD3D3F3),
+                      ),
+                  ],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: isSmall ? 10 : 14),
+                    child: Text(
+                      step,
+                      style: TextStyle(
+                        fontSize: isSmall ? 14 : 18,
+                        shadows: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(64),
+                            blurRadius: 6,
+                            offset: const Offset(4, 4),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -78,7 +79,7 @@ class _SignInState extends State<SignIn> {
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                     Text(
-                      'Back Again! Your Perfect Spot Awaits!',
+                      '${translate(context, 'Back Again? Your Perfect Spot Awaits', "Sudah Kembali? Tempat Sempurna Anda Menanti", "又回来了？完美地点等你来")}!',
                       style: TextStyle(
                         fontSize: isSmall ? 20 : 24,
                         color: Color(0xFF1879D4),
@@ -155,7 +156,7 @@ class _SignInState extends State<SignIn> {
                                     -1) {
                               showFlexibleSnackbar(
                                 context,
-                                "Invalid Credential!",
+                                "${translate(context, "Invalid Credential", "Kredensial Tidak Valid", "凭证无效")}!",
                                 type: SnackbarType.error,
                               );
                               setState(() => form.isLoading = false);
@@ -164,7 +165,7 @@ class _SignInState extends State<SignIn> {
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome Back, ${user.fullname.split(" ")[0]}!",
+                              "${translate(context, "Welcome Back", "Selamat Datang kembali", "欢迎回来")} ${user.fullname.split(" ")[0]}!",
                             );
                             Navigator.pushAndRemoveUntil(
                               context,
@@ -176,7 +177,7 @@ class _SignInState extends State<SignIn> {
                           });
                         }
                       },
-                      text: "Sign In",
+                      text: translate(context, 'Sign In', "Masuk", "登入"),
                     ),
 
                     // Sign In Button
@@ -215,7 +216,7 @@ class _SignInState extends State<SignIn> {
                           MaterialPageRoute(builder: (context) => SignUp()),
                         );
                       },
-                      text: "Sign Up",
+                      text: translate(context, 'Sign Up', "Daftar", "报名"),
                       buttonType: ButtonTypes.outline,
                     ),
 

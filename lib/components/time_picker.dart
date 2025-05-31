@@ -166,14 +166,14 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow:
                     isOutline
-                        ? null
-                        : [
+                        ? [
                           BoxShadow(
                             color: Colors.black.withAlpha(64),
                             blurRadius: 6,
                             offset: const Offset(4, 4),
                           ),
-                        ],
+                        ]
+                        : null,
               ),
               child: GestureDetector(
                 onTap: () async {

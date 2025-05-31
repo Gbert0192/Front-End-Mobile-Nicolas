@@ -5,7 +5,8 @@ class Voucher {
   final String title;
   final String location;
   final String benefit;
-  final String maxUse;
+  final int? maxUse;
+  final int? minHour;
   final DateTime? validUntil;
   final String image;
 
@@ -14,6 +15,7 @@ class Voucher {
     required this.location,
     required this.benefit,
     required this.maxUse,
+    this.minHour,
     this.validUntil,
     required this.image,
   });
@@ -55,55 +57,72 @@ class VoucherCard extends StatelessWidget {
                     voucher.location,
                     style: TextStyle(fontSize: isSmall ? 12 : 14),
                   ),
-                  if (voucher.benefit.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E1E61),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        voucher.benefit,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E1E61),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      voucher.benefit,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E1E61),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          voucher.maxUse == null
+                              ? "Unlimited"
+                              : 'Max Uses ${voucher.maxUse!.toString()}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
-                    ),
-                  if (voucher.maxUse.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E1E61),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        voucher.maxUse,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                      SizedBox(width: 5),
+                      if (voucher.minHour != null)
+                        Container(
+                          margin: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E1E61),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            "Min ${voucher.minHour} Hours",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
-                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
-                  if (voucher.validUntil != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
-                        'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ),
+                  ),
                 ],
               ),
             ),
@@ -134,9 +153,10 @@ class VoucherScreen extends StatelessWidget {
     final vouchers = [
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Sun Plaza only',
+        location: 'Valid at Sun Plaza',
         benefit: 'Free',
-        maxUse: 'Max Uses 6',
+        maxUse: 6,
+        minHour: 5,
         validUntil: DateTime(2025, 12, 25),
         image: 'assets/images/building/Sun Plaza.png',
       ),
@@ -144,7 +164,7 @@ class VoucherScreen extends StatelessWidget {
         title: 'Free Parking Voucher',
         location: 'Valid at Delipark',
         benefit: 'Disc 50%',
-        maxUse: 'Unlimited',
+        maxUse: null,
         validUntil: DateTime(2025, 12, 28),
         image: 'assets/images/building/Delipark.png',
       ),
@@ -152,7 +172,8 @@ class VoucherScreen extends StatelessWidget {
         title: 'Free Parking Voucher',
         location: 'Valid at Plaza Medan Fair',
         benefit: 'Disc Rp 7,000.00',
-        maxUse: 'Max Uses 3',
+        maxUse: 3,
+        minHour: 3,
         validUntil: DateTime(2025, 12, 23),
         image: 'assets/images/building/Plaza Medan Fair.png',
       ),
@@ -160,7 +181,7 @@ class VoucherScreen extends StatelessWidget {
         title: 'Free Parking Voucher',
         location: 'Valid at Centre Point',
         benefit: 'Disc Rp 5,000.00',
-        maxUse: 'Max Uses 10',
+        maxUse: 10,
         validUntil: DateTime(2026, 1, 7),
         image: 'assets/images/building/Centre Point.png',
       ),
@@ -168,7 +189,8 @@ class VoucherScreen extends StatelessWidget {
         title: 'Discount 20% Voucher',
         location: 'Valid at Lippo Plaza',
         benefit: 'Disc Rp 5,000.00',
-        maxUse: 'Max Uses 10',
+        maxUse: 10,
+        minHour: 6,
         validUntil: DateTime(2025, 10, 7),
         image: 'assets/images/building/Lippo Plaza.png',
       ),
