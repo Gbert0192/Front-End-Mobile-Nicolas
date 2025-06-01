@@ -4,14 +4,10 @@ import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class NotificationItem {
   final NotifTypes typeText;
-  final String mall;
+  final String? mall;
   final DateTime date;
 
-  NotificationItem({
-    required this.typeText,
-    required this.mall,
-    required this.date,
-  });
+  NotificationItem({required this.typeText, this.mall, required this.date});
 }
 
 class Notification_ extends StatelessWidget {
@@ -47,8 +43,7 @@ class Notification_ extends StatelessWidget {
         date: yesterday.add(Duration(hours: 15, minutes: 20)),
       ),
       NotificationItem(
-        mall: '',
-        typeText: NotifTypes.verif2Step,
+        typeText: NotifTypes.verify,
         date: yesterday.add(Duration(hours: 9, minutes: 30)),
       ),
 
@@ -83,7 +78,6 @@ class Notification_ extends StatelessWidget {
 
       // May 6, 2025
       NotificationItem(
-        mall: '',
         typeText: NotifTypes.bookExp,
         date: DateTime(2025, 5, 6, 13, 25),
       ),
@@ -95,9 +89,8 @@ class Notification_ extends StatelessWidget {
 
       // November 18, 2024
       NotificationItem(
-        mall: '',
-        typeText: NotifTypes.verif,
-        date: DateTime(2024, 11, 18, 19, 30),
+        typeText: NotifTypes.twoFactor,
+        date: DateTime(2025, 3, 18, 19, 30),
       ),
     ];
   }
@@ -220,7 +213,7 @@ class Notification_ extends StatelessWidget {
                     ...groupedNotifications[dateKey]!
                         .map(
                           (notification) => NotifCard(
-                            mall: notification.mall,
+                            mall: notification.mall ?? "",
                             typeText: notification.typeText,
                             date: notification.date,
                           ),
@@ -282,8 +275,8 @@ enum NotifTypes {
   bookCancel,
   bookExp,
   bookExit,
-  verif,
-  verif2Step,
+  verify,
+  twoFactor,
   paySuccess,
 }
 
@@ -311,9 +304,9 @@ class NotifCard extends StatelessWidget {
         return 'assets/images/icons/expired.png';
       case NotifTypes.paySuccess:
         return 'assets/images/icons/payment.png';
-      case NotifTypes.verif:
+      case NotifTypes.verify:
         return 'assets/images/icons/verification.png';
-      case NotifTypes.verif2Step:
+      case NotifTypes.twoFactor:
         return 'assets/images/icons/locked.png';
     }
   }
@@ -330,7 +323,7 @@ class NotifCard extends StatelessWidget {
       case NotifTypes.bookCancel:
         return translate(
           context,
-          'Parking Booking Canceled',
+          'Booking Booking Canceled',
           'Pemesanan Parkir Dibatalkan',
           '停车预订已取消',
         );
@@ -355,19 +348,19 @@ class NotifCard extends StatelessWidget {
           'Pembayaran Berhasil!',
           '付款成功！',
         );
-      case NotifTypes.verif:
+      case NotifTypes.verify:
         return translate(
           context,
-          'Verification Successful!',
-          'Verifikasi Berhasil!',
-          '验证成功！',
+          '2FA Now Set Up!',
+          '2FA Terpasang!',
+          '2FA 现已设置!',
         );
-      case NotifTypes.verif2Step:
+      case NotifTypes.twoFactor:
         return translate(
           context,
-          '2 Step Verification Successful!',
-          'Verifikasi 2 Langkah Berhasil!',
-          '两步验证成功！',
+          'Protect your account with 2FA.',
+          'Lindungi akun Anda dengan 2FA.',
+          '使用 2FA 保护您的账户。',
         );
     }
   }
@@ -379,21 +372,21 @@ class NotifCard extends StatelessWidget {
           context,
           'Parking booking at $mall was successfully booked!',
           'Pemesanan parkir di $mall berhasil dipesan!',
-          '在$mall的停车预订已成功预订！',
+          '在 $mall 的停车预订已成功预订！',
         );
       case NotifTypes.bookCancel:
         return translate(
           context,
-          'You have canceled parking at $mall',
+          'You have canceled booking at $mall',
           'Anda telah membatalkan parkir di $mall',
-          '您已取消在$mall的停车',
+          '您已取消在 $mall 的停车',
         );
       case NotifTypes.bookExit:
         return translate(
           context,
           'You have exit parking lot at $mall',
           'Anda telah keluar dari area parkir di $mall',
-          '您已离开$mall的停车场',
+          '您已离开 $mall 的停车场',
         );
       case NotifTypes.bookExp:
         return translate(
@@ -407,21 +400,21 @@ class NotifCard extends StatelessWidget {
           context,
           'Parking booking at $mall was successfully paid',
           'Pemesanan parkir di $mall berhasil dibayar',
-          '在$mall的停车预订已成功付款',
+          '在 $mall 的停车预订已成功付款',
         );
-      case NotifTypes.verif:
+      case NotifTypes.verify:
         return translate(
           context,
-          'Account verification complete!',
-          'Verifikasi akun selesai!',
-          '账户验证完成！',
+          'Two Factor Authenticator set up successful!',
+          'Autentikator Dua Faktor berhasil terpasang!',
+          '双重身份验证器设置成功!',
         );
-      case NotifTypes.verif2Step:
+      case NotifTypes.twoFactor:
         return translate(
           context,
-          'Google Authenticator set successful!',
-          'Google Authenticator berhasil diatur!',
-          'Google身份验证器设置成功！',
+          'Account will be more secured with 2FA setup!',
+          'Akun akan lebih aman dengan 2FA terpasang!',
+          '设置 2FA 后帐户将更加安全!',
         );
     }
   }

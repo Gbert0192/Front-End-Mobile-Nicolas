@@ -33,7 +33,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    final forgotPassProvider = Provider.of<OTPProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -187,26 +187,28 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           setState(() => form.isLoading = false);
                           return;
                         }
-                        forgotPassProvider.email = form.control("email").text;
-                        forgotPassProvider.generateOTP();
+                        otpProvider.email = form.control("email").text;
+                        otpProvider.generateOTP();
                         setState(() => form.isLoading = false);
                         showFlexibleSnackbar(
                           context,
-                          "Your OTP is ${forgotPassProvider.OTP}",
+                          "Your OTP is ${otpProvider.OTP}",
                         );
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder:
-                                (context) => VerifyAccount(() {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => ResetPassword(user.id),
-                                    ),
-                                  );
-                                }),
+                                (context) => VerifyAccount(
+                                  onSubmit: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => ResetPassword(user.id),
+                                      ),
+                                    );
+                                  },
+                                ),
                           ),
                         );
                       });

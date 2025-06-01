@@ -4,9 +4,10 @@ import 'package:tugas_front_end_nicolas/model/voucher.dart';
 class Booking {
   final int user_id;
   final bool isMember;
-  final ParkingLot lot;
+  final int lot_id;
   DateTime? checkinTime;
   DateTime? checkoutTime;
+  DateTime? createdAt;
   final int floor;
   final String code;
 
@@ -20,12 +21,12 @@ class Booking {
   Booking({
     required this.user_id,
     required this.isMember,
-    required this.lot,
+    required this.lot_id,
     required this.floor,
     required this.code,
   });
 
-  void exiteParking(Voucher voucher) {
+  void exiteParking(Voucher voucher, ParkingLot lot) {
     hours = calculateHour();
     amount = lot.calculateAmount(hours!);
     tax = amount! * 0.11;
