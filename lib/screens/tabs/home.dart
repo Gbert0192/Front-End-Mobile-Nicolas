@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 // ParkingSpot model
 class ParkingSpot {
   final String name;
   final String imageUrl;
-  final int price;
+  final num price;
 
   ParkingSpot({
     required this.name,
@@ -93,12 +95,8 @@ class _HomeState extends State<Home> {
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     User user = userProvider.currentUser!;
-
-    final currencyFormat = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp. ',
-    );
 
     return Scaffold(
       body: SafeArea(
@@ -227,7 +225,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
-                                currencyFormat.format(user.balance),
+                                formatCurrency(nominal: user.balance),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
@@ -299,6 +297,76 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
 
+                if (!user.twoFactor)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blueAccent),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.blueAccent,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            translate(
+                              context,
+                              "For account security, enable Two-Factor Authentication (2FA).",
+                              'Untuk keamanan akun, aktifkan Two-Factor Authentication (2FA).',
+                              "为了帐户安全，请启用双因素身份验证 (2FA)。",
+                            ),
+                            style: TextStyle(
+                              color: Colors.blue[900],
+                              fontSize: isSmall ? 13 : null,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            otpProvider.email = user.email;
+                            otpProvider.generateOTP();
+                            showFlexibleSnackbar(
+                              context,
+                              "Your OTP is ${otpProvider.OTP}",
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => VerifyAccount(
+                                      successMessage: translate(
+                                        context,
+                                        '2FA Now Set Up!',
+                                        '2FA Terpasang!',
+                                        '2FA 现已设置!',
+                                      ),
+                                      onSubmit: () {
+                                        userProvider.setUp2Fac();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                              ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.blueAccent,
+                          ),
+                          child: Text(
+                            translate(context, "Set Up", "Aktifkan", "设置"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                if (!user.twoFactor) SizedBox(height: isSmall ? 10 : 20),
+
                 // RECENT SPOTS
                 Align(
                   alignment: Alignment.center,
@@ -362,7 +430,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Text(
-                          "${currencyFormat.format(spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
+                          "${formatCurrency(nominal: spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
                           style: TextStyle(fontSize: isSmall ? 14 : 18),
                         ),
                         SizedBox(height: isSmall ? 6 : 10),

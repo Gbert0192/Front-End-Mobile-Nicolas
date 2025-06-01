@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
@@ -38,6 +40,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -163,17 +166,46 @@ class _SignInState extends State<SignIn> {
                               return;
                             }
                             setState(() => form.isLoading = false);
-                            showFlexibleSnackbar(
-                              context,
-                              "${translate(context, "Welcome Back", "Selamat Datang kembali", "欢迎回来")} ${user.fullname.split(" ")[0]}!",
-                            );
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainLayout(),
-                              ),
-                              (Route<dynamic> route) => false,
-                            );
+                            if (user.twoFactor) {
+                              otpProvider.email = user.email;
+                              otpProvider.generateOTP();
+                              showFlexibleSnackbar(
+                                context,
+                                "Your OTP is ${otpProvider.OTP}",
+                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => VerifyAccount(
+                                        successMessage:
+                                            "${translate(context, "Welcome Back", "Selamat Datang kembali", "欢迎回来")} ${user.fullname.split(" ")[0]}!",
+                                        onSubmit: () {
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) => MainLayout(),
+                                            ),
+                                            (Route<dynamic> route) => false,
+                                          );
+                                        },
+                                      ),
+                                ),
+                              );
+                            } else {
+                              showFlexibleSnackbar(
+                                context,
+                                "${translate(context, "Welcome Back", "Selamat Datang kembali", "欢迎回来")} ${user.fullname.split(" ")[0]}!",
+                              );
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainLayout(),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            }
                           });
                         }
                       },

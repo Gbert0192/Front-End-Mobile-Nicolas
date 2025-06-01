@@ -8,8 +8,9 @@ import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class VerifyAccount extends StatefulWidget {
-  const VerifyAccount(this.onSubmit);
+  const VerifyAccount({super.key, required this.onSubmit, this.successMessage});
   final VoidCallback onSubmit;
+  final String? successMessage;
 
   @override
   State<VerifyAccount> createState() => _VerifyAccountState();
@@ -308,7 +309,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                         if (otpValid) {
                           showFlexibleSnackbar(
                             context,
-                            "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
+                            widget.successMessage ??
+                                "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
                           );
                           widget.onSubmit.call();
                         } else {

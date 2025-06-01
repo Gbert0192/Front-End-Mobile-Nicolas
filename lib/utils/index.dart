@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 
@@ -18,4 +19,17 @@ String translate(BuildContext context, String en, String id, String cn) {
       : langProvider.language == "ID"
       ? id
       : cn;
+}
+
+String formatCurrency({
+  required num nominal,
+  int decimalPlace = 2,
+  String symbol = "Rp.",
+}) {
+  final currencyFormat = NumberFormat.currency(
+    locale: 'id_ID',
+    symbol: symbol,
+    decimalDigits: decimalPlace,
+  );
+  return currencyFormat.format(nominal);
 }
