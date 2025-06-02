@@ -22,6 +22,20 @@ class ParkingSpot {
   });
 }
 
+class Mall {
+  final String name;
+  final String address;
+  final String image;
+  final num price;
+
+  Mall({
+    required this.name,
+    required this.address,
+    required this.image,
+    required this.price,
+  });
+}
+
 // Main Home
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -510,53 +524,54 @@ class HistoryCarausel extends StatelessWidget {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  final List<Map<String, dynamic>> data = [
-    {
-      'name': 'Sun Plaza',
-      'address': 'Jl. KH. Zainul Arifin No.7',
-      'image': 'assets/images/building/Sun Plaza.png',
-      'price': 3000,
-    },
-    {
-      'name': 'Center Point',
-      'address': 'Jl. KH. Zainul Arifin No.7',
-      'image': 'assets/images/building/Centre Point.png',
-      'price': 3000,
-    },
-    {
-      'name': 'Manhattan Time Square',
-      'address': 'Medan, North Sumatra',
-      'image': 'assets/images/building/Manhatan Time Square.png',
-      'price': 3000,
-    },
-    {
-      'name': 'Delipark',
-      'address': 'Medan City Center',
-      'image': 'assets/images/building/Delipark.png',
-      'price': 5000,
-    },
-    {
-      'name': 'Plaza Medan Fair',
-      'address': 'Jl. MT Haryono',
-      'image': 'assets/images/building/Plaza Medan Fair.png',
-      'price': 4000,
-    },
-    {
-      'name': 'Lippo Plaza',
-      'address': 'Jl. Gatot Subroto',
-      'image': 'assets/images/building/Lippo Plaza.png',
-      'price': 3500,
-    },
-    {
-      'name': 'Aryaduta',
-      'address': 'Jl. Gatot Subroto',
-      'image': 'assets/images/building/Aryaduta.png',
-      'price': 3500,
-    },
+  final List<Mall> data = [
+    Mall(
+      name: 'Sun Plaza',
+      address: 'Jl. KH. Zainul Arifin No.7',
+      image: 'assets/images/building/Sun Plaza.png',
+      price: 3000,
+    ),
+
+    Mall(
+      name: 'Center Point',
+      address: 'Jl. KH. Zainul Arifin No.7',
+      image: 'assets/images/building/Centre Point.png',
+      price: 3000,
+    ),
+    Mall(
+      name: 'Manhattan Time Square',
+      address: 'Medan, North Sumatra',
+      image: 'assets/images/building/Manhatan Time Square.png',
+      price: 3000,
+    ),
+    Mall(
+      name: 'Delipark',
+      address: 'Medan City Center',
+      image: 'assets/images/building/Delipark.png',
+      price: 5000,
+    ),
+    Mall(
+      name: 'Plaza Medan Fair',
+      address: 'Jl. MT Haryono',
+      image: 'assets/images/building/Plaza Medan Fair.png',
+      price: 4000,
+    ),
+    Mall(
+      name: 'Lippo Plaza',
+      address: 'Jl. Gatot Subroto',
+      image: 'assets/images/building/Lippo Plaza.png',
+      price: 3500,
+    ),
+    Mall(
+      name: 'Aryaduta',
+      address: 'Jl. Gatot Subroto',
+      image: 'assets/images/building/Aryaduta.png',
+      price: 3500,
+    ),
   ];
 
   @override
-  String? get searchFieldLabel => "Search Mall";
+  String? get searchFieldLabel => "Search";
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -584,7 +599,7 @@ class CustomSearchDelegate extends SearchDelegate {
         data
             .where(
               (element) =>
-                  element['name'].toLowerCase().contains(query.toLowerCase()),
+                  element.name.toLowerCase().contains(query.toLowerCase()),
             )
             .toList();
 
@@ -607,21 +622,21 @@ class CustomSearchDelegate extends SearchDelegate {
         final place = results[index];
         return ListTile(
           leading:
-              place['image'] != ''
+              place.image != ''
                   ? ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      place['image'],
+                      place.image,
                       width: 60,
                       height: 60,
                       fit: BoxFit.cover,
                     ),
                   )
                   : const Icon(Icons.location_on, size: 40),
-          title: Text(place['name']),
-          subtitle: Text(place['address']),
+          title: Text(place.name),
+          subtitle: Text(place.address),
           trailing: Text(
-            'Rp. ${place['price'].toString()}/hour',
+            'Rp. ${place.price.toString()}/hour',
             style: const TextStyle(color: Colors.orange),
           ),
           onTap: () {
