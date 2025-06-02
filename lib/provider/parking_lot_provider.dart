@@ -982,8 +982,26 @@ class ParkingLotProvider with ChangeNotifier {
   }
 
   List<Spot> _generateRandomSpots(List<String> codes) {
+    SpotStatus randomStat = _randomSpotStatus();
+    final now = DateTime.now();
+    final r = Random();
     return codes
-        .map((code) => Spot(code: code, status: _randomSpotStatus()))
+        .map(
+          (code) => Spot(
+            code: code,
+            status: randomStat,
+            date:
+                randomStat == SpotStatus.occupied
+                    ? DateTime(
+                      now.year,
+                      now.month,
+                      now.day,
+                      r.nextInt(24),
+                      r.nextInt(60),
+                    )
+                    : null,
+          ),
+        )
         .toList();
   }
 

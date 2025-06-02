@@ -7,7 +7,7 @@ class Spot {
   final String code;
   DateTime? date;
 
-  Spot({required this.status, required this.code});
+  Spot({required this.status, required this.code, this.date});
 }
 
 class Area {

@@ -57,7 +57,7 @@ class Booking {
         diffExpired > 30) {
       status = BookingStatus.expired;
       if (!isMember) {
-        noshowFee = lot.maxTotalEarning() * 0.5;
+        noshowFee = lot.maxTotalEarning() * 0.35;
       }
     } else {
       status = BookingStatus.entered;
@@ -69,7 +69,7 @@ class Booking {
     if (status == BookingStatus.entered) {
       status = BookingStatus.exited;
       hours = calculateHour();
-      amount = lot.calculateAmount(hours!) * 0.35;
+      amount = lot.calculateAmount(hours!);
       tax = amount! * 0.11;
       service = isMember ? 0 : 6000;
       this.voucher = voucher.useVoucher(amount! + tax! + service!, hours!);
