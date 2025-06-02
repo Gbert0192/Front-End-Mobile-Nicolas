@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
       ),
     ];
 
-    final List<SettingButtons> help_oth = [
+    final List<SettingButtons> helpOth = [
       SettingButtons(
         icon: "assets/images/icons/question.png",
         title: translate(context, "FAQ", "Pertanyaan Umum", "常见问题"),
