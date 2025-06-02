@@ -32,7 +32,7 @@ class _ProfileState extends State<Profile> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => page));
     }
 
-    final List<SettingButtons> acc_setting = [
+    final List<SettingButtons> accSetting = [
       SettingButtons(
         icon: "assets/images/icons/key.png",
         title: "Change Password",
@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
             ),
       ),
     ];
-    final List<SettingButtons> help_oth = [
+    final List<SettingButtons> helpOth = [
       SettingButtons(
         icon: "assets/images/icons/question.png",
         title: "FAQ",
@@ -218,9 +218,9 @@ class _ProfileState extends State<Profile> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: acc_setting.length,
+                          itemCount: accSetting.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return acc_setting[index];
+                            return accSetting[index];
                           },
                         ),
                         SizedBox(height: isSmall ? 8 : 10),
@@ -244,9 +244,9 @@ class _ProfileState extends State<Profile> {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: help_oth.length,
+                          itemCount: helpOth.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return help_oth[index];
+                            return helpOth[index];
                           },
                         ),
                         SizedBox(height: isSmall ? 8 : 10),

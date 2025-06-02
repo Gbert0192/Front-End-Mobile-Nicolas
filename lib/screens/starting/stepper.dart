@@ -150,7 +150,7 @@ class _StepperScreensState extends State<StepperScreens> {
 }
 
 class LandingStepper extends StatelessWidget {
-  const LandingStepper(this.step);
+  const LandingStepper(this.step, {super.key});
 
   final StepModel step;
 

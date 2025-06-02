@@ -204,15 +204,15 @@ class NotifCard extends StatelessWidget {
   String _cardDescription(NotifTypes type) {
     switch (type) {
       case NotifTypes.bookSuccess:
-        return 'Parking booking at ${mall} was successfully booked!';
+        return 'Parking booking at $mall was successfully booked!';
       case NotifTypes.bookCancel:
-        return 'You have canceled parking at ${mall}';
+        return 'You have canceled parking at $mall';
       case NotifTypes.bookExit:
-        return 'You have exit parking lot at ${mall}';
+        return 'You have exit parking lot at $mall';
       case NotifTypes.bookExp:
         return 'You missed your booking, no-show fee was charged.';
       case NotifTypes.paySuccess:
-        return 'Parking booking at ${mall} was successfully paid';
+        return 'Parking booking at $mall was successfully paid';
       case NotifTypes.verif:
         return 'Account verification complete!';
       case NotifTypes.verif2Step:

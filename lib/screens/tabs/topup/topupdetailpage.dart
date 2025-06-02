@@ -87,7 +87,7 @@ class TopUpDetailPage extends StatelessWidget {
                       // Salin ke clipboard jika mau
                     },
                     child: const Text("Copy"),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -150,7 +150,7 @@ class TopUpDetailPage extends StatelessWidget {
                         ],
                       ),
                     );
-                  }).toList(),
+                  }),
                 ],
               ),
             ),

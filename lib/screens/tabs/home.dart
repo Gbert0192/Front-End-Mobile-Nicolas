@@ -267,10 +267,24 @@ class _HomeState extends State<Home> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // SEARCH
-                ResponsiveTextInput(
-                  isSmall: isSmall,
-                  hint: "Search",
-                  leading: Icons.search,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () {
+                      showSearch(
+                        context: context,
+                        delegate: CustomSearchDelegate(),
+                      );
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: 'Search',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
 
@@ -389,5 +403,128 @@ class HistoryCarausel extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  final List<Map<String, dynamic>> data = [
+    {
+      'name': 'Sun Plaza',
+      'address': 'Jl. KH. Zainul Arifin No.7',
+      'image': 'https://i.imgur.com/9nVw6Yf.png',
+      'price': 3000,
+    },
+    {
+      'name': 'Center Point',
+      'address': 'Jl. KH. Zainul Arifin No.7',
+      'image': 'https://i.imgur.com/TkL6CUN.png',
+      'price': 3000,
+    },
+    {
+      'name': 'Manhattan Time Square',
+      'address': 'Medan, North Sumatra',
+      'image': 'https://i.imgur.com/Adu3CqH.png',
+      'price': 3000,
+    },
+    {
+      'name': 'Delipark',
+      'address': 'Medan City Center',
+      'image': 'https://i.imgur.com/X8EgyXg.png',
+      'price': 5000,
+    },
+    {
+      'name': 'Brastagi Supermarket',
+      'address': 'Jl. MT Haryono',
+      'image': '',
+      'price': 4000,
+    },
+    {
+      'name': 'Suzuya',
+      'address': 'Jl. Gatot Subroto',
+      'image': '',
+      'price': 3500,
+    },
+  ];
+
+  @override
+  String? get searchFieldLabel => "Search Mall";
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final results =
+        data
+            .where(
+              (element) =>
+                  element['name'].toLowerCase().contains(query.toLowerCase()),
+            )
+            .toList();
+
+    if (results.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/empty/search_where.png', width: 200),
+            const SizedBox(height: 16),
+            const Text('Search no founded', style: TextStyle(fontSize: 16)),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        final place = results[index];
+        return ListTile(
+          leading:
+              place['image'] != ''
+                  ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      place['image'],
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                  : const Icon(Icons.location_on, size: 40),
+          title: Text(place['name']),
+          subtitle: Text(place['address']),
+          trailing: Text(
+            'Rp. ${place['price'].toString()}/hour',
+            style: const TextStyle(color: Colors.orange),
+          ),
+          onTap: () {
+            //Detail
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return buildResults(context);
   }
 }
