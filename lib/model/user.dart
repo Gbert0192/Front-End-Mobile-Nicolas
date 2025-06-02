@@ -10,9 +10,9 @@ class User {
   String? birthDate;
   String? gender;
   int? rating;
-  String language = "EN";
   double balance = 10000000;
   bool isMember = false;
+  bool twoFactor = false;
   DateTime? memberSince;
   DateTime? memberUntil;
 
@@ -48,8 +48,8 @@ class User {
     rating = rate;
   }
 
-  void switchLanguage(String lang) {
-    language = lang;
+  void setUp2Fac() {
+    twoFactor = true;
   }
 
   void editProfile({

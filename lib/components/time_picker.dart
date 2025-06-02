@@ -3,8 +3,8 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 
 enum DatePickerType { date, month, datetime }
 
-class ResponsiveDatePicker extends StatefulWidget {
-  const ResponsiveDatePicker({
+class ResponsiveTimePicker extends StatefulWidget {
+  const ResponsiveTimePicker({
     super.key,
     required this.controller,
     this.onChanged,
@@ -34,10 +34,10 @@ class ResponsiveDatePicker extends StatefulWidget {
   final DatePickerType type;
 
   @override
-  State<ResponsiveDatePicker> createState() => _ResponsiveDatePickerState();
+  State<ResponsiveTimePicker> createState() => _ResponsiveTimePickerState();
 }
 
-class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
+class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   bool _isFocused = false;
   String? _selectedDate;
 
@@ -166,14 +166,14 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                 borderRadius: BorderRadius.circular(20),
                 boxShadow:
                     isOutline
-                        ? null
-                        : [
+                        ? [
                           BoxShadow(
                             color: Colors.black.withAlpha(64),
                             blurRadius: 6,
                             offset: const Offset(4, 4),
                           ),
-                        ],
+                        ]
+                        : null,
               ),
               child: GestureDetector(
                 onTap: () async {
@@ -237,10 +237,7 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                             ),
                   ),
                   child: Text(
-                    _selectedDate ??
-                        widget.controller?.text ??
-                        widget.hint ??
-                        '',
+                    _selectedDate ?? widget.hint ?? '',
                     style: TextStyle(
                       fontSize: widget.isSmall ? 16 : 18,
                       color: Colors.grey[800],
@@ -264,7 +261,7 @@ class _ResponsiveDatePickerState extends State<ResponsiveDatePicker> {
                 icon: Icon(
                   _selectedDate != null
                       ? Icons.clear_outlined
-                      : Icons.date_range_rounded,
+                      : Icons.calendar_month_outlined,
                   color: const Color(0xFF1F1E5B),
                 ),
               ),

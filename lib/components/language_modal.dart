@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 
 class LanguageModal extends StatefulWidget {
   const LanguageModal(this.value, {super.key});
@@ -12,16 +11,10 @@ class LanguageModal extends StatefulWidget {
 }
 
 class _LanguageModalState extends State<LanguageModal> {
-  final List<Language> languages = [
-    Language('Bahasa Indonesia', 'ID'),
-    Language('English', 'EN'),
-    Language('中文', 'CN'),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    User user = userProvider.currentUser!;
+    final langProvider = Provider.of<LanguageProvider>(context);
+
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Container(
@@ -74,13 +67,16 @@ class _LanguageModalState extends State<LanguageModal> {
             ),
             child: Column(
               children: [
-                ...languages.map((lang) {
-                  final isSelected = user.language == lang.value;
+                ...langProvider.languages.map((lang) {
+                  final isSelected = langProvider.language == lang.value;
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     child: GestureDetector(
                       onTap: () {
-                        userProvider.switchLanguage(lang.value);
+                        Navigator.of(context).pop();
+                        Future.delayed(Duration(milliseconds: 500), () {
+                          langProvider.switchLanguage(lang.value);
+                        });
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -136,10 +132,4 @@ class _LanguageModalState extends State<LanguageModal> {
       ),
     );
   }
-}
-
-class Language {
-  Language(this.label, this.value);
-  final String label;
-  final String value;
 }

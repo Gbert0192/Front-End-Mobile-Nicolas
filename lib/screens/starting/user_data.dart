@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -108,7 +109,7 @@ class _UserDataState extends State<UserData> {
                 child: Column(
                   children: [
                     Text(
-                      'USER DATA',
+                      translate(context, "USER DATA", "DATA PENGGUNA", "用户数据"),
                       style: TextStyle(
                         fontSize: isSmall ? 35 : 50,
                         color: Color(0xFF2C39B8),
@@ -259,7 +260,7 @@ class _UserDataState extends State<UserData> {
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome to ParkID, ${form.control("fullname").text.split(" ")[0]}!",
+                              "${translate(context, "Welcome to ParkID", "Selamat datang di ParkID", "欢迎来到 ParkID")}, ${form.control("fullname").text.split(" ")[0]}!",
                             );
                             Navigator.pushAndRemoveUntil(
                               context,
@@ -271,7 +272,7 @@ class _UserDataState extends State<UserData> {
                           });
                         }
                       },
-                      text: "Register",
+                      text: translate(context, "Register", "Daftar", "登记"),
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                   ],

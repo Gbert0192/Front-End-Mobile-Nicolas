@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class Voucher {
   final String title;
   final String location;
   final String benefit;
-  final String maxUse;
+  final int? maxUse;
+  final int? minHour;
   final DateTime? validUntil;
   final String image;
 
@@ -14,6 +16,7 @@ class Voucher {
     required this.location,
     required this.benefit,
     required this.maxUse,
+    this.minHour,
     this.validUntil,
     required this.image,
   });
@@ -26,15 +29,14 @@ class VoucherCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Card(
       elevation: 5,
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
-        side: BorderSide(
-          color: const Color.fromARGB(255, 217, 217, 217),
-          width: 2,
-        ),
+        side: BorderSide(color: const Color.fromARGB(255, 217, 217, 217)),
       ),
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
@@ -47,61 +49,101 @@ class VoucherCard extends StatelessWidget {
                 children: [
                   Text(
                     voucher.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: isSmall ? 16 : 18,
                     ),
                   ),
-                  Text(voucher.location),
-                  if (voucher.benefit.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E1E61),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        voucher.benefit,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                  Text(
+                    "${translate(context, "Valid at", "Berlaku di", "适用于")} ${voucher.location}",
+                    style: TextStyle(fontSize: isSmall ? 12 : 14),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E1E61),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      voucher.benefit,
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1E1E61),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          voucher.maxUse == null
+                              ? translate(
+                                context,
+                                "Unlimited",
+                                "Tanpa Batas",
+                                "无限制",
+                              )
+                              : translate(
+                                context,
+                                'Max Uses ${voucher.maxUse!.toString()}',
+                                'Maks ${voucher.maxUse!.toString()} Kali',
+                                '最多使用${voucher.maxUse!.toString()}次',
+                              ),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
-                    ),
-                  if (voucher.maxUse.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(top: 4),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E1E61),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        voucher.maxUse,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
+                      SizedBox(width: 5),
+                      if (voucher.minHour != null)
+                        Container(
+                          margin: const EdgeInsets.only(top: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E1E61),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            translate(
+                              context,
+                              "Min ${voucher.minHour} Hours",
+                              "Min ${voucher.minHour} Jam",
+                              "最少${voucher.minHour}小时",
+                            ),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  if (voucher.validUntil != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: Text(
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      translate(
+                        context,
                         'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
+                        'Berlaku Hingga ${DateFormat.yMMMMd().format(voucher.validUntil!)}',
+                        '有效期至${DateFormat.yMMMMd().format(voucher.validUntil!)}',
                       ),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
+                  ),
                 ],
               ),
             ),
@@ -110,8 +152,8 @@ class VoucherCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               child: Image.asset(
                 voucher.image,
-                width: 120,
-                height: 120,
+                width: isSmall ? 100 : 120,
+                height: isSmall ? 100 : 120,
                 fit: BoxFit.cover,
               ),
             ),
@@ -123,64 +165,87 @@ class VoucherCard extends StatelessWidget {
 }
 
 class VoucherScreen extends StatelessWidget {
-  const VoucherScreen({super.key});
+  VoucherScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final vouchers = [
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Sun Plaza only',
+        location: 'Sun Plaza',
         benefit: 'Free',
-        maxUse: 'Max Uses 6',
+        maxUse: 6,
+        minHour: 5,
         validUntil: DateTime(2025, 12, 25),
         image: 'assets/images/building/Sun Plaza.png',
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Delipark',
+        location: 'Delipark',
         benefit: 'Disc 50%',
-        maxUse: 'Unlimited',
+        maxUse: null,
         validUntil: DateTime(2025, 12, 28),
         image: 'assets/images/building/Delipark.png',
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Plaza Medan Fair',
+        location: 'Plaza Medan Fair',
         benefit: 'Disc Rp 7,000.00',
-        maxUse: 'Max Uses 3',
+        maxUse: 3,
+        minHour: 3,
         validUntil: DateTime(2025, 12, 23),
         image: 'assets/images/building/Plaza Medan Fair.png',
       ),
       Voucher(
         title: 'Free Parking Voucher',
-        location: 'Valid at Centre Point',
+        location: 'Centre Point',
         benefit: 'Disc Rp 5,000.00',
-        maxUse: 'Max Uses 10',
+        maxUse: 10,
         validUntil: DateTime(2026, 1, 7),
         image: 'assets/images/building/Centre Point.png',
       ),
       Voucher(
         title: 'Discount 20% Voucher',
-        location: 'Valid at Lippo Plaza',
+        location: 'Lippo Plaza',
         benefit: 'Disc Rp 5,000.00',
-        maxUse: 'Max Uses 10',
-        validUntil: null,
+        maxUse: 10,
+        minHour: 6,
+        validUntil: DateTime(2025, 10, 7),
         image: 'assets/images/building/Lippo Plaza.png',
       ),
     ];
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: vouchers.length,
-                itemBuilder: (context, index) {
-                  return VoucherCard(voucher: vouchers[index]);
-                },
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: Text(
+                translate(
+                  context,
+                  'Available Voucher',
+                  'Voucher Tersedia',
+                  '可用优惠券',
+                ),
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: isSmall ? 25 : 30,
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children:
+                      vouchers
+                          .map((voucher) => VoucherCard(voucher: voucher))
+                          .toList(),
+                ),
               ),
             ),
           ],

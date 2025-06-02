@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 // ParkingSpot model
 class ParkingSpot {
   final String name;
   final String imageUrl;
-  final int price;
+  final num price;
 
   ParkingSpot({
     required this.name,
@@ -91,12 +95,8 @@ class _HomeState extends State<Home> {
 
     final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     User user = userProvider.currentUser!;
-
-    final currencyFormat = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp. ',
-    );
 
     return Scaffold(
       body: SafeArea(
@@ -118,7 +118,7 @@ class _HomeState extends State<Home> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Halo, ${user.fullname.split(" ")[0]}!",
+                            "${translate(context, "Hallo", "Halo", "你好")} ${user.fullname.split(" ")[0]}!",
                             style: TextStyle(
                               fontSize: isSmall ? 28 : 36,
                               fontWeight: FontWeight.bold,
@@ -133,10 +133,15 @@ class _HomeState extends State<Home> {
                             ),
                           ),
                           Text(
-                            "Welcome!",
+                            translate(
+                              context,
+                              "Welcome",
+                              "Selamat Datang",
+                              "欢迎",
+                            ),
                             style: TextStyle(
                               fontSize: isSmall ? 22 : 24,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                               color: const Color(0xFF1F1E5B),
                               shadows: [
                                 Shadow(
@@ -173,7 +178,16 @@ class _HomeState extends State<Home> {
                 Container(
                   padding: EdgeInsets.all(isSmall ? 12 : 20),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF1F1E5B),
+                    // color: const Color(0xFF1F1E5B),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        const Color.fromARGB(255, 52, 49, 145),
+                        const Color.fromARGB(255, 6, 10, 70),
+                        const Color.fromARGB(255, 52, 49, 145),
+                      ],
+                    ),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -203,7 +217,7 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Balance",
+                                translate(context, "Balance", "Saldo", "平衡"),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
@@ -211,7 +225,7 @@ class _HomeState extends State<Home> {
                                 ),
                               ),
                               Text(
-                                currencyFormat.format(user.balance),
+                                formatCurrency(nominal: user.balance),
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
@@ -222,44 +236,53 @@ class _HomeState extends State<Home> {
                           ),
                         ],
                       ),
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(isSmall ? 5 : 10),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withAlpha(38),
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withAlpha(51),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
+                      GestureDetector(
+                        onTap:
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TopUpPage(),
+                              ),
                             ),
-                            child: Icon(
-                              Icons.add,
-                              color: Colors.white,
-                              size: isSmall ? 24 : 30,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(isSmall ? 5 : 10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(38),
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(51),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: isSmall ? 24 : 30,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Top Up",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: isSmall ? 12 : 14,
-                              fontWeight: FontWeight.w600,
-                              shadows: [
-                                Shadow(
-                                  color: Colors.black.withAlpha(77),
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 1),
-                                ),
-                              ],
+                            Text(
+                              translate(context, "Top Up", "Top Up", "充值"),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: isSmall ? 12 : 14,
+                                fontWeight: FontWeight.w600,
+                                shadows: [
+                                  Shadow(
+                                    color: Colors.black.withAlpha(77),
+                                    blurRadius: 3,
+                                    offset: const Offset(0, 1),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -267,32 +290,93 @@ class _HomeState extends State<Home> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // SEARCH
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    readOnly: true,
-                    onTap: () {
-                      showSearch(
-                        context: context,
-                        delegate: CustomSearchDelegate(),
-                      );
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      hintText: 'Search',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                  ),
+                ResponsiveTextInput(
+                  isSmall: isSmall,
+                  hint: translate(context, "Search", "Telusuri", "搜索"),
+                  leading: Icons.search,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
+
+                if (!user.twoFactor)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blueAccent),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.info_outline,
+                          color: Colors.blueAccent,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            translate(
+                              context,
+                              "For account security, enable Two-Factor Authentication (2FA).",
+                              'Untuk keamanan akun, aktifkan Two-Factor Authentication (2FA).',
+                              "为了帐户安全，请启用双因素身份验证 (2FA)。",
+                            ),
+                            style: TextStyle(
+                              color: Colors.blue[900],
+                              fontSize: isSmall ? 13 : null,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            otpProvider.email = user.email;
+                            otpProvider.generateOTP();
+                            showFlexibleSnackbar(
+                              context,
+                              "Your OTP is ${otpProvider.OTP}",
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => VerifyAccount(
+                                      successMessage: translate(
+                                        context,
+                                        '2FA Now Set Up!',
+                                        '2FA Terpasang!',
+                                        '2FA 现已设置!',
+                                      ),
+                                      onSubmit: () {
+                                        userProvider.setUp2Fac();
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                              ),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.blueAccent,
+                          ),
+                          child: Text(
+                            translate(context, "Set Up", "Aktifkan", "设置"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                if (!user.twoFactor) SizedBox(height: isSmall ? 10 : 20),
 
                 // RECENT SPOTS
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    "Recent Spots",
+                    translate(
+                      context,
+                      "Frequent Spots",
+                      "Spot Favorit",
+                      "常见景点",
+                    ),
                     style: TextStyle(
                       fontSize: isSmall ? 24 : 30,
                       fontWeight: FontWeight.w500,
@@ -346,7 +430,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Text(
-                          "${currencyFormat.format(spots[_currentIndex].price)} / Hour",
+                          "${formatCurrency(nominal: spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
                           style: TextStyle(fontSize: isSmall ? 14 : 18),
                         ),
                         SizedBox(height: isSmall ? 6 : 10),
@@ -357,7 +441,12 @@ class _HomeState extends State<Home> {
                             foregroundColor: Colors.white,
                           ),
                           child: Text(
-                            "Get Parking Now",
+                            translate(
+                              context,
+                              "Get Parking Now",
+                              "Parkir Sekarang",
+                              "立即停车",
+                            ),
                             style: TextStyle(fontSize: isSmall ? 14 : 16),
                           ),
                         ),
@@ -403,128 +492,5 @@ class HistoryCarausel extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class CustomSearchDelegate extends SearchDelegate {
-  final List<Map<String, dynamic>> data = [
-    {
-      'name': 'Sun Plaza',
-      'address': 'Jl. KH. Zainul Arifin No.7',
-      'image': 'https://i.imgur.com/9nVw6Yf.png',
-      'price': 3000,
-    },
-    {
-      'name': 'Center Point',
-      'address': 'Jl. KH. Zainul Arifin No.7',
-      'image': 'https://i.imgur.com/TkL6CUN.png',
-      'price': 3000,
-    },
-    {
-      'name': 'Manhattan Time Square',
-      'address': 'Medan, North Sumatra',
-      'image': 'https://i.imgur.com/Adu3CqH.png',
-      'price': 3000,
-    },
-    {
-      'name': 'Delipark',
-      'address': 'Medan City Center',
-      'image': 'https://i.imgur.com/X8EgyXg.png',
-      'price': 5000,
-    },
-    {
-      'name': 'Brastagi Supermarket',
-      'address': 'Jl. MT Haryono',
-      'image': '',
-      'price': 4000,
-    },
-    {
-      'name': 'Suzuya',
-      'address': 'Jl. Gatot Subroto',
-      'image': '',
-      'price': 3500,
-    },
-  ];
-
-  @override
-  String? get searchFieldLabel => "Search Mall";
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () => close(context, null),
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    final results =
-        data
-            .where(
-              (element) =>
-                  element['name'].toLowerCase().contains(query.toLowerCase()),
-            )
-            .toList();
-
-    if (results.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/empty/search_where.png', width: 200),
-            const SizedBox(height: 16),
-            const Text('Search no founded', style: TextStyle(fontSize: 16)),
-          ],
-        ),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: results.length,
-      itemBuilder: (context, index) {
-        final place = results[index];
-        return ListTile(
-          leading:
-              place['image'] != ''
-                  ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      place['image'],
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                  : const Icon(Icons.location_on, size: 40),
-          title: Text(place['name']),
-          subtitle: Text(place['address']),
-          trailing: Text(
-            'Rp. ${place['price'].toString()}/hour',
-            style: const TextStyle(color: Colors.orange),
-          ),
-          onTap: () {
-            //Detail
-          },
-        );
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return buildResults(context);
   }
 }

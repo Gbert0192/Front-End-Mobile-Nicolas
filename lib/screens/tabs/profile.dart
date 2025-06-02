@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/language_modal.dart';
+import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/change_password.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/contact_us.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/account/language_modal.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 
@@ -24,6 +26,7 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final langProvider = Provider.of<LanguageProvider>(context);
     User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -35,38 +38,44 @@ class _ProfileState extends State<Profile> {
     final List<SettingButtons> accSetting = [
       SettingButtons(
         icon: "assets/images/icons/key.png",
-        title: "Change Password",
+        title: translate(context, "Change Password", "Ubah Kata Sandi", "更改密码"),
         onPressed: () => acc_nav(ChangePassword()),
       ),
       SettingButtons(
         icon: "assets/images/icons/calender.png",
-        title: "Subscriptions",
+        title: translate(context, "Subscriptions", "Langganan", "订阅"),
         onPressed: () => acc_nav(Subscription()),
       ),
       SettingButtons(
         icon: "assets/images/icons/language.png",
-        title: "Languages",
+        title: translate(context, "Languages", "Bahasa", "语言"),
         onPressed:
             () => showModalBottomSheet(
               context: context,
-              builder: (context) => LanguageModal(user.language),
+              builder: (context) => LanguageModal(langProvider.language),
             ),
       ),
     ];
-    final List<SettingButtons> helpOth = [
+
+    final List<SettingButtons> help_oth = [
       SettingButtons(
         icon: "assets/images/icons/question.png",
-        title: "FAQ",
+        title: translate(context, "FAQ", "Pertanyaan Umum", "常见问题"),
         onPressed: () => acc_nav(FAQ()),
       ),
       SettingButtons(
         icon: "assets/images/icons/problem.png",
-        title: "Contact Us",
+        title: translate(context, "Contact Us", "Hubungi Kami", "联系我们"),
         onPressed: () => acc_nav(ContactUsPage()),
       ),
       SettingButtons(
         icon: "assets/images/icons/star.png",
-        title: "Rate Our App",
+        title: translate(
+          context,
+          "Rate Our App",
+          "Beri Rating Aplikasi",
+          "为应用评分",
+        ),
         onPressed:
             () => showGeneralDialog(
               context: context,
@@ -107,7 +116,7 @@ class _ProfileState extends State<Profile> {
               automaticallyImplyLeading: false,
               centerTitle: true,
               title: Text(
-                'My Profile',
+                translate(context, "My Profile", "Profil Saya", "我的资料"),
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: isSmall ? 25 : 30,
@@ -117,29 +126,63 @@ class _ProfileState extends State<Profile> {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          const Color.fromARGB(255, 52, 49, 145),
+                          const Color.fromARGB(255, 6, 10, 70),
+                          const Color.fromARGB(255, 6, 10, 70),
+                          const Color.fromARGB(255, 52, 49, 145),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF6366F1).withAlpha(76),
+                          blurRadius: 20,
+                          offset: const Offset(0, 8),
+                          spreadRadius: 2,
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    margin: EdgeInsets.symmetric(
+                      horizontal: isSmall ? 12 : 16,
+                      vertical: isSmall ? 6 : 10,
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 14, vertical: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        CircleAvatar(
-                          radius: isSmall ? 50 : 70,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage:
-                              user.profilePic != null
-                                  ? AssetImage(user.profilePic!)
-                                  : null,
-                          child:
-                              user.profilePic == null
-                                  ? Icon(
-                                    Icons.person,
-                                    size: isSmall ? 50 : 70,
-                                    color: Colors.grey[500],
-                                  )
-                                  : null,
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withAlpha(51),
+                                blurRadius: 15,
+                                offset: const Offset(0, 5),
+                              ),
+                            ],
+                          ),
+                          child: CircleAvatar(
+                            radius: isSmall ? 50 : 60,
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                user.profilePic != null
+                                    ? AssetImage(user.profilePic!)
+                                    : null,
+                            child:
+                                user.profilePic == null
+                                    ? Icon(
+                                      Icons.person,
+                                      size: isSmall ? 50 : 60,
+                                      color: Colors.grey[400],
+                                    )
+                                    : null,
+                          ),
                         ),
                         SizedBox(
                           child: Column(
@@ -150,6 +193,7 @@ class _ProfileState extends State<Profile> {
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: isSmall ? 18 : 20,
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 4),
@@ -157,7 +201,7 @@ class _ProfileState extends State<Profile> {
                                 user.email,
                                 style: TextStyle(
                                   fontSize: isSmall ? 14 : 16,
-                                  color: Colors.grey[500],
+                                  color: Colors.white.withAlpha(204),
                                 ),
                               ),
                               SizedBox(height: 4),
@@ -165,7 +209,8 @@ class _ProfileState extends State<Profile> {
                                 '+${user.dialCode}${user.phone}',
                                 style: TextStyle(
                                   fontSize: isSmall ? 16 : 18,
-                                  fontWeight: FontWeight.w400,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                             ],
@@ -173,18 +218,31 @@ class _ProfileState extends State<Profile> {
                         ),
                         Align(
                           alignment: Alignment.topCenter,
-                          child: CircleAvatar(
-                            radius: 20,
-                            backgroundColor: const Color(0xFF1F1E5B),
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.edit,
-                                size: 16,
-                                color: Colors.white,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withAlpha(38),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: Colors.transparent,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.edit,
+                                  size: 16,
+                                  color: const Color(0xFF1F1E5B),
+                                ),
+                                onPressed: () {
+                                  acc_nav(EditProfile(user));
+                                },
                               ),
-                              onPressed: () {
-                                acc_nav(EditProfile(user));
-                              },
                             ),
                           ),
                         ),
@@ -193,7 +251,7 @@ class _ProfileState extends State<Profile> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 16,
+                      horizontal: isSmall ? 12 : 16,
                       vertical: isSmall ? 4 : 8,
                     ),
                     child: Column(
@@ -201,10 +259,15 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Account Settings",
+                            translate(
+                              context,
+                              "Account Settings",
+                              "Pengaturan Akun",
+                              "账户设置",
+                            ),
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 25,
-                              fontWeight: FontWeight.w400,
+                              fontSize: isSmall ? 20 : 24,
+                              fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
                                   color: Colors.black.withAlpha(64),
@@ -227,10 +290,15 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Helps and Others",
+                            translate(
+                              context,
+                              "Help and Others",
+                              "Bantuan dan Lainnya",
+                              "帮助和其他",
+                            ),
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 25,
-                              fontWeight: FontWeight.w400,
+                              fontSize: isSmall ? 20 : 24,
+                              fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
                                   color: Colors.black.withAlpha(64),
@@ -253,10 +321,15 @@ class _ProfileState extends State<Profile> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Exit the Application",
+                            translate(
+                              context,
+                              "Exit the Application",
+                              "Keluar dari Aplikasi",
+                              "退出应用程序",
+                            ),
                             style: TextStyle(
-                              fontSize: isSmall ? 18 : 25,
-                              fontWeight: FontWeight.w400,
+                              fontSize: isSmall ? 20 : 24,
+                              fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
                                   color: Colors.black.withAlpha(64),
@@ -274,16 +347,30 @@ class _ProfileState extends State<Profile> {
                                   context: context,
                                   loading: true,
                                   time: 1,
-                                  title: "Logout",
-                                  subtitle:
-                                      "Are you sure you want to logout from your account?",
+                                  title: translate(
+                                    context,
+                                    "Logout",
+                                    "Keluar",
+                                    "登出",
+                                  ),
+                                  subtitle: translate(
+                                    context,
+                                    "Are you sure you want to logout from your account?",
+                                    "Apakah Anda yakin ingin keluar dari akun Anda?",
+                                    "您确定要退出您的账户吗？",
+                                  ),
                                   icon: Icons.logout,
                                   color: const Color.fromARGB(255, 220, 56, 45),
                                   onContinue: () {
                                     userProvider.logout();
                                     showFlexibleSnackbar(
                                       context,
-                                      "See you next time, ${user.fullname.split(" ")[0]}!",
+                                      translate(
+                                        context,
+                                        "See you next time, ${user.fullname.split(" ")[0]}!",
+                                        "Sampai jumpa lagi, ${user.fullname.split(" ")[0]}!",
+                                        "下次见，${user.fullname.split(" ")[0]}！",
+                                      ),
                                     );
                                     Navigator.pushAndRemoveUntil(
                                       context,
@@ -295,11 +382,24 @@ class _ProfileState extends State<Profile> {
                                   },
                                 ),
                               },
-                          title: "Log Out",
+                          title: translate(context, "Log Out", "Keluar", "登出"),
                           tail: Icons.exit_to_app_rounded,
                           tailColor: Colors.red,
+                          borderColor: const Color.fromARGB(255, 253, 213, 209),
                           textColor: Colors.red,
+                          tailForeground: const Color.fromRGBO(
+                            244,
+                            67,
+                            54,
+                            0.15,
+                          ),
                           bgColor: Color(0xFFFFDCDC),
+                          iconForeground: const Color.fromRGBO(
+                            244,
+                            67,
+                            54,
+                            0.20,
+                          ),
                         ),
                       ],
                     ),
@@ -320,11 +420,14 @@ class SettingButtons extends StatelessWidget {
     this.icon,
     required this.title,
     this.onPressed,
-    this.tail = Icons.arrow_right_sharp,
-    this.bgColor = const Color(0xFFEDF4FF),
+    this.tail = Icons.arrow_forward_ios_rounded,
+    this.bgColor = Colors.white,
+    this.borderColor = const Color.fromARGB(255, 242, 242, 242),
     this.textColor = Colors.black,
     this.iconColor = Colors.black,
-    this.tailColor = Colors.black,
+    this.iconForeground = const Color.fromRGBO(99, 101, 241, 0.1),
+    this.tailColor = const Color.fromRGBO(0, 0, 0, 1),
+    this.tailForeground = const Color.fromRGBO(0, 0, 0, 0.1),
   });
 
   final Object? icon;
@@ -332,8 +435,11 @@ class SettingButtons extends StatelessWidget {
   final IconData tail;
   final Color bgColor;
   final Color textColor;
+  final Color borderColor;
   final Color tailColor;
+  final Color tailForeground;
   final Color iconColor;
+  final Color iconForeground;
   final VoidCallback? onPressed;
 
   @override
@@ -345,19 +451,28 @@ class SettingButtons extends StatelessWidget {
       onTap: onPressed,
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: isSmall ? 4 : 8),
-        child: Container(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
           padding: EdgeInsets.symmetric(
-            horizontal: isSmall ? 12 : 16,
-            vertical: isSmall ? 10 : 12,
+            horizontal: isSmall ? 16 : 20,
+            vertical: isSmall ? 12 : 16,
           ),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(width: 1, color: borderColor.withAlpha(128)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(64),
+                color: Colors.black.withAlpha(20),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+                spreadRadius: 0,
+              ),
+              BoxShadow(
+                color: Colors.black.withAlpha(10),
                 blurRadius: 6,
-                offset: const Offset(4, 4),
+                offset: const Offset(0, 2),
+                spreadRadius: 0,
               ),
             ],
           ),
@@ -367,30 +482,45 @@ class SettingButtons extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  icon != null
-                      ? icon is String
-                          ? Image.asset(
-                            icon! as String,
-                            scale: isSmall ? 32 : 25,
-                          )
-                          : Icon(
-                            icon! as IconData,
-                            size: isSmall ? 24 : 28,
-                            color: iconColor,
-                          )
-                      : SizedBox.shrink(),
-                  const SizedBox(width: 12),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: iconForeground,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child:
+                        icon != null
+                            ? icon is String
+                                ? Image.asset(
+                                  icon! as String,
+                                  scale: isSmall ? 32 : 25,
+                                )
+                                : Icon(
+                                  icon! as IconData,
+                                  size: isSmall ? 20 : 24,
+                                  color: iconColor,
+                                )
+                            : SizedBox.shrink(),
+                  ),
+                  const SizedBox(width: 16),
                   Text(
                     title,
                     style: TextStyle(
                       color: textColor,
-                      fontSize: isSmall ? 16 : 20,
-                      fontWeight: FontWeight.w500,
+                      fontSize: isSmall ? 16 : 18,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-              Icon(tail, color: tailColor),
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: tailForeground,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(tail, color: tailColor, size: isSmall ? 16 : 18),
+              ),
             ],
           ),
         ),

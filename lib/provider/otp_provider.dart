@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 
-class ForgetPassProvider with ChangeNotifier {
+class OTPProvider with ChangeNotifier {
   int? OTP;
   String email = "";
 

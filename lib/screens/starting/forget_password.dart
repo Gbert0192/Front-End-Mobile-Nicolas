@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
-import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/starting/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
+import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -31,7 +33,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
 
   @override
   Widget build(BuildContext context) {
-    final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -72,7 +74,12 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
                 Text(
-                  'Forgot Your Password? Enter Your Email To Get OTP!',
+                  translate(
+                    context,
+                    'Forgot Your Password? Enter Your Email To Get OTP!',
+                    "Lupa Kata Sandi Anda? Masukkan Email Anda untuk Mendapatkan OTP",
+                    "忘记密码？输入邮箱地址获取一次性密码",
+                  ),
                   style: TextStyle(
                     fontSize: isSmall ? 20 : 24,
                     color: Color(0xFF4083FF),
@@ -180,23 +187,34 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           setState(() => form.isLoading = false);
                           return;
                         }
-                        forgotPassProvider.email = form.control("email").text;
-                        forgotPassProvider.generateOTP();
+                        otpProvider.email = form.control("email").text;
+                        otpProvider.generateOTP();
                         setState(() => form.isLoading = false);
                         showFlexibleSnackbar(
                           context,
-                          "Your OTP is ${forgotPassProvider.OTP}",
+                          "Your OTP is ${otpProvider.OTP}",
                         );
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(user.id),
+                            builder:
+                                (context) => VerifyAccount(
+                                  onSubmit: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => ResetPassword(user.id),
+                                      ),
+                                    );
+                                  },
+                                ),
                           ),
                         );
                       });
                     }
                   },
-                  text: "Continue",
+                  text: translate(context, "Continue", "Lanjut", "继续"),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
               ],

@@ -1,12 +1,190 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
+
+class NotificationItem {
+  final NotifTypes typeText;
+  final String? mall;
+  final DateTime date;
+
+  NotificationItem({required this.typeText, this.mall, required this.date});
+}
 
 class Notification_ extends StatelessWidget {
   const Notification_({super.key});
+
+  List<NotificationItem> _getNotifications() {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(Duration(days: 1));
+
+    return [
+      // Today's notifications
+      NotificationItem(
+        mall: 'Sun Plaza',
+        typeText: NotifTypes.bookSuccess,
+        date: today.add(Duration(hours: 11, minutes: 2)),
+      ),
+      NotificationItem(
+        mall: 'Centre Point Mall',
+        typeText: NotifTypes.bookCancel,
+        date: today.add(Duration(hours: 10, minutes: 15)),
+      ),
+
+      // Yesterday's notifications
+      NotificationItem(
+        mall: 'Thamrin Plaza',
+        typeText: NotifTypes.paySuccess,
+        date: yesterday.add(Duration(hours: 16, minutes: 45)),
+      ),
+      NotificationItem(
+        mall: 'Thamrin Plaza',
+        typeText: NotifTypes.bookExit,
+        date: yesterday.add(Duration(hours: 15, minutes: 20)),
+      ),
+      NotificationItem(
+        typeText: NotifTypes.verify,
+        date: yesterday.add(Duration(hours: 9, minutes: 30)),
+      ),
+
+      // May 27, 2025
+      NotificationItem(
+        mall: 'Sun Plaza',
+        typeText: NotifTypes.paySuccess,
+        date: DateTime(2025, 5, 27, 13, 25),
+      ),
+      NotificationItem(
+        mall: 'Sun Plaza',
+        typeText: NotifTypes.bookExit,
+        date: DateTime(2025, 5, 25, 13, 20),
+      ),
+
+      // May 24, 2025
+      NotificationItem(
+        mall: 'Medan Mall',
+        typeText: NotifTypes.paySuccess,
+        date: DateTime(2025, 5, 24, 13, 25),
+      ),
+      NotificationItem(
+        mall: 'Medan Mall',
+        typeText: NotifTypes.bookExit,
+        date: DateTime(2025, 5, 6, 13, 25),
+      ),
+      NotificationItem(
+        mall: 'Medan Mall',
+        typeText: NotifTypes.bookSuccess,
+        date: DateTime(2025, 5, 6, 13, 25),
+      ),
+
+      // May 6, 2025
+      NotificationItem(
+        typeText: NotifTypes.bookExp,
+        date: DateTime(2025, 5, 6, 13, 25),
+      ),
+      NotificationItem(
+        mall: 'Medan Mall',
+        typeText: NotifTypes.bookSuccess,
+        date: DateTime(2025, 5, 6, 13, 25),
+      ),
+
+      // November 18, 2024
+      NotificationItem(
+        typeText: NotifTypes.twoFactor,
+        date: DateTime(2025, 3, 18, 19, 30),
+      ),
+    ];
+  }
+
+  String _getDateGroup(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      return "Today";
+    } else if (difference.inDays == 1) {
+      return "Yesterday";
+    } else if (difference.inDays < 7) {
+      return "This Week";
+    } else if (difference.inDays < 30) {
+      return "This Month";
+    } else {
+      return "Earlier";
+    }
+  }
+
+  String _getTranslatedDateGroup(BuildContext context, DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      return translate(context, "Today", "Hari Ini", "今天");
+    } else if (difference.inDays == 1) {
+      return translate(context, "Yesterday", "Kemarin", "昨天");
+    } else if (difference.inDays < 7) {
+      return translate(context, "This Week", "Minggu Ini", "本周");
+    } else if (difference.inDays < 30) {
+      return translate(context, "This Month", "Bulan Ini", "本月");
+    } else {
+      return translate(context, "Earlier", "Sebelumnya", "更早");
+    }
+  }
+
+  Map<String, List<NotificationItem>> _groupNotificationsByDate(
+    List<NotificationItem> notifications,
+  ) {
+    Map<String, List<NotificationItem>> grouped = {};
+
+    for (var notification in notifications) {
+      String dateKey = _getDateGroup(notification.date);
+
+      if (!grouped.containsKey(dateKey)) {
+        grouped[dateKey] = [];
+      }
+      grouped[dateKey]!.add(notification);
+    }
+
+    // Sort notifications within each group by time (newest first)
+    grouped.forEach((key, notifications) {
+      notifications.sort((a, b) => b.date.compareTo(a.date));
+    });
+
+    return grouped;
+  }
+
+  List<String> _getSortedDateKeys(Map<String, List<NotificationItem>> grouped) {
+    List<String> keys = grouped.keys.toList();
+
+    // Define the order of date groups
+    const groupOrder = [
+      "Today",
+      "Yesterday",
+      "This Week",
+      "This Month",
+      "Earlier",
+    ];
+
+    keys.sort((a, b) {
+      int indexA = groupOrder.indexOf(a);
+      int indexB = groupOrder.indexOf(b);
+
+      if (indexA == -1) indexA = groupOrder.length;
+      if (indexB == -1) indexB = groupOrder.length;
+
+      return indexA.compareTo(indexB);
+    });
+
+    return keys;
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
+    final notifications = _getNotifications();
+    final groupedNotifications = _groupNotificationsByDate(notifications);
+    final sortedDateKeys = _getSortedDateKeys(groupedNotifications);
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -14,12 +192,10 @@ class Notification_ extends StatelessWidget {
             SliverAppBar(
               automaticallyImplyLeading: false,
               title: Text(
-                'Notifications',
+                translate(context, 'Notifications', 'Notifikasi', '通知'),
                 style: TextStyle(
-                  fontSize: isSmall ? 30 : 40,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1F1E5B),
-                  fontFamily: 'Poppins',
+                  fontSize: isSmall ? 25 : 30,
                 ),
               ),
               centerTitle: true,
@@ -27,88 +203,23 @@ class Notification_ extends StatelessWidget {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  //Today
-                  NotifTitle(dateTitle: 'Today'),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/booking.png',
-                    mall: 'Sun Plaza',
-                    typeText: NotifTypes.bookSuccess,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/cancel.png',
-                    mall: 'Centre Point Mall',
-                    typeText: NotifTypes.bookCancel,
-                  ),
-
-                  //Yesterday
-                  NotifTitle(dateTitle: 'Yesterday'),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/payment.png',
-                    mall: 'Thamrin Plaza',
-                    typeText: NotifTypes.paySuccess,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/exit.png',
-                    mall: 'Thamrin Plaza',
-                    typeText: NotifTypes.bookExit,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/locked.png',
-                    mall: '',
-                    typeText: NotifTypes.verif2Step,
-                  ),
-
-                  //December 6, 2024
-                  NotifTitle(dateTitle: 'December 6, 2024'),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/payment.png',
-                    mall: 'Sun Plaza',
-                    typeText: NotifTypes.paySuccess,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/exit.png',
-                    mall: 'Sun Plaza',
-                    typeText: NotifTypes.bookExit,
-                  ),
-
-                  //November 28, 2024
-                  NotifTitle(dateTitle: 'November 28, 2024'),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/payment.png',
-                    mall: 'Medan Mall',
-                    typeText: NotifTypes.paySuccess,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/exit.png',
-                    mall: 'Medan Mall',
-                    typeText: NotifTypes.bookExit,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/booking.png',
-                    mall: 'Medan Mall',
-                    typeText: NotifTypes.bookSuccess,
-                  ),
-
-                  //November 21, 2024
-                  NotifTitle(dateTitle: 'November 21, 2024'),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/expired.png',
-                    mall: '',
-                    typeText: NotifTypes.bookExp,
-                  ),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/booking.png',
-                    mall: 'Medan Mall',
-                    typeText: NotifTypes.bookSuccess,
-                  ),
-
-                  //November 18, 2024
-                  NotifTitle(dateTitle: 'November 18, 2024'),
-                  NotifCard(
-                    notifIcon: 'assets/images/icons/verification.png',
-                    mall: '',
-                    typeText: NotifTypes.verif,
-                  ),
+                  for (String dateKey in sortedDateKeys) ...[
+                    NotifTitle(
+                      dateTitle: _getTranslatedDateGroup(
+                        context,
+                        groupedNotifications[dateKey]!.first.date,
+                      ),
+                    ),
+                    ...groupedNotifications[dateKey]!
+                        .map(
+                          (notification) => NotifCard(
+                            mall: notification.mall ?? "",
+                            typeText: notification.typeText,
+                            date: notification.date,
+                          ),
+                        )
+                        .toList(),
+                  ],
                 ],
               ),
             ),
@@ -119,7 +230,6 @@ class Notification_ extends StatelessWidget {
   }
 }
 
-//ini gabung aja soalnya cuma dipake di satu page ini
 class NotifTitle extends StatelessWidget {
   final String dateTitle;
 
@@ -165,58 +275,168 @@ enum NotifTypes {
   bookCancel,
   bookExp,
   bookExit,
-  verif,
-  verif2Step,
+  verify,
+  twoFactor,
   paySuccess,
 }
 
 class NotifCard extends StatelessWidget {
-  final String notifIcon;
   final NotifTypes typeText;
   final String mall;
+  final DateTime date;
 
   const NotifCard({
     super.key,
-    required this.notifIcon,
     this.typeText = NotifTypes.bookSuccess,
     required this.mall,
+    required this.date,
   });
 
-  String _cardTitle(NotifTypes type) {
+  String _getNotifIcon(NotifTypes type) {
     switch (type) {
       case NotifTypes.bookSuccess:
-        return 'Booking Successful!';
+        return 'assets/images/icons/booking.png';
       case NotifTypes.bookCancel:
-        return 'Parking Booking Canceled';
+        return 'assets/images/icons/cancel.png';
       case NotifTypes.bookExit:
-        return 'Exit Parking Lot';
+        return 'assets/images/icons/exit.png';
       case NotifTypes.bookExp:
-        return 'Booking Has Been Expired!';
+        return 'assets/images/icons/expired.png';
       case NotifTypes.paySuccess:
-        return 'Payment Successful!';
-      case NotifTypes.verif:
-        return 'Verification Successful!';
-      case NotifTypes.verif2Step:
-        return '2 Step Verification Successful!';
+        return 'assets/images/icons/payment.png';
+      case NotifTypes.verify:
+        return 'assets/images/icons/verification.png';
+      case NotifTypes.twoFactor:
+        return 'assets/images/icons/locked.png';
     }
   }
 
-  String _cardDescription(NotifTypes type) {
+  String _cardTitle(BuildContext context, NotifTypes type) {
     switch (type) {
       case NotifTypes.bookSuccess:
-        return 'Parking booking at $mall was successfully booked!';
+        return translate(
+          context,
+          'Booking Successful!',
+          'Pemesanan Berhasil!',
+          '预订成功！',
+        );
       case NotifTypes.bookCancel:
-        return 'You have canceled parking at $mall';
+        return translate(
+          context,
+          'Booking Booking Canceled',
+          'Pemesanan Parkir Dibatalkan',
+          '停车预订已取消',
+        );
       case NotifTypes.bookExit:
-        return 'You have exit parking lot at $mall';
+        return translate(
+          context,
+          'Exit Parking Lot',
+          'Keluar Area Parkir',
+          '离开停车场',
+        );
       case NotifTypes.bookExp:
-        return 'You missed your booking, no-show fee was charged.';
+        return translate(
+          context,
+          'Booking Has Been Expired!',
+          'Pemesanan Telah Kedaluwarsa!',
+          '预订已过期！',
+        );
       case NotifTypes.paySuccess:
-        return 'Parking booking at $mall was successfully paid';
-      case NotifTypes.verif:
-        return 'Account verification complete!';
-      case NotifTypes.verif2Step:
-        return 'Google Authenticator set successful!';
+        return translate(
+          context,
+          'Payment Successful!',
+          'Pembayaran Berhasil!',
+          '付款成功！',
+        );
+      case NotifTypes.verify:
+        return translate(
+          context,
+          '2FA Now Set Up!',
+          '2FA Terpasang!',
+          '2FA 现已设置!',
+        );
+      case NotifTypes.twoFactor:
+        return translate(
+          context,
+          'Protect your account with 2FA.',
+          'Lindungi akun Anda dengan 2FA.',
+          '使用 2FA 保护您的账户。',
+        );
+    }
+  }
+
+  String _cardDescription(BuildContext context, NotifTypes type) {
+    switch (type) {
+      case NotifTypes.bookSuccess:
+        return translate(
+          context,
+          'Parking booking at $mall was successfully booked!',
+          'Pemesanan parkir di $mall berhasil dipesan!',
+          '在 $mall 的停车预订已成功预订！',
+        );
+      case NotifTypes.bookCancel:
+        return translate(
+          context,
+          'You have canceled booking at $mall',
+          'Anda telah membatalkan parkir di $mall',
+          '您已取消在 $mall 的停车',
+        );
+      case NotifTypes.bookExit:
+        return translate(
+          context,
+          'You have exit parking lot at $mall',
+          'Anda telah keluar dari area parkir di $mall',
+          '您已离开 $mall 的停车场',
+        );
+      case NotifTypes.bookExp:
+        return translate(
+          context,
+          'You missed your booking, no-show fee was charged.',
+          'Anda melewatkan pemesanan, denda akan dikenakan.',
+          '您错过了预订，已收取缺席费用。',
+        );
+      case NotifTypes.paySuccess:
+        return translate(
+          context,
+          'Parking booking at $mall was successfully paid',
+          'Pemesanan parkir di $mall berhasil dibayar',
+          '在 $mall 的停车预订已成功付款',
+        );
+      case NotifTypes.verify:
+        return translate(
+          context,
+          'Two Factor Authenticator set up successful!',
+          'Autentikator Dua Faktor berhasil terpasang!',
+          '双重身份验证器设置成功!',
+        );
+      case NotifTypes.twoFactor:
+        return translate(
+          context,
+          'Account will be more secured with 2FA setup!',
+          'Akun akan lebih aman dengan 2FA terpasang!',
+          '设置 2FA 后帐户将更加安全!',
+        );
+    }
+  }
+
+  String _formatDateTime(BuildContext context, DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      if (difference.inHours == 0) {
+        if (difference.inMinutes == 0) {
+          return translate(context, "Just now", "Baru saja", "刚刚");
+        }
+        return "${difference.inMinutes}${translate(context, "m ago", "m lalu", "分钟前")}";
+      }
+      return "${difference.inHours}${translate(context, "h ago", "j lalu", "小时前")}";
+    } else if (difference.inDays == 1) {
+      return translate(context, "Yesterday", "Kemarin", "昨天");
+    } else if (difference.inDays < 7) {
+      return "${difference.inDays}${translate(context, "d ago", "h lalu", "天前")}";
+    } else {
+      return DateFormat("dd MMM yyyy").format(dateTime);
     }
   }
 
@@ -224,6 +444,7 @@ class NotifCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
     return Container(
       margin: EdgeInsets.symmetric(
         horizontal: isSmall ? 15 : 20,
@@ -244,18 +465,32 @@ class NotifCard extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: Image.asset(notifIcon, width: isSmall ? 35 : 50),
-        title: Text(
-          _cardTitle(typeText),
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: isSmall ? 16 : 18,
-            fontWeight: FontWeight.bold,
-          ),
+        leading: Image.asset(_getNotifIcon(typeText), width: isSmall ? 35 : 50),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                _cardTitle(context, typeText),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: isSmall ? 14 : 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Text(
+              _formatDateTime(context, date),
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: isSmall ? 10 : 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
         subtitle: Text(
-          _cardDescription(typeText),
-          style: TextStyle(color: Colors.grey, fontSize: 14),
+          _cardDescription(context, typeText),
+          style: TextStyle(color: Colors.grey, fontSize: isSmall ? 12 : 14),
         ),
       ),
     );

@@ -5,6 +5,7 @@ enum SpotStatus { free, occupied, booked }
 class Spot {
   SpotStatus status;
   final String code;
+  DateTime? date;
 
   Spot({required this.status, required this.code});
 }
@@ -81,6 +82,7 @@ class ParkingLot {
       final spot = floor.getFirstAvailableSpot();
       if (spot != null) {
         spot.status = SpotStatus.occupied;
+        spot.date = DateTime.now();
         spotCount -= 1;
         return spot.code;
       }
@@ -93,6 +95,7 @@ class ParkingLot {
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
       spot.status = SpotStatus.occupied;
+      spot.date = DateTime.now();
       spotCount -= 1;
       return spot.code;
     }
@@ -104,6 +107,7 @@ class ParkingLot {
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.occupied) {
       spot.status = SpotStatus.free;
+      spot.date = null;
       spotCount += 1;
       return true;
     }
@@ -112,5 +116,24 @@ class ParkingLot {
 
   double calculateAmount(int hour) {
     return (starterPrice ?? hourlyPrice) + (hour - 1) * hourlyPrice;
+  }
+
+  double maxTotalEarning() {
+    final open = _parseTime(openTime);
+    final close = _parseTime(closeTime);
+
+    Duration diff = close.difference(open);
+
+    final hours = (diff.inMinutes / 60).ceil();
+
+    return calculateAmount(hours);
+  }
+
+  DateTime _parseTime(String timeStr) {
+    final parts = timeStr.split(':');
+    final now = DateTime.now();
+    final hour = int.parse(parts[0]);
+    final minute = int.parse(parts[1]);
+    return DateTime(now.year, now.month, now.day, hour, minute);
   }
 }
