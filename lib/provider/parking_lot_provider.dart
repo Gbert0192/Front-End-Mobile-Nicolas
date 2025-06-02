@@ -991,7 +991,8 @@ class ParkingLotProvider with ChangeNotifier {
             code: code,
             status: randomStat,
             date:
-                randomStat == SpotStatus.occupied
+                randomStat == SpotStatus.occupied ||
+                        randomStat == SpotStatus.booked
                     ? DateTime(
                       now.year,
                       now.month,

@@ -297,7 +297,7 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
 
-                if (!user.twoFactor)
+                if (!user.twoFactor) ...[
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -364,8 +364,8 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
-
-                if (!user.twoFactor) SizedBox(height: isSmall ? 10 : 20),
+                  SizedBox(height: isSmall ? 10 : 20),
+                ],
 
                 // RECENT SPOTS
                 Align(

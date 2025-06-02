@@ -1,4 +1,5 @@
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
 
 enum BookingStatus {
@@ -12,9 +13,9 @@ enum BookingStatus {
 }
 
 class Booking {
-  final int user_id;
-  final bool isMember;
-  final int lot_id;
+  final User user;
+  bool? isMember;
+  final ParkingLot lot;
   final DateTime bookingTime;
   DateTime? checkinTime;
   DateTime? checkoutTime;
@@ -34,9 +35,8 @@ class Booking {
   double? unresolvedFee = 0;
 
   Booking({
-    required this.user_id,
-    required this.isMember,
-    required this.lot_id,
+    required this.user,
+    required this.lot,
     required this.bookingTime,
     required this.floor,
     required this.code,
@@ -50,13 +50,14 @@ class Booking {
     return hours.ceil();
   }
 
-  BookingStatus claimBooking(ParkingLot lot) {
+  BookingStatus claimBooking() {
     final now = DateTime.now();
     final diffExpired = now.difference(bookingTime).inMinutes;
+    isMember = user.checkStatusMember();
     if ((status == BookingStatus.pending || status == BookingStatus.fixed) &&
         diffExpired > 30) {
       status = BookingStatus.expired;
-      if (!isMember) {
+      if (!isMember!) {
         noshowFee = lot.maxTotalEarning() * 0.35;
       }
     } else {
@@ -65,26 +66,27 @@ class Booking {
     return status;
   }
 
-  void exiteParking(Voucher voucher, ParkingLot lot) {
+  void exitParking(Voucher voucher) {
     if (status == BookingStatus.entered) {
       status = BookingStatus.exited;
       hours = calculateHour();
       amount = lot.calculateAmount(hours!);
       tax = amount! * 0.11;
-      service = isMember ? 0 : 6000;
-      this.voucher = voucher.useVoucher(amount! + tax! + service!, hours!);
-      total = total! - this.voucher!;
+      service = user.checkStatusMember() ? 0 : 6500;
+      this.voucher = voucher.useVoucher(amount!, hours!);
+      total = amount! + tax! + service! - this.voucher!;
     }
   }
 
-  BookingStatus checkStatus(ParkingLot lot) {
+  BookingStatus checkStatus() {
     final now = DateTime.now();
     final diffExpired = now.difference(bookingTime).inMinutes;
     final diffFixed = bookingTime.difference(now).inMinutes;
+    isMember = user.checkStatusMember();
     if ((status == BookingStatus.pending || status == BookingStatus.fixed) &&
         diffExpired > 30) {
       status = BookingStatus.expired;
-      if (!isMember) {
+      if (!isMember!) {
         amount = lot.calculateAmount(hours!) * 0.35;
       }
     } else if (status == BookingStatus.pending &&
@@ -93,7 +95,13 @@ class Booking {
       status = BookingStatus.fixed;
     } else if (status == BookingStatus.entered && calculateHour() >= 20) {
       status = BookingStatus.unresolved;
+      checkoutTime = checkinTime!.add(Duration(hours: 20));
       unresolvedFee = 10000;
+      hours = calculateHour();
+      amount = lot.calculateAmount(20);
+      tax = amount! * 0.11;
+      service = isMember! ? 0 : 6500;
+      total = amount! + tax! + service!;
     }
     return status;
   }

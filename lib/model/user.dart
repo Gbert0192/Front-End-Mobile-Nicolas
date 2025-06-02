@@ -90,6 +90,19 @@ class User {
     return 1;
   }
 
+  bool checkStatusMember() {
+    if (memberUntil == null) {
+      isMember = false;
+      return false;
+    }
+    if (DateTime.now().isAfter(memberUntil!)) {
+      isMember = false;
+      return false;
+    }
+    isMember = true;
+    return true;
+  }
+
   void topUp(double nominal) {
     balance += nominal;
   }

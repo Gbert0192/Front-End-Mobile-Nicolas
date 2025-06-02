@@ -1,13 +1,15 @@
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 enum SpotStatus { free, occupied, booked }
 
 class Spot {
   SpotStatus status;
+  User? user;
   final String code;
   DateTime? date;
 
-  Spot({required this.status, required this.code, this.date});
+  Spot({this.user, required this.status, required this.code, this.date});
 }
 
 class Area {
