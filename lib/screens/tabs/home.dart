@@ -290,6 +290,25 @@ class _HomeState extends State<Home> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // SEARCH
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () {
+                      showSearch(
+                        context: context,
+                        delegate: CustomSearchDelegate(),
+                      );
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: translate(context, "Search", "Telusuri", "搜索"),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
                 ResponsiveTextInput(
                   isSmall: isSmall,
                   hint: translate(context, "Search", "Telusuri", "搜索"),
