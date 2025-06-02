@@ -222,7 +222,7 @@ class ParkingLotProvider with ChangeNotifier {
                 spots: List.generate(
                   6,
                   (i) => Spot(
-                    code: "A${floorIndex}${i + 1}",
+                    code: "A$floorIndex${i + 1}",
                     status: _randomSpotStatus(),
                   ),
                 ),
@@ -232,7 +232,7 @@ class ParkingLotProvider with ChangeNotifier {
                 spots: List.generate(
                   6,
                   (i) => Spot(
-                    code: "B${floorIndex}${i + 1}",
+                    code: "B$floorIndex${i + 1}",
                     status: _randomSpotStatus(),
                   ),
                 ),

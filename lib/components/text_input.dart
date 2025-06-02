@@ -109,11 +109,9 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               widget.onChanged?.call();
             },
             decoration: InputDecoration(
-              hintText: widget.hint ?? null,
+              hintText: widget.hint,
               labelText:
-                  widget.mode == StyleMode.underline
-                      ? null
-                      : widget.label ?? null,
+                  widget.mode == StyleMode.underline ? null : widget.label,
               hintStyle: TextStyle(color: _getColor()),
               labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
