@@ -150,19 +150,6 @@ class CustomSearchDelegate extends SearchDelegate {
             )
             .toList();
 
-    if (results.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/empty/search_where.png', width: 200),
-            const SizedBox(height: 16),
-            const Text('Search no founded', style: TextStyle(fontSize: 16)),
-          ],
-        ),
-      );
-    }
-
     return ListView.builder(
       itemCount: results.length,
       itemBuilder: (context, index) {
@@ -196,6 +183,48 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return buildResults(context);
+    final results =
+        data
+            .where(
+              (mall) => mall.name.toLowerCase().contains(query.toLowerCase()),
+            )
+            .toList();
+    if (results.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/images/empty/search_where.png', width: 200),
+            const SizedBox(height: 16),
+            const Text('Search no founded', style: TextStyle(fontSize: 16)),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(16),
+          child: Text(
+            'Search Results',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: results.length,
+            itemBuilder: (context, index) {
+              final mall = results[index];
+              return ListTile(
+                title: Text(mall.name),
+                subtitle: Text(mall.address),
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
