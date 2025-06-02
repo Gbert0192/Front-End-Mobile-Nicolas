@@ -172,7 +172,7 @@ class CustomSearchDelegate extends SearchDelegate {
             style: const TextStyle(color: Colors.orange),
           ),
           onTap: () {
-            // Go to details page
+            //Detail page
           },
         );
       },
@@ -181,6 +181,6 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return buildResults(context); // Show the same as result list
+    return buildResults(context);
   }
 }
