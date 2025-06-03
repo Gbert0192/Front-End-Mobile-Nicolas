@@ -3,6 +3,8 @@ import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 enum SpotStatus { free, occupied, booked }
 
+enum BuildingType { hotel, mall }
+
 class Spot {
   SpotStatus status;
   User? user;
@@ -53,6 +55,7 @@ class Floor {
 class ParkingLot {
   final int id;
   final String name;
+  final BuildingType buildingType;
   final String address;
   final String openTime;
   final String closeTime;
@@ -66,6 +69,7 @@ class ParkingLot {
   ParkingLot({
     required this.id,
     required this.name,
+    required this.buildingType,
     required this.address,
     required this.openTime,
     required this.closeTime,
@@ -77,7 +81,7 @@ class ParkingLot {
     this.starterPrice,
   });
 
-  String? occupyNearestSpot() {
+  String? occupyNearestSpot(User user) {
     final sortedFloors = [...spots]
       ..sort((a, b) => a.number.compareTo(b.number));
     for (final floor in sortedFloors) {
@@ -85,6 +89,7 @@ class ParkingLot {
       if (spot != null) {
         spot.status = SpotStatus.occupied;
         spot.date = DateTime.now();
+        spot.user = user;
         spotCount -= 1;
         return spot.code;
       }
@@ -92,12 +97,13 @@ class ParkingLot {
     return null;
   }
 
-  String? occupySpot(int floorNumber, String spotCode) {
+  String? occupySpot(int floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
       spot.status = SpotStatus.occupied;
       spot.date = DateTime.now();
+      spot.user = user;
       spotCount -= 1;
       return spot.code;
     }
@@ -110,6 +116,7 @@ class ParkingLot {
     if (spot != null && spot.status == SpotStatus.occupied) {
       spot.status = SpotStatus.free;
       spot.date = null;
+      spot.user = null;
       spotCount += 1;
       return true;
     }
