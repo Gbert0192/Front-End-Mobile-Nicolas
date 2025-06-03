@@ -36,24 +36,31 @@ class Booking {
     hours = calculateHour();
     amount = lot.calculateAmount(hours!);
     tax = amount! * 0.11;
-    service = isMember ? 0 : 6500;
+    service = isMember! ? 0 : 6500;
     this.voucher = voucher.useVoucher(amount!, hours!);
     total = amount! + tax! + service! - this.voucher!;
   }
 
   ParkingStatus checkStatus() {
     if (status == ParkingStatus.entered && calculateHour() >= 20) {
-      this.isMember = isMember;
+      isMember = user.checkStatusMember();
       status = ParkingStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
       unresolvedFee = 10000;
-      hours = calculateHour();
       amount = lot.calculateAmount(20);
       tax = amount! * 0.11;
-      service = isMember ? 0 : 6500;
+      service = isMember! ? 0 : 6500;
       total = amount! + tax! + service!;
     }
     return status;
+  }
+
+  double? resolveUnresolve() {
+    if (status == ParkingStatus.unresolved) {
+      status = ParkingStatus.exited;
+      return total!;
+    }
+    return null;
   }
 
   int calculateHour() {

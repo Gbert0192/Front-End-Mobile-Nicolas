@@ -1,5 +1,5 @@
 class User {
-  int id;
+  final int id;
   String email;
   String? profilePic;
   String fullname;
@@ -10,7 +10,8 @@ class User {
   String? birthDate;
   String? gender;
   int? rating;
-  double balance = 10000000;
+  final DateTime createdAt = DateTime.now();
+  double balance = 0;
   bool isMember = false;
   bool twoFactor = false;
   DateTime? memberSince;

@@ -97,13 +97,20 @@ class Booking {
       status = BookingStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
       unresolvedFee = 10000;
-      hours = calculateHour();
       amount = lot.calculateAmount(20);
       tax = amount! * 0.11;
       service = isMember! ? 0 : 6500;
       total = amount! + tax! + service!;
     }
     return status;
+  }
+
+  double? resolveUnresolve() {
+    if (status == BookingStatus.unresolved) {
+      status = BookingStatus.exited;
+      return total!;
+    }
+    return null;
   }
 
   BookingStatus cancelBooking() {
