@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 
-enum DatePickerType { date, month, datetime }
+enum DatePickerType { date, time, datetime }
 
 class ResponsiveTimePicker extends StatefulWidget {
   const ResponsiveTimePicker({
@@ -47,12 +47,21 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
 
     if (widget.controller != null && widget.controller!.text.isNotEmpty) {
       try {
-        final parts = widget.controller!.text.split('/');
-        if (widget.type == DatePickerType.month && parts.length >= 2) {
-          final month = int.parse(parts[0]);
-          final year = int.parse(parts[1]);
-          initialDate = DateTime(year, month);
-        } else if (parts.length == 3) {
+        final text = widget.controller!.text;
+        if (widget.type == DatePickerType.datetime) {
+          final dateTimeParts = text.split(' ');
+          final dateParts = dateTimeParts[0].split('/');
+          final timeParts = dateTimeParts[1].split(':');
+
+          final day = int.parse(dateParts[0]);
+          final month = int.parse(dateParts[1]);
+          final year = int.parse(dateParts[2]);
+          final hour = int.parse(timeParts[0]);
+          final minute = int.parse(timeParts[1]);
+
+          initialDate = DateTime(year, month, day, hour, minute);
+        } else {
+          final parts = widget.controller!.text.split('/');
           final day = int.parse(parts[0]);
           final month = int.parse(parts[1]);
           final year = int.parse(parts[2]);
@@ -62,6 +71,22 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     }
 
     initialDate ??= now;
+
+    if (widget.type == DatePickerType.time) {
+      final TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initialDate),
+      );
+
+      if (pickedTime != null) {
+        final formattedTime =
+            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}";
+        _selectedDate = formattedTime;
+        widget.controller?.text = formattedTime;
+        widget.onChanged?.call();
+      }
+      return;
+    }
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -95,7 +120,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       if (widget.type == DatePickerType.datetime) {
         final TimeOfDay? time = await showTimePicker(
           context: context,
-          initialTime: TimeOfDay.fromDateTime(pickedDate),
+          initialTime: TimeOfDay.fromDateTime(initialDate),
         );
         if (time != null) {
           finalDate = DateTime(
@@ -113,12 +138,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
         case DatePickerType.date:
           formatted = "${finalDate.day}/${finalDate.month}/${finalDate.year}";
           break;
-        case DatePickerType.month:
-          formatted = "${finalDate.month}/${finalDate.year}";
-          break;
         case DatePickerType.datetime:
           formatted =
               "${finalDate.day}/${finalDate.month}/${finalDate.year} ${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
+          break;
+        default:
+          formatted = '';
           break;
       }
 
@@ -250,7 +275,8 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
               padding: EdgeInsets.only(right: widget.isSmall ? 12 : 16),
               child: IconButton(
                 onPressed: () async {
-                  if (_selectedDate != null) {
+                  if (_selectedDate != null ||
+                      (widget.controller?.text.isNotEmpty ?? false)) {
                     _clearDate();
                   } else {
                     setState(() => _isFocused = true);
@@ -259,9 +285,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                   }
                 },
                 icon: Icon(
-                  _selectedDate != null
+                  _selectedDate != null ||
+                          (widget.controller?.text.isNotEmpty ?? false)
                       ? Icons.clear_outlined
-                      : Icons.calendar_month_outlined,
+                      : widget.type == DatePickerType.time
+                      ? Icons.access_time
+                      : Icons.calendar_month_sharp,
                   color: const Color(0xFF1F1E5B),
                 ),
               ),

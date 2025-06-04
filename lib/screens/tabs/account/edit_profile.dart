@@ -260,6 +260,7 @@ class _EditProfileState extends State<EditProfile> {
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTimePicker(
                           isSmall: isSmall,
+                          type: DatePickerType.date,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',
                           label: 'Birth Date',
