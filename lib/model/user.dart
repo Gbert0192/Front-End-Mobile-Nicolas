@@ -1,5 +1,4 @@
 class User {
-  int id;
   String email;
   String? profilePic;
   String fullname;
@@ -10,14 +9,14 @@ class User {
   String? birthDate;
   String? gender;
   int? rating;
-  double balance = 10000000;
+  final DateTime createdAt = DateTime.now();
+  double balance = 0;
   bool isMember = false;
   bool twoFactor = false;
   DateTime? memberSince;
   DateTime? memberUntil;
 
   User({
-    required this.id,
     required this.email,
     this.profilePic,
     required this.fullname,
@@ -88,6 +87,19 @@ class User {
     }
     isMember = true;
     return 1;
+  }
+
+  bool checkStatusMember() {
+    if (memberUntil == null) {
+      isMember = false;
+      return false;
+    }
+    if (DateTime.now().isAfter(memberUntil!)) {
+      isMember = false;
+      return false;
+    }
+    isMember = true;
+    return true;
   }
 
   void topUp(double nominal) {

@@ -8,8 +8,11 @@ class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
     super.key,
     required this.isSmall,
+    this.readOnly = false,
     this.controller,
     this.onChanged,
+    this.onTap,
+    this.onSubmitted,
     this.hint,
     this.label,
     this.errorText,
@@ -24,9 +27,12 @@ class ResponsiveTextInput extends StatefulWidget {
   });
 
   final bool isSmall;
+  final bool readOnly;
   final int maxLines;
   final TextEditingController? controller;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
+  final VoidCallback? onTap;
+  final Function(String)? onSubmitted;
   final String? hint;
   final String? label;
   final String? value;
@@ -97,6 +103,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     ],
           ),
           child: TextField(
+            readOnly: widget.readOnly,
             maxLines: widget.maxLines,
             focusNode: _focusNode,
             controller: widget.controller,
@@ -105,8 +112,14 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 widget.type == TextInputTypes.email
                     ? TextInputType.emailAddress
                     : TextInputType.text,
-            onChanged: (_) {
-              widget.onChanged?.call();
+            onChanged: (value) {
+              widget.onChanged?.call(value);
+            },
+            onTap: () {
+              widget.onTap?.call();
+            },
+            onSubmitted: (value) {
+              widget.onSubmitted?.call(value);
             },
             decoration: InputDecoration(
               hintText: widget.hint,

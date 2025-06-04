@@ -1,8 +1,9 @@
+import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+
 enum VoucherFlag { flat, percent, free }
 
 class Voucher {
-  final int lot_id;
-  final int user_id;
+  final ParkingLot lot;
   final int? minHour;
   final String voucherName;
   final DateTime validUntil;
@@ -11,13 +12,13 @@ class Voucher {
   int? maxUse;
 
   Voucher({
-    required this.lot_id,
-    required this.user_id,
+    required this.lot,
     this.minHour,
     required this.voucherName,
     required this.validUntil,
     required this.nominal,
     this.type = VoucherFlag.flat,
+    this.maxUse,
   });
 
   double useVoucher(double total, int hours) {

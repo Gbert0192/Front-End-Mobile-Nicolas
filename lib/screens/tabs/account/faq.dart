@@ -57,7 +57,6 @@ class FAQ extends StatelessWidget {
           '🎉 **Current Member Perks**',
           '✔️ No service fee.',
           '✔️ No-show fee waived.',
-          '✔️ Early arrival up to **45 minutes**.',
           '✔️ Late check-in up to **45 minutes**.',
           '✔️ Cancel up to **15 minutes** before booking.',
           '',

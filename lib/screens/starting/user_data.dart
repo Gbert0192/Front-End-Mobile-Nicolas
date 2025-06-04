@@ -173,7 +173,7 @@ class _UserDataState extends State<UserData> {
                           label: 'Fullname',
                           type: TextInputTypes.text,
                           errorText: form.error('fullname'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -208,7 +208,7 @@ class _UserDataState extends State<UserData> {
                           label: 'Password',
                           type: TextInputTypes.password,
                           errorText: form.error('password'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -224,7 +224,7 @@ class _UserDataState extends State<UserData> {
                           label: 'Confirm Password',
                           type: TextInputTypes.password,
                           errorText: form.error('conpassword'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();

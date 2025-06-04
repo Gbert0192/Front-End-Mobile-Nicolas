@@ -6,7 +6,6 @@ import '../model/user.dart';
 class UserProvider with ChangeNotifier {
   List<User> userList = [
     User(
-      id: 1,
       email: "johndoer@gmail.com",
       profilePic: "assets/images/users/male 2.jpg",
       fullname: "JOHN DOER",
@@ -32,7 +31,6 @@ class UserProvider with ChangeNotifier {
             .firstWhereOrNull((item) => item.code == country_code)!
             .dialCode;
     final newUser = User(
-      id: userList.length + 1,
       email: email,
       profilePic: profile_pic,
       fullname: fullname,
@@ -51,9 +49,8 @@ class UserProvider with ChangeNotifier {
     return user;
   }
 
-  int login(int id, String password) {
-    final user = userList.firstWhereOrNull((u) => u.id == id);
-    if (user != null && user.password == password) {
+  int login(User user, String password) {
+    if (user.password == password) {
       currentUser = user;
       notifyListeners();
       return 1;
@@ -66,9 +63,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  int resetPassword(int id, String newPass) {
-    final user = userList.firstWhereOrNull((u) => u.id == id);
-    if (user == null) return -1;
+  int resetPassword(User user, String newPass) {
     final result = user.resetPassword(newPass);
     notifyListeners();
     return result;
