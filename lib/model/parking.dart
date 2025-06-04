@@ -10,7 +10,7 @@ class Booking {
   final ParkingLot lot;
   DateTime? checkinTime;
   DateTime? checkoutTime;
-  DateTime? createdAt;
+  final DateTime createdAt = DateTime.now();
   final int floor;
   final String code;
   ParkingStatus status = ParkingStatus.entered;
@@ -42,7 +42,7 @@ class Booking {
   }
 
   ParkingStatus checkStatus() {
-    if (status == ParkingStatus.entered && calculateHour() >= 20) {
+    if (status == ParkingStatus.entered && calculateHour() > 20) {
       isMember = user.checkStatusMember();
       status = ParkingStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));

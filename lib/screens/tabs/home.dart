@@ -367,7 +367,7 @@ class _HomeState extends State<Home> {
                   SizedBox(height: isSmall ? 10 : 20),
                 ],
 
-                // RECENT SPOTS
+                // FREQUENT SPOTS
                 Align(
                   alignment: Alignment.center,
                   child: Text(

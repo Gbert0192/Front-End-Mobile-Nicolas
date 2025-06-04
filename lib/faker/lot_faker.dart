@@ -10,7 +10,6 @@ class LotFaker {
   LotFaker() {
     lots = [
       ParkingLot(
-        id: 1,
         name: "Medan Mall",
         buildingType: BuildingType.mall,
         address: "Jl. M. T. Haryono No.8, Kota Medan",
@@ -133,7 +132,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 2,
         name: "Aryaduta",
         buildingType: BuildingType.hotel,
         address: " Jl. Kapten Maulana Lubis No.8, Kota Medan",
@@ -202,7 +200,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 3,
         name: "Centre Point",
         buildingType: BuildingType.mall,
         address: "Jl. Centre Point No.15, Kota Medan",
@@ -243,7 +240,6 @@ class LotFaker {
         ),
       ),
       ParkingLot(
-        id: 4,
         name: "Lippo Plaza",
         buildingType: BuildingType.mall,
         address: "Jl. Veteran No.20, Kota Medan",
@@ -339,7 +335,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 5,
         name: "Grand City Hall",
         buildingType: BuildingType.hotel,
         address: "Jl. Asia No. 77, Kota Medan",
@@ -435,7 +430,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 6,
         name: "Sun Plaza",
         buildingType: BuildingType.mall,
         address: "Jl. Gatot Subroto No. 15, Kota Medan",
@@ -504,7 +498,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 7,
         name: "Radisson",
         buildingType: BuildingType.hotel,
         address: "Jl. S. Parman No. 45, Kota Medan",
@@ -600,7 +593,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 8,
         name: "Manhattan Time Square",
         buildingType: BuildingType.mall,
         address: "Jl. Thamrin No. 99, Kota Medan",
@@ -723,7 +715,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 9,
         name: "Plaza Medan Fair",
         buildingType: BuildingType.mall,
         address: "Jl. Gatot Subroto No. 8, Kota Medan",
@@ -819,7 +810,6 @@ class LotFaker {
         ],
       ),
       ParkingLot(
-        id: 10,
         name: "Delipark",
         buildingType: BuildingType.mall,
         address: "Jl. Stasiun No. 5, Kota Medan",

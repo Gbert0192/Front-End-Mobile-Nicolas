@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
@@ -10,8 +11,8 @@ import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
 
 class ResetPassword extends StatefulWidget {
-  const ResetPassword(this.user_id, {super.key});
-  final int user_id;
+  const ResetPassword(this.user, {super.key});
+  final User user;
 
   @override
   State<ResetPassword> createState() => _ResetPasswordState();
@@ -176,13 +177,13 @@ class _ResetPasswordState extends State<ResetPassword> {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
                         int success = userProvider.resetPassword(
-                          widget.user_id,
+                          widget.user,
                           form.control("password").text,
                         );
                         if (success == 0) {
                           showFlexibleSnackbar(
                             context,
-                            "${translate(context, "Password has been reseted", "Kata sandi tidak boleh sama dengan yang lama", "密码不能与旧密码相同")}!",
+                            "${translate(context, "Password can not be the same as old one", "Kata sandi tidak boleh sama dengan yang lama", "密码不能与旧密码相同")}!",
                             type: SnackbarType.error,
                           );
                           setState(() => form.isLoading = false);

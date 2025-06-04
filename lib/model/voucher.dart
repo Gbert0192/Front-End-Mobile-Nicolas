@@ -18,6 +18,7 @@ class Voucher {
     required this.validUntil,
     required this.nominal,
     this.type = VoucherFlag.flat,
+    this.maxUse,
   });
 
   double useVoucher(double total, int hours) {

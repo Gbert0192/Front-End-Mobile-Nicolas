@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
-import 'package:tugas_front_end_nicolas/utils/lot_faker.dart';
+import 'package:tugas_front_end_nicolas/faker/lot_faker.dart';
 
 class ParkingLotProvider with ChangeNotifier {
   List<ParkingLot> lots = lotFaker.lots;

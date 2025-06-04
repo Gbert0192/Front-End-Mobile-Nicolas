@@ -204,7 +204,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                                       context,
                                       MaterialPageRoute(
                                         builder:
-                                            (context) => ResetPassword(user.id),
+                                            (context) => ResetPassword(user),
                                       ),
                                     );
                                   },

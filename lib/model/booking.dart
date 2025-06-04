@@ -20,7 +20,7 @@ class Booking {
   DateTime? checkinTime;
   DateTime? checkoutTime;
   DateTime? cancelTime;
-  DateTime? createdAt;
+  final DateTime createdAt = DateTime.now();
   final int floor;
   final String code;
   BookingStatus status;
@@ -53,16 +53,22 @@ class Booking {
   BookingStatus claimBooking() {
     final now = DateTime.now();
     final diffExpired = now.difference(bookingTime).inMinutes;
+
     isMember = user.checkStatusMember();
+
+    final expiredThreshold = isMember! ? 45 : 30;
+
     if ((status == BookingStatus.pending || status == BookingStatus.fixed) &&
-        diffExpired > 30) {
+        diffExpired > expiredThreshold) {
       status = BookingStatus.expired;
+
       if (!isMember!) {
         noshowFee = lot.maxTotalEarning() * 0.35;
       }
     } else {
       status = BookingStatus.entered;
     }
+
     return status;
   }
 
@@ -82,18 +88,24 @@ class Booking {
     final now = DateTime.now();
     final diffExpired = now.difference(bookingTime).inMinutes;
     final diffFixed = bookingTime.difference(now).inMinutes;
+
     isMember = user.checkStatusMember();
+
+    final expiredThreshold = isMember! ? 45 : 30;
+    final fixedThreshold = isMember! ? 15 : 30;
+
     if ((status == BookingStatus.pending || status == BookingStatus.fixed) &&
-        diffExpired > 30) {
+        diffExpired > expiredThreshold) {
       status = BookingStatus.expired;
+
       if (!isMember!) {
         amount = lot.calculateAmount(hours!) * 0.35;
       }
     } else if (status == BookingStatus.pending &&
-        diffFixed <= 30 &&
+        diffFixed <= fixedThreshold &&
         diffFixed > 0) {
       status = BookingStatus.fixed;
-    } else if (status == BookingStatus.entered && calculateHour() >= 20) {
+    } else if (status == BookingStatus.entered && calculateHour() > 20) {
       status = BookingStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
       unresolvedFee = 10000;
@@ -102,6 +114,7 @@ class Booking {
       service = isMember! ? 0 : 6500;
       total = amount! + tax! + service!;
     }
+
     return status;
   }
 
@@ -116,13 +129,21 @@ class Booking {
   BookingStatus cancelBooking() {
     final now = DateTime.now();
     final diff = bookingTime.difference(now).inMinutes;
+    isMember = user.checkStatusMember();
 
-    if (diff > 30 && status == BookingStatus.pending) {
-      status = BookingStatus.cancel;
-      cancelTime = now;
-    } else {
-      status = BookingStatus.fixed;
+    final isPending = status == BookingStatus.pending;
+
+    if (isPending) {
+      final canCancel = isMember! ? diff > 15 : diff > 30;
+
+      if (canCancel) {
+        status = BookingStatus.cancel;
+        cancelTime = now;
+      } else {
+        status = BookingStatus.fixed;
+      }
     }
+
     return status;
   }
 }

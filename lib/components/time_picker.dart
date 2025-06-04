@@ -140,7 +140,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
           break;
         case DatePickerType.datetime:
           formatted =
-              "${finalDate.day}/${finalDate.month}/${finalDate.year} ${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
+              "${finalDate.day}/${finalDate.month}/${finalDate.year}:${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
           break;
         default:
           formatted = '';
@@ -164,6 +164,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     if (widget.errorText != null) return Colors.red;
     if (_isFocused) return widget.borderColor;
     return widget.borderFocusColor;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDate = widget.controller!.text;
   }
 
   @override

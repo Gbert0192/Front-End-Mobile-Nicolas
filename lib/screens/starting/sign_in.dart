@@ -153,7 +153,7 @@ class _SignInState extends State<SignIn> {
                             );
                             if (user == null ||
                                 userProvider.login(
-                                      user.id,
+                                      user,
                                       form.control("password").text,
                                     ) ==
                                     -1) {
