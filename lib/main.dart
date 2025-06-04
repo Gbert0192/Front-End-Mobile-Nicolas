@@ -10,7 +10,6 @@ import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/search/search_tes.dart';
 
 void main() {
   runApp(
