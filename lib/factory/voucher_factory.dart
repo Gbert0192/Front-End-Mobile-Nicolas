@@ -1,9 +1,9 @@
 import 'dart:math';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
-import 'package:tugas_front_end_nicolas/faker/lot_faker.dart';
+import 'package:tugas_front_end_nicolas/factory/lot_factory.dart';
 
-class VoucherFaker {
+class VoucherFactory {
   List<Voucher> vouchers = [];
 
   final List<String> fallbackNames = [
@@ -26,12 +26,12 @@ class VoucherFaker {
 
   final Random _random = Random();
 
-  VoucherFaker() {
+  VoucherFactory() {
     vouchers = generateVouchers();
   }
 
   List<Voucher> generateVouchers() {
-    final List<ParkingLot> lots = lotFaker.lots;
+    final List<ParkingLot> lots = lotFactory.lots;
 
     return List.generate(18, (index) {
       final randomLot = lots[_random.nextInt(lots.length)];
@@ -89,4 +89,4 @@ class VoucherFaker {
   }
 }
 
-final VoucherFaker voucherFaker = VoucherFaker();
+final VoucherFactory voucherFactory = VoucherFactory();

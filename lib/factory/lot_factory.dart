@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 
-class LotFaker {
+class LotFactory {
   final Random _random = Random();
 
   List<ParkingLot> lots = [];
 
-  LotFaker() {
+  LotFactory() {
     lots = [
       ParkingLot(
         name: "Medan Mall",
@@ -943,4 +943,4 @@ class LotFaker {
   }
 }
 
-final LotFaker lotFaker = LotFaker();
+final LotFactory lotFactory = LotFactory();
