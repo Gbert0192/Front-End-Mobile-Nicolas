@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
-import 'package:tugas_front_end_nicolas/faker/lot_faker.dart';
+import 'package:tugas_front_end_nicolas/factory/lot_factory.dart';
 
 class ParkingLotProvider with ChangeNotifier {
-  List<ParkingLot> lots = lotFaker.lots;
+  List<ParkingLot> lots = lotFactory.lots;
   List<UserSearchHistory> searches = [];
 
   UserSearchHistory? loadHistory(int user_id) {
@@ -32,7 +32,7 @@ class ParkingLotProvider with ChangeNotifier {
     return filterLots;
   }
 
-  void deleteLot(int user_id, String key) {
+  void deleteHistory(int user_id, String key) {
     final history = searches.firstWhereOrNull(
       (item) => item.user_id == user_id,
     );
