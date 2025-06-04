@@ -305,24 +305,42 @@ class _HomeState extends State<Home> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // SEARCH
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: TextField(
-                    readOnly: true,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Search()),
-                      );
-                    },
-                    decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.search),
-                      hintText: translate(context, "Search", "Telusuri", "搜索"),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                ResponsiveTextInput(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder:
+                            (context, animation, secondaryAnimation) =>
+                                Search(),
+                        transitionsBuilder: (
+                          context,
+                          animation,
+                          secondaryAnimation,
+                          child,
+                        ) {
+                          const begin = Offset(0.0, 1.0);
+                          const end = Offset.zero;
+                          const curve = Curves.ease;
+
+                          final tween = Tween(
+                            begin: begin,
+                            end: end,
+                          ).chain(CurveTween(curve: curve));
+                          final offsetAnimation = animation.drive(tween);
+
+                          return SlideTransition(
+                            position: offsetAnimation,
+                            child: child,
+                          );
+                        },
                       ),
-                    ),
-                  ),
+                    );
+                  },
+                  isSmall: isSmall,
+                  readOnly: true,
+                  hint: translate(context, "Search", "Telusuri", "搜索"),
+                  leading: Icons.search,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
 

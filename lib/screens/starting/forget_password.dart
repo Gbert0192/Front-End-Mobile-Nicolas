@@ -106,7 +106,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       label: 'Email',
                       type: TextInputTypes.email,
                       errorText: form.error("email"),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();

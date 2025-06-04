@@ -126,7 +126,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       label: 'Password',
                       type: TextInputTypes.password,
                       errorText: form.error('password'),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();
@@ -142,7 +142,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                       label: 'Confirm Password',
                       type: TextInputTypes.password,
                       errorText: form.error('conpassword'),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();

@@ -105,7 +105,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       label: 'Current Password',
                       type: TextInputTypes.password,
                       errorText: form.error("oldPassword"),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();
@@ -121,7 +121,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       label: 'New Password',
                       type: TextInputTypes.password,
                       errorText: form.error("newPassword"),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();
@@ -137,7 +137,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       label: 'Confirm Password',
                       type: TextInputTypes.password,
                       errorText: form.error("confPassword"),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();

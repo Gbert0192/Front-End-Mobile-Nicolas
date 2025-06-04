@@ -132,7 +132,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               hint: 'Enter Fullname',
                               label: 'Fullname',
                               errorText: form.error('fullname'),
-                              onChanged: () {
+                              onChanged: (value) {
                                 if (form.isSubmitted) {
                                   setState(() {
                                     form.validate();
@@ -149,7 +149,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               label: 'Email',
                               type: TextInputTypes.email,
                               errorText: form.error('email'),
-                              onChanged: () {
+                              onChanged: (value) {
                                 if (form.isSubmitted) {
                                   setState(() {
                                     form.validate();
@@ -204,7 +204,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                               maxLines: 3,
                               label: 'Comment',
                               errorText: form.error('comment'),
-                              onChanged: () {
+                              onChanged: (value) {
                                 if (form.isSubmitted) {
                                   setState(() {
                                     form.validate();
