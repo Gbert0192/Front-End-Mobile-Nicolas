@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/search/search.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
@@ -18,6 +19,20 @@ class ParkingSpot {
   ParkingSpot({
     required this.name,
     required this.imageUrl,
+    required this.price,
+  });
+}
+
+class Mall {
+  final String name;
+  final String address;
+  final String image;
+  final num price;
+
+  Mall({
+    required this.name,
+    required this.address,
+    required this.image,
     required this.price,
   });
 }
@@ -290,10 +305,24 @@ class _HomeState extends State<Home> {
                 SizedBox(height: isSmall ? 10 : 20),
 
                 // SEARCH
-                ResponsiveTextInput(
-                  isSmall: isSmall,
-                  hint: translate(context, "Search", "Telusuri", "搜索"),
-                  leading: Icons.search,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: TextField(
+                    readOnly: true,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Search()),
+                      );
+                    },
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.search),
+                      hintText: translate(context, "Search", "Telusuri", "搜索"),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
 

@@ -26,7 +26,7 @@ class UserProvider with ChangeNotifier {
     required String phone,
     required String password,
   }) {
-    final String dial_code =
+    final String dialCode =
         countries
             .firstWhereOrNull((item) => item.code == country_code)!
             .dialCode;
@@ -35,7 +35,7 @@ class UserProvider with ChangeNotifier {
       profilePic: profile_pic,
       fullname: fullname,
       countryCode: country_code,
-      dialCode: dial_code,
+      dialCode: dialCode,
       phone: phone,
       password: password,
     );
