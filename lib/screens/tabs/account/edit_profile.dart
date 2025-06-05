@@ -214,7 +214,7 @@ class _EditProfileState extends State<EditProfile> {
                           label: 'Fullname',
                           type: TextInputTypes.text,
                           errorText: form.error('fullname'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -230,7 +230,7 @@ class _EditProfileState extends State<EditProfile> {
                           label: 'Email',
                           type: TextInputTypes.text,
                           errorText: form.error('email'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -260,6 +260,7 @@ class _EditProfileState extends State<EditProfile> {
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTimePicker(
                           isSmall: isSmall,
+                          type: DatePickerType.date,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',
                           label: 'Birth Date',

@@ -107,7 +107,7 @@ class _SignInState extends State<SignIn> {
                           label: 'Email',
                           type: TextInputTypes.email,
                           errorText: form.error("email"),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -123,7 +123,7 @@ class _SignInState extends State<SignIn> {
                           label: 'Password',
                           type: TextInputTypes.password,
                           errorText: form.error("password"),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -153,7 +153,7 @@ class _SignInState extends State<SignIn> {
                             );
                             if (user == null ||
                                 userProvider.login(
-                                      user.id,
+                                      user,
                                       form.control("password").text,
                                     ) ==
                                     -1) {
