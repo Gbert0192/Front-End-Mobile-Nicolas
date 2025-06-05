@@ -49,7 +49,7 @@ class _SearchState extends State<Search> {
                       'Parkir Dimana?',
                       '在哪里停车？',
                     ),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ],
               ),
