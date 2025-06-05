@@ -600,7 +600,7 @@ class LotFactory {
         closeTime: "22:00",
         hourlyPrice: 6200,
         starterPrice: 3900,
-        image: "assets/images/building/Manhattan Time Square.png",
+        image: "assets/images/building/Manhatan Time Square.png",
         spotCount: 0,
         floor: 4,
         spots: [
