@@ -286,7 +286,7 @@ class _SearchState extends State<Search> {
                                         ),
                                       ),
                                       Text(
-                                        '/hour',
+                                        '/${translate(context, "Hour", "Jam", "小时")}',
                                         style: TextStyle(
                                           color: Color(0xFFDC5F00),
                                           fontSize: 14,

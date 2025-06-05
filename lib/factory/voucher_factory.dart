@@ -33,8 +33,14 @@ class VoucherFactory {
   List<Voucher> generateVouchers() {
     final List<ParkingLot> lots = lotFactory.lots;
 
+    final weightedLots = <ParkingLot>[
+      for (final lot in lots)
+        ...List.filled(lot.buildingType == BuildingType.hotel ? 1 : 3, lot),
+    ];
+
     return List.generate(18, (index) {
-      final randomLot = lots[_random.nextInt(lots.length)];
+      ParkingLot randomLot = weightedLots[_random.nextInt(weightedLots.length)];
+
       final randomType =
           _random.nextBool() ? VoucherFlag.flat : VoucherFlag.percent;
       final validUntil = DateTime.now().add(
