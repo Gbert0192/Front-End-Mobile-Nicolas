@@ -150,7 +150,7 @@ class VoucherCard extends StatelessWidget {
 }
 
 class VoucherScreen extends StatelessWidget {
-  VoucherScreen({super.key});
+  const VoucherScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
