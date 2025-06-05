@@ -39,7 +39,7 @@ void main() {
           popupMenuTheme: PopupMenuThemeData(color: Colors.white),
         ),
         debugShowCheckedModeBanner: false,
-        home: Search(),
+        home: MainApp(),
       ),
     ),
   );
