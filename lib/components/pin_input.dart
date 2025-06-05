@@ -106,14 +106,14 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
                 widget.errorText != null ? Colors.red : widget.pinBorderColor,
             activeBoxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.5),
+                color: Colors.black.withAlpha(128),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
             ],
             inActiveBoxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.25),
+                color: Colors.black.withAlpha(64),
                 blurRadius: 4,
                 offset: const Offset(0, 2),
               ),
@@ -134,7 +134,7 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
                 widget.errorText!,
                 style: TextStyle(
                   color: Colors.red,
-                  fontSize: widget.isSmall ? 12 : 16,
+                  fontSize: widget.isSmall ? 12 : 15,
                 ),
               ),
             ),

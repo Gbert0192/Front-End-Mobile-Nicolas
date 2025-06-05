@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 
 enum TextInputTypes { password, email, text }
 
+enum StyleMode { outline, underline }
+
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
     super.key,
     required this.isSmall,
+    this.readOnly = false,
     this.controller,
     this.onChanged,
+    this.onTap,
+    this.onSubmitted,
     this.hint,
     this.label,
     this.errorText,
     this.leading,
+    this.value,
+    this.mode = StyleMode.outline,
+    this.maxLines = 1,
     this.type = TextInputTypes.text,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -19,11 +27,17 @@ class ResponsiveTextInput extends StatefulWidget {
   });
 
   final bool isSmall;
+  final bool readOnly;
+  final int maxLines;
   final TextEditingController? controller;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
+  final VoidCallback? onTap;
+  final Function(String)? onSubmitted;
   final String? hint;
   final String? label;
+  final String? value;
   final String? errorText;
+  final StyleMode mode;
   final TextInputTypes type;
   final IconData? leading;
   final Color fillColor;
@@ -65,18 +79,32 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        widget.mode == StyleMode.underline
+            ? Text(
+              widget.label!,
+              style: TextStyle(
+                color: _getColor(),
+                fontSize: widget.isSmall ? 12 : 16,
+              ),
+            )
+            : SizedBox.shrink(),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 6,
-                offset: const Offset(4, 4),
-              ),
-            ],
+            boxShadow:
+                widget.mode == StyleMode.underline
+                    ? null
+                    : [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(64),
+                        blurRadius: 6,
+                        offset: const Offset(4, 4),
+                      ),
+                    ],
           ),
           child: TextField(
+            readOnly: widget.readOnly,
+            maxLines: widget.maxLines,
             focusNode: _focusNode,
             controller: widget.controller,
             obscureText: isPassword ? _obscureText : false,
@@ -84,23 +112,37 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                 widget.type == TextInputTypes.email
                     ? TextInputType.emailAddress
                     : TextInputType.text,
-            onChanged: (_) {
-              widget.onChanged?.call();
+            onChanged: (value) {
+              widget.onChanged?.call(value);
+            },
+            onTap: () {
+              widget.onTap?.call();
+            },
+            onSubmitted: (value) {
+              widget.onSubmitted?.call(value);
             },
             decoration: InputDecoration(
-              hintText: widget.hint ?? null,
-              labelText: widget.label ?? null,
+              hintText: widget.hint,
+              labelText:
+                  widget.mode == StyleMode.underline ? null : widget.label,
               hintStyle: TextStyle(color: _getColor()),
               labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
               filled: true,
-              fillColor: hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+              fillColor:
+                  widget.mode == StyleMode.underline
+                      ? Colors.white
+                      : hasError
+                      ? const Color(0xFFFFEDED)
+                      : widget.fillColor,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: widget.isSmall ? 18 : 20,
                 vertical: widget.isSmall ? 12 : 16,
               ),
               prefixIcon:
-                  Icon(widget.leading, size: widget.isSmall ? 20 : 28) ?? null,
+                  widget.leading != null
+                      ? Icon(widget.leading, size: widget.isSmall ? 20 : 28)
+                      : null,
               suffixIcon:
                   isPassword
                       ? IconButton(
@@ -117,21 +159,39 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                         },
                       )
                       : null,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: _getColor(), width: 2.0),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: _getColor()),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red),
-                borderRadius: BorderRadius.circular(20),
-              ),
+              border:
+                  widget.mode == StyleMode.underline
+                      ? UnderlineInputBorder()
+                      : OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+              focusedBorder:
+                  widget.mode == StyleMode.underline
+                      ? UnderlineInputBorder(
+                        borderSide: BorderSide(color: _getColor(), width: 2.0),
+                      )
+                      : OutlineInputBorder(
+                        borderSide: BorderSide(color: _getColor(), width: 2.0),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+              enabledBorder:
+                  widget.mode == StyleMode.underline
+                      ? UnderlineInputBorder(
+                        borderSide: BorderSide(color: _getColor()),
+                      )
+                      : OutlineInputBorder(
+                        borderSide: BorderSide(color: _getColor()),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+              errorBorder:
+                  widget.mode == StyleMode.underline
+                      ? UnderlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red),
+                      )
+                      : OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
             ),
           ),
         ),
@@ -143,7 +203,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
               widget.errorText!,
               style: TextStyle(
                 color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
+                fontSize: widget.isSmall ? 12 : 15,
               ),
             ),
           ),

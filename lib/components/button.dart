@@ -12,7 +12,8 @@ class ResponsiveButton extends StatelessWidget {
   final Color borderColor;
   final bool isLoading;
 
-  const ResponsiveButton({super.key, 
+  const ResponsiveButton({
+    super.key,
     required this.isSmall,
     this.onPressed,
     required this.text,
@@ -38,15 +39,6 @@ class ResponsiveButton extends StatelessWidget {
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation<Color>(textColor),
-                  ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  "Loading...",
-                  style: TextStyle(
-                    color: textColor,
-                    fontSize: isSmall ? null : 20,
-                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],

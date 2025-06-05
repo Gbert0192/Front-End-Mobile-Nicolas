@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -28,13 +32,19 @@ class _SignInState extends State<SignIn> {
   );
 
   @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -59,31 +69,30 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/starting/park_spot.png',
+                      'assets/images/starting/park_spot.png',
                       height: isSmall ? 240 : 360,
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                     Text(
-                      'Back Again! Your Perfect Spot Awaits!',
+                      '${translate(context, 'Back Again? Your Perfect Spot Awaits', "Sudah Kembali? Tempat Sempurna Anda Menanti", "又回来了？完美地点等你来")}!',
                       style: TextStyle(
-                        fontSize: isSmall ? 18 : 24,
+                        fontSize: isSmall ? 20 : 24,
                         color: Color(0xFF1879D4),
-                        // shadows: [
-                        //   Shadow(
-                        //     offset: Offset(4, 4),
-                        //     blurRadius: 6.0,
-                        //     color: Color.fromRGBO(24, 45, 163, 0.25),
-                        //   ),
-                        // ],
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          ),
+                        ],
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -98,7 +107,7 @@ class _SignInState extends State<SignIn> {
                           label: 'Email',
                           type: TextInputTypes.email,
                           errorText: form.error("email"),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -114,7 +123,7 @@ class _SignInState extends State<SignIn> {
                           label: 'Password',
                           type: TextInputTypes.password,
                           errorText: form.error("password"),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -139,38 +148,68 @@ class _SignInState extends State<SignIn> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            int user_id = userProvider.findUser(
+                            User? user = userProvider.findUserByEmail(
                               form.control("email").text,
                             );
-                            if (user_id == -1 ||
+                            if (user == null ||
                                 userProvider.login(
-                                      user_id,
+                                      user,
                                       form.control("password").text,
                                     ) ==
                                     -1) {
                               showFlexibleSnackbar(
                                 context,
-                                "Invalid Credential!",
+                                "${translate(context, "Invalid Credential", "Kredensial Tidak Valid", "凭证无效")}!",
                                 type: SnackbarType.error,
                               );
                               setState(() => form.isLoading = false);
                               return;
                             }
                             setState(() => form.isLoading = false);
-                            showFlexibleSnackbar(
-                              context,
-                              "Welcome Back, ${userProvider.userList[user_id].fullname.split(" ")[0]}!",
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainLayout(),
-                              ),
-                            );
+                            if (user.twoFactor) {
+                              otpProvider.email = user.email;
+                              otpProvider.generateOTP();
+                              showFlexibleSnackbar(
+                                context,
+                                "Your OTP is ${otpProvider.OTP}",
+                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => VerifyAccount(
+                                        successMessage:
+                                            "${translate(context, "Welcome Back", "Selamat Datang kembali", "欢迎回来")} ${user.fullname.split(" ")[0]}!",
+                                        onSubmit: () {
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder:
+                                                  (context) => MainLayout(),
+                                            ),
+                                            (Route<dynamic> route) => false,
+                                          );
+                                        },
+                                      ),
+                                ),
+                              );
+                            } else {
+                              showFlexibleSnackbar(
+                                context,
+                                "${translate(context, "Welcome Back", "Selamat Datang kembali", "欢迎回来")} ${user.fullname.split(" ")[0]}!",
+                              );
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MainLayout(),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
+                            }
                           });
                         }
                       },
-                      text: "Sign In",
+                      text: translate(context, 'Sign In', "Masuk", "登入"),
                     ),
 
                     // Sign In Button
@@ -192,9 +231,12 @@ class _SignInState extends State<SignIn> {
 
                     SizedBox(height: isSmall ? 10 : 20),
 
-                    const Text(
+                    Text(
                       'Haven’t Sign Up?',
-                      style: TextStyle(color: Color(0xFF10297F)),
+                      style: TextStyle(
+                        color: Color(0xFF10297F),
+                        fontSize: isSmall ? 16 : 20,
+                      ),
                     ),
 
                     ResponsiveButton(
@@ -206,7 +248,7 @@ class _SignInState extends State<SignIn> {
                           MaterialPageRoute(builder: (context) => SignUp()),
                         );
                       },
-                      text: "Sign Up",
+                      text: translate(context, 'Sign Up', "Daftar", "报名"),
                       buttonType: ButtonTypes.outline,
                     ),
 
@@ -224,7 +266,7 @@ class _SignInState extends State<SignIn> {
                         'Forget Password?',
                         style: TextStyle(
                           color: Color(0xFF10297F),
-                          fontSize: isSmall ? 16 : 24,
+                          fontSize: isSmall ? 18 : 25,
                         ),
                       ),
                     ),
