@@ -7,11 +7,12 @@ class ParkingLotProvider with ChangeNotifier {
   List<ParkingLot> lots = lotFactory.lots;
   List<UserSearchHistory> searches = [];
 
+
   UserSearchHistory? loadHistory(int user_id) {
     return searches.firstWhereOrNull((item) => item.user_id == user_id);
   }
 
-  List<ParkingLot>? searchLot(int user_id, String key) {
+  List<ParkingLot>? searchLot(int userId, String key) {
     final filterLots =
         lots
             .where(
@@ -19,9 +20,7 @@ class ParkingLotProvider with ChangeNotifier {
             )
             .toList();
 
-    final history = searches.firstWhereOrNull(
-      (item) => item.user_id == user_id,
-    );
+    final history = searches.firstWhereOrNull((item) => item.user_id == userId);
 
     if (history == null) return null;
 
@@ -37,7 +36,8 @@ class ParkingLotProvider with ChangeNotifier {
       (item) => item.user_id == user_id,
     );
 
-    if (history == null) return null;
+
+    if (history == null) return;
 
     history.searchHistory.remove(key.trim());
     notifyListeners();

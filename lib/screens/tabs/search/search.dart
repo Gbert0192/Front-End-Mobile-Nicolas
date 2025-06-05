@@ -1,95 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/search/search_detail.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
-
-class Mall {
-  final String name;
-  final String address;
-  final String image;
-  final num price;
-  final num slot;
-
-  Mall({
-    required this.name,
-    required this.address,
-    required this.image,
-    required this.price,
-    required this.slot,
-  });
-}
-
-final allMall = [
-  Mall(
-    name: 'Sun Plaza',
-    address: 'Jl. KH. Zainul Arifin No. 7',
-    image: 'assets/images/building/Sun Plaza.png',
-    price: 3000,
-    slot: 8,
-  ),
-  Mall(
-    name: 'Center Point',
-    address: 'Jl. Jawa No. 8',
-    image: 'assets/images/building/Centre Point.png',
-    price: 3000,
-    slot: 9,
-  ),
-  Mall(
-    name: 'Manhattan Time Square',
-    address: 'Jl. Gatot Subroto No. 217',
-    image: 'assets/images/building/Manhatan Time Square.png',
-    price: 3000,
-    slot: 1,
-  ),
-  Mall(
-    name: 'Delipark',
-    address: 'Jl. Putri Hijau Dalam No. 1',
-    image: 'assets/images/building/Delipark.png',
-    price: 5000,
-    slot: 4,
-  ),
-  Mall(
-    name: 'Plaza Medan Fair',
-    address: 'Jl. Gatot Subroto No. 30',
-    image: 'assets/images/building/Plaza Medan Fair.png',
-    price: 4000,
-    slot: 0,
-  ),
-  Mall(
-    name: 'Lippo Plaza',
-    address: 'Jl. Imam Bonjol No. 6',
-    image: 'assets/images/building/Lippo Plaza.png',
-    price: 3500,
-    slot: 1,
-  ),
-  Mall(
-    name: 'Aryaduta',
-    address: 'Jl. Kapten Maulana Lubis No. 8',
-    image: 'assets/images/building/Aryaduta.png',
-    price: 3500,
-    slot: 2,
-  ),
-  Mall(
-    name: 'Medan Mall',
-    address: 'Jl. Balai Kota No. 1',
-    image: 'assets/images/building/Medan Mall.png',
-    price: 5000,
-    slot: 3,
-  ),
-  Mall(
-    name: 'Grand City Hall',
-    address: 'Jl. Balai Kota No. 1',
-    image: 'assets/images/building/Grand City Hall.png',
-    price: 4000,
-    slot: 10,
-  ),
-  Mall(
-    name: 'Radisson Medan',
-    address: 'Jl. H. Adam Malik No. 5',
-    image: 'assets/images/building/Radisson.png',
-    price: 4000,
-    slot: 1,
-  ),
-];
+import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -100,21 +14,21 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final controller = TextEditingController();
-  List<Mall> malls = allMall;
+  List<ParkingLot>? resultLots;
 
-  void searchMall(String query) {
-    final suggestions =
-        allMall.where((mall) {
-          final mallName = mall.name.toLowerCase();
-          final input = query.toLowerCase();
-
-          return mallName.contains(input);
-        }).toList();
-    setState(() => malls = suggestions);
+  void searchMall(ParkingLotProvider provider, String query, int userId) {
+    final lots = provider.searchLot(userId, query);
+    setState(() {
+      resultLots = lots;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final userId = 1;
+    final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final malls = resultLots ?? lotProvider.lots;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -149,7 +63,7 @@ class _SearchState extends State<Search> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       controller.clear();
-                      searchMall('');
+                      searchMall(lotProvider, '', userId);
                     },
                     icon: Icon(Icons.clear),
                   ),
@@ -160,7 +74,7 @@ class _SearchState extends State<Search> {
                     borderSide: BorderSide(color: Color(0xFF1F1E5B)),
                   ),
                 ),
-                onChanged: searchMall,
+                onSubmitted: (value) => searchMall(lotProvider, value, userId),
               ),
             ),
             Text(
@@ -251,11 +165,11 @@ class _SearchState extends State<Search> {
                                       borderRadius: BorderRadius.circular(20),
                                     ),
                                     child: Text(
-                                      mall.slot <= 0
+                                      mall.spotCount <= 0
                                           ? 'All Full'
-                                          : mall.slot == 1
-                                          ? '${mall.slot} Slot'
-                                          : '${mall.slot} Slots',
+                                          : mall.spotCount == 1
+                                          ? '${mall.spotCount} Slot'
+                                          : '${mall.spotCount} Slots',
                                       style: TextStyle(
                                         color: Color(0xFFDC5F00),
                                         fontSize: 14,
@@ -279,7 +193,10 @@ class _SearchState extends State<Search> {
                                   Row(
                                     children: [
                                       Text(
-                                        formatCurrency(nominal: mall.price),
+                                        formatCurrency(
+                                          nominal: mall.starterPrice ?? 0,
+                                        ),
+
                                         style: TextStyle(
                                           color: Color(0xFFDC5F00),
                                           fontSize: 16,
