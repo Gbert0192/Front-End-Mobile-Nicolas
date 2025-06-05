@@ -5,8 +5,8 @@ import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/search/search.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/search/search.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 

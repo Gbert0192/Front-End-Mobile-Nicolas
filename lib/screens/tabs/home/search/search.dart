@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/search/search_detail.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/lot_detail.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 
@@ -16,8 +18,8 @@ class _SearchState extends State<Search> {
   final controller = TextEditingController();
   List<ParkingLot>? resultLots;
 
-  void searchMall(ParkingLotProvider provider, String query, int userId) {
-    final lots = provider.searchLot(userId, query);
+  void searchMall(ParkingLotProvider provider, String query, User user) {
+    final lots = provider.searchLot(user, query);
     setState(() {
       resultLots = lots;
     });
@@ -25,8 +27,9 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    final userId = 1;
     final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    User user = userProvider.currentUser!;
     final malls = resultLots ?? lotProvider.lots;
 
     return Scaffold(
@@ -63,7 +66,7 @@ class _SearchState extends State<Search> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       controller.clear();
-                      searchMall(lotProvider, '', userId);
+                      searchMall(lotProvider, '', user);
                     },
                     icon: Icon(Icons.clear),
                   ),
@@ -74,7 +77,7 @@ class _SearchState extends State<Search> {
                     borderSide: BorderSide(color: Color(0xFF1F1E5B)),
                   ),
                 ),
-                onSubmitted: (value) => searchMall(lotProvider, value, userId),
+                onSubmitted: (value) => searchMall(lotProvider, value, user),
               ),
             ),
             Text(
@@ -203,7 +206,7 @@ class _SearchState extends State<Search> {
                                         ),
                                       ),
                                       Text(
-                                        '/hour',
+                                        '/${translate(context, "Hour", "Jam", "小时")}',
                                         style: TextStyle(
                                           color: Color(0xFFDC5F00),
                                           fontSize: 14,

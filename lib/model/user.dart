@@ -1,5 +1,4 @@
 class User {
-  int user_id;
   String email;
   String? profilePic;
   String fullname;
@@ -18,7 +17,6 @@ class User {
   DateTime? memberUntil;
 
   User({
-    required this.user_id,
     required this.email,
     this.profilePic,
     required this.fullname,
