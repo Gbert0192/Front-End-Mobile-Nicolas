@@ -697,7 +697,7 @@ class ParkingLotProvider with ChangeNotifier {
         closeTime: "22:00",
         hourlyPrice: 6200,
         starterPrice: 3900,
-        image: "assets/images/building/Manhattan Time Square.png",
+        image: "assets/images/building/Manhatan Time Square.png",
         spotCount: 0,
         floor: 4,
         spots: [
@@ -1013,11 +1013,11 @@ class ParkingLotProvider with ChangeNotifier {
     return count;
   }
 
-  UserSearchHistory? loadHistory(int user_id) {
-    return searches.firstWhereOrNull((item) => item.user_id == user_id);
+  UserSearchHistory? loadHistory(int userId) {
+    return searches.firstWhereOrNull((item) => item.user_id == userId);
   }
 
-  List<ParkingLot>? searchLot(int user_id, String key) {
+  List<ParkingLot>? searchLot(int userId, String key) {
     final filterLots =
         lots
             .where(
@@ -1025,9 +1025,7 @@ class ParkingLotProvider with ChangeNotifier {
             )
             .toList();
 
-    final history = searches.firstWhereOrNull(
-      (item) => item.user_id == user_id,
-    );
+    final history = searches.firstWhereOrNull((item) => item.user_id == userId);
 
     if (history == null) return null;
 
@@ -1038,12 +1036,10 @@ class ParkingLotProvider with ChangeNotifier {
     return filterLots;
   }
 
-  void deleteLot(int user_id, String key) {
-    final history = searches.firstWhereOrNull(
-      (item) => item.user_id == user_id,
-    );
+  void deleteLot(int userId, String key) {
+    final history = searches.firstWhereOrNull((item) => item.user_id == userId);
 
-    if (history == null) return null;
+    if (history == null) return;
 
     history.searchHistory.remove(key.trim());
     notifyListeners();
