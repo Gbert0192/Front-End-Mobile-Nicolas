@@ -6,7 +6,6 @@ import '../model/user.dart';
 class UserProvider with ChangeNotifier {
   List<User> userList = [
     User(
-      user_id: 1,
       email: "johndoer@gmail.com",
       profilePic: "assets/images/users/male 2.jpg",
       fullname: "JOHN DOER",
@@ -32,7 +31,6 @@ class UserProvider with ChangeNotifier {
             .firstWhereOrNull((item) => item.code == country_code)!
             .dialCode;
     final newUser = User(
-      user_id: userList.length + 1,
       email: email,
       profilePic: profile_pic,
       fullname: fullname,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/topup/topup_detail.dart'; // import halaman detail
+import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail.dart'; // import halaman detail
 
 class TopUpPage extends StatelessWidget {
   TopUpPage({super.key});

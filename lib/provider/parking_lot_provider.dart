@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/factory/lot_factory.dart';
 
@@ -7,12 +8,11 @@ class ParkingLotProvider with ChangeNotifier {
   List<ParkingLot> lots = lotFactory.lots;
   List<UserSearchHistory> searches = [];
 
-
-  UserSearchHistory? loadHistory(int user_id) {
-    return searches.firstWhereOrNull((item) => item.user_id == user_id);
+  UserSearchHistory? loadHistory(User user) {
+    return searches.firstWhereOrNull((item) => item.user == user);
   }
 
-  List<ParkingLot>? searchLot(int userId, String key) {
+  List<ParkingLot>? searchLot(User user, String key) {
     final filterLots =
         lots
             .where(
@@ -20,7 +20,7 @@ class ParkingLotProvider with ChangeNotifier {
             )
             .toList();
 
-    final history = searches.firstWhereOrNull((item) => item.user_id == userId);
+    final history = searches.firstWhereOrNull((item) => item.user == user);
 
     if (history == null) return null;
 
@@ -31,13 +31,10 @@ class ParkingLotProvider with ChangeNotifier {
     return filterLots;
   }
 
-  void deleteHistory(int user_id, String key) {
-    final history = searches.firstWhereOrNull(
-      (item) => item.user_id == user_id,
-    );
+  void deleteHistory(User user, String key) {
+    final history = searches.firstWhereOrNull((item) => item.user == user);
 
-
-    if (history == null) return;
+    if (history == null) return null;
 
     history.searchHistory.remove(key.trim());
     notifyListeners();
@@ -45,8 +42,8 @@ class ParkingLotProvider with ChangeNotifier {
 }
 
 class UserSearchHistory {
-  final int user_id;
+  final User user;
   final List<String> searchHistory;
 
-  UserSearchHistory(this.user_id, this.searchHistory);
+  UserSearchHistory(this.user, this.searchHistory);
 }
