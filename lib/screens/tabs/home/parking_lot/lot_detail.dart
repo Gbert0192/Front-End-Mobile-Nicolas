@@ -99,10 +99,20 @@ class SearchDetail extends StatelessWidget {
                                   SizedBox(width: 5),
                                   Text(
                                     mall.spotCount <= 0
-                                        ? 'All Full'
-                                        : mall.spotCount == 1
-                                        ? '${mall.spotCount} Slot'
-                                        : '${mall.spotCount} Slots',
+                                        ? translate(
+                                          context,
+                                          'All Full',
+                                          'Penuh',
+                                          '全部满了',
+                                        )
+                                        : translate(
+                                          context,
+                                          mall.spotCount == 1
+                                              ? '${mall.spotCount} Slot'
+                                              : '${mall.spotCount} Slots',
+                                          '${mall.spotCount} Slot',
+                                          '${mall.spotCount} 个插槽',
+                                        ),
                                     style: TextStyle(
                                       color: Color(0xFF4D5DFA),
                                       fontSize: 14,
@@ -155,7 +165,7 @@ class SearchDetail extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
-                                'Parking',
+                                translate(context, 'Parking', 'Parkir', '停車處'),
                                 style: TextStyle(
                                   color: Color(0xFF4D5DFA),
                                   fontSize: 14,
@@ -167,34 +177,42 @@ class SearchDetail extends StatelessWidget {
                         ),
                         SizedBox(height: 20),
                         Text(
-                          'Description',
+                          translate(context, 'Description', 'Deskripsi', '描述'),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'It is a very famous shopping center in Medan. Not only a shopping center, but also home to many cafes and trendy dining places. The mall operates from ${mall.openTime} A.M. until ${mall.closeTime} P.M..',
-                                style: TextStyle(
-                                  color: Color(0xFF908C8C),
-                                  fontSize: 16,
-                                ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              translate(
+                                context,
+                                'It is a very famous shopping center in Medan. Not only a shopping center, but also home to many cafes and trendy dining places. The mall operates from ${mall.openTime} until ${mall.closeTime}',
+                                'Merupakan sebuah pusat pembelanjaan yang sangat terkenal di Medan. Bukan hanya sebuah pusat pembelanjaan tetapi juga merupakan rumah dari banyak kafe - kafe dan tempat - tempat makan yang ngetren. Mall beroperasi mulai dari jam ${mall.openTime} sampai jam ${mall.closeTime}',
+                                '这是棉兰一家非常著名的购物中心。它不仅是一个购物中心，还汇聚了众多咖啡馆和时尚餐厅。商场营业时间为${mall.openTime}至${mall.closeTime}',
                               ),
-                              SizedBox(height: 4),
-                              Text(
+                              style: TextStyle(
+                                color: Color(0xFF908C8C),
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              translate(
+                                context,
                                 'Read More...',
-                                style: TextStyle(
-                                  color: Color(0xFF4D5DFA),
-                                  fontSize: 16,
-                                ),
+                                'Baca Selengkapnya...',
+                                '阅读更多...',
                               ),
-                            ],
-                          ),
+                              style: TextStyle(
+                                color: Color(0xFF4D5DFA),
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
 
                         Container(
@@ -225,7 +243,12 @@ class SearchDetail extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    ' / hour',
+                                    translate(
+                                      context,
+                                      ' / hour',
+                                      ' / jam',
+                                      ' / 小时',
+                                    ),
                                     style: TextStyle(
                                       color: Color(0xFF908C8C),
                                       fontWeight: FontWeight.bold,
@@ -256,7 +279,12 @@ class SearchDetail extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      '1st hour',
+                                      translate(
+                                        context,
+                                        '1st hour',
+                                        'Jam pertama',
+                                        '第一个小时',
+                                      ),
                                       style: TextStyle(
                                         color: Color(0xFF908C8C),
                                         fontSize: 17,
@@ -276,6 +304,84 @@ class SearchDetail extends StatelessWidget {
                               ),
                             ],
                           ),
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 7,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFFFFA35E)),
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                color: Color(0xFFFFA35E),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  //ke halamaan parking
+                                },
+                                child: Text(
+                                  translate(
+                                    context,
+                                    'Enter Parking',
+                                    'Masuk Parkir',
+                                    '进入停车场',
+                                  ),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 7,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFF7573EE)),
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                color: Color(0xFF7573EE),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  //ke halamaan booking
+                                },
+                                child: Text(
+                                  translate(
+                                    context,
+                                    'Book Parking',
+                                    'Pesan Parkir',
+                                    '预订停车位',
+                                  ),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
