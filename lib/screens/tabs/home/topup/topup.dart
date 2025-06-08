@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail.dart'; // import halaman detail
+import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail_bank.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail_cash.dart'; // import halaman detail
 
 class TopUpPage extends StatelessWidget {
   TopUpPage({super.key});
@@ -16,6 +17,27 @@ class TopUpPage extends StatelessWidget {
       MaterialPageRoute(
         builder:
             (_) => TopUpDetailPage(
+              bankName: bankName,
+              logoPath: logoPath,
+              vaNumber: vaNumber,
+              steps: steps,
+            ),
+      ),
+    );
+  }
+
+  void _navigateToCash(
+    BuildContext context, {
+    required String bankName,
+    required String logoPath,
+    required String vaNumber,
+    required List<String> steps,
+  }) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (_) => TopUpDetailCash(
               bankName: bankName,
               logoPath: logoPath,
               vaNumber: vaNumber,
@@ -116,15 +138,96 @@ class TopUpPage extends StatelessWidget {
     ),
   ];
 
-  final cashList = [
-    'assets/images/topup/alfamidi.png',
-    'assets/images/topup/indomaret2.png',
-    'assets/images/topup/alfamart.png',
-    'assets/images/topup/superindo.png',
-    'assets/images/topup/sevel.png',
-    'assets/images/topup/family mart.png',
-    'assets/images/topup/lawson.png',
-    'assets/images/topup/K3mart.png',
+final List<TopUpMethod> cashList = [
+    TopUpMethod(
+      name: 'Alfamidi',
+      image: 'assets/images/topup/alfamidi.png',
+      va: '8558801234567890',
+      steps: [
+        'Kunjungi gerai Alfamidi terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'Indomaret',
+      image: 'assets/images/topup/indomaret2.png',
+      va: '8558801234567891',
+      steps: [
+        'Kunjungi gerai Indomaret terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'Alfamart',
+      image: 'assets/images/topup/alfamart.png',
+      va: '8558801234567892',
+      steps: [
+        'Kunjungi gerai Alfamart terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'Superindo',
+      image: 'assets/images/topup/superindo.png',
+      va: '8558801234567893',
+      steps: [
+        'Kunjungi gerai Superindo terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'Sevel',
+      image: 'assets/images/topup/sevel.png',
+      va: '8558801234567894',
+      steps: [
+        'Kunjungi gerai Sevel terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'Family Mart',
+      image: 'assets/images/topup/family mart.png',
+      va: '8558801234567895',
+      steps: [
+        'Kunjungi gerai Family Mart terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'Lawson',
+      image: 'assets/images/topup/lawson.png',
+      va: '8558801234567896',
+      steps: [
+        'Kunjungi gerai Lawson terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    TopUpMethod(
+      name: 'K3Mart',
+      image: 'assets/images/topup/K3mart.png',
+      va: '8558801234567897',
+      steps: [
+        'Kunjungi gerai K3Mart terdekat',
+        'Tunjukkan barcode ke kasir',
+        'Sebutkan nominal top up',
+        'Bayar dan simpan struk sebagai bukti',
+      ],
+    ),
+    // Tambahan lainnya tetap sama ...
   ];
 
   @override
@@ -276,8 +379,19 @@ class TopUpPage extends StatelessWidget {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 children:
-                    cashList.map((path) {
-                      return Container(
+                    cashList.map((cash) {
+                      return GestureDetector(
+                        onTap: () {
+                          _navigateToCash(context, 
+                          bankName: cash.name, 
+                          logoPath: cash.image, 
+                          vaNumber: cash.va, 
+                          steps: List<String>.from(cash.steps),
+                          );
+                        },
+                      
+                      
+                      child: Container(
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -290,12 +404,13 @@ class TopUpPage extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(6),
                           child: Image.asset(
-                            path,
+                            cash.image,
                             width: 40,
                             height: 40,
                             fit: BoxFit.cover,
                           ),
                         ),
+                      )
                       );
                     }).toList(),
               ),
