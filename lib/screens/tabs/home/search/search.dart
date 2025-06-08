@@ -30,7 +30,8 @@ class _SearchState extends State<Search> {
     final lotProvider = Provider.of<ParkingLotProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     User user = userProvider.currentUser!;
-    final malls = resultLots ?? lotProvider.lots;
+    final malls =
+        (controller.text.isEmpty) ? lotProvider.lots : resultLots ?? [];
 
     return Scaffold(
       body: SafeArea(
@@ -169,10 +170,20 @@ class _SearchState extends State<Search> {
                                     ),
                                     child: Text(
                                       mall.spotCount <= 0
-                                          ? 'All Full'
-                                          : mall.spotCount == 1
-                                          ? '${mall.spotCount} Slot'
-                                          : '${mall.spotCount} Slots',
+                                          ? translate(
+                                            context,
+                                            'All Full',
+                                            'Penuh',
+                                            '全部满了',
+                                          )
+                                          : translate(
+                                            context,
+                                            mall.spotCount == 1
+                                                ? '${mall.spotCount} Slot'
+                                                : '${mall.spotCount} Slots',
+                                            '${mall.spotCount} Slot',
+                                            '${mall.spotCount} 个插槽',
+                                          ),
                                       style: TextStyle(
                                         color: Color(0xFFDC5F00),
                                         fontSize: 14,

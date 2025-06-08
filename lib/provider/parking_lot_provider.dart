@@ -20,9 +20,12 @@ class ParkingLotProvider with ChangeNotifier {
             )
             .toList();
 
-    final history = searches.firstWhereOrNull((item) => item.user == user);
+    var history = searches.firstWhereOrNull((item) => item.user == user);
 
-    if (history == null) return null;
+    if (history == null) {
+      history = UserSearchHistory(user, []);
+      searches.add(history);
+    }
 
     history.searchHistory.remove(key.trim());
 
