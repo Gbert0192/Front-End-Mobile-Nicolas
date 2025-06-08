@@ -1,239 +1,238 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail_bank.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail_cash.dart'; // import halaman detail
+import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail.dart';
 
 class TopUpPage extends StatelessWidget {
   TopUpPage({super.key});
 
   void _navigateToDetail(
     BuildContext context, {
-    required String bankName,
-    required String logoPath,
-    required String vaNumber,
-    required List<String> steps,
+    MethodType type = MethodType.transfer,
+    required TopUpMethod method,
   }) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder:
-            (_) => TopUpDetailPage(
-              bankName: bankName,
-              logoPath: logoPath,
-              vaNumber: vaNumber,
-              steps: steps,
-            ),
+        builder: (_) => TopUpDetailPage(type: type, method: method),
       ),
     );
   }
-
-  void _navigateToCash(
-    BuildContext context, {
-    required String bankName,
-    required String logoPath,
-    required String vaNumber,
-    required List<String> steps,
-  }) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (_) => TopUpDetailCash(
-              bankName: bankName,
-              logoPath: logoPath,
-              vaNumber: vaNumber,
-              steps: steps,
-            ),
-      ),
-    );
-  }
-
-  final List<TopUpMethod> bankList = [
-    TopUpMethod(
-      name: 'BRI',
-      image: 'assets/images/topup/bri.png',
-      va: '70001 081234567891',
-      steps: [
-        'Login ke BRImo',
-        'Pilih menu BRIVA',
-        'Masukkan nomor VA dan nominal',
-        'Konfirmasi dan bayar',
-      ],
-    ),
-    TopUpMethod(
-      name: 'BCA',
-      image: 'assets/images/topup/bca.png',
-      va: '70001 081234567890',
-      steps: [
-        'Login ke BCA Mobile',
-        'Pilih m-Transfer',
-        'Pilih BCA Virtual Account',
-        'Masukkan nomor VA dan bayar',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Mandiri',
-      image: 'assets/images/topup/mandiri.png',
-      va: '70001 081234567892',
-      steps: [
-        'Masuk ke Livin by Mandiri',
-        'Pilih Bayar > Multipayment',
-        'Masukkan VA dan jumlah',
-        'Lanjutkan pembayaran',
-      ],
-    ),
-    TopUpMethod(
-      name: 'CIMB',
-      image: 'assets/images/topup/cimb.png',
-      va: '70001 081234567893',
-      steps: [
-        'Buka OCTO Mobile',
-        'Pilih menu Pembayaran',
-        'Input nomor Virtual Account',
-        'Lakukan pembayaran',
-      ],
-    ),
-    TopUpMethod(
-      name: 'OCBC',
-      image: 'assets/images/topup/ocbc.png',
-      va: '70001 081234567894',
-      steps: [
-        'Buka OCBC app',
-        'Klik menu pembayaran',
-        'Input VA dan nominal',
-        'Selesaikan transaksi',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Danamon',
-      image: 'assets/images/topup/danamon.png',
-      va: '70001 081234567895',
-      steps: [
-        'Buka D-Bank PRO',
-        'Pilih Virtual Account',
-        'Masukkan detail pembayaran',
-        'Konfirmasi dan bayar',
-      ],
-    ),
-    TopUpMethod(
-      name: 'BNI',
-      image: 'assets/images/topup/bni.png',
-      va: '70001 081234567896',
-      steps: [
-        'Masuk ke BNI Mobile Banking',
-        'Pilih menu Transfer VA',
-        'Masukkan nomor VA dan nominal',
-        'Konfirmasi pembayaran',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Panin',
-      image: 'assets/images/topup/panin.jpg',
-      va: '70001 081234567897',
-      steps: [
-        'Masuk aplikasi Panin',
-        'Pilih Virtual Account',
-        'Input nomor dan jumlah',
-        'Selesaikan pembayaran',
-      ],
-    ),
-  ];
-
-final List<TopUpMethod> cashList = [
-    TopUpMethod(
-      name: 'Alfamidi',
-      image: 'assets/images/topup/alfamidi.png',
-      va: '8558801234567890',
-      steps: [
-        'Kunjungi gerai Alfamidi terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Indomaret',
-      image: 'assets/images/topup/indomaret2.png',
-      va: '8558801234567891',
-      steps: [
-        'Kunjungi gerai Indomaret terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Alfamart',
-      image: 'assets/images/topup/alfamart.png',
-      va: '8558801234567892',
-      steps: [
-        'Kunjungi gerai Alfamart terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Superindo',
-      image: 'assets/images/topup/superindo.png',
-      va: '8558801234567893',
-      steps: [
-        'Kunjungi gerai Superindo terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Sevel',
-      image: 'assets/images/topup/sevel.png',
-      va: '8558801234567894',
-      steps: [
-        'Kunjungi gerai Sevel terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Family Mart',
-      image: 'assets/images/topup/family mart.png',
-      va: '8558801234567895',
-      steps: [
-        'Kunjungi gerai Family Mart terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'Lawson',
-      image: 'assets/images/topup/lawson.png',
-      va: '8558801234567896',
-      steps: [
-        'Kunjungi gerai Lawson terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    TopUpMethod(
-      name: 'K3Mart',
-      image: 'assets/images/topup/K3mart.png',
-      va: '8558801234567897',
-      steps: [
-        'Kunjungi gerai K3Mart terdekat',
-        'Tunjukkan barcode ke kasir',
-        'Sebutkan nominal top up',
-        'Bayar dan simpan struk sebagai bukti',
-      ],
-    ),
-    // Tambahan lainnya tetap sama ...
-  ];
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
+    final List<TopUpMethod> bankList = [
+      TopUpMethod(
+        name: 'BRI',
+        image: 'assets/images/topup/bri.png',
+        prefix: '88888',
+        steps: [
+          'Login ke BRImo',
+          'Pilih menu BRIVA',
+          'Masukkan nomor VA dan nominal',
+          'Konfirmasi dan bayar',
+        ],
+        adminFee: 1500.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'BCA',
+        image: 'assets/images/topup/bca.png',
+        prefix: '3901',
+        steps: [
+          'Login ke BCA Mobile',
+          'Pilih m-Transfer',
+          'Pilih BCA Virtual Account',
+          'Masukkan nomor VA dan bayar',
+        ],
+        adminFee: 1000.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Mandiri',
+        image: 'assets/images/topup/mandiri.png',
+        prefix: '70012',
+        steps: [
+          'Masuk ke Livin by Mandiri',
+          'Pilih Bayar > Multipayment',
+          'Masukkan VA dan jumlah',
+          'Lanjutkan pembayaran',
+        ],
+        adminFee: 2500.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'CIMB',
+        image: 'assets/images/topup/cimb.png',
+        prefix: '2849',
+        steps: [
+          'Buka OCTO Mobile',
+          'Pilih menu Pembayaran',
+          'Input nomor Virtual Account',
+          'Lakukan pembayaran',
+        ],
+        adminFee: 1000.0,
+        minTo: 20000.0,
+      ),
+      TopUpMethod(
+        name: 'OCBC',
+        image: 'assets/images/topup/ocbc.png',
+        prefix: '88810',
+        steps: [
+          'Buka OCBC app',
+          'Klik menu pembayaran',
+          'Input VA dan nominal',
+          'Selesaikan transaksi',
+        ],
+        adminFee: 2500.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Danamon',
+        image: 'assets/images/topup/danamon.png',
+        prefix: '8528',
+        steps: [
+          'Buka D-Bank PRO',
+          'Pilih Virtual Account',
+          'Masukkan detail pembayaran',
+          'Konfirmasi dan bayar',
+        ],
+        adminFee: 5000.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'BNI',
+        image: 'assets/images/topup/bni.png',
+        prefix: '8808',
+        steps: [
+          'Masuk ke BNI Mobile Banking',
+          'Pilih menu Transfer VA',
+          'Masukkan nomor VA dan nominal',
+          'Konfirmasi pembayaran',
+        ],
+        adminFee: 2500.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Panin',
+        image: 'assets/images/topup/panin.jpg',
+        prefix: '9009',
+        steps: [
+          'Masuk aplikasi Panin',
+          'Pilih Virtual Account',
+          'Input nomor dan jumlah',
+          'Selesaikan pembayaran',
+        ],
+        minTo: 10000.0,
+      ),
+    ];
+
+    final List<TopUpMethod> cashList = [
+      TopUpMethod(
+        name: 'Alfamidi',
+        image: 'assets/images/topup/alfamidi.png',
+        prefix: 'ALMA',
+        steps: [
+          'Kunjungi gerai Alfamidi terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        adminFee: 2000.0,
+        minTo: 20000.0,
+      ),
+      TopUpMethod(
+        name: 'Indomaret',
+        image: 'assets/images/topup/indomaret2.png',
+        prefix: 'INDO',
+        steps: [
+          'Kunjungi gerai Indomaret terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        adminFee: 1500.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Alfamart',
+        image: 'assets/images/topup/alfamart.png',
+        prefix: 'ALFA',
+        steps: [
+          'Kunjungi gerai Alfamart terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        adminFee: 2000.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Superindo',
+        image: 'assets/images/topup/superindo.png',
+        prefix: 'SIND',
+        steps: [
+          'Kunjungi gerai Superindo terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        adminFee: 1000.0,
+        minTo: 50000.0,
+      ),
+      TopUpMethod(
+        name: 'Sevel',
+        image: 'assets/images/topup/sevel.png',
+        prefix: 'SVEN',
+        steps: [
+          'Kunjungi gerai Sevel terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Family Mart',
+        image: 'assets/images/topup/family mart.png',
+        prefix: 'FMRT',
+        steps: [
+          'Kunjungi gerai Family Mart terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        adminFee: 2500.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'Lawson',
+        image: 'assets/images/topup/lawson.png',
+        prefix: 'LAWS',
+        steps: [
+          'Kunjungi gerai Lawson terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        adminFee: 2000.0,
+        minTo: 10000.0,
+      ),
+      TopUpMethod(
+        name: 'K3Mart',
+        image: 'assets/images/topup/K3mart.png',
+        prefix: 'K3MT',
+        steps: [
+          'Kunjungi gerai K3Mart terdekat',
+          'Tunjukkan barcode ke kasir',
+          'Sebutkan nominal top up',
+          'Bayar dan simpan struk sebagai bukti',
+        ],
+        minTo: 50000.0,
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -310,13 +309,7 @@ final List<TopUpMethod> cashList = [
                     bankList.map((bank) {
                       return GestureDetector(
                         onTap: () {
-                          _navigateToDetail(
-                            context,
-                            bankName: bank.name,
-                            logoPath: bank.image,
-                            vaNumber: bank.va,
-                            steps: List<String>.from(bank.steps),
-                          );
+                          _navigateToDetail(context, method: bank);
                         },
                         child: Container(
                           padding: EdgeInsets.all(6),
@@ -382,35 +375,32 @@ final List<TopUpMethod> cashList = [
                     cashList.map((cash) {
                       return GestureDetector(
                         onTap: () {
-                          _navigateToCash(context, 
-                          bankName: cash.name, 
-                          logoPath: cash.image, 
-                          vaNumber: cash.va, 
-                          steps: List<String>.from(cash.steps),
+                          _navigateToDetail(
+                            context,
+                            type: MethodType.cash,
+                            method: cash,
                           );
                         },
-                      
-                      
-                      child: Container(
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 6,
-                            color: const Color.fromARGB(255, 228, 239, 255),
+                        child: Container(
+                          padding: EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 6,
+                              color: const Color.fromARGB(255, 228, 239, 255),
+                            ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        clipBehavior: Clip.hardEdge,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(6),
-                          child: Image.asset(
-                            cash.image,
-                            width: 40,
-                            height: 40,
-                            fit: BoxFit.cover,
+                          clipBehavior: Clip.hardEdge,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: Image.asset(
+                              cash.image,
+                              width: 40,
+                              height: 40,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      )
                       );
                     }).toList(),
               ),
@@ -425,13 +415,17 @@ final List<TopUpMethod> cashList = [
 class TopUpMethod {
   final String name;
   final String image;
-  final String va;
+  final String prefix;
+  final double? minTo;
+  final double? adminFee;
   final List<String> steps;
 
   const TopUpMethod({
     required this.name,
     required this.image,
-    required this.va,
+    required this.prefix,
+    this.minTo,
+    this.adminFee,
     required this.steps,
   });
 }
