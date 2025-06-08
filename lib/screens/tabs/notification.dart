@@ -5,9 +5,17 @@ import 'package:tugas_front_end_nicolas/utils/index.dart';
 class NotificationItem {
   final NotifTypes typeText;
   final String? mall;
+  final String? method;
+  final double? nominal;
   final DateTime date;
 
-  NotificationItem({required this.typeText, this.mall, required this.date});
+  NotificationItem({
+    required this.typeText,
+    this.mall,
+    this.method,
+    this.nominal,
+    required this.date,
+  });
 }
 
 class Notification_ extends StatelessWidget {
@@ -84,6 +92,12 @@ class Notification_ extends StatelessWidget {
       NotificationItem(
         mall: 'Medan Mall',
         typeText: NotifTypes.bookSuccess,
+        date: DateTime(2025, 5, 6, 13, 25),
+      ),
+      NotificationItem(
+        nominal: 1000000,
+        method: "CIMB",
+        typeText: NotifTypes.topUp,
         date: DateTime(2025, 5, 6, 13, 25),
       ),
 
@@ -213,9 +227,8 @@ class Notification_ extends StatelessWidget {
                     ...groupedNotifications[dateKey]!
                         .map(
                           (notification) => NotifCard(
-                            mall: notification.mall ?? "",
+                            notification: notification,
                             typeText: notification.typeText,
-                            date: notification.date,
                           ),
                         )
                         .toList(),
@@ -278,18 +291,17 @@ enum NotifTypes {
   verify,
   twoFactor,
   paySuccess,
+  topUp,
 }
 
 class NotifCard extends StatelessWidget {
   final NotifTypes typeText;
-  final String mall;
-  final DateTime date;
+  final NotificationItem notification;
 
   const NotifCard({
     super.key,
-    this.typeText = NotifTypes.bookSuccess,
-    required this.mall,
-    required this.date,
+    required this.typeText,
+    required this.notification,
   });
 
   String _getNotifIcon(NotifTypes type) {
@@ -308,6 +320,8 @@ class NotifCard extends StatelessWidget {
         return 'assets/images/icons/verification.png';
       case NotifTypes.twoFactor:
         return 'assets/images/icons/locked.png';
+      case NotifTypes.topUp:
+        return 'assets/images/icons/topup.png';
     }
   }
 
@@ -362,6 +376,13 @@ class NotifCard extends StatelessWidget {
           'Lindungi akun Anda dengan 2FA.',
           '使用 2FA 保护您的账户。',
         );
+      case NotifTypes.topUp:
+        return translate(
+          context,
+          'Top Up Successful',
+          'Top Up Berhasil',
+          '充值成功！',
+        );
     }
   }
 
@@ -370,23 +391,23 @@ class NotifCard extends StatelessWidget {
       case NotifTypes.bookSuccess:
         return translate(
           context,
-          'Parking booking at $mall was successfully booked!',
-          'Pemesanan parkir di $mall berhasil dipesan!',
-          '在 $mall 的停车预订已成功预订！',
+          'Parking booking at ${notification.mall} was successfully booked!',
+          'Pemesanan parkir di ${notification.mall} berhasil dipesan!',
+          '在 ${notification.mall} 的停车预订已成功预订！',
         );
       case NotifTypes.bookCancel:
         return translate(
           context,
-          'You have canceled booking at $mall',
-          'Anda telah membatalkan parkir di $mall',
-          '您已取消在 $mall 的停车',
+          'You have canceled booking at ${notification.mall}',
+          'Anda telah membatalkan parkir di ${notification.mall}',
+          '您已取消在 ${notification.mall} 的停车',
         );
       case NotifTypes.bookExit:
         return translate(
           context,
-          'You have exit parking lot at $mall',
-          'Anda telah keluar dari area parkir di $mall',
-          '您已离开 $mall 的停车场',
+          'You have exit parking lot at ${notification.mall}',
+          'Anda telah keluar dari area parkir di ${notification.mall}',
+          '您已离开 ${notification.mall} 的停车场',
         );
       case NotifTypes.bookExp:
         return translate(
@@ -398,9 +419,9 @@ class NotifCard extends StatelessWidget {
       case NotifTypes.paySuccess:
         return translate(
           context,
-          'Parking booking at $mall was successfully paid',
-          'Pemesanan parkir di $mall berhasil dibayar',
-          '在 $mall 的停车预订已成功付款',
+          'Parking booking at ${notification.mall} was successfully paid',
+          'Pemesanan parkir di ${notification.mall} berhasil dibayar',
+          '在 ${notification.mall} 的停车预订已成功付款',
         );
       case NotifTypes.verify:
         return translate(
@@ -415,6 +436,13 @@ class NotifCard extends StatelessWidget {
           'Account will be more secured with 2FA setup!',
           'Akun akan lebih aman dengan 2FA terpasang!',
           '设置 2FA 后帐户将更加安全!',
+        );
+      case NotifTypes.topUp:
+        return translate(
+          context,
+          'You have successfully topped up ${formatCurrency(nominal: notification.nominal as num, decimalPlace: 0)} via ${notification.method}.',
+          'Kamu berhasil melakukan top up sebesar ${formatCurrency(nominal: notification.nominal as num, decimalPlace: 0)} melalui ${notification.method}.',
+          '您已成功通过 ${notification.method} 充值 ${formatCurrency(nominal: notification.nominal as num, decimalPlace: 0)}。',
         );
     }
   }
@@ -479,7 +507,7 @@ class NotifCard extends StatelessWidget {
               ),
             ),
             Text(
-              _formatDateTime(context, date),
+              _formatDateTime(context, notification.date),
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: isSmall ? 10 : 12,

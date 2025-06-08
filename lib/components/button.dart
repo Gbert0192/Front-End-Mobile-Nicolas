@@ -5,17 +5,19 @@ enum ButtonTypes { normal, outline }
 class ResponsiveButton extends StatelessWidget {
   final bool isSmall;
   final VoidCallback? onPressed;
+  final String? loadingText;
   final String text;
   final Color textColor;
   final Color backgroundColor;
   final ButtonTypes buttonType;
   final Color borderColor;
-  final bool isLoading;
+  final bool? isLoading;
 
   const ResponsiveButton({
     super.key,
     required this.isSmall,
     this.onPressed,
+    this.loadingText,
     required this.text,
     Color? textColor,
     this.buttonType = ButtonTypes.normal,
@@ -29,17 +31,25 @@ class ResponsiveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final buttonChild =
-        isLoading
+        isLoading != null && isLoading!
             ? Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  width: isSmall ? 16 : 24,
-                  height: isSmall ? 16 : 24,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation<Color>(textColor),
-                  ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: isSmall ? 16 : 24,
+                      height: isSmall ? 16 : 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(textColor),
+                      ),
+                    ),
+                    if (loadingText != null) ...[
+                      SizedBox(width: 6),
+                      Text(loadingText!),
+                    ],
+                  ],
                 ),
               ],
             )
@@ -68,12 +78,22 @@ class ResponsiveButton extends StatelessWidget {
       child:
           buttonType == ButtonTypes.outline
               ? OutlinedButton(
-                onPressed: isLoading ? null : onPressed,
+                onPressed:
+                    isLoading != null
+                        ? isLoading!
+                            ? null
+                            : onPressed
+                        : () {},
                 style: outlineStyle,
                 child: buttonChild,
               )
               : ElevatedButton(
-                onPressed: isLoading ? null : onPressed,
+                onPressed:
+                    isLoading != null
+                        ? isLoading!
+                            ? null
+                            : onPressed
+                        : () {},
                 style: style,
                 child: buttonChild,
               ),

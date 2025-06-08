@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-enum TextInputTypes { password, email, text }
+enum TextInputTypes { password, email, text, number }
 
 enum StyleMode { outline, underline }
 
@@ -111,6 +112,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
             keyboardType:
                 widget.type == TextInputTypes.email
                     ? TextInputType.emailAddress
+                    : widget.type == TextInputTypes.number
+                    ? TextInputType.number
                     : TextInputType.text,
             onChanged: (value) {
               widget.onChanged?.call(value);
@@ -193,6 +196,10 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                         borderRadius: BorderRadius.circular(20),
                       ),
             ),
+            inputFormatters:
+                widget.type == TextInputTypes.number
+                    ? [FilteringTextInputFormatter.digitsOnly]
+                    : null,
           ),
         ),
         const SizedBox(height: 4),
