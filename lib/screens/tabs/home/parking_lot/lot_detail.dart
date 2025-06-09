@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/payment_qr.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -334,7 +334,7 @@ class SearchDetail extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder:
                                           (context) =>
-                                              const BookingDetailPage(),
+                                              BookingDetailPage(mall: mall),
                                     ),
                                   );
                                 },
