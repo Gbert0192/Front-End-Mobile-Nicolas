@@ -1,46 +1,57 @@
 import 'package:flutter/foundation.dart';
-import '../utils/user.dart';
+import 'package:intl_phone_field/countries.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
+import '../model/user.dart';
 
 class UserProvider with ChangeNotifier {
   List<User> userList = [
     User(
       email: "johndoer@gmail.com",
-      profilePic: "assets/users/male 2.jpg",
+      profilePic: "assets/images/users/male 2.jpg",
       fullname: "JOHN DOER",
-      countryCode: "ID",
+      countryCode: "CN",
+      dialCode: "86",
       phone: "123456789",
       password: "Asdf1234!",
-      birthDate: "12-02-2000",
-      gender: "male",
-      balance: 100000,
-      isMember: false,
     ),
   ];
 
-  int? currentUser;
+  User? currentUser;
 
-  void registerUser(Map<String, Object?> userData) {
-    userList.add(
-      User(
-        email: userData["email"] as String,
-        profilePic: userData["profile_pic"] as String?,
-        fullname: userData["fullname"] as String,
-        countryCode: userData["country_code"] as String,
-        phone: userData["phone"] as String,
-        password: userData["password"] as String,
-      ),
+  void registerUser({
+    required String email,
+    String? profile_pic,
+    required String fullname,
+    required String country_code,
+    required String phone,
+    required String password,
+  }) {
+    final String dialCode =
+        countries
+            .firstWhereOrNull((item) => item.code == country_code)!
+            .dialCode;
+    final newUser = User(
+      email: email,
+      profilePic: profile_pic,
+      fullname: fullname,
+      countryCode: country_code,
+      dialCode: dialCode,
+      phone: phone,
+      password: password,
     );
-    currentUser = userList.length - 1;
+    userList.add(newUser);
+    currentUser = newUser;
     notifyListeners();
   }
 
-  int findUser(String email) {
-    return userList.indexWhere((user) => user.email == email);
+  User? findUserByEmail(String email) {
+    final user = userList.firstWhereOrNull((u) => u.email == email);
+    return user;
   }
 
-  int login(int index, String password) {
-    if (userList[index].password == password) {
-      currentUser = index;
+  int login(User user, String password) {
+    if (user.password == password) {
+      currentUser = user;
       notifyListeners();
       return 1;
     }
@@ -52,49 +63,62 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, Object?> getCurrentUser() {
-    return userList[currentUser!]();
-  }
-
-  int resetPassword(int index, String newPass) {
-    final result = userList[index].resetPassword(newPass);
+  int resetPassword(User user, String newPass) {
+    final result = user.resetPassword(newPass);
     notifyListeners();
     return result;
   }
 
+  void rateApp(int rate) {
+    currentUser?.rateApp(rate);
+    notifyListeners();
+  }
+
+  void setUp2Fac() {
+    currentUser?.setUp2Fac();
+    notifyListeners();
+  }
+
   int changePassword(String oldPass, String newPass) {
-    final result = userList[currentUser!].changePassword(oldPass, newPass);
+    final result = currentUser?.changePassword(oldPass, newPass) ?? -1;
     notifyListeners();
     return result;
   }
 
   void editProfile({
     required String fullname,
+    required String email,
     required String phone,
+    required String countryCode,
     String? birthDate,
     String? gender,
+    String? profilePic,
   }) {
-    userList[currentUser!].editProfile(
+    currentUser?.editProfile(
       newFullname: fullname,
+      newEmail: email,
       newPhone: phone,
+      newCountryCode: countryCode,
       newBirthDate: birthDate,
       newGender: gender,
+      newProfilePic: profilePic,
     );
     notifyListeners();
   }
 
-  void joinMember() {
-    userList[currentUser!].joinMember();
+  int joinMember({required MemberType type, required double nominal}) {
+    final result = currentUser?.joinMember(type: type, nominal: nominal) ?? -1;
     notifyListeners();
+    return result;
   }
 
   void topUp(double nominal) {
-    userList[currentUser!].topUp(nominal);
+    currentUser?.topUp(nominal);
     notifyListeners();
   }
 
   void purchase(double nominal) {
-    userList[currentUser!].purchase(nominal);
+    currentUser?.purchase(nominal);
     notifyListeners();
   }
 }

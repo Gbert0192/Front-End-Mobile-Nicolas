@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 enum ParkingStatus { isParking, isExited, bookingCancel, bookingExpired }
 
@@ -7,7 +8,7 @@ class ParkingCard extends StatelessWidget {
   final String placeName;
   final ParkingStatus statusText;
   final String dateText;
-  final String priceText;
+  final double priceText;
 
   const ParkingCard({
     super.key,
@@ -59,6 +60,8 @@ class ParkingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Container(
       margin: const EdgeInsets.all(12),
       padding: const EdgeInsets.all(12),
@@ -87,8 +90,8 @@ class ParkingCard extends StatelessWidget {
               children: [
                 Text(
                   placeName,
-                  style: const TextStyle(
-                    fontSize: 18,
+                  style: TextStyle(
+                    fontSize: isSmall ? 16 : 18,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
@@ -98,13 +101,13 @@ class ParkingCard extends StatelessWidget {
                     Icon(
                       _getStatusIcon(statusText),
                       color: _getStatusColor(statusText),
-                      size: 18,
+                      size: isSmall ? 14 : 18,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       _getStatusText(statusText),
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: isSmall ? 11 : 13,
                         color: _getStatusColor(statusText),
                         fontWeight: FontWeight.w500,
                       ),
@@ -119,13 +122,13 @@ class ParkingCard extends StatelessWidget {
             children: [
               Text(
                 dateText,
-                style: const TextStyle(color: Colors.grey, fontSize: 12),
+                style: TextStyle(color: Colors.grey, fontSize: 12),
               ),
               const SizedBox(height: 28),
               Text(
-                priceText,
-                style: const TextStyle(
-                  fontSize: 15,
+                "${formatCurrency(nominal: priceText)}/h",
+                style: TextStyle(
+                  fontSize: isSmall ? 13 : 15,
                   color: Colors.grey,
                   fontWeight: FontWeight.w600,
                 ),
