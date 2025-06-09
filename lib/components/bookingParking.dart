@@ -126,7 +126,7 @@ class ParkingCard extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               Text(
-                "${formatCurrency(nominal: priceText, decimalPlace: 0)}/h",
+                "${formatCurrency(nominal: priceText)}/h",
                 style: TextStyle(
                   fontSize: isSmall ? 13 : 15,
                   color: Colors.grey,

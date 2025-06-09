@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
-  final mall;
+  final ParkingLot mall;
 
   const SearchDetail({super.key, required this.mall});
 
@@ -235,7 +236,10 @@ class SearchDetail extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    formatCurrency(nominal: mall.starterPrice),
+                                    formatCurrency(
+                                      nominal:
+                                          mall.starterPrice ?? mall.hourlyPrice,
+                                    ),
                                     style: TextStyle(
                                       color: Color(0xFF4D5DFA),
                                       fontWeight: FontWeight.bold,
