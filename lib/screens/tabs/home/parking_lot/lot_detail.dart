@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking_qr.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/payment_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -334,7 +335,7 @@ class SearchDetail extends StatelessWidget {
                                     MaterialPageRoute(
                                       builder:
                                           (context) =>
-                                              BookingDetailPage(mall: mall),
+                                              PaymentQrPage(mall: mall),
                                     ),
                                   );
                                 },
@@ -372,7 +373,14 @@ class SearchDetail extends StatelessWidget {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  //ke halamaan booking
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              BookingDetailPage(mall: mall),
+                                    ),
+                                  );
                                 },
                                 child: Text(
                                   translate(
