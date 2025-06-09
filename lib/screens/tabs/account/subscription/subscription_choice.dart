@@ -78,7 +78,7 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
                       ),
                     ),
                     secondary: Text(
-                      formatCurrency(nominal: choice.price, decimalPlace: 0),
+                      formatCurrency(nominal: choice.price),
                       style: TextStyle(fontSize: isSmall ? 14 : 18),
                     ),
                     selected: val == index,

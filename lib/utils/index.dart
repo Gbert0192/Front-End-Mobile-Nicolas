@@ -23,7 +23,7 @@ String translate(BuildContext context, String en, String id, String cn) {
 
 String formatCurrency({
   required num nominal,
-  int decimalPlace = 2,
+  int decimalPlace = 0,
   String symbol = "Rp.",
 }) {
   final currencyFormat = NumberFormat.currency(

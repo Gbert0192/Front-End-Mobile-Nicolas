@@ -259,14 +259,13 @@ class _SearchState extends State<Search> {
       children:
           malls.map((mall) {
             return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchDetail(mall: mall),
+              onTap:
+                  () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SearchDetail(mall: mall),
+                    ),
                   ),
-                );
-              },
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 8),
                 padding: EdgeInsets.all(12),
@@ -352,10 +351,7 @@ class _SearchState extends State<Search> {
                           Row(
                             children: [
                               Text(
-                                formatCurrency(
-                                  nominal: mall.starterPrice!,
-                                  decimalPlace: 0,
-                                ),
+                                formatCurrency(nominal: mall.starterPrice!),
                                 style: TextStyle(
                                   color: Color(0xFFDC5F00),
                                   fontSize: 14,

@@ -440,9 +440,9 @@ class NotifCard extends StatelessWidget {
       case NotifTypes.topUp:
         return translate(
           context,
-          'You have successfully topped up ${formatCurrency(nominal: notification.nominal as num, decimalPlace: 0)} via ${notification.method}.',
-          'Kamu berhasil melakukan top up sebesar ${formatCurrency(nominal: notification.nominal as num, decimalPlace: 0)} melalui ${notification.method}.',
-          '您已成功通过 ${notification.method} 充值 ${formatCurrency(nominal: notification.nominal as num, decimalPlace: 0)}。',
+          'You have successfully topped up ${formatCurrency(nominal: notification.nominal as num)} via ${notification.method}.',
+          'Kamu berhasil melakukan top up sebesar ${formatCurrency(nominal: notification.nominal as num)} melalui ${notification.method}.',
+          '您已成功通过 ${notification.method} 充值 ${formatCurrency(nominal: notification.nominal as num)}。',
         );
     }
   }

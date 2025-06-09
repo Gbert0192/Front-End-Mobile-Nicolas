@@ -68,16 +68,14 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Payment Method: ${widget.method.name}"),
-                Text(
-                  "Amount: ${formatCurrency(nominal: originalAmount, decimalPlace: 0)}",
-                ),
+                Text("Amount: ${formatCurrency(nominal: originalAmount)}"),
                 if (widget.method.adminFee != null) ...[
                   Text(
-                    "Admin Fee: ${formatCurrency(nominal: widget.method.adminFee as num, decimalPlace: 0)}",
+                    "Admin Fee: ${formatCurrency(nominal: widget.method.adminFee as num)}",
                   ),
                   Divider(),
                   Text(
-                    "Credit Added: ${formatCurrency(nominal: finalAmount, decimalPlace: 0)}",
+                    "Credit Added: ${formatCurrency(nominal: finalAmount)}",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],
@@ -122,7 +120,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
       if (amount < widget.method.minTo!) {
         showFlexibleSnackbar(
           context,
-          "Minimum top-up is ${formatCurrency(nominal: widget.method.minTo as num, decimalPlace: 0)}",
+          "Minimum top-up is ${formatCurrency(nominal: widget.method.minTo as num)}",
         );
         return;
       }
@@ -282,7 +280,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          "Enter amount to simulate top-up (min ${formatCurrency(nominal: widget.method.minTo as num, decimalPlace: 0)}):",
+                          "Enter amount to simulate top-up (min ${formatCurrency(nominal: widget.method.minTo as num)}):",
                         ),
                         SizedBox(height: 8),
                         ResponsiveTextInput(
@@ -462,7 +460,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "${widget.method.adminFee != null ? "ADMIN FEE ${formatCurrency(nominal: widget.method.adminFee as num, decimalPlace: 0)} – " : ""}MIN. TOP UP ${formatCurrency(nominal: widget.method.minTo as num, decimalPlace: 0)}",
+                              "${widget.method.adminFee != null ? "ADMIN FEE ${formatCurrency(nominal: widget.method.adminFee as num)} – " : ""}MIN. TOP UP ${formatCurrency(nominal: widget.method.minTo as num)}",
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.black54,

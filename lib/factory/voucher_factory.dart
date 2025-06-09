@@ -94,7 +94,7 @@ class VoucherFactory {
     } else if (type == VoucherFlag.percent) {
       return "Discounts ${nominal.toInt()}% Voucher";
     } else {
-      return "Discounts ${formatCurrency(nominal: nominal, decimalPlace: 0)} Off";
+      return "Discounts ${formatCurrency(nominal: nominal)} Off";
     }
   }
 }
