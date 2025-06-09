@@ -49,8 +49,6 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
     final today = now; // sekarang
     final expired = today.add(Duration(hours: 6));
 
-    print(formatDateTime(today));
-    print(formatDateTime(expired));
     String generateUniqueId() {
       final random = Random();
       final randomNumber = random.nextInt(9000) + 1000;
