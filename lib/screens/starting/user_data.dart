@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -23,24 +24,15 @@ class _UserDataState extends State<UserData> {
   final form = UseForm(
     fields: ["fullname", "phone", "password", "conpassword"],
     validators: {
-      "fullname":
-          (value) =>
-              validateBasic(key: "Fullname", value: value, required: true),
+      "fullname": (value) => validateBasic(key: "Fullname", value: value),
       "phone":
           (value) => validateBasic(
             key: "Phone Number",
             value: value,
             minLength: 7,
             maxLength: 12,
-            required: true,
           ),
       "password": (value) => validatePassword(value: value),
-      "conpassword":
-          (value) => validateBasic(
-            key: "Confirm Password",
-            value: value,
-            required: true,
-          ),
     },
     match: {
       "password": [
@@ -52,16 +44,16 @@ class _UserDataState extends State<UserData> {
   int choice = -1;
 
   List<String> userPP = [
-    "assets/users/female 1.jpg",
-    "assets/users/female 2.jpg",
-    "assets/users/male 2.jpg",
-    "assets/users/female 4.jpg",
-    "assets/users/male 5.jpg",
-    "assets/users/female 5.jpg",
-    "assets/users/male 1.jpg",
-    "assets/users/female 3.jpg",
-    "assets/users/male 4.jpg",
-    "assets/users/male 3.jpg",
+    "assets/images/users/female 1.jpg",
+    "assets/images/users/female 2.jpg",
+    "assets/images/users/male 2.jpg",
+    "assets/images/users/female 4.jpg",
+    "assets/images/users/male 5.jpg",
+    "assets/images/users/female 5.jpg",
+    "assets/images/users/male 1.jpg",
+    "assets/images/users/female 3.jpg",
+    "assets/images/users/male 4.jpg",
+    "assets/images/users/male 3.jpg",
   ];
 
   void changeAvatar() {
@@ -74,12 +66,17 @@ class _UserDataState extends State<UserData> {
   }
 
   @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -104,7 +101,6 @@ class _UserDataState extends State<UserData> {
                   ),
                 ),
               ),
-              backgroundColor: Colors.white,
               elevation: 0,
             ),
             SliverToBoxAdapter(
@@ -113,7 +109,7 @@ class _UserDataState extends State<UserData> {
                 child: Column(
                   children: [
                     Text(
-                      'USER DATA',
+                      translate(context, "USER DATA", "DATA PENGGUNA", "用户数据"),
                       style: TextStyle(
                         fontSize: isSmall ? 35 : 50,
                         color: Color(0xFF2C39B8),
@@ -149,7 +145,7 @@ class _UserDataState extends State<UserData> {
                             height: isSmall ? 30 : 45,
                             width: isSmall ? 30 : 45,
                             decoration: BoxDecoration(
-                              color: Colors.blue,
+                              color: const Color(0xFF1F1E5B),
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.white, width: 2),
                             ),
@@ -177,7 +173,7 @@ class _UserDataState extends State<UserData> {
                           label: 'Fullname',
                           type: TextInputTypes.text,
                           errorText: form.error('fullname'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -212,7 +208,7 @@ class _UserDataState extends State<UserData> {
                           label: 'Password',
                           type: TextInputTypes.password,
                           errorText: form.error('password'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -228,7 +224,7 @@ class _UserDataState extends State<UserData> {
                           label: 'Confirm Password',
                           type: TextInputTypes.password,
                           errorText: form.error('conpassword'),
-                          onChanged: () {
+                          onChanged: (value) {
                             if (form.isSubmitted) {
                               setState(() {
                                 form.validate();
@@ -253,30 +249,30 @@ class _UserDataState extends State<UserData> {
                         if (isValid) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
-                            userProvider.registerUser({
-                              "email": widget.email,
-                              "profile_pic":
-                                  choice == -1 ? null : userPP[choice],
-                              "fullname": form.control("fullname").text,
-                              "country_code": country_code,
-                              "phone": form.control("phone").text,
-                              "password": form.control("password").text,
-                            });
+                            userProvider.registerUser(
+                              email: widget.email,
+                              profile_pic: choice == -1 ? null : userPP[choice],
+                              fullname: form.control("fullname").text,
+                              country_code: country_code,
+                              phone: form.control("phone").text,
+                              password: form.control("password").text,
+                            );
                             setState(() => form.isLoading = false);
                             showFlexibleSnackbar(
                               context,
-                              "Welcome to ParkID, ${form.control("fullname").text.split(" ")[0]}!",
+                              "${translate(context, "Welcome to ParkID", "Selamat datang di ParkID", "欢迎来到 ParkID")}, ${form.control("fullname").text.split(" ")[0]}!",
                             );
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => MainLayout(),
                               ),
+                              (Route<dynamic> route) => false,
                             );
                           });
                         }
                       },
-                      text: "Register",
+                      text: translate(context, "Register", "Daftar", "登记"),
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                   ],

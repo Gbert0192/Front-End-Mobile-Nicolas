@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/countries.dart';
+import 'package:tugas_front_end_nicolas/components/text_input.dart';
 
 List<String> allowedCountryCodes = [
   'ID',
@@ -31,6 +32,7 @@ class ResponsivePhoneInput extends StatefulWidget {
     this.label,
     this.errorText,
     this.country_code,
+    this.mode = StyleMode.outline,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
@@ -45,6 +47,7 @@ class ResponsivePhoneInput extends StatefulWidget {
   final String? errorText;
   final String? country_code;
   final Color fillColor;
+  final StyleMode mode;
   final Color borderColor;
   final Color borderFocusColor;
 
@@ -80,16 +83,28 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        widget.mode == StyleMode.underline
+            ? Text(
+              widget.label!,
+              style: TextStyle(
+                color: _getColor(),
+                fontSize: widget.isSmall ? 12 : 16,
+              ),
+            )
+            : SizedBox.shrink(),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.25),
-                blurRadius: 6,
-                offset: const Offset(4, 4),
-              ),
-            ],
+            boxShadow:
+                widget.mode == StyleMode.underline
+                    ? null
+                    : [
+                      BoxShadow(
+                        color: Colors.black.withAlpha(64),
+                        blurRadius: 6,
+                        offset: const Offset(4, 4),
+                      ),
+                    ],
           ),
           child: IntlPhoneField(
             focusNode: _focusNode,
@@ -104,31 +119,57 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                     .toList(),
             decoration: InputDecoration(
               hintText: widget.hint ?? 'Phone Number',
-              labelText: widget.label ?? 'Phone Number',
+              labelText:
+                  widget.mode == StyleMode.underline
+                      ? null
+                      : widget.label ?? 'Phone Number',
               hintStyle: TextStyle(color: _getColor()),
               labelStyle: TextStyle(color: _getColor()),
               floatingLabelStyle: TextStyle(color: _getColor()),
               filled: true,
-              fillColor: hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+              fillColor:
+                  widget.mode == StyleMode.underline
+                      ? Colors.white
+                      : hasError
+                      ? const Color(0xFFFFEDED)
+                      : widget.fillColor,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: widget.isSmall ? 18 : 20,
                 vertical: widget.isSmall ? 12 : 16,
               ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: _getColor(), width: 2.0),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: _getColor()),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.red),
-                borderRadius: BorderRadius.circular(20),
-              ),
+              border:
+                  widget.mode == StyleMode.underline
+                      ? const UnderlineInputBorder()
+                      : OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+              focusedBorder:
+                  widget.mode == StyleMode.underline
+                      ? UnderlineInputBorder(
+                        borderSide: BorderSide(color: _getColor(), width: 2.0),
+                      )
+                      : OutlineInputBorder(
+                        borderSide: BorderSide(color: _getColor(), width: 2.0),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+              enabledBorder:
+                  widget.mode == StyleMode.underline
+                      ? UnderlineInputBorder(
+                        borderSide: BorderSide(color: _getColor()),
+                      )
+                      : OutlineInputBorder(
+                        borderSide: BorderSide(color: _getColor()),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+              errorBorder:
+                  widget.mode == StyleMode.underline
+                      ? const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red),
+                      )
+                      : OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
             ),
             initialCountryCode: widget.country_code,
             disableLengthCheck: true,
@@ -142,7 +183,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
               widget.errorText!,
               style: TextStyle(
                 color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
+                fontSize: widget.isSmall ? 12 : 15,
               ),
             ),
           ),

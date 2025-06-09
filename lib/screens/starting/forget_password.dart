@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
-import 'package:tugas_front_end_nicolas/provider/forget_pass_provider.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/starting/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/reset_password.dart';
+import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/utils/validator.dart';
@@ -21,9 +24,16 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     fields: ["email"],
     validators: {'email': (value) => validateEmail(value: value)},
   );
+
+  @override
+  void dispose() {
+    form.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final forgotPassProvider = Provider.of<ForgetPassProvider>(context);
+    final otpProvider = Provider.of<OTPProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -50,10 +60,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             ),
           ),
         ),
-        backgroundColor: Colors.white,
         elevation: 0,
       ),
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -61,21 +69,26 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             child: Column(
               children: [
                 Image.asset(
-                  'assets/starting/forget_pass.png',
+                  'assets/images/starting/forget_pass.png',
                   height: isSmall ? 180 : 300,
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
                 Text(
-                  'Forgot Your Password? Enter Your Email To Get OTP!',
+                  translate(
+                    context,
+                    'Forgot Your Password? Enter Your Email To Get OTP!',
+                    "Lupa Kata Sandi Anda? Masukkan Email Anda untuk Mendapatkan OTP",
+                    "忘记密码？输入邮箱地址获取一次性密码",
+                  ),
                   style: TextStyle(
                     fontSize: isSmall ? 20 : 24,
-                    color: Color(0xFF1879D4),
-                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF4083FF),
+                    fontWeight: FontWeight.w600,
                     shadows: [
                       Shadow(
                         offset: Offset(4, 4),
                         blurRadius: 6.0,
-                        color: Color.fromRGBO(24, 45, 163, 0.25),
+                        color: Color.fromRGBO(64, 131, 255, 0.25),
                       ),
                     ],
                   ),
@@ -93,7 +106,7 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                       label: 'Email',
                       type: TextInputTypes.email,
                       errorText: form.error("email"),
-                      onChanged: () {
+                      onChanged: (value) {
                         if (form.isSubmitted) {
                           setState(() {
                             form.validate();
@@ -141,7 +154,14 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                   ],
                 ),
 
-                SizedBox(height: isSmall ? 120 : 200),
+                SizedBox(
+                  height:
+                      isSmall
+                          ? 120
+                          : form.error('email') == null
+                          ? 200
+                          : 185,
+                ),
 
                 ResponsiveButton(
                   isSmall: isSmall,
@@ -155,10 +175,10 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     if (isValid) {
                       setState(() => form.isLoading = true);
                       Future.delayed(const Duration(seconds: 2), () {
-                        int userId = userProvider.findUser(
+                        User? user = userProvider.findUserByEmail(
                           form.control("email").text,
                         );
-                        if (userId == -1) {
+                        if (user == null) {
                           showFlexibleSnackbar(
                             context,
                             "Email not found",
@@ -167,23 +187,34 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                           setState(() => form.isLoading = false);
                           return;
                         }
-                        forgotPassProvider.email = form.control("email").text;
-                        forgotPassProvider.generateOTP();
+                        otpProvider.email = form.control("email").text;
+                        otpProvider.generateOTP();
                         setState(() => form.isLoading = false);
                         showFlexibleSnackbar(
                           context,
-                          "Your OTP is ${forgotPassProvider.OTP}",
+                          "Your OTP is ${otpProvider.OTP}",
                         );
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => VerifyAccount(userId),
+                            builder:
+                                (context) => VerifyAccount(
+                                  onSubmit: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => ResetPassword(user),
+                                      ),
+                                    );
+                                  },
+                                ),
                           ),
                         );
                       });
                     }
                   },
-                  text: "Continue",
+                  text: translate(context, "Continue", "Lanjut", "继续"),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),
               ],

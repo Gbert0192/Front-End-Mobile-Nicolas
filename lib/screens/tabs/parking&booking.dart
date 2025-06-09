@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/bookings.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/parkings.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ParkingHistory extends StatelessWidget {
   const ParkingHistory({super.key});
@@ -13,18 +14,29 @@ class ParkingHistory extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'Parking & Bookings',
-          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+          translate(
+            context,
+            'Parking & Booking',
+            'Parkir & Pemesanan',
+            '停车与预订',
+          ),
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: isSmall ? 25 : 30,
+          ),
         ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24),
+            padding: EdgeInsets.only(
+              left: isSmall ? 12 : 24,
+              right: isSmall ? 12 : 24,
+              top: isSmall ? 0 : 30,
+            ),
             child: Column(
               children: [
                 //Button Parking
@@ -40,7 +52,7 @@ class ParkingHistory extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Parking()),
+                      MaterialPageRoute(builder: (context) => Parkings()),
                     );
                   },
                   child: Container(
@@ -52,18 +64,28 @@ class ParkingHistory extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Image.asset('assets/others/booking_view.png'),
+                          padding:
+                              isSmall
+                                  ? EdgeInsets.all(10)
+                                  : EdgeInsets.only(
+                                    top: 50,
+                                    left: 20,
+                                    right: 20,
+                                    bottom: 20,
+                                  ),
+                          child: Image.asset(
+                            'assets/images/others/parking_view.png',
+                          ),
                         ),
                         Positioned(
                           top: 10,
                           left: 15,
                           child: Text(
-                            'Parking',
+                            translate(context, 'Parkings', 'Parkir', '停车场'),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: isSmall ? 20 : 25,
                             ),
                           ),
                         ),
@@ -71,7 +93,7 @@ class ParkingHistory extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: isSmall ? 12 : 45),
 
                 // Button Booking
                 ElevatedButton(
@@ -86,7 +108,7 @@ class ParkingHistory extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => History()),
+                      MaterialPageRoute(builder: (context) => Booking()),
                     );
                   },
                   child: Container(
@@ -98,18 +120,28 @@ class ParkingHistory extends StatelessWidget {
                       alignment: Alignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(20),
-                          child: Image.asset('assets/others/parking_view.png'),
+                          padding:
+                              isSmall
+                                  ? EdgeInsets.all(35)
+                                  : EdgeInsets.only(
+                                    top: 70,
+                                    left: 20,
+                                    right: 20,
+                                    bottom: 30,
+                                  ),
+                          child: Image.asset(
+                            'assets/images/others/booking_view.png',
+                          ),
                         ),
                         Positioned(
                           top: 10,
                           left: 15,
                           child: Text(
-                            'Bookings',
+                            translate(context, 'Bookings', 'Pemesanan', '预订'),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: isSmall ? 20 : 25,
                             ),
                           ),
                         ),

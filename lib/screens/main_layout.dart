@@ -18,7 +18,8 @@ class TabModel {
 }
 
 class MainLayout extends StatefulWidget {
-  const MainLayout({super.key});
+  const MainLayout([this.tabValue = 0]);
+  final int tabValue;
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -28,15 +29,17 @@ class _MainLayoutState extends State<MainLayout>
     with SingleTickerProviderStateMixin {
   late TabController controller;
   final List<TabModel> tabs = [
-    TabModel(icon: Icons.home, screen: const Home()),
-    TabModel(icon: Icons.notifications, screen: const Notification_()),
-    TabModel(icon: Icons.local_parking, screen: const ParkingHistory()),
-    TabModel(icon: Icons.discount, screen: const Voucher()),
-    TabModel(icon: Icons.person, screen: const Profile()),
+    TabModel(icon: Icons.home, screen: Home()),
+    TabModel(icon: Icons.notifications, screen: Notification_()),
+    TabModel(icon: Icons.local_parking, screen: ParkingHistory()),
+    TabModel(icon: Icons.discount, screen: VoucherScreen()),
+    TabModel(icon: Icons.person, screen: Profile()),
   ];
 
+  @override
   void initState() {
     controller = TabController(length: tabs.length, vsync: this);
+    controller.index = widget.tabValue;
     super.initState();
     controller.addListener(() {
       setState(() {});
@@ -48,9 +51,9 @@ class _MainLayoutState extends State<MainLayout>
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: TabBarView(
           controller: controller,
+          physics: NeverScrollableScrollPhysics(),
           children: tabs.map((tab) => tab.screen).toList(),
         ),
         bottomNavigationBar: Container(
@@ -60,7 +63,7 @@ class _MainLayoutState extends State<MainLayout>
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
+                color: Colors.grey.withAlpha(51),
                 spreadRadius: 2,
                 blurRadius: 10,
                 offset: const Offset(0, 3),
