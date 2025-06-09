@@ -191,7 +191,7 @@ class _HomeState extends State<Home> {
                 SizedBox(height: isSmall ? 5 : 10),
 
                 Container(
-                  padding: EdgeInsets.all(isSmall ? 12 : 20),
+                  padding: EdgeInsets.all(isSmall ? 12 : 16),
                   decoration: BoxDecoration(
                     // color: const Color(0xFF1F1E5B),
                     gradient: LinearGradient(
@@ -242,6 +242,7 @@ class _HomeState extends State<Home> {
                               Text(
                                 formatCurrency(nominal: user.balance),
                                 style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
                                   color: Colors.white,
                                   fontSize: isSmall ? 16 : 20,
                                   fontWeight: FontWeight.w800,
