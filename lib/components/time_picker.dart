@@ -169,7 +169,8 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.controller!.text;
+    _selectedDate =
+        widget.controller!.text.isNotEmpty ? widget.controller!.text : null;
   }
 
   @override
