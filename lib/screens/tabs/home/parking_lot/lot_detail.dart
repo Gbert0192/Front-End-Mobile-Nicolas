@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -8,6 +9,9 @@ class SearchDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
@@ -309,27 +313,16 @@ class SearchDetail extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 7,
-                                horizontal: 20,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFFFA35E),
                               ),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xFFFFA35E)),
-                                borderRadius: BorderRadius.circular(25),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 8,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
-                                color: Color(0xFFFFA35E),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  //ke halamaan parking
-                                },
+                              onPressed: () {},
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 20,
+                                ),
                                 child: Text(
                                   translate(
                                     context,
@@ -345,27 +338,16 @@ class SearchDetail extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 7,
-                                horizontal: 20,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFF7573EE),
                               ),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Color(0xFF7573EE)),
-                                borderRadius: BorderRadius.circular(25),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 8,
-                                    offset: Offset(0, 4),
-                                  ),
-                                ],
-                                color: Color(0xFF7573EE),
-                              ),
-                              child: TextButton(
-                                onPressed: () {
-                                  //ke halamaan booking
-                                },
+                              onPressed: () {},
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 20,
+                                ),
                                 child: Text(
                                   translate(
                                     context,
