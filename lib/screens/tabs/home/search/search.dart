@@ -258,114 +258,124 @@ class _SearchState extends State<Search> {
     return Column(
       children:
           malls.map((mall) {
-            return Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Gambar tetap kotak
-                  SizedBox(
-                    width: 80,
-                    height: 80,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(mall.image, fit: BoxFit.cover),
-                    ),
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchDetail(mall: mall),
                   ),
-                  SizedBox(width: 12),
-                  // Konten text di samping gambar
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Baris nama dan badge slot
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                mall.name,
-                                style: TextStyle(
-                                  color: Color(0xFF1F1E5B),
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
+                );
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(vertical: 8),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Gambar tetap kotak
+                    SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(mall.image, fit: BoxFit.cover),
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    // Konten text di samping gambar
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Baris nama dan badge slot
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  mall.name,
+                                  style: TextStyle(
+                                    color: Color(0xFF1F1E5B),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0x46DC5F00),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  mall.spotCount <= 0
+                                      ? translate(
+                                        context,
+                                        'All Full',
+                                        'Penuh',
+                                        '全部满了',
+                                      )
+                                      : translate(
+                                        context,
+                                        mall.spotCount == 1
+                                            ? '${mall.spotCount} Slot'
+                                            : '${mall.spotCount} Slots',
+                                        '${mall.spotCount} Slot',
+                                        '${mall.spotCount} 个插槽',
+                                      ),
+                                  style: TextStyle(
+                                    color: Color(0xFFDC5F00),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            mall.address,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black87,
+                              fontWeight: FontWeight.w500,
                             ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 4,
+                          ),
+                          SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Text(
+                                formatCurrency(
+                                  nominal: mall.starterPrice!,
+                                  decimalPlace: 0,
+                                ),
+                                style: TextStyle(
+                                  color: Color(0xFFDC5F00),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                              decoration: BoxDecoration(
-                                color: Color(0x46DC5F00),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Text(
-                                mall.spotCount <= 0
-                                    ? translate(
-                                      context,
-                                      'All Full',
-                                      'Penuh',
-                                      '全部满了',
-                                    )
-                                    : translate(
-                                      context,
-                                      mall.spotCount == 1
-                                          ? '${mall.spotCount} Slot'
-                                          : '${mall.spotCount} Slots',
-                                      '${mall.spotCount} Slot',
-                                      '${mall.spotCount} 个插槽',
-                                    ),
+                              Text(
+                                '/${translate(context, "Hour", "Jam", "小时")}',
                                 style: TextStyle(
                                   color: Color(0xFFDC5F00),
                                   fontSize: 12,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          mall.address,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
+                            ],
                           ),
-                        ),
-                        SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Text(
-                              formatCurrency(
-                                nominal: mall.starterPrice!,
-                                decimalPlace: 0,
-                              ),
-                              style: TextStyle(
-                                color: Color(0xFFDC5F00),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              '/${translate(context, "Hour", "Jam", "小时")}',
-                              style: TextStyle(
-                                color: Color(0xFFDC5F00),
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }).toList(),
