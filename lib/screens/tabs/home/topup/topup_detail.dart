@@ -222,10 +222,10 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                       ),
                       const SizedBox(width: 12),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Transform.translate(
-                            offset: Offset(0, isSmall ? 6 : -8),
+                            offset: Offset(0, isSmall ? 6 : 10),
                             child: Text(
                               widget.method.name.toUpperCase(),
                               style: TextStyle(
@@ -237,11 +237,11 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                             ),
                           ),
                           Transform.translate(
-                            offset: Offset(0, isSmall ? -6 : -8),
+                            offset: Offset(0, isSmall ? -6 : -6),
                             child: Text(
-                              widget.method.name,
+                              widget.method.name.toUpperCase(),
                               style: TextStyle(
-                                fontSize: isSmall ? 14 : 20,
+                                fontSize: isSmall ? 14 : 18,
                                 color: Color.fromARGB(255, 83, 81, 203),
                               ),
                             ),

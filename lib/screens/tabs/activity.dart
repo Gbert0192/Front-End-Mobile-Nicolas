@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-class NotificationItem {
-  final NotifTypes typeText;
+class ActivityItem {
+  final ActivityTypes typeText;
   final String? mall;
   final String? method;
   final double? nominal;
   final DateTime date;
 
-  NotificationItem({
+  ActivityItem({
     required this.typeText,
     this.mall,
     this.method,
@@ -18,93 +18,97 @@ class NotificationItem {
   });
 }
 
-class Notification_ extends StatelessWidget {
-  const Notification_({super.key});
+class Activity extends StatelessWidget {
+  const Activity({super.key});
 
-  List<NotificationItem> _getNotifications() {
+  List<ActivityItem> _getActivities() {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final yesterday = today.subtract(Duration(days: 1));
 
     return [
       // Today's notifications
-      NotificationItem(
-        mall: 'Sun Plaza',
-        typeText: NotifTypes.bookSuccess,
+      ActivityItem(
+        mall: 'Medan Mall',
+        typeText: ActivityTypes.unresolved,
         date: today.add(Duration(hours: 11, minutes: 2)),
       ),
-      NotificationItem(
+      ActivityItem(
+        mall: 'Sun Plaza',
+        typeText: ActivityTypes.bookSuccess,
+        date: today.add(Duration(hours: 11, minutes: 2)),
+      ),
+      ActivityItem(
         mall: 'Centre Point Mall',
-        typeText: NotifTypes.bookCancel,
+        typeText: ActivityTypes.bookCancel,
         date: today.add(Duration(hours: 10, minutes: 15)),
       ),
 
       // Yesterday's notifications
-      NotificationItem(
+      ActivityItem(
         mall: 'Thamrin Plaza',
-        typeText: NotifTypes.paySuccess,
+        typeText: ActivityTypes.paySuccess,
         date: yesterday.add(Duration(hours: 16, minutes: 45)),
       ),
-      NotificationItem(
+      ActivityItem(
         mall: 'Thamrin Plaza',
-        typeText: NotifTypes.bookExit,
+        typeText: ActivityTypes.exitLot,
         date: yesterday.add(Duration(hours: 15, minutes: 20)),
       ),
-      NotificationItem(
-        typeText: NotifTypes.verify,
+      ActivityItem(
+        typeText: ActivityTypes.verify,
         date: yesterday.add(Duration(hours: 9, minutes: 30)),
       ),
 
       // May 27, 2025
-      NotificationItem(
+      ActivityItem(
         mall: 'Sun Plaza',
-        typeText: NotifTypes.paySuccess,
+        typeText: ActivityTypes.paySuccess,
         date: DateTime(2025, 5, 27, 13, 25),
       ),
-      NotificationItem(
+      ActivityItem(
         mall: 'Sun Plaza',
-        typeText: NotifTypes.bookExit,
+        typeText: ActivityTypes.exitLot,
+        date: DateTime(2025, 5, 25, 13, 20),
+      ),
+      ActivityItem(
+        mall: 'Sun Plaza',
+        typeText: ActivityTypes.enterLot,
         date: DateTime(2025, 5, 25, 13, 20),
       ),
 
       // May 24, 2025
-      NotificationItem(
+      ActivityItem(
         mall: 'Medan Mall',
-        typeText: NotifTypes.paySuccess,
-        date: DateTime(2025, 5, 24, 13, 25),
+        typeText: ActivityTypes.paySuccess,
+        date: DateTime(2025, 5, 6, 13, 40),
       ),
-      NotificationItem(
+      ActivityItem(
         mall: 'Medan Mall',
-        typeText: NotifTypes.bookExit,
+        typeText: ActivityTypes.exitLot,
         date: DateTime(2025, 5, 6, 13, 25),
       ),
-      NotificationItem(
+      ActivityItem(
         mall: 'Medan Mall',
-        typeText: NotifTypes.bookSuccess,
-        date: DateTime(2025, 5, 6, 13, 25),
+        typeText: ActivityTypes.bookSuccess,
+        date: DateTime(2025, 4, 24, 13, 25),
       ),
 
       // May 6, 2025
-      NotificationItem(
-        typeText: NotifTypes.bookExp,
-        date: DateTime(2025, 5, 6, 13, 25),
+      ActivityItem(
+        typeText: ActivityTypes.bookExp,
+        date: DateTime(2025, 4, 16, 13, 25),
       ),
-      NotificationItem(
+      ActivityItem(
         mall: 'Medan Mall',
-        typeText: NotifTypes.bookSuccess,
-        date: DateTime(2025, 5, 6, 13, 25),
+        typeText: ActivityTypes.bookSuccess,
+        date: DateTime(2025, 4, 13, 16, 25),
       ),
-      NotificationItem(
+      ActivityItem(
         nominal: 1000000,
         method: "CIMB",
-        typeText: NotifTypes.topUp,
-        date: DateTime(2025, 5, 6, 13, 25),
-      ),
-
-      // November 18, 2024
-      NotificationItem(
-        typeText: NotifTypes.twoFactor,
-        date: DateTime(2025, 3, 18, 19, 30),
+        typeText: ActivityTypes.topUp,
+        date: DateTime(2025, 4, 13, 11, 25),
       ),
     ];
   }
@@ -143,10 +147,10 @@ class Notification_ extends StatelessWidget {
     }
   }
 
-  Map<String, List<NotificationItem>> _groupNotificationsByDate(
-    List<NotificationItem> notifications,
+  Map<String, List<ActivityItem>> _groupActivitiesByDate(
+    List<ActivityItem> notifications,
   ) {
-    Map<String, List<NotificationItem>> grouped = {};
+    Map<String, List<ActivityItem>> grouped = {};
 
     for (var notification in notifications) {
       String dateKey = _getDateGroup(notification.date);
@@ -165,7 +169,7 @@ class Notification_ extends StatelessWidget {
     return grouped;
   }
 
-  List<String> _getSortedDateKeys(Map<String, List<NotificationItem>> grouped) {
+  List<String> _getSortedDateKeys(Map<String, List<ActivityItem>> grouped) {
     List<String> keys = grouped.keys.toList();
 
     // Define the order of date groups
@@ -195,8 +199,8 @@ class Notification_ extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
-    final notifications = _getNotifications();
-    final groupedNotifications = _groupNotificationsByDate(notifications);
+    final notifications = _getActivities();
+    final groupedNotifications = _groupActivitiesByDate(notifications);
     final sortedDateKeys = _getSortedDateKeys(groupedNotifications);
 
     return Scaffold(
@@ -206,7 +210,7 @@ class Notification_ extends StatelessWidget {
             SliverAppBar(
               automaticallyImplyLeading: false,
               title: Text(
-                translate(context, 'Notifications', 'Notifikasi', '通知'),
+                translate(context, 'Activities', 'Aktivitas', '活动'),
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: isSmall ? 25 : 30,
@@ -226,10 +230,8 @@ class Notification_ extends StatelessWidget {
                     ),
                     ...groupedNotifications[dateKey]!
                         .map(
-                          (notification) => NotifCard(
-                            notification: notification,
-                            typeText: notification.typeText,
-                          ),
+                          (notification) =>
+                              ActivityCard(notification: notification),
                         )
                         .toList(),
                   ],
@@ -283,166 +285,195 @@ class NotifTitle extends StatelessWidget {
   }
 }
 
-enum NotifTypes {
+enum ActivityTypes {
   bookSuccess,
   bookCancel,
   bookExp,
-  bookExit,
+  unresolved,
+  exitLot,
+  enterLot,
   verify,
-  twoFactor,
+  // twoFactor,
   paySuccess,
   topUp,
 }
 
-class NotifCard extends StatelessWidget {
-  final NotifTypes typeText;
-  final NotificationItem notification;
+class ActivityCard extends StatelessWidget {
+  final ActivityItem notification;
 
-  const NotifCard({
-    super.key,
-    required this.typeText,
-    required this.notification,
-  });
+  const ActivityCard({super.key, required this.notification});
 
-  String _getNotifIcon(NotifTypes type) {
+  String _getActivityIcon(ActivityTypes type) {
     switch (type) {
-      case NotifTypes.bookSuccess:
+      case ActivityTypes.bookSuccess:
         return 'assets/images/icons/booking.png';
-      case NotifTypes.bookCancel:
+      case ActivityTypes.bookCancel:
         return 'assets/images/icons/cancel.png';
-      case NotifTypes.bookExit:
+      case ActivityTypes.exitLot:
         return 'assets/images/icons/exit.png';
-      case NotifTypes.bookExp:
+      case ActivityTypes.enterLot:
+        return 'assets/images/icons/enter.png';
+      case ActivityTypes.bookExp:
         return 'assets/images/icons/expired.png';
-      case NotifTypes.paySuccess:
+      case ActivityTypes.paySuccess:
         return 'assets/images/icons/payment.png';
-      case NotifTypes.verify:
+      case ActivityTypes.verify:
         return 'assets/images/icons/verification.png';
-      case NotifTypes.twoFactor:
-        return 'assets/images/icons/locked.png';
-      case NotifTypes.topUp:
+      // case ActivityTypes.twoFactor:
+      //   return 'assets/images/icons/locked.png';
+      case ActivityTypes.topUp:
         return 'assets/images/icons/topup.png';
+      case ActivityTypes.unresolved:
+        return 'assets/images/icons/unresolved.png';
     }
   }
 
-  String _cardTitle(BuildContext context, NotifTypes type) {
+  String _cardTitle(BuildContext context, ActivityTypes type) {
     switch (type) {
-      case NotifTypes.bookSuccess:
+      case ActivityTypes.bookSuccess:
         return translate(
           context,
           'Booking Successful!',
           'Pemesanan Berhasil!',
           '预订成功！',
         );
-      case NotifTypes.bookCancel:
+      case ActivityTypes.bookCancel:
         return translate(
           context,
           'Booking Booking Canceled',
           'Pemesanan Parkir Dibatalkan',
           '停车预订已取消',
         );
-      case NotifTypes.bookExit:
+      case ActivityTypes.exitLot:
         return translate(
           context,
           'Exit Parking Lot',
           'Keluar Area Parkir',
           '离开停车场',
         );
-      case NotifTypes.bookExp:
+      case ActivityTypes.enterLot:
+        return translate(
+          context,
+          'Enter Parking Lot',
+          'Masuk Area Parkir',
+          '进入停车场',
+        );
+      case ActivityTypes.bookExp:
         return translate(
           context,
           'Booking Has Been Expired!',
           'Pemesanan Telah Kedaluwarsa!',
           '预订已过期！',
         );
-      case NotifTypes.paySuccess:
+      case ActivityTypes.paySuccess:
         return translate(
           context,
           'Payment Successful!',
           'Pembayaran Berhasil!',
           '付款成功！',
         );
-      case NotifTypes.verify:
+      case ActivityTypes.verify:
         return translate(
           context,
           '2FA Now Set Up!',
           '2FA Terpasang!',
           '2FA 现已设置!',
         );
-      case NotifTypes.twoFactor:
-        return translate(
-          context,
-          'Protect your account with 2FA.',
-          'Lindungi akun Anda dengan 2FA.',
-          '使用 2FA 保护您的账户。',
-        );
-      case NotifTypes.topUp:
+      // case ActivityTypes.twoFactor:
+      //   return translate(
+      //     context,
+      //     'Protect your account with 2FA.',
+      //     'Lindungi akun Anda dengan 2FA.',
+      //     '使用 2FA 保护您的账户。',
+      //   );
+      case ActivityTypes.topUp:
         return translate(
           context,
           'Top Up Successful',
           'Top Up Berhasil',
           '充值成功！',
         );
+      case ActivityTypes.unresolved:
+        return translate(
+          context,
+          'Unresolved Parking!',
+          'Parkir Tak Selesai!',
+          '未解决的停车问题！',
+        );
     }
   }
 
-  String _cardDescription(BuildContext context, NotifTypes type) {
+  String _cardDescription(BuildContext context, ActivityTypes type) {
     switch (type) {
-      case NotifTypes.bookSuccess:
+      case ActivityTypes.bookSuccess:
         return translate(
           context,
           'Parking booking at ${notification.mall} was successfully booked!',
           'Pemesanan parkir di ${notification.mall} berhasil dipesan!',
           '在 ${notification.mall} 的停车预订已成功预订！',
         );
-      case NotifTypes.bookCancel:
+      case ActivityTypes.bookCancel:
         return translate(
           context,
           'You have canceled booking at ${notification.mall}',
           'Anda telah membatalkan parkir di ${notification.mall}',
           '您已取消在 ${notification.mall} 的停车',
         );
-      case NotifTypes.bookExit:
+      case ActivityTypes.exitLot:
         return translate(
           context,
-          'You have exit parking lot at ${notification.mall}',
+          'You have exited parking lot at ${notification.mall}',
           'Anda telah keluar dari area parkir di ${notification.mall}',
           '您已离开 ${notification.mall} 的停车场',
         );
-      case NotifTypes.bookExp:
+      case ActivityTypes.enterLot:
+        return translate(
+          context,
+          'You have entered parking lot at ${notification.mall}',
+          'Anda telah masuk dari area parkir di ${notification.mall}',
+          '您已从 ${notification.mall} 的停车场进入',
+        );
+      case ActivityTypes.bookExp:
         return translate(
           context,
           'You missed your booking, no-show fee was charged.',
           'Anda melewatkan pemesanan, denda akan dikenakan.',
           '您错过了预订，已收取缺席费用。',
         );
-      case NotifTypes.paySuccess:
+      case ActivityTypes.paySuccess:
         return translate(
           context,
           'Parking booking at ${notification.mall} was successfully paid',
           'Pemesanan parkir di ${notification.mall} berhasil dibayar',
           '在 ${notification.mall} 的停车预订已成功付款',
         );
-      case NotifTypes.verify:
+      case ActivityTypes.verify:
         return translate(
           context,
           'Two Factor Authenticator set up successful!',
           'Autentikator Dua Faktor berhasil terpasang!',
           '双重身份验证器设置成功!',
         );
-      case NotifTypes.twoFactor:
-        return translate(
-          context,
-          'Account will be more secured with 2FA setup!',
-          'Akun akan lebih aman dengan 2FA terpasang!',
-          '设置 2FA 后帐户将更加安全!',
-        );
-      case NotifTypes.topUp:
+      // case ActivityTypes.twoFactor:
+      //   return translate(
+      //     context,
+      //     'Account will be more secured with 2FA setup!',
+      //     'Akun akan lebih aman dengan 2FA terpasang!',
+      //     '设置 2FA 后帐户将更加安全!',
+      //   );
+      case ActivityTypes.topUp:
         return translate(
           context,
           'You have successfully topped up ${formatCurrency(nominal: notification.nominal as num)} via ${notification.method}.',
           'Kamu berhasil melakukan top up sebesar ${formatCurrency(nominal: notification.nominal as num)} melalui ${notification.method}.',
           '您已成功通过 ${notification.method} 充值 ${formatCurrency(nominal: notification.nominal as num)}。',
+        );
+      case ActivityTypes.unresolved:
+        return translate(
+          context,
+          'Your parking at ${notification.mall} has exceeded 20 hour',
+          'Parkir Anda di ${notification.mall} telah melebihi 20 jam',
+          '您在 ${notification.mall} 的停车时间已超过20小时',
         );
     }
   }
@@ -493,12 +524,15 @@ class NotifCard extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
-        leading: Image.asset(_getNotifIcon(typeText), width: isSmall ? 35 : 50),
+        leading: Image.asset(
+          _getActivityIcon(notification.typeText),
+          width: isSmall ? 35 : 50,
+        ),
         title: Row(
           children: [
             Expanded(
               child: Text(
-                _cardTitle(context, typeText),
+                _cardTitle(context, notification.typeText),
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: isSmall ? 14 : 18,
@@ -517,7 +551,7 @@ class NotifCard extends StatelessWidget {
           ],
         ),
         subtitle: Text(
-          _cardDescription(context, typeText),
+          _cardDescription(context, notification.typeText),
           style: TextStyle(color: Colors.grey, fontSize: isSmall ? 12 : 14),
         ),
       ),
