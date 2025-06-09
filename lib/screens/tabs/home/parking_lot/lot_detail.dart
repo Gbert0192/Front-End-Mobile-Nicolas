@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
