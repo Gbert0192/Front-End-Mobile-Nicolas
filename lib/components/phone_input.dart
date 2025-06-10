@@ -113,6 +113,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
             onChanged: (_) {
               widget.onChanged?.call();
             },
+            keyboardType: TextInputType.number,
             countries:
                 countries
                     .where((c) => allowedCountryCodes.contains(c.code))

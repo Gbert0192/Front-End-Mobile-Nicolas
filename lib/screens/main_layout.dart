@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/notification.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/activity.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/parking&booking.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/voucher.dart';
@@ -30,7 +30,7 @@ class _MainLayoutState extends State<MainLayout>
   late TabController controller;
   final List<TabModel> tabs = [
     TabModel(icon: Icons.home, screen: Home()),
-    TabModel(icon: Icons.notifications, screen: Notification_()),
+    TabModel(icon: Icons.local_activity, screen: Activity()),
     TabModel(icon: Icons.local_parking, screen: ParkingHistory()),
     TabModel(icon: Icons.discount, screen: VoucherScreen()),
     TabModel(icon: Icons.person, screen: Profile()),

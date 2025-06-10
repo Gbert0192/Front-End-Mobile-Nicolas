@@ -8,6 +8,7 @@ class ResponsiveButton extends StatelessWidget {
   final String? loadingText;
   final String text;
   final Color textColor;
+  final FontWeight? fontWeight;
   final Color backgroundColor;
   final ButtonTypes buttonType;
   final Color borderColor;
@@ -20,6 +21,7 @@ class ResponsiveButton extends StatelessWidget {
     this.loadingText,
     required this.text,
     Color? textColor,
+    this.fontWeight = FontWeight.w400,
     this.buttonType = ButtonTypes.normal,
     this.backgroundColor = const Color(0xFF1F1E5B),
     this.borderColor = Colors.black,
@@ -47,7 +49,14 @@ class ResponsiveButton extends StatelessWidget {
                     ),
                     if (loadingText != null) ...[
                       SizedBox(width: 6),
-                      Text(loadingText!),
+                      Text(
+                        loadingText!,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: isSmall ? null : 20,
+                          fontWeight: fontWeight,
+                        ),
+                      ),
                     ],
                   ],
                 ),
@@ -58,7 +67,7 @@ class ResponsiveButton extends StatelessWidget {
               style: TextStyle(
                 color: textColor,
                 fontSize: isSmall ? null : 20,
-                fontWeight: FontWeight.w400,
+                fontWeight: fontWeight,
               ),
             );
 
@@ -82,7 +91,7 @@ class ResponsiveButton extends StatelessWidget {
                     isLoading != null
                         ? isLoading!
                             ? null
-                            : onPressed
+                            : onPressed ?? () {}
                         : () {},
                 style: outlineStyle,
                 child: buttonChild,
@@ -92,7 +101,7 @@ class ResponsiveButton extends StatelessWidget {
                     isLoading != null
                         ? isLoading!
                             ? null
-                            : onPressed
+                            : onPressed ?? () {}
                         : () {},
                 style: style,
                 child: buttonChild,

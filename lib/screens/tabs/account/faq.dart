@@ -41,7 +41,7 @@ class FAQ extends StatelessWidget {
         ],
       ),
       FAQItem(
-        title: '🚫 Cancel & Expired Booking',
+        title: '🚫 Cancel & Expired',
         content: [
           '➤ Cancel **up to 1 hour** before your booking — no charge.',
           '➤ Booking expires if not checked in **within 30 minutes**.',
