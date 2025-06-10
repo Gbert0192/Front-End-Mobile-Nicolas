@@ -66,9 +66,6 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
-    });
   }
 
   @override
@@ -81,6 +78,7 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           length: widget.pinLength,
           controller: widget.controller,
           focusNode: _focusNode,
+          autoFocus: true,
           autoDisposeControllers: false,
           animationType: AnimationType.fade,
           keyboardType: _keyboardType,

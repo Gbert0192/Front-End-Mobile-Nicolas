@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ActivityItem {
@@ -283,19 +284,6 @@ class NotifTitle extends StatelessWidget {
       ),
     );
   }
-}
-
-enum ActivityTypes {
-  bookSuccess,
-  bookCancel,
-  bookExp,
-  unresolved,
-  exitLot,
-  enterLot,
-  verify,
-  // twoFactor,
-  paySuccess,
-  topUp,
 }
 
 class ActivityCard extends StatelessWidget {
