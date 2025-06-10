@@ -11,14 +11,16 @@ class ResponsiveTextInput extends StatefulWidget {
     required this.isSmall,
     this.readOnly = false,
     this.controller,
+    this.clearButton = false,
     this.onChanged,
+    this.onClear,
     this.onTap,
     this.onSubmitted,
     this.hint,
     this.label,
     this.errorText,
     this.leading,
-    this.disabled,
+    this.isLoading,
     this.suffix,
     this.value,
     this.mode = StyleMode.outline,
@@ -31,10 +33,12 @@ class ResponsiveTextInput extends StatefulWidget {
 
   final bool isSmall;
   final bool readOnly;
+  final bool clearButton;
   final int maxLines;
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final VoidCallback? onTap;
+  final VoidCallback? onClear;
   final Function(String)? onSubmitted;
   final String? hint;
   final String? label;
@@ -43,7 +47,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final StyleMode mode;
   final TextInputTypes type;
   final IconData? leading;
-  final bool? disabled;
+  final bool? isLoading;
   final Widget? suffix;
   final Color fillColor;
   final Color borderColor;
@@ -108,7 +112,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     ],
           ),
           child: TextField(
-            enabled: widget.disabled != null ? !widget.disabled! : true,
+            enabled: widget.isLoading != null ? !widget.isLoading! : true,
             readOnly: widget.readOnly,
             maxLines: widget.maxLines,
             focusNode: _focusNode,
@@ -121,13 +125,19 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     ? TextInputType.number
                     : TextInputType.text,
             onChanged: (value) {
-              widget.onChanged?.call(value);
+              setState(() {
+                widget.onChanged?.call(value);
+              });
             },
             onTap: () {
-              widget.onTap?.call();
+              setState(() {
+                widget.onTap?.call();
+              });
             },
             onSubmitted: (value) {
-              widget.onSubmitted?.call(value);
+              setState(() {
+                widget.onSubmitted?.call(value);
+              });
             },
             decoration: InputDecoration(
               hintText: widget.hint,
@@ -166,6 +176,45 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                           });
                         },
                       )
+                      : widget.clearButton
+                      ? (widget.isLoading == true)
+                          ? Container(
+                            width: 24,
+                            height: 24,
+                            margin: const EdgeInsets.all(12),
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.grey,
+                              ),
+                            ),
+                          )
+                          : (widget.controller?.text.isNotEmpty == true)
+                          ? Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                widget.controller?.clear();
+                                setState(() {
+                                  widget.onClear?.call();
+                                });
+                              },
+                              child: Container(
+                                width: 20,
+                                height: 20,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ),
+                          )
+                          : widget.suffix
                       : widget.suffix,
               border:
                   widget.mode == StyleMode.underline

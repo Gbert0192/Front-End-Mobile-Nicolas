@@ -30,7 +30,6 @@ class _SearchState extends State<Search> {
       isLoading = true;
     });
 
-    // Simulate network delay for better UX
     await Future.delayed(Duration(milliseconds: 800));
 
     final lots = provider.searchLot(user, query);
@@ -65,7 +64,7 @@ class _SearchState extends State<Search> {
                   children: [
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back_ios, size: 30),
+                      icon: Icon(Icons.arrow_back_ios, size: isSmall ? 25 : 30),
                     ),
                     Text(
                       translate(
@@ -76,7 +75,7 @@ class _SearchState extends State<Search> {
                       ),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 30,
+                        fontSize: isSmall ? 25 : 30,
                       ),
                     ),
                   ],
@@ -87,55 +86,27 @@ class _SearchState extends State<Search> {
                 controller: controller,
                 leading: Icons.search,
                 hint: translate(context, 'Search', 'Telusuri', '搜索'),
-                disabled: isLoading,
+                isLoading: isLoading,
+                clearButton: true,
+                onClear: () {
+                  setState(() {
+                    isSubmited = false;
+                    resultLots = null;
+                  });
+                },
                 onChanged: (value) {
-                  setState(() {});
+                  if (controller.text.isEmpty) {
+                    setState(() {
+                      isSubmited = false;
+                      resultLots = null;
+                    });
+                  }
                 },
                 onSubmitted: (value) async {
                   if (controller.text.isNotEmpty && !isLoading) {
                     await searchMall(lotProvider, value, user);
                   }
                 },
-                suffix:
-                    isLoading
-                        ? Container(
-                          width: 24,
-                          height: 24,
-                          margin: EdgeInsets.all(12),
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.grey,
-                            ),
-                          ),
-                        )
-                        : controller.text.isNotEmpty
-                        ? Padding(
-                          padding: EdgeInsets.only(right: 8),
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.clear();
-                              setState(() {
-                                isSubmited = false;
-                                resultLots = null;
-                              });
-                            },
-                            child: Container(
-                              width: 20,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.close,
-                                size: 18,
-                                color: Colors.grey.shade800,
-                              ),
-                            ),
-                          ),
-                        )
-                        : null,
               ),
               const SizedBox(height: 16),
               Padding(
@@ -151,7 +122,10 @@ class _SearchState extends State<Search> {
                           '搜索结果',
                         )
                         : translate(context, 'Recent', 'Terkini', '最近'),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: isSmall ? 20 : 30,
+                    ),
                   ),
                 ),
               ),
@@ -176,8 +150,6 @@ class _SearchState extends State<Search> {
   }
 
   Widget _buildLoadingState(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -215,6 +187,8 @@ class _SearchState extends State<Search> {
   }
 
   Widget _buildSearchResults(List<ParkingLot> malls, BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     if (malls.isEmpty) {
       return Center(
         child: Column(
@@ -222,8 +196,8 @@ class _SearchState extends State<Search> {
           children: [
             Image.asset(
               'assets/images/empty/search_where.png',
-              width: 300,
-              height: 300,
+              width: isSmall ? 240 : 300,
+              height: isSmall ? 240 : 300,
             ),
             const SizedBox(height: 16),
             Text(
@@ -351,7 +325,10 @@ class _SearchState extends State<Search> {
                           Row(
                             children: [
                               Text(
-                                formatCurrency(nominal: mall.starterPrice!),
+                                formatCurrency(
+                                  nominal:
+                                      mall.starterPrice ?? mall.hourlyPrice,
+                                ),
                                 style: TextStyle(
                                   color: Color(0xFFDC5F00),
                                   fontSize: 14,
@@ -431,13 +408,13 @@ class _SearchState extends State<Search> {
             itemBuilder: (context, index) {
               final query = history[index];
               return Container(
-                margin: EdgeInsets.symmetric(vertical: 4),
+                margin: EdgeInsets.symmetric(vertical: isSmall ? 0 : 4),
                 child: ListTile(
                   contentPadding: EdgeInsets.symmetric(horizontal: 16),
                   title: Text(
                     query,
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: isSmall ? 16 : 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.grey.shade500,
                     ),
@@ -447,15 +424,15 @@ class _SearchState extends State<Search> {
                       provider.deleteHistory(user, query);
                     },
                     child: Container(
-                      width: 28,
-                      height: 28,
+                      width: isSmall ? 24 : 28,
+                      height: isSmall ? 24 : 28,
                       decoration: BoxDecoration(
                         color: Colors.grey.shade600,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         Icons.close_rounded,
-                        size: 18,
+                        size: isSmall ? 15 : 18,
                         color: Colors.white,
                       ),
                     ),
