@@ -11,15 +11,16 @@ class Activity extends StatelessWidget {
 
   String _getDateGroup(DateTime dateTime) {
     final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    final today = DateTime(now.year, now.month, now.day);
+    final date = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-    if (difference.inDays == 0) {
+    if (date == today) {
       return "Today";
-    } else if (difference.inDays == 1) {
+    } else if (date == today.subtract(Duration(days: 1))) {
       return "Yesterday";
-    } else if (difference.inDays < 7) {
+    } else if (date.isAfter(today.subtract(Duration(days: now.weekday - 1)))) {
       return "This Week";
-    } else if (difference.inDays < 30) {
+    } else if (date.month == now.month && date.year == now.year) {
       return "This Month";
     } else {
       return "Earlier";
@@ -28,15 +29,16 @@ class Activity extends StatelessWidget {
 
   String _getTranslatedDateGroup(BuildContext context, DateTime dateTime) {
     final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    final today = DateTime(now.year, now.month, now.day);
+    final date = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
-    if (difference.inDays == 0) {
+    if (date == today) {
       return translate(context, "Today", "Hari Ini", "今天");
-    } else if (difference.inDays == 1) {
+    } else if (date == today.subtract(Duration(days: 1))) {
       return translate(context, "Yesterday", "Kemarin", "昨天");
-    } else if (difference.inDays < 7) {
+    } else if (date.isAfter(today.subtract(Duration(days: now.weekday - 1)))) {
       return translate(context, "This Week", "Minggu Ini", "本周");
-    } else if (difference.inDays < 30) {
+    } else if (date.month == now.month && date.year == now.year) {
       return translate(context, "This Month", "Bulan Ini", "本月");
     } else {
       return translate(context, "Earlier", "Sebelumnya", "更早");
@@ -135,37 +137,41 @@ class Activity extends StatelessWidget {
                           ],
                         ]
                         : [
-                          Center(
-                            child: Column(
-                              children: [
-                                Transform.translate(
-                                  offset: Offset(0, 20),
-                                  child: Opacity(
-                                    opacity: 0.5,
-                                    child: Image.asset(
-                                      'assets/images/empty/activity_empty.png',
-                                      width: 300,
-                                      height: 300,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.7,
+                            child: Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Transform.translate(
+                                    offset: Offset(0, 10),
+                                    child: Opacity(
+                                      opacity: 0.5,
+                                      child: Image.asset(
+                                        'assets/images/empty/activity_empty.png',
+                                        width: isSmall ? 240 : 320,
+                                        height: isSmall ? 240 : 320,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Transform.translate(
-                                  offset: Offset(0, -15),
-                                  child: Text(
-                                    translate(
-                                      context,
-                                      'No activities done yet!',
-                                      'Belum ada aktivitas dilakukan!',
-                                      '尚未完成任何活动！',
-                                    ),
-                                    style: TextStyle(
-                                      color: Color(0xFFD3D3D3),
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 24,
+                                  Transform.translate(
+                                    offset: Offset(0, -5),
+                                    child: Text(
+                                      translate(
+                                        context,
+                                        'No activities done yet!',
+                                        'Belum ada aktivitas dilakukan!',
+                                        '尚未完成任何活动！',
+                                      ),
+                                      style: TextStyle(
+                                        color: Color(0xFFD3D3D3),
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: isSmall ? 20 : 25,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ],

@@ -183,7 +183,8 @@ class VoucherScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children:
-                      voucherProvider.vouchers
+                      voucherProvider
+                          .getAvailableVoucher()
                           .map((voucher) => VoucherCard(voucher: voucher))
                           .toList(),
                 ),
