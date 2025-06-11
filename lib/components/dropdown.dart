@@ -171,6 +171,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
     final isOutline = widget.mode == StyleMode.outline;

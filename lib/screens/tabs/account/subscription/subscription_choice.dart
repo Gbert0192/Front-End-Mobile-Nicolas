@@ -88,7 +88,7 @@ class _SubscriptionChoiceState extends State<SubscriptionChoice> {
                   SizedBox(height: isSmall ? 10 : 20),
               ],
             );
-          }).toList(),
+          }),
         ],
       ),
     );
