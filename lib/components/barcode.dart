@@ -8,12 +8,12 @@ class CustomBarcodeWidget extends StatelessWidget {
   final bool showText;
 
   const CustomBarcodeWidget({
-    Key? key,
+    super.key,
     required this.data,
     this.width = 200,
     this.height = 60,
     this.showText = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

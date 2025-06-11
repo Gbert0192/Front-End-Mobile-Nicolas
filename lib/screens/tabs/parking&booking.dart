@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/bookings.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/parkings.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/booking.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/parking.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ParkingHistory extends StatelessWidget {
@@ -81,7 +81,7 @@ class ParkingHistory extends StatelessWidget {
                           top: 10,
                           left: 15,
                           child: Text(
-                            translate(context, 'Parkings', 'Parkir', '停车场'),
+                            translate(context, 'Parking', 'Parkir', '停车场'),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -137,7 +137,7 @@ class ParkingHistory extends StatelessWidget {
                           top: 10,
                           left: 15,
                           child: Text(
-                            translate(context, 'Bookings', 'Pemesanan', '预订'),
+                            translate(context, 'Booking', 'Pemesanan', '预订'),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,

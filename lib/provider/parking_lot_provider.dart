@@ -37,7 +37,7 @@ class ParkingLotProvider with ChangeNotifier {
   void deleteHistory(User user, String key) {
     final history = searches.firstWhereOrNull((item) => item.user == user);
 
-    if (history == null) return null;
+    if (history == null) return;
 
     history.searchHistory.remove(key.trim());
     notifyListeners();
