@@ -209,7 +209,7 @@ class _SearchState extends State<Search> {
               ),
               style: TextStyle(
                 color: Color(0xFFD3D3D3),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
                 fontSize: 24,
               ),
             ),

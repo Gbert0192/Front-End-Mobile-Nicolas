@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
@@ -112,6 +113,7 @@ class _HomeState extends State<Home> {
     final userProvider = Provider.of<UserProvider>(context);
     final otpProvider = Provider.of<OTPProvider>(context);
     User user = userProvider.currentUser!;
+    final activityProvider = Provider.of<ActivityProvider>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -397,6 +399,12 @@ class _HomeState extends State<Home> {
                                       onSubmit: () {
                                         userProvider.setUp2Fac();
                                         Navigator.pop(context);
+                                        activityProvider.addActivity(
+                                          user,
+                                          ActivityItem(
+                                            activityTypes: ActivityTypes.verify,
+                                          ),
+                                        );
                                       },
                                     ),
                               ),
@@ -510,7 +518,7 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10),
+                user.twoFactor ? SizedBox.shrink() : SizedBox(height: 10),
               ],
             ),
           ),

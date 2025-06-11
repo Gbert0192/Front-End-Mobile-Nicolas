@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 enum ActivityTypes {
   bookSuccess,
@@ -26,8 +27,8 @@ class ActivityProvider with ChangeNotifier {
     }
   }
 
-  List<UserActivity> getActivity(User user) {
-    return activities.where((activity) => activity.user == user).toList();
+  UserActivity? getActivity(User user) {
+    return activities.firstWhereOrNull((v) => v.user == user);
   }
 }
 
@@ -39,11 +40,19 @@ class UserActivity {
 }
 
 class ActivityItem {
-  final ActivityTypes typeText;
+  final ActivityTypes activityTypes;
   final String? mall;
   final String? method;
   final double? nominal;
-  final DateTime date = DateTime.now();
+  final DateTime date;
 
-  ActivityItem({required this.typeText, this.mall, this.method, this.nominal});
+  ActivityItem({
+    required this.activityTypes,
+    this.mall,
+    this.method,
+    this.nominal,
+    DateTime? date,
+  }) : date = date ?? DateTime.now();
+
+  get length => null;
 }

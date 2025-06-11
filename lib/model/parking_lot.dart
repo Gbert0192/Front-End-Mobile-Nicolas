@@ -80,6 +80,7 @@ class ParkingLot {
   });
 
   String? occupyNearestSpot(User user) {
+    renderAllSlot();
     final sortedFloors = [...spots]
       ..sort((a, b) => a.number.compareTo(b.number));
     for (final floor in sortedFloors) {

@@ -42,6 +42,11 @@ class ParkingLotProvider with ChangeNotifier {
     history.searchHistory.remove(key.trim());
     notifyListeners();
   }
+
+  List<Floor> getAvailableSpot(ParkingLot lot) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].renderAllSlot();
+  }
 }
 
 class UserSearchHistory {
