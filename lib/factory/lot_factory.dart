@@ -18,118 +18,7 @@ class LotFactory {
         hourlyPrice: 3000,
         starterPrice: 5000,
         image: "assets/images/building/Medan Mall.png",
-        spotCount: 0,
-        floor: 4,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A13",
-                  "A14",
-                  "A15",
-                  "A16",
-                  "A17",
-                  "A18",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B13",
-                  "B14",
-                  "B15",
-                  "B16",
-                  "B17",
-                  "B18",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '3',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A19",
-                  "A20",
-                  "A21",
-                  "A22",
-                  "A23",
-                  "A24",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B19",
-                  "B20",
-                  "B21",
-                  "B22",
-                  "B23",
-                  "B24",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G', lastFloor: '5', areaStep: 2),
       ),
       ParkingLot(
         name: "Aryaduta",
@@ -140,64 +29,7 @@ class LotFactory {
         hourlyPrice: 4000,
         starterPrice: 7000,
         image: "assets/images/building/Aryaduta.png",
-        spotCount: 0,
-        floor: 2,
-        spots: [
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G3', lastFloor: '4', areaStep: 3),
       ),
       ParkingLot(
         name: "Centre Point",
@@ -208,36 +40,7 @@ class LotFactory {
         hourlyPrice: 3500,
         starterPrice: 6000,
         image: "assets/images/building/Centre Point.png",
-        spotCount: 0,
-        floor: 6,
-        spots: List.generate(
-          6,
-          (floorIndex) => Floor(
-            number: floorIndex == 0 ? 'G' : floorIndex.toString(),
-            areas: [
-              Area(
-                name: "A",
-                spots: List.generate(
-                  6,
-                  (i) => Spot(
-                    code: "A${floorIndex}${i + 1}",
-                    status: _randomSpotStatus(),
-                  ),
-                ),
-              ),
-              Area(
-                name: "B",
-                spots: List.generate(
-                  6,
-                  (i) => Spot(
-                    code: "B${floorIndex}${i + 1}",
-                    status: _randomSpotStatus(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        spots: generateFloors(firstFloor: 'G2', lastFloor: '4', areaStep: 2),
       ),
       ParkingLot(
         name: "Lippo Plaza",
@@ -247,91 +50,7 @@ class LotFactory {
         closeTime: "22:00",
         hourlyPrice: 5500,
         image: "assets/images/building/Lippo Plaza.png",
-        spotCount: 0,
-        floor: 3,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A13",
-                  "A14",
-                  "A15",
-                  "A16",
-                  "A17",
-                  "A18",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B13",
-                  "B14",
-                  "B15",
-                  "B16",
-                  "B17",
-                  "B18",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G3', lastFloor: '3', areaStep: 2),
       ),
       ParkingLot(
         name: "Grand City Hall",
@@ -342,91 +61,7 @@ class LotFactory {
         hourlyPrice: 4000,
         starterPrice: 6000,
         image: "assets/images/building/Grand City Hall.png",
-        spotCount: 0,
-        floor: 3,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A13",
-                  "A14",
-                  "A15",
-                  "A16",
-                  "A17",
-                  "A18",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B13",
-                  "B14",
-                  "B15",
-                  "B16",
-                  "B17",
-                  "B18",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G', lastFloor: '6', areaStep: 2),
       ),
       ParkingLot(
         name: "Sun Plaza",
@@ -437,64 +72,7 @@ class LotFactory {
         hourlyPrice: 3700,
         starterPrice: 5800,
         image: "assets/images/building/Sun Plaza.png",
-        spotCount: 0,
-        floor: 2,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G2', lastFloor: '5', areaStep: 2),
       ),
       ParkingLot(
         name: "Radisson",
@@ -505,91 +83,7 @@ class LotFactory {
         hourlyPrice: 4700,
         starterPrice: 6500,
         image: "assets/images/building/Radisson.png",
-        spotCount: 0,
-        floor: 3,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A13",
-                  "A14",
-                  "A15",
-                  "A16",
-                  "A17",
-                  "A18",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B13",
-                  "B14",
-                  "B15",
-                  "B16",
-                  "B17",
-                  "B18",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G3', lastFloor: '6', areaStep: 3),
       ),
       ParkingLot(
         name: "Manhattan Time Square",
@@ -600,118 +94,7 @@ class LotFactory {
         hourlyPrice: 3900,
         starterPrice: 6200,
         image: "assets/images/building/Manhatan Time Square.png",
-        spotCount: 0,
-        floor: 4,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A13",
-                  "A14",
-                  "A15",
-                  "A16",
-                  "A17",
-                  "A18",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B13",
-                  "B14",
-                  "B15",
-                  "B16",
-                  "B17",
-                  "B18",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '3',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A19",
-                  "A20",
-                  "A21",
-                  "A22",
-                  "A23",
-                  "A24",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B19",
-                  "B20",
-                  "B21",
-                  "B22",
-                  "B23",
-                  "B24",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G2', lastFloor: '3', areaStep: 1),
       ),
       ParkingLot(
         name: "Plaza Medan Fair",
@@ -721,91 +104,7 @@ class LotFactory {
         closeTime: "21:30",
         hourlyPrice: 5600,
         image: "assets/images/building/Plaza Medan Fair.png",
-        spotCount: 0,
-        floor: 3,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '2',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A13",
-                  "A14",
-                  "A15",
-                  "A16",
-                  "A17",
-                  "A18",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B13",
-                  "B14",
-                  "B15",
-                  "B16",
-                  "B17",
-                  "B18",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G', lastFloor: '4', areaStep: 1),
       ),
       ParkingLot(
         name: "Delipark",
@@ -816,64 +115,7 @@ class LotFactory {
         hourlyPrice: 3500,
         starterPrice: 5400,
         image: "assets/images/building/Delipark.png",
-        spotCount: 0,
-        floor: 2,
-        spots: [
-          Floor(
-            number: 'G',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A01",
-                  "A02",
-                  "A03",
-                  "A04",
-                  "A05",
-                  "A06",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B01",
-                  "B02",
-                  "B03",
-                  "B04",
-                  "B05",
-                  "B06",
-                ]),
-              ),
-            ],
-          ),
-          Floor(
-            number: '1',
-            areas: [
-              Area(
-                name: "A",
-                spots: _generateRandomSpots([
-                  "A07",
-                  "A08",
-                  "A09",
-                  "A10",
-                  "A11",
-                  "A12",
-                ]),
-              ),
-              Area(
-                name: "B",
-                spots: _generateRandomSpots([
-                  "B07",
-                  "B08",
-                  "B09",
-                  "B10",
-                  "B11",
-                  "B12",
-                ]),
-              ),
-            ],
-          ),
-        ],
+        spots: generateFloors(firstFloor: 'G2', lastFloor: '5', areaStep: 2),
       ),
     ];
 
@@ -882,9 +124,68 @@ class LotFactory {
     }
   }
 
-  List<Spot> _generateRandomSpots(List<String> codes) {
+  List<Spot> _generateSpots(String prefix, int startIndex) {
+    final codes = List.generate(
+      6,
+      (i) => '$prefix${(startIndex + i).toString().padLeft(2, '0')}',
+    );
     SpotStatus randomStat = _randomSpotStatus();
     return codes.map((code) => Spot(code: code, status: randomStat)).toList();
+  }
+
+  List<String> _buildFloorRange(String first, String last) {
+    int parseFloor(String label) {
+      if (label == 'G') return -1;
+      if (label.startsWith('G')) return -int.parse(label.substring(1));
+      return int.parse(label);
+    }
+
+    String formatFloor(int floor) {
+      if (floor == -1) return 'G';
+      if (floor < -1) return 'G${-floor}';
+      return floor.toString();
+    }
+
+    int start = parseFloor(first);
+    int end = parseFloor(last);
+
+    List<String> result = [];
+    for (int i = start; i <= end; i++) {
+      result.add(formatFloor(i));
+    }
+    return result;
+  }
+
+  List<Floor> generateFloors({
+    required String firstFloor,
+    required String lastFloor,
+    int areaStep = 2, // jumlah lantai per area group
+  }) {
+    List<Floor> floors = [];
+    int spotCounter = 1;
+
+    List<String> floorLabels = _buildFloorRange(firstFloor, lastFloor);
+
+    for (int i = 0; i < floorLabels.length; i++) {
+      String floorLabel = floorLabels[i];
+
+      // Hitung grup berdasarkan areaStep
+      int group = i ~/ areaStep;
+
+      // Area names: setiap grup dapet 2 huruf area: A&B, C&D, E&F, dst.
+      String area1 = String.fromCharCode(65 + group * 2);
+      String area2 = String.fromCharCode(65 + group * 2 + 1);
+
+      List<Area> areas = [
+        Area(name: area1, spots: _generateSpots(area1, spotCounter)),
+        Area(name: area2, spots: _generateSpots(area2, spotCounter + 6)),
+      ];
+      spotCounter += 12;
+
+      floors.add(Floor(number: floorLabel, areas: areas));
+    }
+
+    return floors;
   }
 
   SpotStatus _randomSpotStatus() {

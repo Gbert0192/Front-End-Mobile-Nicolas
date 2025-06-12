@@ -53,9 +53,33 @@ class ParkingLotProvider with ChangeNotifier {
     return lots[index].occupyNearestSpot(user);
   }
 
-  String? occupySpot(ParkingLot lot, User user) {
+  String? bookSpot({
+    required ParkingLot lot,
+    required User user,
+    required String floorNumber,
+    required String spotCode,
+  }) {
     final index = lots.indexWhere((item) => item == lot);
-    return lots[index].occupyNearestSpot(user);
+    return lots[index].bookSpot(floorNumber, spotCode, user);
+  }
+
+  String? claimSpot({
+    required ParkingLot lot,
+    required User user,
+    required String floorNumber,
+    required String spotCode,
+  }) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].claimSpot(floorNumber, spotCode, user);
+  }
+
+  bool freeSpot({
+    required ParkingLot lot,
+    required String floorNumber,
+    required String spotCode,
+  }) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].freeSpot(floorNumber, spotCode);
   }
 }
 

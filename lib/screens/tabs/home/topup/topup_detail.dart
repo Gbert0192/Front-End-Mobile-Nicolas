@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
@@ -39,6 +40,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
     final isSmall = size.height < 700;
     final userProvider = Provider.of<UserProvider>(context);
     User user = userProvider.currentUser!;
+    final activityProvider = Provider.of<ActivityProvider>(context);
 
     void showSuccessDialog(double originalAmount, double finalAmount) {
       showDialog(
@@ -84,6 +86,14 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
             actions: [
               TextButton(
                 onPressed: () {
+                  activityProvider.addActivity(
+                    user,
+                    ActivityItem(
+                      activityTypes: ActivityTypes.topUp,
+                      method: widget.method.name,
+                      nominal: finalAmount,
+                    ),
+                  );
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },

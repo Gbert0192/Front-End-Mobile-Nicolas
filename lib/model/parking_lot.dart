@@ -61,8 +61,7 @@ class ParkingLot {
   final double? starterPrice;
   final double hourlyPrice;
   final String image;
-  int spotCount;
-  final int floor;
+  int spotCount = 0;
   final List<Floor> spots;
 
   ParkingLot({
@@ -73,17 +72,45 @@ class ParkingLot {
     required this.closeTime,
     required this.hourlyPrice,
     required this.image,
-    required this.spotCount,
-    required this.floor,
     required this.spots,
     this.starterPrice,
   });
 
+  int floorWeight(String label) {
+    if (label == 'G') return 0;
+    if (label.startsWith('G')) return -int.parse(label.substring(1));
+    return int.parse(label);
+  }
+
   String? occupyNearestSpot(User user) {
     renderAllSlot();
-    final sortedFloors = [...spots]
-      ..sort((a, b) => a.number.compareTo(b.number));
-    for (final floor in sortedFloors) {
+
+    final aboveFloors = spots.where((f) => floorWeight(f.number) > 1).toList();
+    final belowFloors = spots.where((f) => floorWeight(f.number) < 1).toList();
+    final floor1 = spots.firstWhereOrNull((f) => floorWeight(f.number) == 1);
+
+    List<Floor> orderedFloors = [];
+
+    if (floor1 != null) {
+      orderedFloors.add(floor1);
+    }
+
+    aboveFloors.sort(
+      (a, b) => floorWeight(a.number).compareTo(floorWeight(b.number)),
+    );
+    belowFloors.sort(
+      (a, b) => floorWeight(a.number).compareTo(floorWeight(b.number)),
+    );
+
+    if (aboveFloors.length >= belowFloors.length) {
+      orderedFloors.addAll(aboveFloors);
+      orderedFloors.addAll(belowFloors);
+    } else {
+      orderedFloors.addAll(belowFloors);
+      orderedFloors.addAll(aboveFloors);
+    }
+
+    for (final floor in orderedFloors) {
       final spot = floor.getFirstAvailableSpot();
       if (spot != null) {
         spot.status = SpotStatus.occupied;
@@ -93,23 +120,11 @@ class ParkingLot {
         return spot.code;
       }
     }
+
     return null;
   }
 
-  String? occupySpot(int floorNumber, String spotCode, User user) {
-    final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
-    final spot = floor?.findSpot(spotCode);
-    if (spot != null && spot.status == SpotStatus.free) {
-      spot.status = SpotStatus.occupied;
-      spot.date = DateTime.now();
-      spot.user = user;
-      spotCount -= 1;
-      return spot.code;
-    }
-    return null;
-  }
-
-  String? bookSpot(int floorNumber, String spotCode, User user) {
+  String? bookSpot(String floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
@@ -122,7 +137,7 @@ class ParkingLot {
     return null;
   }
 
-  String? claimSpot(int floorNumber, String spotCode, User user) {
+  String? claimSpot(String floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.booked) {
@@ -134,7 +149,7 @@ class ParkingLot {
     return null;
   }
 
-  bool freeSpot(int floorNumber, String spotCode) {
+  bool freeSpot(String floorNumber, String spotCode) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.occupied) {

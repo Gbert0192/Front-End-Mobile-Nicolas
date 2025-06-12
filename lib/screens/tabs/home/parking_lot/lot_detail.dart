@@ -107,7 +107,7 @@ class SearchDetail extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                mall.spotCount <= 0
+                                mall.getFreeCount() <= 0
                                     ? translate(
                                       context,
                                       'All Full',
@@ -116,11 +116,11 @@ class SearchDetail extends StatelessWidget {
                                     )
                                     : translate(
                                       context,
-                                      mall.spotCount == 1
-                                          ? '${mall.spotCount} Slot'
-                                          : '${mall.spotCount} Slots',
-                                      '${mall.spotCount} Slot',
-                                      '${mall.spotCount} 个插槽',
+                                      mall.getFreeCount() == 1
+                                          ? '${mall.getFreeCount()} Slot'
+                                          : '${mall.getFreeCount()} Slots',
+                                      '${mall.getFreeCount()} Slot',
+                                      '${mall.getFreeCount()} 个插槽',
                                     ),
                                 style: TextStyle(
                                   color: Color(0xFF4D5DFA),
