@@ -4,6 +4,7 @@ import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_in.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/user_data.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
@@ -96,6 +97,7 @@ class _SignUpState extends State<SignUp> {
                       children: [
                         ResponsiveTextInput(
                           isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control("email"),
                           hint: 'Enter your email',
                           label: 'Email',
@@ -186,6 +188,12 @@ class _SignUpState extends State<SignUp> {
                       isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LandingScreen(),
+                          ),
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => SignIn()),

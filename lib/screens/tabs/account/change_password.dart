@@ -100,6 +100,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     SizedBox(height: isSmall ? 10 : 20),
                     ResponsiveTextInput(
                       isSmall: isSmall,
+                      isLoading: form.isLoading,
                       controller: form.control("oldPassword"),
                       hint: 'Enter Current password',
                       label: 'Current Password',
@@ -116,6 +117,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     SizedBox(height: isSmall ? 10 : 20),
                     ResponsiveTextInput(
                       isSmall: isSmall,
+                      isLoading: form.isLoading,
                       controller: form.control("newPassword"),
                       hint: 'Enter New password',
                       label: 'New Password',

@@ -31,6 +31,7 @@ class ResponsivePhoneInput extends StatefulWidget {
     this.hint,
     this.label,
     this.errorText,
+    this.isLoading,
     this.country_code,
     this.mode = StyleMode.outline,
     this.fillColor = Colors.white,
@@ -50,6 +51,7 @@ class ResponsivePhoneInput extends StatefulWidget {
   final StyleMode mode;
   final Color borderColor;
   final Color borderFocusColor;
+  final bool? isLoading;
 
   @override
   State<ResponsivePhoneInput> createState() => _ResponsivePhoneInputState();
@@ -107,6 +109,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                     ],
           ),
           child: IntlPhoneField(
+            enabled: widget.isLoading != null ? !widget.isLoading! : true,
             focusNode: _focusNode,
             controller: widget.controller,
             onCountryChanged: widget.onCountryChanged,

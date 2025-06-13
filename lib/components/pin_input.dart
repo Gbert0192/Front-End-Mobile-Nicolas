@@ -8,12 +8,13 @@ class ResponsivePINInput extends StatefulWidget {
   final int pinLength;
   final bool isSmall;
   final TextEditingController? controller;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
   final String? errorText;
   final Color pinFillColor;
   final Color pinBorderColor;
   final Color pinActiveBorderColor;
   final PinInputType inputType;
+  final bool? isLoading;
 
   const ResponsivePINInput({
     super.key,
@@ -21,6 +22,7 @@ class ResponsivePINInput extends StatefulWidget {
     this.pinLength = 6,
     this.controller,
     this.onChanged,
+    this.isLoading,
     this.errorText,
     this.pinFillColor = Colors.white,
     this.pinBorderColor = const Color.fromARGB(255, 182, 182, 182),
@@ -74,6 +76,7 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         PinCodeTextField(
+          enabled: widget.isLoading != null ? !widget.isLoading! : true,
           appContext: context,
           length: widget.pinLength,
           controller: widget.controller,
@@ -127,7 +130,7 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           ),
           enableActiveFill: true,
           onChanged: (val) {
-            widget.onChanged?.call();
+            widget.onChanged?.call(val);
           },
           beforeTextPaste: (text) => false,
         ),

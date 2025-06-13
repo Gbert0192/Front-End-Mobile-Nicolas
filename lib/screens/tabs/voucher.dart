@@ -54,7 +54,7 @@ class VoucherCard extends StatelessWidget {
                     child: Text(
                       voucher.type == VoucherFlag.free
                           ? "Free"
-                          : "Disc ${voucher.type == VoucherFlag.percent ? "${voucher.nominal}%" : (formatCurrency(nominal: voucher.nominal!))}",
+                          : "Disc ${voucher.type == VoucherFlag.percent ? "${(voucher.nominal!.toInt())}%" : (formatCurrency(nominal: voucher.nominal!))}",
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
