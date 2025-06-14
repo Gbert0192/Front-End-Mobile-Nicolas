@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tugas_front_end_nicolas/provider/booking_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
-import 'package:tugas_front_end_nicolas/provider/parking_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
@@ -20,8 +19,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => ParkingLotProvider()),
         ChangeNotifierProvider(create: (_) => ActivityProvider()),
         ChangeNotifierProvider(create: (_) => VoucherProvider()),
-        ChangeNotifierProvider(create: (_) => ParkingProvider()),
-        ChangeNotifierProvider(create: (_) => BookingProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
       child: MaterialApp(
