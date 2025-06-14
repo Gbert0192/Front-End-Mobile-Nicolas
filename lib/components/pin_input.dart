@@ -8,12 +8,11 @@ class ResponsivePINInput extends StatefulWidget {
   final int pinLength;
   final bool isSmall;
   final TextEditingController? controller;
-  final Function(String)? onChanged;
+  final Function(String)? onCompleted;
   final String? errorText;
   final Color pinFillColor;
   final Color pinBorderColor;
   final Color pinActiveBorderColor;
-  final PinInputType inputType;
   final bool? isLoading;
 
   const ResponsivePINInput({
@@ -21,42 +20,26 @@ class ResponsivePINInput extends StatefulWidget {
     required this.isSmall,
     this.pinLength = 6,
     this.controller,
-    this.onChanged,
+    this.onCompleted,
     this.isLoading,
     this.errorText,
     this.pinFillColor = Colors.white,
     this.pinBorderColor = const Color.fromARGB(255, 182, 182, 182),
     this.pinActiveBorderColor = const Color.fromARGB(255, 54, 50, 159),
-    this.inputType = PinInputType.mixed,
   });
 
   @override
-  State<ResponsivePINInput> createState() => _ResponsivePINInputState();
+  State<ResponsivePINInput> createState() => ResponsivePINInputState();
 }
 
-class _ResponsivePINInputState extends State<ResponsivePINInput> {
+class ResponsivePINInputState extends State<ResponsivePINInput> {
   final FocusNode _focusNode = FocusNode();
 
-  TextInputType get _keyboardType {
-    switch (widget.inputType) {
-      case PinInputType.number:
-        return TextInputType.number;
-      case PinInputType.text:
-        return TextInputType.text;
-      case PinInputType.mixed:
-        return TextInputType.visiblePassword;
-    }
-  }
-
-  List<TextInputFormatter> get _inputFormatters {
-    switch (widget.inputType) {
-      case PinInputType.number:
-        return [FilteringTextInputFormatter.digitsOnly];
-      case PinInputType.text:
-        return [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))];
-      case PinInputType.mixed:
-        return [];
-    }
+  void resetField() {
+    Future.delayed(const Duration(milliseconds: 100), () {
+      widget.controller?.clear();
+      _focusNode.requestFocus();
+    });
   }
 
   @override
@@ -83,9 +66,9 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
           focusNode: _focusNode,
           autoFocus: true,
           autoDisposeControllers: false,
-          animationType: AnimationType.fade,
-          keyboardType: _keyboardType,
-          inputFormatters: _inputFormatters,
+          animationType: AnimationType.scale,
+          keyboardType: TextInputType.number,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
             borderRadius: BorderRadius.circular(10),
@@ -129,10 +112,14 @@ class _ResponsivePINInputState extends State<ResponsivePINInput> {
             ],
           ),
           enableActiveFill: true,
-          onChanged: (val) {
-            widget.onChanged?.call(val);
+          onCompleted: (val) {
+            widget.onCompleted?.call(val);
           },
-          beforeTextPaste: (text) => false,
+          beforeTextPaste: (text) {
+            return text != null &&
+                text.length == 6 &&
+                RegExp(r'^\d+$').hasMatch(text);
+          },
         ),
         if (widget.errorText != null)
           Transform.translate(

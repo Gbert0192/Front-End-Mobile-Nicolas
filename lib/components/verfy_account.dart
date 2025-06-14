@@ -23,6 +23,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
   int count = 0;
 
   TextEditingController otpController = TextEditingController();
+  final pinKey = GlobalKey<ResponsivePINInputState>();
 
   String? otpError;
 
@@ -60,34 +61,33 @@ class _VerifyAccountState extends State<VerifyAccount> {
     }
 
     void verifyOTP() {
-      if (otpController.text.length == 6) {
-        setState(() {
-          isSubmitted = true;
-        });
-        final isValid = validate();
-        if (isValid) {
-          setState(() => isLoading = true);
-          Future.delayed(const Duration(seconds: 2), () {
-            final otpValid = forgotPassProvider.validateOTP(otpController.text);
-            if (otpValid) {
-              showFlexibleSnackbar(
-                context,
-                widget.successMessage ??
-                    "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
-              );
-              widget.onSubmit.call();
-            } else {
-              showFlexibleSnackbar(
-                context,
-                "${translate(context, "OTP Invalid", "OTP Tidak Valid", "OTP 无效")}!",
-                type: SnackbarType.error,
-              );
-            }
-            setState(() {
-              isLoading = false;
-            });
+      setState(() {
+        isSubmitted = true;
+      });
+      final isValid = validate();
+      if (isValid) {
+        setState(() => isLoading = true);
+        Future.delayed(const Duration(seconds: 2), () {
+          final otpValid = forgotPassProvider.validateOTP(otpController.text);
+          if (otpValid) {
+            showFlexibleSnackbar(
+              context,
+              widget.successMessage ??
+                  "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
+            );
+            widget.onSubmit.call();
+          } else {
+            pinKey.currentState?.resetField();
+            showFlexibleSnackbar(
+              context,
+              "${translate(context, "OTP Invalid", "OTP Tidak Valid", "OTP 无效")}!",
+              type: SnackbarType.error,
+            );
+          }
+          setState(() {
+            isLoading = false;
           });
-        }
+        });
       }
     }
 
@@ -190,11 +190,11 @@ class _VerifyAccountState extends State<VerifyAccount> {
                 // OTP Field
                 ResponsivePINInput(
                   isLoading: isLoading,
+                  key: pinKey,
                   isSmall: isSmall,
                   errorText: otpError,
                   controller: otpController,
-                  inputType: PinInputType.number,
-                  onChanged: (value) {
+                  onCompleted: (value) {
                     verifyOTP();
                   },
                 ),
@@ -227,7 +227,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
                     GestureDetector(
                       onTap: () {
-                        if (!resending && count == 0) {
+                        if (!resending && count == 0 && !isLoading) {
                           setState(() => resending = true);
                           Future.delayed(const Duration(seconds: 2), () {
                             setState(() {
