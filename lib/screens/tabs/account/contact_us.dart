@@ -127,6 +127,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                           children: [
                             ResponsiveTextInput(
                               isSmall: isSmall,
+                              isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               controller: form.control("fullname"),
                               hint: 'Enter Fullname',
@@ -143,6 +144,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             const SizedBox(height: 10),
                             ResponsiveTextInput(
                               isSmall: isSmall,
+                              isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               controller: form.control("email"),
                               hint: 'Enter Email',
@@ -160,6 +162,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             const SizedBox(height: 10),
                             ResponsivePhoneInput(
                               isSmall: isSmall,
+                              isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               country_code: country_code,
                               controller: form.control("phone"),
@@ -181,13 +184,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             const SizedBox(height: 10),
                             ResponsiveDropdown(
                               isSmall: isSmall,
+                              isLoading: form.isLoading,
                               items: subjects,
                               mode: StyleMode.underline,
                               controller: form.control("subject"),
                               hint: 'Enter Subject',
                               label: 'Subject',
                               errorText: form.error('subject'),
-                              onChanged: () {
+                              onChanged: (val) {
                                 if (form.isSubmitted) {
                                   setState(() {
                                     form.validate();
@@ -198,6 +202,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             const SizedBox(height: 10),
                             ResponsiveTextInput(
                               isSmall: isSmall,
+                              isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               controller: form.control("comment"),
                               hint: 'Enter Comment',

@@ -44,6 +44,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   image_picker: ^1.1.2
   flutter_animate: ^4.5.2
+  flutter_launcher_icons: "^0.14.3"
 
 dev_dependencies:
   flutter_test:
@@ -55,20 +56,13 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
-  flutter_launcher_icons: "^0.14.3"
-  flutter_native_splash: ^2.3.3
-
-flutter_native_splash:
-  color: "#ffffff" # or any background you want
-  android: true
-  ios: true
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/logo.png"
+  image_path: "assets/images/logo.png"
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/adaptive_icon.png"
+  adaptive_icon_foreground: "assets/images/adaptive_icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

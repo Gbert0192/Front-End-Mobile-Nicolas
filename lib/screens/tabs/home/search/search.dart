@@ -209,7 +209,7 @@ class _SearchState extends State<Search> {
               ),
               style: TextStyle(
                 color: Color(0xFFD3D3D3),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w700,
                 fontSize: 24,
               ),
             ),
@@ -289,7 +289,7 @@ class _SearchState extends State<Search> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  mall.spotCount <= 0
+                                  mall.getFreeCount() <= 0
                                       ? translate(
                                         context,
                                         'All Full',
@@ -298,11 +298,11 @@ class _SearchState extends State<Search> {
                                       )
                                       : translate(
                                         context,
-                                        mall.spotCount == 1
-                                            ? '${mall.spotCount} Slot'
-                                            : '${mall.spotCount} Slots',
-                                        '${mall.spotCount} Slot',
-                                        '${mall.spotCount} 个插槽',
+                                        mall.getFreeCount() == 1
+                                            ? '${mall.getFreeCount()} Slot'
+                                            : '${mall.getFreeCount()} Slots',
+                                        '${mall.getFreeCount()} Slot',
+                                        '${mall.getFreeCount()} 个插槽',
                                       ),
                                   style: TextStyle(
                                     color: Color(0xFFDC5F00),

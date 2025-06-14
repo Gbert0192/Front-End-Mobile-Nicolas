@@ -42,6 +42,45 @@ class ParkingLotProvider with ChangeNotifier {
     history.searchHistory.remove(key.trim());
     notifyListeners();
   }
+
+  List<Floor> getAvailableSpot(ParkingLot lot) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].renderAllSlot();
+  }
+
+  String? occupyNearestSpot(ParkingLot lot, User user) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].occupyNearestSpot(user);
+  }
+
+  String? bookSpot({
+    required ParkingLot lot,
+    required User user,
+    required String floorNumber,
+    required String spotCode,
+  }) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].bookSpot(floorNumber, spotCode, user);
+  }
+
+  String? claimSpot({
+    required ParkingLot lot,
+    required User user,
+    required String floorNumber,
+    required String spotCode,
+  }) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].claimSpot(floorNumber, spotCode, user);
+  }
+
+  bool freeSpot({
+    required ParkingLot lot,
+    required String floorNumber,
+    required String spotCode,
+  }) {
+    final index = lots.indexWhere((item) => item == lot);
+    return lots[index].freeSpot(floorNumber, spotCode);
+  }
 }
 
 class UserSearchHistory {

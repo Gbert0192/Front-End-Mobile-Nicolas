@@ -23,6 +23,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
   int count = 0;
 
   TextEditingController otpController = TextEditingController();
+  final pinKey = GlobalKey<ResponsivePINInputState>();
 
   String? otpError;
 
@@ -57,6 +58,37 @@ class _VerifyAccountState extends State<VerifyAccount> {
       });
 
       return errorOtp == null;
+    }
+
+    void verifyOTP() {
+      setState(() {
+        isSubmitted = true;
+      });
+      final isValid = validate();
+      if (isValid) {
+        setState(() => isLoading = true);
+        Future.delayed(const Duration(seconds: 2), () {
+          final otpValid = forgotPassProvider.validateOTP(otpController.text);
+          if (otpValid) {
+            showFlexibleSnackbar(
+              context,
+              widget.successMessage ??
+                  "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
+            );
+            widget.onSubmit.call();
+          } else {
+            pinKey.currentState?.resetField();
+            showFlexibleSnackbar(
+              context,
+              "${translate(context, "OTP Invalid", "OTP Tidak Valid", "OTP 无效")}!",
+              type: SnackbarType.error,
+            );
+          }
+          setState(() {
+            isLoading = false;
+          });
+        });
+      }
     }
 
     return Scaffold(
@@ -157,14 +189,13 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
                 // OTP Field
                 ResponsivePINInput(
+                  isLoading: isLoading,
+                  key: pinKey,
                   isSmall: isSmall,
                   errorText: otpError,
                   controller: otpController,
-                  inputType: PinInputType.number,
-                  onChanged: () {
-                    if (isSubmitted) {
-                      validate();
-                    }
+                  onCompleted: (value) {
+                    verifyOTP();
                   },
                 ),
 
@@ -196,7 +227,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
                     GestureDetector(
                       onTap: () {
-                        if (!resending && count == 0) {
+                        if (!resending && count == 0 && !isLoading) {
                           setState(() => resending = true);
                           Future.delayed(const Duration(seconds: 2), () {
                             setState(() {
@@ -295,37 +326,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                 ResponsiveButton(
                   isSmall: isSmall,
                   isLoading: isLoading,
-                  onPressed: () {
-                    setState(() {
-                      isSubmitted = true;
-                    });
-                    final isValid = validate();
-                    if (isValid) {
-                      setState(() => isLoading = true);
-                      Future.delayed(const Duration(seconds: 2), () {
-                        final otpValid = forgotPassProvider.validateOTP(
-                          otpController.text,
-                        );
-                        if (otpValid) {
-                          showFlexibleSnackbar(
-                            context,
-                            widget.successMessage ??
-                                "${translate(context, "OTP Valid", "OTP Valid", "OTP 有效")}!",
-                          );
-                          widget.onSubmit.call();
-                        } else {
-                          showFlexibleSnackbar(
-                            context,
-                            "${translate(context, "OTP Invalid", "OTP Tidak Valid", "OTP 无效")}!",
-                            type: SnackbarType.error,
-                          );
-                        }
-                        setState(() {
-                          isLoading = false;
-                        });
-                      });
-                    }
-                  },
+                  onPressed: verifyOTP,
                   text: translate(context, "Continue", "Lanjut", "继续"),
                 ),
                 SizedBox(height: isSmall ? 10 : 20),

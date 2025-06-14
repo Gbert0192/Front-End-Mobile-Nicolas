@@ -11,6 +11,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     this.label,
     this.hint,
     this.errorText,
+    this.isLoading,
     this.leading,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -21,7 +22,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
   final bool isSmall;
   final List<Map<String, String>> items;
   final TextEditingController? controller;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
   final String? label;
   final String? hint;
   final String? errorText;
@@ -30,6 +31,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
   final Color fillColor;
   final Color borderColor;
   final Color borderFocusColor;
+  final bool? isLoading;
 
   @override
   State<ResponsiveDropdown<T>> createState() => _ResponsiveDropdownState<T>();
@@ -76,98 +78,102 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
   }
 
   Future<void> _showDropdownMenu() async {
-    setState(() {
-      _isFocused = true;
-      _isMenuOpen = true;
-    });
+    if (widget.isLoading != null ? !widget.isLoading! : true) {
+      setState(() {
+        _isFocused = true;
+        _isMenuOpen = true;
+      });
 
-    final RenderBox renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
+      final RenderBox renderBox = context.findRenderObject() as RenderBox;
+      final size = renderBox.size;
+      final offset = renderBox.localToGlobal(Offset.zero);
 
-    final selectedValue = await showMenu<String>(
-      context: context,
-      position: RelativeRect.fromLTRB(
-        offset.dx,
-        offset.dy + size.height,
-        offset.dx + size.width,
-        offset.dy + size.height + 200,
-      ),
-      constraints: BoxConstraints(minWidth: size.width, maxWidth: size.width),
-      items:
-          widget.items.map((item) {
-            final isSelected = _selectedValue == item['value'];
-            return PopupMenuItem<String>(
-              value: item['value'],
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 16,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected ? widget.borderColor.withAlpha(20) : null,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item['label']!,
-                        style: TextStyle(
-                          color:
-                              isSelected
-                                  ? widget.borderColor
-                                  : Colors.grey[800],
-                          fontWeight:
-                              isSelected ? FontWeight.w500 : FontWeight.normal,
-                          fontSize: widget.isSmall ? 16 : 18,
+      final selectedValue = await showMenu<String>(
+        context: context,
+        position: RelativeRect.fromLTRB(
+          offset.dx,
+          offset.dy + size.height,
+          offset.dx + size.width,
+          offset.dy + size.height + 200,
+        ),
+        constraints: BoxConstraints(minWidth: size.width, maxWidth: size.width),
+        items:
+            widget.items.map((item) {
+              final isSelected = _selectedValue == item['value'];
+              return PopupMenuItem<String>(
+                value: item['value'],
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected ? widget.borderColor.withAlpha(20) : null,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item['label']!,
+                          style: TextStyle(
+                            color:
+                                isSelected
+                                    ? widget.borderColor
+                                    : Colors.grey[800],
+                            fontWeight:
+                                isSelected
+                                    ? FontWeight.w500
+                                    : FontWeight.normal,
+                            fontSize: widget.isSmall ? 16 : 18,
+                          ),
                         ),
                       ),
-                    ),
-                    if (isSelected)
-                      Icon(Icons.check, color: widget.borderColor, size: 20),
-                  ],
+                      if (isSelected)
+                        Icon(Icons.check, color: widget.borderColor, size: 20),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    );
+              );
+            }).toList(),
+        elevation: 8,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      );
 
-    setState(() {
-      _isFocused = false;
-      _isMenuOpen = false;
-    });
+      setState(() {
+        _isFocused = false;
+        _isMenuOpen = false;
+      });
 
-    if (selectedValue != null) {
-      // If the same item is selected again, deselect it
-      if (_selectedValue == selectedValue) {
-        setState(() {
-          _selectedValue = null;
-          _selectedLabel = null;
-          if (widget.controller != null) {
-            widget.controller!.text = '';
-          }
-        });
-      } else {
-        // Select the new item
-        final selectedItem = widget.items.firstWhere(
-          (item) => item['value'] == selectedValue,
-        );
+      if (selectedValue != null) {
+        // If the same item is selected again, deselect it
+        if (_selectedValue == selectedValue) {
+          setState(() {
+            _selectedValue = null;
+            _selectedLabel = null;
+            if (widget.controller != null) {
+              widget.controller!.text = '';
+            }
+          });
+        } else {
+          // Select the new item
+          final selectedItem = widget.items.firstWhere(
+            (item) => item['value'] == selectedValue,
+          );
 
-        setState(() {
-          _selectedValue = selectedValue;
-          _selectedLabel = selectedItem['label'];
-          if (widget.controller != null) {
-            widget.controller!.text = selectedValue;
-          }
-        });
+          setState(() {
+            _selectedValue = selectedValue;
+            _selectedLabel = selectedItem['label'];
+            if (widget.controller != null) {
+              widget.controller!.text = selectedValue;
+            }
+          });
+        }
+
+        widget.onChanged?.call(selectedValue);
       }
-
-      widget.onChanged?.call();
     }
   }
 
@@ -209,6 +215,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
             onTap: _showDropdownMenu,
             child: InputDecorator(
               decoration: InputDecoration(
+                enabled: widget.isLoading != null ? !widget.isLoading! : true,
                 labelText: widget.label,
                 hintText: widget.hint,
                 hintStyle: TextStyle(color: _getColor()),

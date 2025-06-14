@@ -12,6 +12,7 @@ class ResponsiveTimePicker extends StatefulWidget {
     this.label,
     this.hint,
     this.errorText,
+    this.isLoading,
     this.leading,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -22,7 +23,7 @@ class ResponsiveTimePicker extends StatefulWidget {
 
   final bool isSmall;
   final TextEditingController? controller;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
   final String? label;
   final String? hint;
   final String? errorText;
@@ -32,6 +33,7 @@ class ResponsiveTimePicker extends StatefulWidget {
   final Color borderFocusColor;
   final StyleMode mode;
   final DatePickerType type;
+  final bool? isLoading;
 
   @override
   State<ResponsiveTimePicker> createState() => _ResponsiveTimePickerState();
@@ -83,7 +85,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
             "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}";
         _selectedDate = formattedTime;
         widget.controller?.text = formattedTime;
-        widget.onChanged?.call();
+        widget.onChanged?.call(formattedTime);
       }
       return;
     }
@@ -149,7 +151,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
 
       _selectedDate = formatted;
       widget.controller?.text = formatted;
-      widget.onChanged?.call();
+      widget.onChanged?.call(formatted);
     }
   }
 
@@ -209,12 +211,16 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  setState(() => _isFocused = true);
-                  await _pickDate();
-                  setState(() => _isFocused = false);
+                  if (widget.isLoading != null ? !widget.isLoading! : true) {
+                    setState(() => _isFocused = true);
+                    await _pickDate();
+                    setState(() => _isFocused = false);
+                  }
                 },
                 child: InputDecorator(
                   decoration: InputDecoration(
+                    enabled:
+                        widget.isLoading != null ? !widget.isLoading! : true,
                     labelText: widget.label,
                     hintText: widget.hint,
                     hintStyle: TextStyle(color: _getColor()),
