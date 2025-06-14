@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup_detail.dart';
 
 class TopUpPage extends StatelessWidget {
-  TopUpPage({super.key});
+  const TopUpPage({super.key});
 
   void _navigateToDetail(
     BuildContext context, {

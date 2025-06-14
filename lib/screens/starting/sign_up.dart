@@ -62,7 +62,6 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              elevation: 0,
             ),
             SliverToBoxAdapter(
               child: Padding(
