@@ -20,14 +20,14 @@ class StepModel {
   });
 }
 
-class StepperScreens extends StatefulWidget {
-  const StepperScreens({super.key});
+class StepperScreen extends StatefulWidget {
+  const StepperScreen({super.key});
 
   @override
-  _StepperScreensState createState() => _StepperScreensState();
+  _StepperScreenState createState() => _StepperScreenState();
 }
 
-class _StepperScreensState extends State<StepperScreens> {
+class _StepperScreenState extends State<StepperScreen> {
   final PageController _controller = PageController();
 
   int currentPage = 0;

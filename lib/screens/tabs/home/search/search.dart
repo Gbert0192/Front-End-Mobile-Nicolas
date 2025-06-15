@@ -109,38 +109,45 @@ class _SearchState extends State<Search> {
                 },
               ),
               const SizedBox(height: 16),
-              Padding(
-                padding: EdgeInsets.only(left: 12),
-                child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    isSubmited
-                        ? translate(
-                          context,
-                          'Search Result',
-                          'Hasil Pencarian',
-                          '搜索结果',
-                        )
-                        : translate(context, 'Recent', 'Terkini', '最近'),
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: isSmall ? 20 : 30,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child:
-                    isLoading
-                        ? _buildLoadingState(context)
-                        : isSubmited
-                        ? _buildSearchResults(malls, context)
-                        : _buildSearchHistory(
-                          history,
-                          lotProvider,
-                          user,
-                          context,
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          isSubmited
+                              ? translate(
+                                context,
+                                'Search Result',
+                                'Hasil Pencarian',
+                                '搜索结果',
+                              )
+                              : translate(context, 'Recent', 'Terkini', '最近'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: isSmall ? 20 : 30,
+                          ),
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child:
+                          isLoading
+                              ? _buildLoadingState(context)
+                              : isSubmited
+                              ? _buildSearchResults(malls, context)
+                              : _buildSearchHistory(
+                                history,
+                                lotProvider,
+                                user,
+                                context,
+                              ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -189,6 +196,7 @@ class _SearchState extends State<Search> {
   Widget _buildSearchResults(List<ParkingLot> malls, BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
     if (malls.isEmpty) {
       return Center(
         child: Column(
@@ -231,13 +239,13 @@ class _SearchState extends State<Search> {
 
     return Column(
       children:
-          malls.map((mall) {
+          malls.map((item) {
             return GestureDetector(
               onTap:
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SearchDetail(mall: mall),
+                      builder: (context) => SearchDetail(mall: item),
                     ),
                   ),
               child: Container(
@@ -256,7 +264,7 @@ class _SearchState extends State<Search> {
                       height: 80,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(mall.image, fit: BoxFit.cover),
+                        child: Image.asset(item.image, fit: BoxFit.cover),
                       ),
                     ),
                     SizedBox(width: 12),
@@ -271,7 +279,7 @@ class _SearchState extends State<Search> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  mall.name,
+                                  item.name,
                                   style: TextStyle(
                                     color: Color(0xFF1F1E5B),
                                     fontWeight: FontWeight.w600,
@@ -289,7 +297,7 @@ class _SearchState extends State<Search> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  mall.getFreeCount() <= 0
+                                  item.getFreeCount() <= 0
                                       ? translate(
                                         context,
                                         'All Full',
@@ -298,11 +306,11 @@ class _SearchState extends State<Search> {
                                       )
                                       : translate(
                                         context,
-                                        mall.getFreeCount() == 1
-                                            ? '${mall.getFreeCount()} Slot'
-                                            : '${mall.getFreeCount()} Slots',
-                                        '${mall.getFreeCount()} Slot',
-                                        '${mall.getFreeCount()} 个插槽',
+                                        item.getFreeCount() == 1
+                                            ? '${item.getFreeCount()} Slot'
+                                            : '${item.getFreeCount()} Slots',
+                                        '${item.getFreeCount()} Slot',
+                                        '${item.getFreeCount()} 个插槽',
                                       ),
                                   style: TextStyle(
                                     color: Color(0xFFDC5F00),
@@ -314,7 +322,7 @@ class _SearchState extends State<Search> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            mall.address,
+                            item.address,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.black87,
@@ -327,7 +335,7 @@ class _SearchState extends State<Search> {
                               Text(
                                 formatCurrency(
                                   nominal:
-                                      mall.starterPrice ?? mall.hourlyPrice,
+                                      item.starterPrice ?? item.hourlyPrice,
                                 ),
                                 style: TextStyle(
                                   color: Color(0xFFDC5F00),
@@ -363,6 +371,7 @@ class _SearchState extends State<Search> {
   ) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
     if (history.isEmpty) {
       return Center(
         child: Column(
@@ -400,55 +409,47 @@ class _SearchState extends State<Search> {
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: history.length,
-            itemBuilder: (context, index) {
-              final query = history[index];
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: isSmall ? 0 : 4),
-                child: ListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                  title: Text(
-                    query,
-                    style: TextStyle(
-                      fontSize: isSmall ? 16 : 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey.shade500,
-                    ),
+      children:
+          history.map((item) {
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: isSmall ? 0 : 4),
+              child: ListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                title: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: isSmall ? 16 : 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade500,
                   ),
-                  trailing: GestureDetector(
-                    onTap: () {
-                      provider.deleteHistory(user, query);
-                    },
-                    child: Container(
-                      width: isSmall ? 24 : 28,
-                      height: isSmall ? 24 : 28,
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade600,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.close_rounded,
-                        size: isSmall ? 15 : 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  onTap: () async {
-                    if (!isLoading) {
-                      controller.text = query;
-                      await searchMall(provider, query, user);
-                    }
-                  },
                 ),
-              );
-            },
-          ),
-        ),
-      ],
+                trailing: GestureDetector(
+                  onTap: () {
+                    provider.deleteHistory(user, item);
+                  },
+                  child: Container(
+                    width: isSmall ? 24 : 28,
+                    height: isSmall ? 24 : 28,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade600,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.close_rounded,
+                      size: isSmall ? 15 : 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                onTap: () async {
+                  if (!isLoading) {
+                    controller.text = item;
+                    await searchMall(provider, item, user);
+                  }
+                },
+              ),
+            );
+          }).toList(),
     );
   }
 }
