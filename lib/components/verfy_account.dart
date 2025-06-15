@@ -92,173 +92,205 @@ class _VerifyAccountState extends State<VerifyAccount> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                padding: const EdgeInsets.all(12),
-                elevation: 1,
-              ),
-              child: const Icon(Icons.arrow_back, color: Colors.black),
-            ),
-          ],
-        ),
-      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/starting/otp_send.png',
-                  height: isSmall ? 180 : 300,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 2,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.all(12),
+                      elevation: 1,
+                    ),
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
+                child: Column(
                   children: [
-                    Text(
-                      translate(context, "Verify", "Verifikasi", "验证"),
-                      style: TextStyle(
-                        fontSize: isSmall ? 20 : 30,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                    Image.asset(
+                      'assets/images/starting/otp_send.png',
+                      height: isSmall ? 180 : 300,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          translate(context, "Verify", "Verifikasi", "验证"),
+                          style: TextStyle(
+                            fontSize: isSmall ? 20 : 30,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(24, 45, 163, 0.25),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      translate(context, "Account", "Akun", "账户"),
-                      style: TextStyle(
-                        fontSize: isSmall ? 20 : 30,
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          translate(context, "Account", "Akun", "账户"),
+                          style: TextStyle(
+                            fontSize: isSmall ? 20 : 30,
+                            fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(24, 45, 163, 0.25),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
 
-                Column(
-                  children: [
-                    Text(
-                      translate(
-                        context,
-                        "Please enter the code sent to",
-                        "Silakan masukkan kode yang dikirim ke",
-                        "请输入发送至",
-                      ),
-                      style: TextStyle(
-                        fontSize: isSmall ? 15 : 18,
-                        color: Color(0xFFBABABA),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: isSmall ? 15 : 18,
-                        color: Color(0xFFBABABA),
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-
-                SizedBox(height: isSmall ? 10 : 20),
-
-                // OTP Field
-                ResponsivePINInput(
-                  isLoading: isLoading,
-                  key: pinKey,
-                  isSmall: isSmall,
-                  errorText: otpError,
-                  controller: otpController,
-                  onCompleted: (value) {
-                    verifyOTP();
-                  },
-                ),
-
-                SizedBox(height: isSmall ? 18 : 30),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      translate(
-                        context,
-                        "OTP not received?",
-                        "OTP tidak diterima?",
-                        "没有收到 OTP？",
-                      ),
-                      style: TextStyle(
-                        fontSize: isSmall ? 15 : 18,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
+                    Column(
+                      children: [
+                        Text(
+                          translate(
+                            context,
+                            "Please enter the code sent to",
+                            "Silakan masukkan kode yang dikirim ke",
+                            "请输入发送至",
                           ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: isSmall ? 15 : 18,
+                            color: Color(0xFFBABABA),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        Text(
+                          email,
+                          style: TextStyle(
+                            fontSize: isSmall ? 15 : 18,
+                            color: Color(0xFFBABABA),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 5),
 
-                    GestureDetector(
-                      onTap: () {
-                        if (!resending && count == 0 && !isLoading) {
-                          setState(() => resending = true);
-                          Future.delayed(const Duration(seconds: 2), () {
-                            setState(() {
-                              resending = false;
-                              count = 10;
-                            });
-                            showFlexibleSnackbar(
-                              context,
-                              "${translate(context, "Your OTP is", "OTP Anda adalah", "您的一次性密码是")} ${forgotPassProvider.generateOTP()}",
-                            );
-                          });
-                        }
+                    SizedBox(height: isSmall ? 10 : 20),
+
+                    // OTP Field
+                    ResponsivePINInput(
+                      isLoading: isLoading,
+                      key: pinKey,
+                      isSmall: isSmall,
+                      errorText: otpError,
+                      controller: otpController,
+                      onCompleted: (value) {
+                        verifyOTP();
                       },
-                      child:
-                          resending
-                              ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: isSmall ? 16 : 20,
-                                    height: isSmall ? 16 : 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Color(0xFF1879D4),
+                    ),
+
+                    SizedBox(height: isSmall ? 18 : 30),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          translate(
+                            context,
+                            "OTP not received?",
+                            "OTP tidak diterima?",
+                            "没有收到 OTP？",
+                          ),
+                          style: TextStyle(
+                            fontSize: isSmall ? 15 : 18,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(24, 45, 163, 0.25),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(width: 5),
+
+                        GestureDetector(
+                          onTap: () {
+                            if (!resending && count == 0 && !isLoading) {
+                              setState(() => resending = true);
+                              Future.delayed(const Duration(seconds: 2), () {
+                                setState(() {
+                                  resending = false;
+                                  count = 10;
+                                });
+                                showFlexibleSnackbar(
+                                  context,
+                                  "${translate(context, "Your OTP is", "OTP Anda adalah", "您的一次性密码是")} ${forgotPassProvider.generateOTP()}",
+                                );
+                              });
+                            }
+                          },
+                          child:
+                              resending
+                                  ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        width: isSmall ? 16 : 20,
+                                        height: isSmall ? 16 : 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Color(0xFF1879D4),
+                                              ),
+                                        ),
                                       ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "${translate(context, "Resending", "Mengirim ulang", "重新发送")}...",
+                                        style: TextStyle(
+                                          fontSize: isSmall ? 15 : 18,
+                                          color: Color(0xFF1879D4),
+                                          shadows: [
+                                            Shadow(
+                                              offset: Offset(4, 4),
+                                              blurRadius: 6.0,
+                                              color: Color.fromRGBO(
+                                                24,
+                                                45,
+                                                163,
+                                                0.25,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                  : count == 0
+                                  ? Text(
+                                    translate(
+                                      context,
+                                      "Resend OTP",
+                                      "Kirim ulang",
+                                      "重新发送OTP",
                                     ),
-                                  ),
-                                  SizedBox(width: 5),
-                                  Text(
-                                    "${translate(context, "Resending", "Mengirim ulang", "重新发送")}...",
                                     style: TextStyle(
                                       fontSize: isSmall ? 15 : 18,
                                       color: Color(0xFF1879D4),
@@ -275,64 +307,44 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                         ),
                                       ],
                                     ),
+                                    textAlign: TextAlign.center,
+                                  )
+                                  : CountdownTimer(
+                                    isSmall: isSmall,
+                                    countLong: count,
+                                    countDownFunction:
+                                        (int remain) => setState(() {
+                                          count = remain;
+                                        }),
+                                    color: Color(0xFF1879D4),
                                   ),
-                                ],
-                              )
-                              : count == 0
-                              ? Text(
-                                translate(
-                                  context,
-                                  "Resend OTP",
-                                  "Kirim ulang",
-                                  "重新发送OTP",
-                                ),
-                                style: TextStyle(
-                                  fontSize: isSmall ? 15 : 18,
-                                  color: Color(0xFF1879D4),
-                                  shadows: [
-                                    Shadow(
-                                      offset: Offset(4, 4),
-                                      blurRadius: 6.0,
-                                      color: Color.fromRGBO(24, 45, 163, 0.25),
-                                    ),
-                                  ],
-                                ),
-                                textAlign: TextAlign.center,
-                              )
-                              : CountdownTimer(
-                                isSmall: isSmall,
-                                countLong: count,
-                                countDownFunction:
-                                    (int remain) => setState(() {
-                                      count = remain;
-                                    }),
-                                color: Color(0xFF1879D4),
-                              ),
+                        ),
+                      ],
                     ),
+
+                    SizedBox(
+                      height:
+                          isSmall
+                              ? otpError != null
+                                  ? 95
+                                  : 100
+                              : otpError != null
+                              ? 170
+                              : 180,
+                    ),
+
+                    ResponsiveButton(
+                      isSmall: isSmall,
+                      isLoading: isLoading,
+                      onPressed: verifyOTP,
+                      text: translate(context, "Continue", "Lanjut", "继续"),
+                    ),
+                    SizedBox(height: isSmall ? 10 : 20),
                   ],
                 ),
-
-                SizedBox(
-                  height:
-                      isSmall
-                          ? otpError != null
-                              ? 95
-                              : 100
-                          : otpError != null
-                          ? 170
-                          : 180,
-                ),
-
-                ResponsiveButton(
-                  isSmall: isSmall,
-                  isLoading: isLoading,
-                  onPressed: verifyOTP,
-                  text: translate(context, "Continue", "Lanjut", "继续"),
-                ),
-                SizedBox(height: isSmall ? 10 : 20),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

@@ -40,194 +40,199 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     final isSmall = size.height < 700;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: EdgeInsets.only(left: 12.0),
-          child: Material(
-            color: Colors.white,
-            shape: const CircleBorder(),
-            elevation: 2,
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                backgroundColor: Colors.white,
-                padding: const EdgeInsets.all(12),
-                elevation: 1,
-              ),
-              child: const Icon(Icons.arrow_back, color: Colors.black),
-            ),
-          ),
-        ),
-        elevation: 0,
-      ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
-            child: Column(
-              children: [
-                Image.asset(
-                  'assets/images/starting/forget_pass.png',
-                  height: isSmall ? 180 : 300,
-                ),
-                SizedBox(height: isSmall ? 10 : 20),
-                Text(
-                  translate(
-                    context,
-                    'Forgot Your Password? Enter Your Email To Get OTP!',
-                    "Lupa Kata Sandi Anda? Masukkan Email Anda untuk Mendapatkan OTP",
-                    "忘记密码？输入邮箱地址获取一次性密码",
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              leading: Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  elevation: 2,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.all(12),
+                      elevation: 1,
+                    ),
+                    child: const Icon(Icons.arrow_back, color: Colors.black),
                   ),
-                  style: TextStyle(
-                    fontSize: isSmall ? 20 : 24,
-                    color: Color(0xFF4083FF),
-                    fontWeight: FontWeight.w600,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(4, 4),
-                        blurRadius: 6.0,
-                        color: Color.fromRGBO(64, 131, 255, 0.25),
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: isSmall ? 15 : 30),
-
-                // Email Field
-                Column(
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: isSmall ? 12 : 24.0),
+                child: Column(
                   children: [
-                    ResponsiveTextInput(
+                    Image.asset(
+                      'assets/images/starting/forget_pass.png',
+                      height: isSmall ? 180 : 300,
+                    ),
+                    SizedBox(height: isSmall ? 10 : 20),
+                    Text(
+                      translate(
+                        context,
+                        'Forgot Your Password? Enter Your Email To Get OTP!',
+                        "Lupa Kata Sandi Anda? Masukkan Email Anda untuk Mendapatkan OTP",
+                        "忘记密码？输入邮箱地址获取一次性密码",
+                      ),
+                      style: TextStyle(
+                        fontSize: isSmall ? 20 : 24,
+                        color: Color(0xFF4083FF),
+                        fontWeight: FontWeight.w600,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(4, 4),
+                            blurRadius: 6.0,
+                            color: Color.fromRGBO(64, 131, 255, 0.25),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: isSmall ? 15 : 30),
+
+                    // Email Field
+                    Column(
+                      children: [
+                        ResponsiveTextInput(
+                          isSmall: isSmall,
+                          isLoading: form.isLoading,
+                          controller: form.control("email"),
+                          hint: 'Enter your email',
+                          label: 'Email',
+                          type: TextInputTypes.email,
+                          errorText: form.error("email"),
+                          onChanged: (value) {
+                            if (form.isSubmitted) {
+                              setState(() {
+                                form.validate();
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: isSmall ? 15 : 30),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Any Questions?',
+                          style: TextStyle(
+                            fontSize: isSmall ? 15 : 18,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(24, 45, 163, 0.25),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          'Chat With Us',
+                          style: TextStyle(
+                            fontSize: isSmall ? 15 : 18,
+                            color: Color(0xFF1879D4),
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(24, 45, 163, 0.25),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(
+                      height:
+                          isSmall
+                              ? 120
+                              : form.error('email') == null
+                              ? 200
+                              : 185,
+                    ),
+
+                    ResponsiveButton(
                       isSmall: isSmall,
                       isLoading: form.isLoading,
-                      controller: form.control("email"),
-                      hint: 'Enter your email',
-                      label: 'Email',
-                      type: TextInputTypes.email,
-                      errorText: form.error("email"),
-                      onChanged: (value) {
-                        if (form.isSubmitted) {
-                          setState(() {
-                            form.validate();
+                      onPressed: () {
+                        bool isValid = false;
+                        setState(() {
+                          form.isSubmitted = true;
+                          isValid = form.validate();
+                        });
+                        if (isValid) {
+                          setState(() => form.isLoading = true);
+                          Future.delayed(const Duration(seconds: 2), () {
+                            User? user = userProvider.findUserByEmail(
+                              form.control("email").text,
+                            );
+                            if (user == null) {
+                              showFlexibleSnackbar(
+                                context,
+                                "Email not found",
+                                type: SnackbarType.error,
+                              );
+                              setState(() => form.isLoading = false);
+                              return;
+                            }
+                            otpProvider.email = form.control("email").text;
+                            otpProvider.generateOTP();
+                            setState(() => form.isLoading = false);
+                            showFlexibleSnackbar(
+                              context,
+                              "Your OTP is ${otpProvider.OTP}",
+                            );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => VerifyAccount(
+                                      onSubmit: () {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => LandingScreen(),
+                                          ),
+                                        );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    ResetPassword(user),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                              ),
+                            );
                           });
                         }
                       },
+                      text: translate(context, "Continue", "Lanjut", "继续"),
                     ),
+                    SizedBox(height: isSmall ? 10 : 20),
                   ],
                 ),
-
-                SizedBox(height: isSmall ? 15 : 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Any Questions?',
-                      style: TextStyle(
-                        fontSize: isSmall ? 15 : 18,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      'Chat With Us',
-                      style: TextStyle(
-                        fontSize: isSmall ? 15 : 18,
-                        color: Color(0xFF1879D4),
-                        shadows: [
-                          Shadow(
-                            offset: Offset(4, 4),
-                            blurRadius: 6.0,
-                            color: Color.fromRGBO(24, 45, 163, 0.25),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-
-                SizedBox(
-                  height:
-                      isSmall
-                          ? 120
-                          : form.error('email') == null
-                          ? 200
-                          : 185,
-                ),
-
-                ResponsiveButton(
-                  isSmall: isSmall,
-                  isLoading: form.isLoading,
-                  onPressed: () {
-                    bool isValid = false;
-                    setState(() {
-                      form.isSubmitted = true;
-                      isValid = form.validate();
-                    });
-                    if (isValid) {
-                      setState(() => form.isLoading = true);
-                      Future.delayed(const Duration(seconds: 2), () {
-                        User? user = userProvider.findUserByEmail(
-                          form.control("email").text,
-                        );
-                        if (user == null) {
-                          showFlexibleSnackbar(
-                            context,
-                            "Email not found",
-                            type: SnackbarType.error,
-                          );
-                          setState(() => form.isLoading = false);
-                          return;
-                        }
-                        otpProvider.email = form.control("email").text;
-                        otpProvider.generateOTP();
-                        setState(() => form.isLoading = false);
-                        showFlexibleSnackbar(
-                          context,
-                          "Your OTP is ${otpProvider.OTP}",
-                        );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) => VerifyAccount(
-                                  onSubmit: () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LandingScreen(),
-                                      ),
-                                    );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => ResetPassword(user),
-                                      ),
-                                    );
-                                  },
-                                ),
-                          ),
-                        );
-                      });
-                    }
-                  },
-                  text: translate(context, "Continue", "Lanjut", "继续"),
-                ),
-                SizedBox(height: isSmall ? 10 : 20),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

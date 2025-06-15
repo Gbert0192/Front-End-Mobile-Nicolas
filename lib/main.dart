@@ -8,6 +8,7 @@ import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 
 void main() async {
   runApp(
@@ -57,7 +58,7 @@ class _MainAppState extends State<MainApp> {
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
-          pageBuilder: (_, __, ___) => StepperScreens(),
+          pageBuilder: (_, __, ___) => StepperScreen(),
           transitionsBuilder: (_, animation, __, child) {
             var tween = Tween(
               begin: const Offset(0, -1),
