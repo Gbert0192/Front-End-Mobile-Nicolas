@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/components/button.dart';
-import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking_qr.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/payment_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -223,169 +223,195 @@ class SearchDetail extends StatelessWidget {
 
                     SizedBox(height: isSmall ? 15 : 20),
 
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: isSmall ? 20 : 0,
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xFFEDF4FF)),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromRGBO(0, 0, 0, 0.25),
-                            blurRadius: 8,
-                            offset: Offset(0, 4),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 20),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFEDF4FF)),
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 8,
+                                offset: Offset(0, 4),
+                              ),
+                            ],
+                            color: Color(0xFFEDF4FF),
                           ),
-                        ],
-                        color: Color(0xFFEDF4FF),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: Column(
                             children: [
-                              Text(
-                                formatCurrency(
-                                  nominal:
-                                      mall.starterPrice ?? mall.hourlyPrice,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    formatCurrency(nominal: mall.starterPrice),
+                                    style: TextStyle(
+                                      color: Color(0xFF4D5DFA),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                    ),
+                                  ),
+                                  Text(
+                                    translate(
+                                      context,
+                                      ' / hour',
+                                      ' / jam',
+                                      ' / 小时',
+                                    ),
+                                    style: TextStyle(
+                                      color: Color(0xFF908C8C),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 20,
+                                  horizontal: 30,
                                 ),
-                                style: TextStyle(
-                                  color: Color(0xFF4D5DFA),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: isSmall ? 20 : 25,
-                                  shadows: [
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                  boxShadow: [
                                     BoxShadow(
-                                      color: const Color.fromRGBO(
-                                        0,
-                                        0,
-                                        0,
-                                        0.25,
-                                      ),
+                                      color: Colors.black12,
                                       blurRadius: 8,
                                       offset: Offset(0, 4),
                                     ),
                                   ],
+                                  color: Colors.white,
                                 ),
-                              ),
-                              Text(
-                                translate(
-                                  context,
-                                  ' / hour',
-                                  ' / jam',
-                                  ' / 小时',
-                                ),
-                                style: TextStyle(
-                                  color: Color(0xFF908C8C),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: isSmall ? 15 : 18,
-                                  shadows: [
-                                    BoxShadow(
-                                      color: const Color.fromRGBO(
-                                        0,
-                                        0,
-                                        0,
-                                        0.25,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      translate(
+                                        context,
+                                        '1st hour',
+                                        'Jam pertama',
+                                        '第一个小时',
                                       ),
-                                      blurRadius: 8,
-                                      offset: Offset(0, 4),
+                                      style: TextStyle(
+                                        color: Color(0xFF908C8C),
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      formatCurrency(nominal: mall.hourlyPrice),
+                                      style: TextStyle(
+                                        color: Color(0xFF5C5959),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: isSmall ? 10 : 20,
-                              horizontal: isSmall ? 20 : 30,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 8,
-                                  offset: Offset(0, 4),
-                                ),
-                              ],
-                              color: Colors.white,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 7,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFFFFA35E)),
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                color: Color(0xFFFFA35E),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              PaymentQrPage(mall: mall),
+                                    ),
+                                  );
+                                },
+                                child: Text(
                                   translate(
                                     context,
-                                    '1st hour',
-                                    'Jam pertama',
-                                    '第一个小时',
+                                    'Enter Parking',
+                                    'Masuk Parkir',
+                                    '进入停车场',
                                   ),
                                   style: TextStyle(
-                                    color: Color(0xFF908C8C),
-                                    fontSize: isSmall ? 14 : 17,
-                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                Text(
-                                  formatCurrency(
-                                    nominal:
-                                        mall.starterPrice ?? mall.hourlyPrice,
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 7,
+                                horizontal: 20,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Color(0xFF7573EE)),
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                                color: Color(0xFF7573EE),
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              BookingDetailPage(mall: mall),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  translate(
+                                    context,
+                                    'Book Parking',
+                                    'Pesan Parkir',
+                                    '预订停车位',
                                   ),
                                   style: TextStyle(
-                                    color: Color(0xFF5C5959),
-                                    fontSize: isSmall ? 18 : 20,
-                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: isSmall ? 15 : 20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ResponsiveButton(
-                            isSmall: isSmall,
-                            fontWeight: FontWeight.w600,
-                            backgroundColor: Color(0xFFFFA35E),
-                            text: translate(
-                              context,
-                              'Enter Parking',
-                              'Masuk Parkir',
-                              '进入停车场',
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: ResponsiveButton(
-                            isSmall: isSmall,
-                            fontWeight: FontWeight.w600,
-                            backgroundColor: Color(0xFF7573EE),
-                            text: translate(
-                              context,
-                              'Book Parking',
-                              'Pesan Parkir',
-                              '预订停车位',
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
