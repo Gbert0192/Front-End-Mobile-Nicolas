@@ -108,46 +108,19 @@ class _SearchState extends State<Search> {
                   }
                 },
               ),
-              const SizedBox(height: 16),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 12),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          isSubmited
-                              ? translate(
-                                context,
-                                'Search Result',
-                                'Hasil Pencarian',
-                                '搜索结果',
-                              )
-                              : translate(context, 'Recent', 'Terkini', '最近'),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: isSmall ? 20 : 30,
-                          ),
+
+              Expanded(
+                child:
+                    isLoading
+                        ? _buildLoadingState(context)
+                        : isSubmited
+                        ? _buildSearchResults(malls, context)
+                        : _buildSearchHistory(
+                          history,
+                          lotProvider,
+                          user,
+                          context,
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Expanded(
-                      child:
-                          isLoading
-                              ? _buildLoadingState(context)
-                              : isSubmited
-                              ? _buildSearchResults(malls, context)
-                              : _buildSearchHistory(
-                                history,
-                                lotProvider,
-                                user,
-                                context,
-                              ),
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -196,56 +169,72 @@ class _SearchState extends State<Search> {
   Widget _buildSearchResults(List<ParkingLot> malls, BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
-
     if (malls.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/empty/search_where.png',
-              width: isSmall ? 240 : 300,
-              height: isSmall ? 240 : 300,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              translate(
-                context,
-                'Search not found',
-                'Pencarian tidak ditemukan',
-                '搜索没找到',
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/empty/search_where.png',
+                width: isSmall ? 240 : 300,
+                height: isSmall ? 240 : 300,
               ),
-              style: TextStyle(
-                color: Color(0xFFD3D3D3),
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
+              const SizedBox(height: 16),
+              Text(
+                translate(
+                  context,
+                  'Search not found',
+                  'Pencarian tidak ditemukan',
+                  '搜索没找到',
+                ),
+                style: TextStyle(
+                  color: Color(0xFFD3D3D3),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              translate(
-                context,
-                'Try searching with different keywords',
-                'Coba cari dengan kata kunci lain',
-                '尝试使用不同的关键词搜索',
+              const SizedBox(height: 8),
+              Text(
+                translate(
+                  context,
+                  'Try searching with different keywords',
+                  'Coba cari dengan kata kunci lain',
+                  '尝试使用不同的关键词搜索',
+                ),
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
+                textAlign: TextAlign.center,
               ),
-              style: TextStyle(color: Colors.grey.shade500, fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
 
-    return Column(
-      children:
-          malls.map((item) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                translate(context, 'Search Result', 'Hasil Pencarian', '搜索结果'),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: isSmall ? 20 : 30,
+                ),
+              ),
+            ),
+          ),
+          ...malls.map((mall) {
             return GestureDetector(
               onTap:
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SearchDetail(mall: item),
+                      builder: (context) => SearchDetail(mall: mall),
                     ),
                   ),
               child: Container(
@@ -264,7 +253,7 @@ class _SearchState extends State<Search> {
                       height: 80,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(item.image, fit: BoxFit.cover),
+                        child: Image.asset(mall.image, fit: BoxFit.cover),
                       ),
                     ),
                     SizedBox(width: 12),
@@ -279,7 +268,7 @@ class _SearchState extends State<Search> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  item.name,
+                                  mall.name,
                                   style: TextStyle(
                                     color: Color(0xFF1F1E5B),
                                     fontWeight: FontWeight.w600,
@@ -297,7 +286,7 @@ class _SearchState extends State<Search> {
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 child: Text(
-                                  item.getFreeCount() <= 0
+                                  mall.spotCount <= 0
                                       ? translate(
                                         context,
                                         'All Full',
@@ -306,11 +295,11 @@ class _SearchState extends State<Search> {
                                       )
                                       : translate(
                                         context,
-                                        item.getFreeCount() == 1
-                                            ? '${item.getFreeCount()} Slot'
-                                            : '${item.getFreeCount()} Slots',
-                                        '${item.getFreeCount()} Slot',
-                                        '${item.getFreeCount()} 个插槽',
+                                        mall.spotCount == 1
+                                            ? '${mall.spotCount} Slot'
+                                            : '${mall.spotCount} Slots',
+                                        '${mall.spotCount} Slot',
+                                        '${mall.spotCount} 个插槽',
                                       ),
                                   style: TextStyle(
                                     color: Color(0xFFDC5F00),
@@ -322,7 +311,7 @@ class _SearchState extends State<Search> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            item.address,
+                            mall.address,
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.black87,
@@ -335,7 +324,7 @@ class _SearchState extends State<Search> {
                               Text(
                                 formatCurrency(
                                   nominal:
-                                      item.starterPrice ?? item.hourlyPrice,
+                                      mall.starterPrice ?? mall.hourlyPrice,
                                 ),
                                 style: TextStyle(
                                   color: Color(0xFFDC5F00),
@@ -360,6 +349,8 @@ class _SearchState extends State<Search> {
               ),
             );
           }).toList(),
+        ],
+      ),
     );
   }
 
@@ -371,46 +362,63 @@ class _SearchState extends State<Search> {
   ) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
-
     if (history.isEmpty) {
       return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.history, size: 100, color: Color(0xFFD3D3D3)),
-            const SizedBox(height: 16),
-            Text(
-              translate(
-                context,
-                'No search history',
-                'Tidak ada riwayat pencarian',
-                '没有搜索历史',
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.history, size: 100, color: Color(0xFFD3D3D3)),
+              const SizedBox(height: 16),
+              Text(
+                translate(
+                  context,
+                  'No search history',
+                  'Tidak ada riwayat pencarian',
+                  '没有搜索历史',
+                ),
+                style: TextStyle(
+                  color: Color(0xFFD3D3D3),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-              style: TextStyle(
-                color: Color(0xFFD3D3D3),
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+              const SizedBox(height: 8),
+              Text(
+                translate(
+                  context,
+                  'Start searching to see your history',
+                  'Mulai mencari untuk melihat riwayat',
+                  '开始搜索以查看您的历史记录',
+                ),
+                style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              translate(
-                context,
-                'Start searching to see your history',
-                'Mulai mencari untuk melihat riwayat',
-                '开始搜索以查看您的历史记录',
-              ),
-              style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
 
-    return Column(
-      children:
-          history.map((item) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 10),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                translate(context, 'Recent', 'Terkini', '最近'),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: isSmall ? 20 : 30,
+                ),
+              ),
+            ),
+          ),
+          ...history.map((item) {
             return Container(
               margin: EdgeInsets.symmetric(vertical: isSmall ? 0 : 4),
               child: ListTile(
@@ -449,7 +457,9 @@ class _SearchState extends State<Search> {
                 },
               ),
             );
-          }).toList(),
+          }),
+        ],
+      ),
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
@@ -11,34 +13,6 @@ import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
-// ParkingSpot model
-class ParkingSpot {
-  final String name;
-  final String imageUrl;
-  final num price;
-
-  ParkingSpot({
-    required this.name,
-    required this.imageUrl,
-    required this.price,
-  });
-}
-
-class Mall {
-  final String name;
-  final String address;
-  final String image;
-  final num price;
-
-  Mall({
-    required this.name,
-    required this.address,
-    required this.image,
-    required this.price,
-  });
-}
-
-// Main Home
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -50,23 +24,7 @@ class _HomeState extends State<Home> {
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
-  final List<ParkingSpot> spots = [
-    ParkingSpot(
-      name: 'Sun Plaza',
-      imageUrl: 'assets/images/building/Sun Plaza.png',
-      price: 3000,
-    ),
-    ParkingSpot(
-      name: 'Centre Point',
-      imageUrl: 'assets/images/building/Centre Point.png',
-      price: 2500,
-    ),
-    ParkingSpot(
-      name: 'Aryaduta',
-      imageUrl: 'assets/images/building/Aryaduta.png',
-      price: 4000,
-    ),
-  ];
+  late List<ParkingLot> spots = [];
 
   void _nextSpot() {
     if (_currentIndex < spots.length - 1) {
@@ -102,6 +60,19 @@ class _HomeState extends State<Home> {
         _currentIndex = spots.length - 1;
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      final userProvider = Provider.of<UserProvider>(context);
+      User user = userProvider.currentUser!;
+      final historyProvider = Provider.of<HistoryProvider>(context);
+      final frequent = historyProvider.getFrequentLots(user);
+      spots = frequent ?? [];
+    });
   }
 
   @override
@@ -424,7 +395,7 @@ class _HomeState extends State<Home> {
                 ],
 
                 // FREQUENT SPOTS
-                Align(
+              spots.isNotEmpty ? ...[  Align(
                   alignment: Alignment.center,
                   child: Text(
                     translate(
@@ -460,7 +431,7 @@ class _HomeState extends State<Home> {
                       });
                     },
                     itemBuilder: (context, index) {
-                      return Center(child: HistoryCarausel(spots[index]));
+                      return Center(child: HistoryCarausel(spots[index].image));
                     },
                   ),
                 ),
@@ -486,7 +457,7 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         Text(
-                          "${formatCurrency(nominal: spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
+                          "${formatCurrency(nominal: spots[_currentIndex].hourlyPrice)} / ${translate(context, "Hour", "Jam", "小时")}",
                           style: TextStyle(fontSize: isSmall ? 14 : 18),
                         ),
                         SizedBox(height: isSmall ? 6 : 10),
@@ -519,7 +490,7 @@ class _HomeState extends State<Home> {
                   ],
                 ),
                 user.twoFactor ? SizedBox.shrink() : SizedBox(height: 10),
-              ],
+              ] : Text("kosong")],
             ),
           ),
         ),
@@ -529,8 +500,8 @@ class _HomeState extends State<Home> {
 }
 
 class HistoryCarausel extends StatelessWidget {
-  const HistoryCarausel(this.step, {super.key});
-  final ParkingSpot step;
+  const HistoryCarausel(this.image, {super.key});
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -545,7 +516,7 @@ class HistoryCarausel extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.asset(step.imageUrl, fit: BoxFit.cover),
+          child: Image.asset(image, fit: BoxFit.cover),
         ),
       ),
     );
