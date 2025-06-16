@@ -53,6 +53,7 @@ class Floor {
 }
 
 class ParkingLot {
+  final String prefix;
   final String name;
   final BuildingType buildingType;
   final String address;
@@ -65,6 +66,7 @@ class ParkingLot {
   final List<Floor> spots;
 
   ParkingLot({
+    required this.prefix,
     required this.name,
     required this.buildingType,
     required this.address,

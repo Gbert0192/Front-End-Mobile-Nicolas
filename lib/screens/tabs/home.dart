@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
-import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/lot_detail.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/search/search.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
@@ -24,10 +24,8 @@ class _HomeState extends State<Home> {
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
-  late List<ParkingLot> spots = [];
-
   void _nextSpot() {
-    if (_currentIndex < spots.length - 1) {
+    if (_currentIndex < 5) {
       _controller.nextPage(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -52,27 +50,14 @@ class _HomeState extends State<Home> {
       );
     } else {
       _controller.animateToPage(
-        spots.length - 1,
+        5,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
       setState(() {
-        _currentIndex = spots.length - 1;
+        _currentIndex = 5;
       });
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    Future.microtask(() {
-      final userProvider = Provider.of<UserProvider>(context);
-      User user = userProvider.currentUser!;
-      final historyProvider = Provider.of<HistoryProvider>(context);
-      final frequent = historyProvider.getFrequentLots(user);
-      spots = frequent ?? [];
-    });
   }
 
   @override
@@ -80,11 +65,16 @@ class _HomeState extends State<Home> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
-    final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
     final otpProvider = Provider.of<OTPProvider>(context);
     User user = userProvider.currentUser!;
     final activityProvider = Provider.of<ActivityProvider>(context);
+    final historyProvider = Provider.of<HistoryProvider>(
+      context,
+      listen: false,
+    );
+    final frequent = historyProvider.getFrequentLots(user);
+    final currentSpot = frequent?[_currentIndex];
 
     return Scaffold(
       body: SafeArea(
@@ -395,102 +385,149 @@ class _HomeState extends State<Home> {
                 ],
 
                 // FREQUENT SPOTS
-              spots.isNotEmpty ? ...[  Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    translate(
-                      context,
-                      "Frequent Spots",
-                      "Spot Favorit",
-                      "常见景点",
-                    ),
-                    style: TextStyle(
-                      fontSize: isSmall ? 24 : 30,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF1F1E5B),
-                      shadows: [
-                        Shadow(
-                          offset: Offset(4, 4),
-                          blurRadius: 6.0,
-                          color: Color.fromRGBO(0, 0, 0, 0.247),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  height: isSmall ? 160 : 260,
-                  child: PageView.builder(
-                    controller: _controller,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: spots.length,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                    itemBuilder: (context, index) {
-                      return Center(child: HistoryCarausel(spots[index].image));
-                    },
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: _prevSpot,
-                      icon: Icon(
-                        Icons.arrow_circle_left,
-                        size: isSmall ? 40 : 50,
-                        color: Color(0xFF1F1E5B),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          currentSpot.name,
+                ...frequent != null
+                    ? [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          translate(
+                            context,
+                            "Frequent Spots",
+                            "Spot Favorit",
+                            "常见景点",
+                          ),
                           style: TextStyle(
-                            fontSize: isSmall ? 16 : 24,
+                            fontSize: isSmall ? 24 : 30,
                             fontWeight: FontWeight.w500,
+                            color: const Color(0xFF1F1E5B),
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(0, 0, 0, 0.247),
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          "${formatCurrency(nominal: spots[_currentIndex].hourlyPrice)} / ${translate(context, "Hour", "Jam", "小时")}",
-                          style: TextStyle(fontSize: isSmall ? 14 : 18),
-                        ),
-                        SizedBox(height: isSmall ? 6 : 10),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1F1E5B),
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text(
-                            translate(
-                              context,
-                              "Get Parking Now",
-                              "Parkir Sekarang",
-                              "立即停车",
-                            ),
-                            style: TextStyle(fontSize: isSmall ? 14 : 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: _nextSpot,
-                      icon: Icon(
-                        Icons.arrow_circle_right,
-                        size: isSmall ? 40 : 50,
-                        color: Color(0xFF1F1E5B),
                       ),
-                    ),
-                  ],
-                ),
-                user.twoFactor ? SizedBox.shrink() : SizedBox(height: 10),
-              ] : Text("kosong")],
+
+                      SizedBox(
+                        height: isSmall ? 160 : 260,
+                        child: PageView.builder(
+                          controller: _controller,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: frequent.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            return Center(
+                              child: HistoryCarausel(currentSpot!.image),
+                            );
+                          },
+                        ),
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: _prevSpot,
+                            icon: Icon(
+                              Icons.arrow_circle_left,
+                              size: isSmall ? 40 : 50,
+                              color: Color(0xFF1F1E5B),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                currentSpot!.name,
+                                style: TextStyle(
+                                  fontSize: isSmall ? 16 : 24,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "${formatCurrency(nominal: currentSpot.hourlyPrice)} / ${translate(context, "Hour", "Jam", "小时")}",
+                                style: TextStyle(fontSize: isSmall ? 14 : 18),
+                              ),
+                              SizedBox(height: isSmall ? 6 : 10),
+                              ElevatedButton(
+                                onPressed:
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                SearchDetail(mall: currentSpot),
+                                      ),
+                                    ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF1F1E5B),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: Text(
+                                  translate(
+                                    context,
+                                    "Get Parking Now",
+                                    "Parkir Sekarang",
+                                    "立即停车",
+                                  ),
+                                  style: TextStyle(fontSize: isSmall ? 14 : 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: _nextSpot,
+                            icon: Icon(
+                              Icons.arrow_circle_right,
+                              size: isSmall ? 40 : 50,
+                              color: Color(0xFF1F1E5B),
+                            ),
+                          ),
+                        ],
+                      ),
+                      user.twoFactor ? SizedBox.shrink() : SizedBox(height: 10),
+                    ]
+                    : [
+                      Transform.translate(
+                        offset: Offset(0, user.twoFactor ? 30 : -20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Transform.translate(
+                              offset: Offset(0, 10),
+                              child: Opacity(
+                                opacity: 0.5,
+                                child: Image.asset(
+                                  'assets/images/empty/empty_history.png',
+                                  width: isSmall ? 240 : 300,
+                                  height: isSmall ? 240 : 300,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              translate(
+                                context,
+                                "No parking history yet!",
+                                "Belum ada riwayat parkir!",
+                                "暂无停车记录！",
+                              ),
+                              style: TextStyle(
+                                color: Color(0xFFD3D3D3),
+                                fontWeight: FontWeight.w700,
+                                fontSize: isSmall ? 20 : 25,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+              ],
             ),
           ),
         ),

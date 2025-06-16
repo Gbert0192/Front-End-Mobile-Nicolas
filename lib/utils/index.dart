@@ -33,3 +33,30 @@ String formatCurrency({
   );
   return currencyFormat.format(nominal);
 }
+
+Widget buildDetailRow(String title, String value, {Color? valueColor}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4.0),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 120,
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 15, color: Colors.grey),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            value,
+            style: TextStyle(fontSize: 15, color: valueColor ?? Colors.black),
+            textAlign: TextAlign.end,
+            softWrap: true,
+          ),
+        ),
+      ],
+    ),
+  );
+}

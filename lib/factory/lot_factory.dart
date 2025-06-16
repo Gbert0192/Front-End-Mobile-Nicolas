@@ -10,6 +10,7 @@ class LotFactory {
   LotFactory() {
     lots = [
       ParkingLot(
+        prefix: "MED",
         name: "Medan Mall",
         buildingType: BuildingType.mall,
         address: "Jl. M. T. Haryono No.8, Kota Medan",
@@ -21,9 +22,10 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G', lastFloor: '5', areaStep: 2),
       ),
       ParkingLot(
+        prefix: "ARY",
         name: "Aryaduta",
         buildingType: BuildingType.hotel,
-        address: " Jl. Kapten Maulana Lubis No.8, Kota Medan",
+        address: "Jl. Kapten Maulana Lubis No.8, Kota Medan",
         openTime: "06:00",
         closeTime: "22:30",
         hourlyPrice: 4000,
@@ -32,6 +34,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G3', lastFloor: '4', areaStep: 3),
       ),
       ParkingLot(
+        prefix: "CEP",
         name: "Centre Point",
         buildingType: BuildingType.mall,
         address: "Jl. Centre Point No.15, Kota Medan",
@@ -43,6 +46,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G2', lastFloor: '4', areaStep: 2),
       ),
       ParkingLot(
+        prefix: "LIP",
         name: "Lippo Plaza",
         buildingType: BuildingType.mall,
         address: "Jl. Veteran No.20, Kota Medan",
@@ -53,6 +57,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G3', lastFloor: '3', areaStep: 2),
       ),
       ParkingLot(
+        prefix: "GCH",
         name: "Grand City Hall",
         buildingType: BuildingType.hotel,
         address: "Jl. Asia No. 77, Kota Medan",
@@ -64,6 +69,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G', lastFloor: '6', areaStep: 2),
       ),
       ParkingLot(
+        prefix: "SUN",
         name: "Sun Plaza",
         buildingType: BuildingType.mall,
         address: "Jl. Gatot Subroto No. 15, Kota Medan",
@@ -75,6 +81,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G2', lastFloor: '5', areaStep: 2),
       ),
       ParkingLot(
+        prefix: "RAD",
         name: "Radisson",
         buildingType: BuildingType.hotel,
         address: "Jl. S. Parman No. 45, Kota Medan",
@@ -86,6 +93,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G3', lastFloor: '6', areaStep: 3),
       ),
       ParkingLot(
+        prefix: "MTS",
         name: "Manhattan Time Square",
         buildingType: BuildingType.mall,
         address: "Jl. Thamrin No. 99, Kota Medan",
@@ -97,6 +105,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G2', lastFloor: '3', areaStep: 1),
       ),
       ParkingLot(
+        prefix: "PMF",
         name: "Plaza Medan Fair",
         buildingType: BuildingType.mall,
         address: "Jl. Gatot Subroto No. 8, Kota Medan",
@@ -107,6 +116,7 @@ class LotFactory {
         spots: generateFloors(firstFloor: 'G', lastFloor: '4', areaStep: 1),
       ),
       ParkingLot(
+        prefix: "DEL",
         name: "Delipark",
         buildingType: BuildingType.mall,
         address: "Jl. Stasiun No. 5, Kota Medan",

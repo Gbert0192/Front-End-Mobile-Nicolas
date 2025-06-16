@@ -313,7 +313,7 @@ class _SearchState extends State<Search> {
                           Text(
                             mall.address,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: isSmall ? 12 : 15,
                               color: Colors.black87,
                               fontWeight: FontWeight.w500,
                             ),
@@ -368,7 +368,11 @@ class _SearchState extends State<Search> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.history, size: 100, color: Color(0xFFD3D3D3)),
+              Icon(
+                Icons.history,
+                size: isSmall ? 100 : 150,
+                color: Color(0xFFD3D3D3),
+              ),
               const SizedBox(height: 16),
               Text(
                 translate(
@@ -380,7 +384,7 @@ class _SearchState extends State<Search> {
                 style: TextStyle(
                   color: Color(0xFFD3D3D3),
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: isSmall ? 18 : 25,
                 ),
               ),
               const SizedBox(height: 8),
@@ -391,7 +395,10 @@ class _SearchState extends State<Search> {
                   'Mulai mencari untuk melihat riwayat',
                   '开始搜索以查看您的历史记录',
                 ),
-                style: TextStyle(color: Colors.grey.shade500, fontSize: 14),
+                style: TextStyle(
+                  color: Colors.grey.shade500,
+                  fontSize: isSmall ? 14 : 18,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],

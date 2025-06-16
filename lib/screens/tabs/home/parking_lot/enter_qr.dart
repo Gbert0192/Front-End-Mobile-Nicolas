@@ -1,40 +1,52 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-class PaymentQrPage extends StatefulWidget {
+class EnterQR extends StatefulWidget {
   final ParkingLot mall;
 
-  const PaymentQrPage({super.key, required this.mall});
+  const EnterQR({super.key, required this.mall});
 
   @override
-  State<PaymentQrPage> createState() => _PaymentQrPageState();
+  State<EnterQR> createState() => _EnterQRState();
 }
 
-class _PaymentQrPageState extends State<PaymentQrPage> {
+class _EnterQRState extends State<EnterQR> {
   @override
   Widget build(BuildContext context) {
     String generateUniqueId() {
-      final random = Random();
-      final randomNumber = random.nextInt(9000) + 1000;
-      return 'CPA-$randomNumber';
+      final now = DateTime.now();
+      final formattedTime =
+          '${now.year % 100}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
+      return '${widget.mall.prefix}-$formattedTime';
     }
 
     final String uniqueId = generateUniqueId();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFBEA),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        leading: Padding(
+          padding: EdgeInsets.only(left: 12.0),
+          child: Material(
+            color: Colors.white,
+            shape: const CircleBorder(),
+            elevation: 2,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                backgroundColor: Colors.white,
+                padding: const EdgeInsets.all(12),
+                elevation: 1,
+              ),
+              child: const Icon(Icons.arrow_back, color: Colors.black),
+            ),
+          ),
         ),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -43,48 +55,43 @@ class _PaymentQrPageState extends State<PaymentQrPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Color(0xFFBFBFBF)),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
+                    color: const Color.fromRGBO(0, 0, 0, 0.25),
                     blurRadius: 5,
-                    offset: const Offset(0, 3),
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: const Text(
                 'Parking QR Scan',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 35,
+                  color: Color(0xFF1F1E5B),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(height: 30),
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: QrImageView(
-                    data: uniqueId,
-                    version: QrVersions.auto,
-                    size: 220.0,
-                    gapless: false,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.share_outlined, color: Colors.grey),
-                  onPressed: () {},
-                ),
-              ],
+
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: QrImageView(
+                data: uniqueId,
+                version: QrVersions.auto,
+                size: 220.0,
+                gapless: false,
+              ),
             ),
-            const SizedBox(height: 12),
             Text(
               'Unique ID: $uniqueId',
               style: TextStyle(color: Colors.grey, fontSize: 16),
@@ -92,59 +99,41 @@ class _PaymentQrPageState extends State<PaymentQrPage> {
             const SizedBox(height: 30),
 
             Card(
-              elevation: 0,
+              elevation: 4,
+              shadowColor: const Color.fromRGBO(0, 0, 0, 1),
               color: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Color(0xFFBFBFBF)),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 30,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Parking Details',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    Center(
+                      child: const Text(
+                        'Parking Details',
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildDetailRow('Parking Area', widget.mall.name),
-                    const SizedBox(height: 12),
-                    _buildDetailRow(
-                      'Address',
-                      widget.mall.address.split(',')[0],
-                    ),
-                    const SizedBox(height: 12),
-                    _buildDetailRow(
-                      'Available Spots',
-                      widget.mall.spotCount.toString(),
+                    buildDetailRow('Parking Area', widget.mall.name),
+                    buildDetailRow('Address', widget.mall.address),
+                    buildDetailRow(
+                      'Available Slots',
+                      widget.mall.getFreeCount().toString(),
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 40),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDetailRow(String title, String value, {Color? valueColor}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title, style: const TextStyle(color: Colors.grey)),
-        Text(
-          value,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: valueColor ?? Colors.black,
-          ),
-        ),
-      ],
     );
   }
 }
