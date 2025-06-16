@@ -15,6 +15,8 @@ class EnterQR extends StatefulWidget {
 class _EnterQRState extends State<EnterQR> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     String generateUniqueId() {
       final now = DateTime.now();
       final formattedTime =
@@ -49,13 +51,13 @@ class _EnterQRState extends State<EnterQR> {
         elevation: 0,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(isSmall ? 12 : 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
@@ -68,19 +70,19 @@ class _EnterQRState extends State<EnterQR> {
                   ),
                 ],
               ),
-              child: const Text(
+              child: Text(
                 'Parking QR Scan',
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: isSmall ? 30 : 35,
                   color: Color(0xFF1F1E5B),
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: isSmall ? 10 : 30),
 
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(isSmall ? 8 : 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -88,7 +90,7 @@ class _EnterQRState extends State<EnterQR> {
               child: QrImageView(
                 data: uniqueId,
                 version: QrVersions.auto,
-                size: 220.0,
+                size: isSmall ? 190 : 220,
                 gapless: false,
               ),
             ),
@@ -96,7 +98,7 @@ class _EnterQRState extends State<EnterQR> {
               'Unique ID: $uniqueId',
               style: TextStyle(color: Colors.grey, fontSize: 16),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: isSmall ? 10 : 30),
 
             Card(
               elevation: 4,
@@ -107,9 +109,9 @@ class _EnterQRState extends State<EnterQR> {
                 side: BorderSide(color: Color(0xFFBFBFBF)),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
+                padding: EdgeInsets.symmetric(
                   horizontal: 16.0,
-                  vertical: 30,
+                  vertical: isSmall ? 20 : 30,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,11 +123,17 @@ class _EnterQRState extends State<EnterQR> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    buildDetailRow('Parking Area', widget.mall.name),
-                    buildDetailRow('Address', widget.mall.address),
                     buildDetailRow(
-                      'Available Slots',
-                      widget.mall.getFreeCount().toString(),
+                      label: 'Parking Area',
+                      value: widget.mall.name,
+                    ),
+                    buildDetailRow(
+                      label: 'Address',
+                      value: widget.mall.address,
+                    ),
+                    buildDetailRow(
+                      label: 'Available Slots',
+                      value: widget.mall.getFreeCount().toString(),
                     ),
                   ],
                 ),

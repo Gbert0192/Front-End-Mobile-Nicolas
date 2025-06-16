@@ -6,7 +6,7 @@ enum DatePickerType { date, time, datetime }
 class ResponsiveTimePicker extends StatefulWidget {
   const ResponsiveTimePicker({
     super.key,
-    required this.controller,
+    this.controller,
     this.onChanged,
     required this.isSmall,
     this.label,
@@ -84,7 +84,9 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
         final formattedTime =
             "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}";
         _selectedDate = formattedTime;
-        widget.controller?.text = formattedTime;
+        if (widget.controller != null) {
+          widget.controller?.text = formattedTime;
+        }
         widget.onChanged?.call(formattedTime);
       }
       return;
@@ -150,7 +152,9 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       }
 
       _selectedDate = formatted;
-      widget.controller?.text = formatted;
+      if (widget.controller != null) {
+        widget.controller?.text = formatted;
+      }
       widget.onChanged?.call(formatted);
     }
   }
@@ -172,7 +176,11 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   void initState() {
     super.initState();
     _selectedDate =
-        widget.controller!.text.isNotEmpty ? widget.controller!.text : null;
+        widget.controller != null
+            ? widget.controller!.text.isNotEmpty
+                ? widget.controller!.text
+                : null
+            : null;
   }
 
   @override

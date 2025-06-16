@@ -164,12 +164,21 @@ class _ExitQRState extends State<ExitQR> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    buildDetailRow('Parking Area', widget.mall.name),
-                    buildDetailRow('Address', widget.mall.address),
-                    buildDetailRow('Booking Time', formatDateTime(today)),
                     buildDetailRow(
-                      'Expired Time',
-                      formatDateTime(expired),
+                      label: 'Parking Area',
+                      value: widget.mall.name,
+                    ),
+                    buildDetailRow(
+                      label: 'Address',
+                      value: widget.mall.address,
+                    ),
+                    buildDetailRow(
+                      label: 'Booking Time',
+                      value: formatDateTime(today),
+                    ),
+                    buildDetailRow(
+                      label: 'Expired Time',
+                      value: formatDateTime(expired),
                       valueColor: Colors.red,
                     ),
                   ],

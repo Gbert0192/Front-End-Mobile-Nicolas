@@ -34,8 +34,8 @@ class ParkingHistory extends StatelessWidget {
             SliverToBoxAdapter(
               child: Column(
                 children: [
-                  Divider(indent: 20, thickness: 1),
-                  SizedBox(height: isSmall ? 0 : 15),
+                  // Divider(indent: 20, thickness: 1),
+                  // SizedBox(height: isSmall ? 0 : 15),
                   Padding(
                     padding: EdgeInsets.only(
                       left: isSmall ? 12 : 24,

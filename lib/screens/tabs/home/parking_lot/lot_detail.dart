@@ -362,7 +362,7 @@ class SearchDetail extends StatelessWidget {
                                 () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AddBooking(),
+                                    builder: (context) => AddBooking(mall),
                                   ),
                                 ),
                             backgroundColor: Color(0xFFFFA35E),

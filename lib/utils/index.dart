@@ -34,7 +34,13 @@ String formatCurrency({
   return currencyFormat.format(nominal);
 }
 
-Widget buildDetailRow(String title, String value, {Color? valueColor}) {
+Widget buildDetailRow({
+  required String label,
+  required String value,
+  Color? valueColor,
+  FontWeight? fontWeight,
+  double? fontSize,
+}) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4.0),
     child: Row(
@@ -43,15 +49,23 @@ Widget buildDetailRow(String title, String value, {Color? valueColor}) {
         SizedBox(
           width: 120,
           child: Text(
-            title,
-            style: const TextStyle(fontSize: 15, color: Colors.grey),
+            label,
+            style: TextStyle(
+              fontSize: fontSize ?? 15,
+              color: Colors.grey,
+              fontWeight: fontWeight,
+            ),
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             value,
-            style: TextStyle(fontSize: 15, color: valueColor ?? Colors.black),
+            style: TextStyle(
+              fontSize: fontSize ?? 15,
+              color: valueColor ?? Colors.black,
+              fontWeight: fontWeight,
+            ),
             textAlign: TextAlign.end,
             softWrap: true,
           ),
