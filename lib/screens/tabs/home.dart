@@ -24,42 +24,6 @@ class _HomeState extends State<Home> {
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
-  void _nextSpot() {
-    if (_currentIndex < 5) {
-      _controller.nextPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _controller.animateToPage(
-        0,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      setState(() {
-        _currentIndex = 0;
-      });
-    }
-  }
-
-  void _prevSpot() {
-    if (_currentIndex > 0) {
-      _controller.previousPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _controller.animateToPage(
-        5,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      setState(() {
-        _currentIndex = 5;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -75,6 +39,42 @@ class _HomeState extends State<Home> {
     );
     final frequent = historyProvider.getFrequentLots(user);
     final currentSpot = frequent?[_currentIndex];
+
+    void nextSpot() {
+      if (_currentIndex < frequent!.length) {
+        _controller.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _controller.animateToPage(
+          0,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentIndex = 0;
+        });
+      }
+    }
+
+    void prevSpot() {
+      if (_currentIndex > 0) {
+        _controller.previousPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _controller.animateToPage(
+          frequent!.length,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentIndex = frequent.length;
+        });
+      }
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -434,7 +434,7 @@ class _HomeState extends State<Home> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           IconButton(
-                            onPressed: _prevSpot,
+                            onPressed: prevSpot,
                             icon: Icon(
                               Icons.arrow_circle_left,
                               size: isSmall ? 40 : 50,
@@ -482,7 +482,7 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           IconButton(
-                            onPressed: _nextSpot,
+                            onPressed: nextSpot,
                             icon: Icon(
                               Icons.arrow_circle_right,
                               size: isSmall ? 40 : 50,
@@ -495,7 +495,16 @@ class _HomeState extends State<Home> {
                     ]
                     : [
                       Transform.translate(
-                        offset: Offset(0, user.twoFactor ? 30 : -20),
+                        offset: Offset(
+                          0,
+                          user.twoFactor
+                              ? isSmall
+                                  ? 0
+                                  : 30
+                              : isSmall
+                              ? -15
+                              : -20,
+                        ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
