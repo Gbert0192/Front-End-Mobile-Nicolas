@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class BookingTime extends StatefulWidget {

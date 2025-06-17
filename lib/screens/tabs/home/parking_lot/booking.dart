@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking/booking_time.dart';
-import 'package:tugas_front_end_nicolas/utils/index.dart';
-
-class DetailItem {
-  final String label;
-  final String value;
-
-  DetailItem({required this.label, required this.value});
-}
 
 class AddBooking extends StatefulWidget {
   const AddBooking(this.mall);
@@ -80,7 +72,7 @@ class _AddBookingState extends State<AddBooking> {
                   ],
                 ),
                 SizedBox(
-                  height: 700,
+                  height: isSmall ? 700 : 740,
                   child: PageView(
                     controller: _controller,
                     physics: NeverScrollableScrollPhysics(),
@@ -123,59 +115,6 @@ class _AddBookingState extends State<AddBooking> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class DataCard extends StatelessWidget {
-  final List<DetailItem> listData;
-  final String title;
-
-  const DataCard({super.key, required this.listData, required this.title});
-  final FontWeight fontWeight = FontWeight.w600;
-  final double fontSize = 13;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-        ),
-        Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: isSmall ? 25 : 35,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (int i = 0; i < listData.length; i++) ...[
-                  buildDetailRow(
-                    label: listData[i].label,
-                    value: listData[i].value,
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
-                  ),
-                  if (i != listData.length - 1) const SizedBox(height: 10),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
