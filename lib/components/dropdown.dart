@@ -11,6 +11,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     this.hint,
     this.errorText,
     this.isLoading,
+    this.disabled = false,
     this.leading,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -30,6 +31,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
   final Color borderColor;
   final Color borderFocusColor;
   final bool? isLoading;
+  final bool disabled;
 
   @override
   State<ResponsiveDropdown<T>> createState() => _ResponsiveDropdownState<T>();
@@ -146,7 +148,6 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
       });
 
       if (selectedValue != null) {
-        // If the same item is selected again, deselect it
         if (_selectedValue == selectedValue) {
           setState(() {
             _selectedValue = null;
@@ -181,6 +182,8 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
     final isOutline = widget.mode == StyleMode.outline;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+    final enabled =
+        widget.isLoading != null ? !widget.isLoading! : !widget.disabled;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,7 +196,6 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
               style: TextStyle(color: _getColor(), fontSize: isSmall ? 12 : 16),
             ),
           ),
-
         Container(
           decoration: BoxDecoration(
             borderRadius: isOutline ? BorderRadius.circular(20) : null,
@@ -209,10 +211,16 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                     : null,
           ),
           child: GestureDetector(
-            onTap: () => _showDropdownMenu(isSmall),
+            onTap: () async {
+              if ((widget.isLoading != null ? !widget.isLoading! : true) &&
+                  !widget.disabled) {
+                setState(() => _isFocused = true);
+                await _showDropdownMenu(isSmall);
+                setState(() => _isFocused = false);
+              }
+            },
             child: InputDecorator(
               decoration: InputDecoration(
-                enabled: widget.isLoading != null ? !widget.isLoading! : true,
                 labelText: widget.label,
                 hintText: widget.hint,
                 hintStyle: TextStyle(color: _getColor()),
@@ -220,7 +228,11 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                 floatingLabelStyle: TextStyle(color: _getColor()),
                 filled: true,
                 fillColor:
-                    hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+                    widget.mode == StyleMode.underline
+                        ? Colors.white
+                        : hasError
+                        ? const Color(0xFFFFEDED)
+                        : widget.fillColor,
                 contentPadding: EdgeInsets.symmetric(
                   horizontal: isSmall ? 18 : 20,
                   vertical: isSmall ? 12 : 16,
@@ -233,11 +245,23 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                           color: _getColor(),
                         )
                         : null,
-                suffixIcon: Icon(
-                  _isMenuOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                  color: _getColor(),
+                suffixIcon: Opacity(
+                  opacity: enabled ? 1 : 0.4,
+                  child: Icon(
+                    _isMenuOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: _getColor(),
+                  ),
                 ),
                 enabledBorder:
+                    isOutline
+                        ? OutlineInputBorder(
+                          borderSide: BorderSide(color: _getColor()),
+                          borderRadius: BorderRadius.circular(20),
+                        )
+                        : UnderlineInputBorder(
+                          borderSide: BorderSide(color: _getColor()),
+                        ),
+                disabledBorder:
                     isOutline
                         ? OutlineInputBorder(
                           borderSide: BorderSide(color: _getColor()),
@@ -284,11 +308,14 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                         ),
               ),
               isFocused: _isFocused || _isMenuOpen,
-              child: Text(
-                _selectedLabel ?? widget.hint ?? '',
-                style: TextStyle(
-                  fontSize: isSmall ? 16 : 18,
-                  color: Colors.grey[800],
+              child: Opacity(
+                opacity: enabled ? 1 : 0.4,
+                child: Text(
+                  _selectedLabel ?? widget.hint ?? '',
+                  style: TextStyle(
+                    fontSize: isSmall ? 16 : 18,
+                    color: Colors.grey[800],
+                  ),
                 ),
               ),
             ),

@@ -12,6 +12,7 @@ class ResponsiveTimePicker extends StatefulWidget {
     this.hint,
     this.errorText,
     this.isLoading,
+    this.disabled = false,
     this.leading,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -37,10 +38,9 @@ class ResponsiveTimePicker extends StatefulWidget {
   final StyleMode mode;
   final DatePickerType type;
   final bool? isLoading;
-
+  final bool disabled;
   final TimeOfDay? minTime;
   final TimeOfDay? maxTime;
-
   final List<DateTime>? disabledDates;
   final DateTime? minDate;
   final DateTime? maxDate;
@@ -51,7 +51,47 @@ class ResponsiveTimePicker extends StatefulWidget {
 
 class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   bool _isFocused = false;
-  String? _selectedDate;
+  String? _selectedTime;
+
+  DateTime _getSmartDefaultDateTime() {
+    DateTime now = DateTime.now();
+    int currentMinute = now.minute;
+    int roundedMinute;
+    int hourOffset = 0;
+
+    if (currentMinute <= 15) {
+      roundedMinute = 0;
+      hourOffset = 1;
+    } else if (currentMinute <= 45) {
+      roundedMinute = 30;
+      hourOffset = 1;
+    } else {
+      roundedMinute = 0;
+      hourOffset = 2;
+    }
+
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      now.hour + hourOffset,
+      roundedMinute,
+    );
+  }
+
+  void _updateSelectedTime(String? newTime) {
+    setState(() {
+      _selectedTime = newTime;
+    });
+
+    if (widget.controller != null) {
+      widget.controller!.text = newTime ?? '';
+    }
+
+    if (newTime != null) {
+      widget.onChanged?.call(newTime);
+    }
+  }
 
   bool _isTimeInRange(TimeOfDay time) {
     if (widget.minTime == null && widget.maxTime == null) return true;
@@ -84,6 +124,10 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     );
   }
 
+  String _formatTime24Hour(TimeOfDay time) {
+    return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+  }
+
   Future<TimeOfDay?> _showTimePickerWithConstraints(
     BuildContext context,
     TimeOfDay initialTime,
@@ -91,32 +135,38 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: initialTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
     );
 
     if (selectedTime != null && !_isTimeInRange(selectedTime)) {
-      // Show error dialog if time is out of range
       String errorMessage = '';
       if (widget.minTime != null && widget.maxTime != null) {
         errorMessage =
-            'Please select a time between ${widget.minTime!.format(context)} and ${widget.maxTime!.format(context)}';
+            'Please select a time between ${_formatTime24Hour(widget.minTime!)} and ${_formatTime24Hour(widget.maxTime!)}';
       } else if (widget.minTime != null) {
         errorMessage =
-            'Please select a time after ${widget.minTime!.format(context)}';
+            'Please select a time after ${_formatTime24Hour(widget.minTime!)}';
       } else if (widget.maxTime != null) {
         errorMessage =
-            'Please select a time before ${widget.maxTime!.format(context)}';
+            'Please select a time before ${_formatTime24Hour(widget.maxTime!)}';
       }
 
       if (mounted) {
-        showDialog(
+        await showDialog(
           context: context,
-          builder: (BuildContext context) {
+          barrierDismissible: false,
+          builder: (BuildContext dialogContext) {
             return AlertDialog(
               title: const Text('Invalid Time'),
               content: Text(errorMessage),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () => Navigator.of(dialogContext).pop(),
                   child: const Text('OK'),
                 ),
               ],
@@ -125,7 +175,6 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
         );
       }
 
-      // Recursively show time picker again
       return await _showTimePickerWithConstraints(context, initialTime);
     }
 
@@ -133,14 +182,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   }
 
   Future<void> _pickDate() async {
-    DateTime now = DateTime.now();
-    DateTime? initialDate;
+    DateTime initialDate;
 
-    if (widget.controller != null && widget.controller!.text.isNotEmpty) {
+    if (_selectedTime != null && _selectedTime!.isNotEmpty) {
       try {
-        final text = widget.controller!.text;
         if (widget.type == DatePickerType.datetime) {
-          final dateTimeParts = text.split(' ');
+          final dateTimeParts = _selectedTime!.split(' ');
           final dateParts = dateTimeParts[0].split('/');
           final timeParts = dateTimeParts[1].split(':');
 
@@ -151,17 +198,25 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
           final minute = int.parse(timeParts[1]);
 
           initialDate = DateTime(year, month, day, hour, minute);
-        } else {
-          final parts = widget.controller!.text.split('/');
+        } else if (widget.type == DatePickerType.date) {
+          final parts = _selectedTime!.split('/');
           final day = int.parse(parts[0]);
           final month = int.parse(parts[1]);
           final year = int.parse(parts[2]);
           initialDate = DateTime(year, month, day);
+        } else {
+          final parts = _selectedTime!.split(':');
+          final hour = int.parse(parts[0]);
+          final minute = int.parse(parts[1]);
+          final now = DateTime.now();
+          initialDate = DateTime(now.year, now.month, now.day, hour, minute);
         }
-      } catch (_) {}
+      } catch (_) {
+        initialDate = _getSmartDefaultDateTime();
+      }
+    } else {
+      initialDate = _getSmartDefaultDateTime();
     }
-
-    initialDate ??= now;
 
     if (widget.type == DatePickerType.time) {
       final TimeOfDay? pickedTime = await _showTimePickerWithConstraints(
@@ -170,13 +225,8 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       );
 
       if (pickedTime != null) {
-        final formattedTime =
-            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}";
-        _selectedDate = formattedTime;
-        if (widget.controller != null) {
-          widget.controller?.text = formattedTime;
-        }
-        widget.onChanged?.call(formattedTime);
+        final formattedTime = _formatTime24Hour(pickedTime);
+        _updateSelectedTime(formattedTime);
       }
       return;
     }
@@ -214,11 +264,20 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       DateTime finalDate = pickedDate;
 
       if (widget.type == DatePickerType.datetime) {
-        final TimeOfDay? time = await _showTimePickerWithConstraints(
-          context,
-          TimeOfDay.fromDateTime(initialDate),
+        final TimeOfDay? time = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.fromDateTime(initialDate),
+          builder: (BuildContext context, Widget? child) {
+            return MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(alwaysUse24HourFormat: true),
+              child: child!,
+            );
+          },
         );
-        if (time != null) {
+
+        if (time != null && _isTimeInRange(time)) {
           finalDate = DateTime(
             pickedDate.year,
             pickedDate.month,
@@ -226,6 +285,38 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
             time.hour,
             time.minute,
           );
+        } else if (time != null && !_isTimeInRange(time)) {
+          String errorMessage = '';
+          if (widget.minTime != null && widget.maxTime != null) {
+            errorMessage =
+                'Please select a time between ${_formatTime24Hour(widget.minTime!)} and ${_formatTime24Hour(widget.maxTime!)}';
+          } else if (widget.minTime != null) {
+            errorMessage =
+                'Please select a time after ${_formatTime24Hour(widget.minTime!)}';
+          } else if (widget.maxTime != null) {
+            errorMessage =
+                'Please select a time before ${_formatTime24Hour(widget.maxTime!)}';
+          }
+
+          if (mounted) {
+            await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext dialogContext) {
+                return AlertDialog(
+                  title: const Text('Invalid Time'),
+                  content: Text(errorMessage),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+          return;
         }
       }
 
@@ -243,19 +334,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
           break;
       }
 
-      _selectedDate = formatted;
-      if (widget.controller != null) {
-        widget.controller?.text = formatted;
-      }
-      widget.onChanged?.call(formatted);
+      _updateSelectedTime(formatted);
     }
   }
 
   void _clearDate() {
-    setState(() {
-      _selectedDate = null;
-      widget.controller?.clear();
-    });
+    _updateSelectedTime(null);
   }
 
   Color _getColor() {
@@ -267,12 +351,14 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   @override
   void initState() {
     super.initState();
-    _selectedDate =
-        widget.controller != null
-            ? widget.controller!.text.isNotEmpty
-                ? widget.controller!.text
-                : null
-            : null;
+
+    if (widget.controller != null && widget.controller!.text.isNotEmpty) {
+      _selectedTime = widget.controller!.text;
+    } else {
+      // Tidak mengisi otomatis saat initState, biarkan kosong
+      // Waktu sekarang akan menjadi default saat picker dibuka
+      _selectedTime = null;
+    }
   }
 
   @override
@@ -281,6 +367,8 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     final isSmall = size.height < 700;
     final hasError = widget.errorText != null;
     final isOutline = widget.mode == StyleMode.outline;
+    final enabled =
+        widget.isLoading != null ? !widget.isLoading! : !widget.disabled;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +401,8 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  if (widget.isLoading != null ? !widget.isLoading! : true) {
+                  if ((widget.isLoading != null ? !widget.isLoading! : true) &&
+                      !widget.disabled) {
                     setState(() => _isFocused = true);
                     await _pickDate();
                     setState(() => _isFocused = false);
@@ -321,8 +410,6 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                 },
                 child: InputDecorator(
                   decoration: InputDecoration(
-                    enabled:
-                        widget.isLoading != null ? !widget.isLoading! : true,
                     labelText: widget.label,
                     hintText: widget.hint,
                     hintStyle: TextStyle(color: _getColor()),
@@ -330,7 +417,11 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                     floatingLabelStyle: TextStyle(color: _getColor()),
                     filled: true,
                     fillColor:
-                        hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+                        widget.mode == StyleMode.underline
+                            ? Colors.white
+                            : hasError
+                            ? const Color(0xFFFFEDED)
+                            : widget.fillColor,
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: isSmall ? 18 : 20,
                       vertical: isSmall ? 12 : 16,
@@ -339,7 +430,45 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                         widget.leading != null
                             ? Icon(widget.leading, size: isSmall ? 20 : 28)
                             : null,
+                    suffixIcon: Opacity(
+                      opacity: enabled ? 1 : 0.4,
+                      child: IconButton(
+                        onPressed: () async {
+                          if (_selectedTime != null ||
+                              (widget.controller?.text.isNotEmpty ?? false)) {
+                            _clearDate();
+                          } else {
+                            if ((widget.isLoading != null
+                                    ? !widget.isLoading!
+                                    : true) &&
+                                !widget.disabled) {
+                              setState(() => _isFocused = true);
+                              await _pickDate();
+                              setState(() => _isFocused = false);
+                            }
+                          }
+                        },
+                        icon: Icon(
+                          _selectedTime != null ||
+                                  (widget.controller?.text.isNotEmpty ?? false)
+                              ? Icons.clear_outlined
+                              : widget.type == DatePickerType.time
+                              ? Icons.access_time
+                              : Icons.calendar_month_sharp,
+                          color: const Color(0xFF1F1E5B),
+                        ),
+                      ),
+                    ),
                     enabledBorder:
+                        isOutline
+                            ? OutlineInputBorder(
+                              borderSide: BorderSide(color: _getColor()),
+                              borderRadius: BorderRadius.circular(20),
+                            )
+                            : UnderlineInputBorder(
+                              borderSide: BorderSide(color: _getColor()),
+                            ),
+                    disabledBorder:
                         isOutline
                             ? OutlineInputBorder(
                               borderSide: BorderSide(color: _getColor()),
@@ -373,37 +502,16 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                               borderSide: BorderSide(color: Colors.red),
                             ),
                   ),
-                  child: Text(
-                    _selectedDate ?? widget.hint ?? '',
-                    style: TextStyle(
-                      fontSize: isSmall ? 16 : 18,
-                      color: Colors.grey[800],
+                  child: Opacity(
+                    opacity: enabled ? 1 : 0.4,
+                    child: Text(
+                      _selectedTime ?? widget.hint ?? '',
+                      style: TextStyle(
+                        fontSize: isSmall ? 16 : 18,
+                        color: Colors.grey[800],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: isSmall ? 12 : 16),
-              child: IconButton(
-                onPressed: () async {
-                  if (_selectedDate != null ||
-                      (widget.controller?.text.isNotEmpty ?? false)) {
-                    _clearDate();
-                  } else {
-                    setState(() => _isFocused = true);
-                    await _pickDate();
-                    setState(() => _isFocused = false);
-                  }
-                },
-                icon: Icon(
-                  _selectedDate != null ||
-                          (widget.controller?.text.isNotEmpty ?? false)
-                      ? Icons.clear_outlined
-                      : widget.type == DatePickerType.time
-                      ? Icons.access_time
-                      : Icons.calendar_month_sharp,
-                  color: const Color(0xFF1F1E5B),
                 ),
               ),
             ),

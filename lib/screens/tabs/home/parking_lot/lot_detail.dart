@@ -156,7 +156,7 @@ class SearchDetail extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                '${mall.openTime} - ${mall.closeTime}',
+                                '${timeToString(mall.openTime)} - ${timeToString(mall.closeTime)}',
                                 style: TextStyle(
                                   color: Color(0xFF4D5DFA),
                                   fontSize: isSmall ? 12 : 14,
@@ -251,10 +251,7 @@ class SearchDetail extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                formatCurrency(
-                                  nominal:
-                                      mall.starterPrice ?? mall.hourlyPrice,
-                                ),
+                                formatCurrency(nominal: mall.hourlyPrice),
                                 style: TextStyle(
                                   color: Color(0xFF4D5DFA),
                                   fontWeight: FontWeight.bold,

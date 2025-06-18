@@ -23,8 +23,8 @@ class DetailRow extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            width: 120,
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 120, maxWidth: 150),
             child: Text(
               label,
               style: TextStyle(
@@ -34,7 +34,6 @@ class DetailRow extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 8),
           Expanded(
             child: Text(
               value,
@@ -55,54 +54,115 @@ class DetailRow extends StatelessWidget {
 
 class DetailItem {
   final String label;
-  final String value;
+  final String? value;
+  final Widget? child;
 
-  DetailItem({required this.label, required this.value});
+  DetailItem({required this.label, this.value, this.child})
+    : assert(
+        value == null || child == null,
+        'Cannot provide both value and child.',
+      );
 }
 
 class DataCard extends StatelessWidget {
-  final List<DetailItem> listData;
-  final String title;
+  final List<DetailItem>? listData;
+  final String? title;
+  final List<DetailItem>? children;
 
-  const DataCard({super.key, required this.listData, required this.title});
+  const DataCard({super.key, this.listData, this.title, this.children});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     final FontWeight fontWeight = FontWeight.w600;
-    final double fontSize = isSmall ? 13 : 20;
+    final double fontSize = isSmall ? 13 : 16;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: isSmall ? 18 : 25,
-              fontWeight: FontWeight.w600,
+        if (title != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              title!,
+              style: TextStyle(
+                fontSize: isSmall ? 18 : 24,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
-        ),
         Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (int i = 0; i < listData.length; i++) ...[
-                  DetailRow(
-                    label: listData[i].label,
-                    value: listData[i].value,
-                    fontSize: fontSize,
-                    fontWeight: fontWeight,
-                  ),
-                  if (i != listData.length - 1) const SizedBox(height: 10),
+                if (listData != null && listData!.isNotEmpty) ...[
+                  ...List.generate(listData!.length * 2 - 1, (index) {
+                    if (index.isEven) {
+                      final i = index ~/ 2;
+                      final item = listData![i];
+
+                      if (item.value != null) {
+                        return DetailRow(
+                          label: item.label,
+                          value: item.value!,
+                          fontSize: fontSize,
+                          fontWeight: fontWeight,
+                        );
+                      } else if (item.child != null) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              item.label,
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                fontWeight: fontWeight,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            item.child!,
+                          ],
+                        );
+                      } else {
+                        return const SizedBox.shrink();
+                      }
+                    } else {
+                      return const SizedBox(height: 10);
+                    }
+                  }),
+                  if (children != null && children!.isNotEmpty)
+                    const SizedBox(height: 10),
+                ],
+                if (children != null && children!.isNotEmpty) ...[
+                  ...List.generate(children!.length * 2 - 1, (index) {
+                    if (index.isEven) {
+                      final i = index ~/ 2;
+                      final item = children![i];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.label,
+                            style: TextStyle(
+                              fontSize: fontSize,
+                              fontWeight: fontWeight,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          item.child!,
+                        ],
+                      );
+                    } else {
+                      return const SizedBox(height: 10);
+                    }
+                  }),
                 ],
               ],
             ),

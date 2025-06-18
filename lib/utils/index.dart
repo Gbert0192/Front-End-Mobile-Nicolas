@@ -35,7 +35,9 @@ String formatCurrency({
 }
 
 String timeToString(TimeOfDay time) {
-  return "${time.hour}:${time.minute}";
+  final hour = time.hour.toString().padLeft(2, '0');
+  final minute = time.minute.toString().padLeft(2, '0');
+  return "$hour:$minute";
 }
 
 TimeOfDay stringToTime(String hhmm) {

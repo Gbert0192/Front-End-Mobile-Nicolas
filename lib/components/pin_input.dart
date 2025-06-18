@@ -13,6 +13,7 @@ class ResponsivePINInput extends StatefulWidget {
   final Color pinBorderColor;
   final Color pinActiveBorderColor;
   final bool? isLoading;
+  final bool disabled;
 
   const ResponsivePINInput({
     super.key,
@@ -20,6 +21,7 @@ class ResponsivePINInput extends StatefulWidget {
     this.controller,
     this.onCompleted,
     this.isLoading,
+    this.disabled = false,
     this.errorText,
     this.pinFillColor = Colors.white,
     this.pinBorderColor = const Color.fromARGB(255, 182, 182, 182),
@@ -59,7 +61,8 @@ class ResponsivePINInputState extends State<ResponsivePINInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         PinCodeTextField(
-          enabled: widget.isLoading != null ? !widget.isLoading! : true,
+          enabled:
+              widget.isLoading != null ? !widget.isLoading! : !widget.disabled,
           appContext: context,
           length: widget.pinLength,
           controller: widget.controller,
@@ -74,6 +77,7 @@ class ResponsivePINInputState extends State<ResponsivePINInput> {
             borderRadius: BorderRadius.circular(10),
             fieldHeight: isSmall ? 50 : 55,
             fieldWidth: isSmall ? 50 : 55,
+            disabledColor: const Color(0xFFF0F0F0),
             activeFillColor:
                 widget.errorText != null
                     ? const Color(0xFFFFEDED)

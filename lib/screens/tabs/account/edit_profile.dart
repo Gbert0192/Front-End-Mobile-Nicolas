@@ -208,6 +208,7 @@ class _EditProfileState extends State<EditProfile> {
                     Column(
                       children: [
                         ResponsiveTextInput(
+                          isLoading: form.isLoading,
                           controller: form.control('fullname'),
                           hint: 'Enter Fullname',
                           label: 'Fullname',
@@ -223,6 +224,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTextInput(
+                          isLoading: form.isLoading,
                           controller: form.control('email'),
                           hint: 'Enter Email',
                           label: 'Email',
@@ -238,6 +240,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsivePhoneInput(
+                          isLoading: form.isLoading,
                           country_code: country_code,
                           controller: form.control("phone"),
                           hint: 'Enter Phone Number',
@@ -256,6 +259,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTimePicker(
+                          isLoading: form.isLoading,
                           type: DatePickerType.date,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',
@@ -263,6 +267,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveDropdown(
+                          isLoading: form.isLoading,
                           items: [
                             {"label": "Male", "value": "male"},
                             {"label": "Female", "value": "female"},

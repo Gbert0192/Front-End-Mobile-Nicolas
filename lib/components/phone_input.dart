@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
@@ -31,6 +32,7 @@ class ResponsivePhoneInput extends StatefulWidget {
     this.label,
     this.errorText,
     this.isLoading,
+    this.disabled = false,
     this.country_code,
     this.mode = StyleMode.outline,
     this.fillColor = Colors.white,
@@ -50,6 +52,7 @@ class ResponsivePhoneInput extends StatefulWidget {
   final Color borderColor;
   final Color borderFocusColor;
   final bool? isLoading;
+  final bool disabled;
 
   @override
   State<ResponsivePhoneInput> createState() => _ResponsivePhoneInputState();
@@ -106,7 +109,10 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                     ],
           ),
           child: IntlPhoneField(
-            enabled: widget.isLoading != null ? !widget.isLoading! : true,
+            enabled:
+                widget.isLoading != null
+                    ? !widget.isLoading!
+                    : !widget.disabled,
             focusNode: _focusNode,
             controller: widget.controller,
             onCountryChanged: widget.onCountryChanged,
@@ -174,6 +180,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
             ),
             initialCountryCode: widget.country_code,
             disableLengthCheck: true,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
         ),
         const SizedBox(height: 4),

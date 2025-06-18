@@ -19,10 +19,9 @@ class BookingTime extends StatefulWidget {
 }
 
 class _BookingTimeState extends State<BookingTime> {
+  String? date;
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
     final List<DetailItem> parkingArea = [
       DetailItem(label: "Parking Area", value: widget.mall.name),
       DetailItem(
@@ -52,6 +51,31 @@ class _BookingTimeState extends State<BookingTime> {
       ),
     ];
 
+    final List<DetailItem> timeInput = [
+      DetailItem(
+        label: "Booking Date",
+        child: ResponsiveTimePicker(
+          onChanged: (val) {
+            widget.setDate(val);
+            setState(() {
+              date = val;
+            });
+          },
+          minDate: DateTime.now(),
+        ),
+      ),
+      DetailItem(
+        label: "Booking Time",
+        child: ResponsiveTimePicker(
+          disabled: date == null,
+          minTime: widget.mall.openTime,
+          maxTime: widget.mall.closeTime,
+          onChanged: widget.setDate,
+          type: DatePickerType.time,
+        ),
+      ),
+    ];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,57 +83,7 @@ class _BookingTimeState extends State<BookingTime> {
         const SizedBox(height: 12),
         DataCard(title: "Price Booking", listData: rateData),
         const SizedBox(height: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                "Select Time",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-            ),
-            Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: isSmall ? 20 : 30,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Booking Date",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    ResponsiveTimePicker(onChanged: widget.setDate),
-                    const SizedBox(height: 10),
-                    Text(
-                      "Booking Time",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    ResponsiveTimePicker(
-                      type: DatePickerType.time,
-                      onChanged: widget.setTime,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        DataCard(title: "Select Time", children: timeInput),
       ],
     );
   }

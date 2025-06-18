@@ -91,7 +91,7 @@ class ResponsiveButton extends StatelessWidget {
                     isLoading != null
                         ? isLoading!
                             ? null
-                            : onPressed ?? () {}
+                            : onPressed
                         : () {},
                 style: outlineStyle,
                 child: buttonChild,
@@ -101,7 +101,7 @@ class ResponsiveButton extends StatelessWidget {
                     isLoading != null
                         ? isLoading!
                             ? null
-                            : onPressed ?? () {}
+                            : onPressed
                         : () {},
                 style: style,
                 child: buttonChild,
