@@ -126,7 +126,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         Column(
                           children: [
                             ResponsiveTextInput(
-                              isSmall: isSmall,
                               isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               controller: form.control("fullname"),
@@ -143,7 +142,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                             const SizedBox(height: 10),
                             ResponsiveTextInput(
-                              isSmall: isSmall,
                               isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               controller: form.control("email"),
@@ -161,7 +159,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                             const SizedBox(height: 10),
                             ResponsivePhoneInput(
-                              isSmall: isSmall,
                               isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               country_code: country_code,
@@ -183,7 +180,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                             const SizedBox(height: 10),
                             ResponsiveDropdown(
-                              isSmall: isSmall,
                               isLoading: form.isLoading,
                               items: subjects,
                               mode: StyleMode.underline,
@@ -201,7 +197,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
                             ),
                             const SizedBox(height: 10),
                             ResponsiveTextInput(
-                              isSmall: isSmall,
                               isLoading: form.isLoading,
                               mode: StyleMode.underline,
                               controller: form.control("comment"),
@@ -249,7 +244,6 @@ class _ContactUsPageState extends State<ContactUsPage> {
                         ),
                         SizedBox(height: isSmall ? 32 : 48),
                         ResponsiveButton(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           onPressed: () {
                             bool isValid = false;

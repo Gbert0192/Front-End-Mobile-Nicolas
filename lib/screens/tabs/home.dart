@@ -301,7 +301,7 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-                  isSmall: isSmall,
+
                   readOnly: true,
                   hint: translate(context, "Search", "Telusuri", "搜索"),
                   leading: Icons.search,

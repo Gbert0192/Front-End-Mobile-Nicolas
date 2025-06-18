@@ -24,7 +24,6 @@ List<String> allowedCountryCodes = [
 class ResponsivePhoneInput extends StatefulWidget {
   const ResponsivePhoneInput({
     super.key,
-    required this.isSmall,
     this.controller,
     this.onChanged,
     this.onCountryChanged,
@@ -39,7 +38,6 @@ class ResponsivePhoneInput extends StatefulWidget {
     this.borderFocusColor = const Color(0xFF505050),
   });
 
-  final bool isSmall;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
   final ValueChanged<Country>? onCountryChanged;
@@ -80,6 +78,8 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final hasError = widget.errorText != null;
 
     return Column(
@@ -88,10 +88,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
         widget.mode == StyleMode.underline
             ? Text(
               widget.label!,
-              style: TextStyle(
-                color: _getColor(),
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: _getColor(), fontSize: isSmall ? 12 : 16),
             )
             : SizedBox.shrink(),
         Container(
@@ -138,8 +135,8 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                       ? const Color(0xFFFFEDED)
                       : widget.fillColor,
               contentPadding: EdgeInsets.symmetric(
-                horizontal: widget.isSmall ? 18 : 20,
-                vertical: widget.isSmall ? 12 : 16,
+                horizontal: isSmall ? 18 : 20,
+                vertical: isSmall ? 12 : 16,
               ),
               border:
                   widget.mode == StyleMode.underline
@@ -185,10 +182,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 15,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 15),
             ),
           ),
       ],

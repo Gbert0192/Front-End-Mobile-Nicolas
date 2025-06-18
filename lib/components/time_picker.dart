@@ -8,7 +8,6 @@ class ResponsiveTimePicker extends StatefulWidget {
     super.key,
     this.controller,
     this.onChanged,
-    required this.isSmall,
     this.label,
     this.hint,
     this.errorText,
@@ -19,9 +18,13 @@ class ResponsiveTimePicker extends StatefulWidget {
     this.borderFocusColor = const Color(0xFF505050),
     this.mode = StyleMode.outline,
     this.type = DatePickerType.date,
+    this.minTime,
+    this.maxTime,
+    this.disabledDates,
+    this.minDate,
+    this.maxDate,
   });
 
-  final bool isSmall;
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final String? label;
@@ -35,6 +38,13 @@ class ResponsiveTimePicker extends StatefulWidget {
   final DatePickerType type;
   final bool? isLoading;
 
+  final TimeOfDay? minTime;
+  final TimeOfDay? maxTime;
+
+  final List<DateTime>? disabledDates;
+  final DateTime? minDate;
+  final DateTime? maxDate;
+
   @override
   State<ResponsiveTimePicker> createState() => _ResponsiveTimePickerState();
 }
@@ -42,6 +52,85 @@ class ResponsiveTimePicker extends StatefulWidget {
 class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   bool _isFocused = false;
   String? _selectedDate;
+
+  bool _isTimeInRange(TimeOfDay time) {
+    if (widget.minTime == null && widget.maxTime == null) return true;
+
+    final timeInMinutes = time.hour * 60 + time.minute;
+
+    if (widget.minTime != null) {
+      final minTimeInMinutes =
+          widget.minTime!.hour * 60 + widget.minTime!.minute;
+      if (timeInMinutes < minTimeInMinutes) return false;
+    }
+
+    if (widget.maxTime != null) {
+      final maxTimeInMinutes =
+          widget.maxTime!.hour * 60 + widget.maxTime!.minute;
+      if (timeInMinutes > maxTimeInMinutes) return false;
+    }
+
+    return true;
+  }
+
+  bool _isDateDisabled(DateTime date) {
+    if (widget.disabledDates == null) return false;
+
+    return widget.disabledDates!.any(
+      (disabledDate) =>
+          date.year == disabledDate.year &&
+          date.month == disabledDate.month &&
+          date.day == disabledDate.day,
+    );
+  }
+
+  Future<TimeOfDay?> _showTimePickerWithConstraints(
+    BuildContext context,
+    TimeOfDay initialTime,
+  ) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (selectedTime != null && !_isTimeInRange(selectedTime)) {
+      // Show error dialog if time is out of range
+      String errorMessage = '';
+      if (widget.minTime != null && widget.maxTime != null) {
+        errorMessage =
+            'Please select a time between ${widget.minTime!.format(context)} and ${widget.maxTime!.format(context)}';
+      } else if (widget.minTime != null) {
+        errorMessage =
+            'Please select a time after ${widget.minTime!.format(context)}';
+      } else if (widget.maxTime != null) {
+        errorMessage =
+            'Please select a time before ${widget.maxTime!.format(context)}';
+      }
+
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Invalid Time'),
+              content: Text(errorMessage),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      // Recursively show time picker again
+      return await _showTimePickerWithConstraints(context, initialTime);
+    }
+
+    return selectedTime;
+  }
 
   Future<void> _pickDate() async {
     DateTime now = DateTime.now();
@@ -75,9 +164,9 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     initialDate ??= now;
 
     if (widget.type == DatePickerType.time) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(initialDate),
+      final TimeOfDay? pickedTime = await _showTimePickerWithConstraints(
+        context,
+        TimeOfDay.fromDateTime(initialDate),
       );
 
       if (pickedTime != null) {
@@ -95,8 +184,11 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      firstDate: widget.minDate ?? DateTime(2000),
+      lastDate: widget.maxDate ?? DateTime(2100),
+      selectableDayPredicate: (DateTime date) {
+        return !_isDateDisabled(date);
+      },
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
@@ -122,9 +214,9 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       DateTime finalDate = pickedDate;
 
       if (widget.type == DatePickerType.datetime) {
-        final TimeOfDay? time = await showTimePicker(
-          context: context,
-          initialTime: TimeOfDay.fromDateTime(initialDate),
+        final TimeOfDay? time = await _showTimePickerWithConstraints(
+          context,
+          TimeOfDay.fromDateTime(initialDate),
         );
         if (time != null) {
           finalDate = DateTime(
@@ -144,7 +236,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
           break;
         case DatePickerType.datetime:
           formatted =
-              "${finalDate.day}/${finalDate.month}/${finalDate.year}:${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
+              "${finalDate.day}/${finalDate.month}/${finalDate.year} ${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
           break;
         default:
           formatted = '';
@@ -185,6 +277,8 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final hasError = widget.errorText != null;
     final isOutline = widget.mode == StyleMode.outline;
 
@@ -199,7 +293,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                   widget.label ?? '',
                   style: TextStyle(
                     color: _getColor(),
-                    fontSize: widget.isSmall ? 12 : 16,
+                    fontSize: isSmall ? 12 : 16,
                   ),
                 )
                 : const SizedBox.shrink(),
@@ -238,15 +332,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                     fillColor:
                         hasError ? const Color(0xFFFFEDED) : widget.fillColor,
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: widget.isSmall ? 18 : 20,
-                      vertical: widget.isSmall ? 12 : 16,
+                      horizontal: isSmall ? 18 : 20,
+                      vertical: isSmall ? 12 : 16,
                     ),
                     prefixIcon:
                         widget.leading != null
-                            ? Icon(
-                              widget.leading,
-                              size: widget.isSmall ? 20 : 28,
-                            )
+                            ? Icon(widget.leading, size: isSmall ? 20 : 28)
                             : null,
                     enabledBorder:
                         isOutline
@@ -285,7 +376,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                   child: Text(
                     _selectedDate ?? widget.hint ?? '',
                     style: TextStyle(
-                      fontSize: widget.isSmall ? 16 : 18,
+                      fontSize: isSmall ? 16 : 18,
                       color: Colors.grey[800],
                     ),
                   ),
@@ -293,7 +384,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(right: widget.isSmall ? 12 : 16),
+              padding: EdgeInsets.only(right: isSmall ? 12 : 16),
               child: IconButton(
                 onPressed: () async {
                   if (_selectedDate != null ||
@@ -324,10 +415,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 16),
             ),
           ),
       ],

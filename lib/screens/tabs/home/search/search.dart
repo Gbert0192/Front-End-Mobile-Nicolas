@@ -82,7 +82,6 @@ class _SearchState extends State<Search> {
                 ),
               ),
               ResponsiveTextInput(
-                isSmall: isSmall,
                 controller: controller,
                 leading: Icons.search,
                 hint: translate(context, 'Search', 'Telusuri', '搜索'),

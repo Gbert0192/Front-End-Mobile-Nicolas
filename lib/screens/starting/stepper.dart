@@ -156,7 +156,6 @@ class _StepperScreenState extends State<StepperScreen> {
             child: Column(
               children: [
                 ResponsiveButton(
-                  isSmall: isSmall,
                   onPressed: () => nextPage(context),
                   text: "Next",
                   textColor: Colors.white,
@@ -164,7 +163,6 @@ class _StepperScreenState extends State<StepperScreen> {
                 ),
                 SizedBox(height: isSmall ? 0 : 10),
                 ResponsiveButton(
-                  isSmall: isSmall,
                   onPressed: () => skipAll(context),
                   text: "Skip",
                   textColor: Color(0xFF4D5DFA),

@@ -151,7 +151,6 @@ class LandingScreen extends StatelessWidget {
                   ),
                   const Spacer(),
                   ResponsiveButton(
-                    isSmall: isSmall,
                     onPressed:
                         () => Navigator.push(
                           context,
@@ -161,7 +160,6 @@ class LandingScreen extends StatelessWidget {
                   ),
                   SizedBox(height: (isSmall ? 0 : 10)),
                   ResponsiveButton(
-                    isSmall: isSmall,
                     onPressed:
                         () => Navigator.push(
                           context,

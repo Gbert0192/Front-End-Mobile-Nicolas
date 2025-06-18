@@ -4,7 +4,6 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 class ResponsiveDropdown<T> extends StatefulWidget {
   const ResponsiveDropdown({
     super.key,
-    required this.isSmall,
     required this.items,
     this.controller,
     this.onChanged,
@@ -19,7 +18,6 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     this.mode = StyleMode.outline,
   });
 
-  final bool isSmall;
   final List<Map<String, String>> items;
   final TextEditingController? controller;
   final Function(String)? onChanged;
@@ -77,7 +75,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
     return widget.borderFocusColor;
   }
 
-  Future<void> _showDropdownMenu() async {
+  Future<void> _showDropdownMenu(bool isSmall) async {
     if (widget.isLoading != null ? !widget.isLoading! : true) {
       setState(() {
         _isFocused = true;
@@ -127,7 +125,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                                 isSelected
                                     ? FontWeight.w500
                                     : FontWeight.normal,
-                            fontSize: widget.isSmall ? 16 : 18,
+                            fontSize: isSmall ? 16 : 18,
                           ),
                         ),
                       ),
@@ -181,6 +179,8 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
     final isOutline = widget.mode == StyleMode.outline;
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,10 +190,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
               widget.label!,
-              style: TextStyle(
-                color: _getColor(),
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: _getColor(), fontSize: isSmall ? 12 : 16),
             ),
           ),
 
@@ -212,7 +209,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                     : null,
           ),
           child: GestureDetector(
-            onTap: _showDropdownMenu,
+            onTap: () => _showDropdownMenu(isSmall),
             child: InputDecorator(
               decoration: InputDecoration(
                 enabled: widget.isLoading != null ? !widget.isLoading! : true,
@@ -225,14 +222,14 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                 fillColor:
                     hasError ? const Color(0xFFFFEDED) : widget.fillColor,
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: widget.isSmall ? 18 : 20,
-                  vertical: widget.isSmall ? 12 : 16,
+                  horizontal: isSmall ? 18 : 20,
+                  vertical: isSmall ? 12 : 16,
                 ),
                 prefixIcon:
                     widget.leading != null
                         ? Icon(
                           widget.leading,
-                          size: widget.isSmall ? 20 : 24,
+                          size: isSmall ? 20 : 24,
                           color: _getColor(),
                         )
                         : null,
@@ -290,7 +287,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
               child: Text(
                 _selectedLabel ?? widget.hint ?? '',
                 style: TextStyle(
-                  fontSize: widget.isSmall ? 16 : 18,
+                  fontSize: isSmall ? 16 : 18,
                   color: Colors.grey[800],
                 ),
               ),
@@ -305,10 +302,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 15,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 15),
             ),
           ),
       ],

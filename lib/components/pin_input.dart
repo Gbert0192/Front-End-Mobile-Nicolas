@@ -6,7 +6,6 @@ enum PinInputType { number, text, mixed }
 
 class ResponsivePINInput extends StatefulWidget {
   final int pinLength;
-  final bool isSmall;
   final TextEditingController? controller;
   final Function(String)? onCompleted;
   final String? errorText;
@@ -17,7 +16,6 @@ class ResponsivePINInput extends StatefulWidget {
 
   const ResponsivePINInput({
     super.key,
-    required this.isSmall,
     this.pinLength = 6,
     this.controller,
     this.onCompleted,
@@ -55,6 +53,8 @@ class ResponsivePINInputState extends State<ResponsivePINInput> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -72,8 +72,8 @@ class ResponsivePINInputState extends State<ResponsivePINInput> {
           pinTheme: PinTheme(
             shape: PinCodeFieldShape.box,
             borderRadius: BorderRadius.circular(10),
-            fieldHeight: widget.isSmall ? 50 : 55,
-            fieldWidth: widget.isSmall ? 50 : 55,
+            fieldHeight: isSmall ? 50 : 55,
+            fieldWidth: isSmall ? 50 : 55,
             activeFillColor:
                 widget.errorText != null
                     ? const Color(0xFFFFEDED)
@@ -130,7 +130,7 @@ class ResponsivePINInputState extends State<ResponsivePINInput> {
                 widget.errorText!,
                 style: TextStyle(
                   color: Colors.red,
-                  fontSize: widget.isSmall ? 12 : 15,
+                  fontSize: isSmall ? 12 : 15,
                 ),
               ),
             ),

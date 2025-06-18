@@ -102,7 +102,6 @@ class _SignInState extends State<SignIn> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           controller: form.control("email"),
                           hint: 'Enter your email',
@@ -119,7 +118,6 @@ class _SignInState extends State<SignIn> {
                         ),
                         const SizedBox(height: 12),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           controller: form.control("password"),
                           hint: 'Enter your password',
@@ -140,7 +138,6 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: isSmall ? 10 : 20),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;
@@ -243,7 +240,6 @@ class _SignInState extends State<SignIn> {
                     ),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         Navigator.pushReplacement(

@@ -102,7 +102,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           controller: form.control("email"),
                           hint: 'Enter your email',
@@ -167,7 +166,6 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     ),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;

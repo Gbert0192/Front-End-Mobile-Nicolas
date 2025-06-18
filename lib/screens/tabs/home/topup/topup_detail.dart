@@ -294,7 +294,6 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                         ),
                         SizedBox(height: 8),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           hint: "Enter amount",
                           type: TextInputTypes.number,
                           controller: _amountController,
@@ -303,7 +302,6 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                         ),
                         SizedBox(height: 12),
                         ResponsiveButton(
-                          isSmall: isSmall,
                           backgroundColor: const Color.fromARGB(
                             220,
                             81,

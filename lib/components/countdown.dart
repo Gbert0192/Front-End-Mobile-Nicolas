@@ -5,19 +5,17 @@ enum Metrics { second, minute, hour }
 
 class CountdownTimer extends StatefulWidget {
   final Color color;
-  final double fontSize;
   final int countLong;
   final Function(int)? countDownFunction;
-  final bool isSmall;
   final Metrics unit;
 
-  const CountdownTimer({super.key, 
-    required this.isSmall,
+  const CountdownTimer({
+    super.key,
     required this.countLong,
     this.countDownFunction,
     this.color = Colors.black,
     this.unit = Metrics.minute,
-  }) : fontSize = isSmall ? 15 : 18;
+  });
 
   @override
   State<CountdownTimer> createState() => _CountdownTimerState();
@@ -83,9 +81,11 @@ class _CountdownTimerState extends State<CountdownTimer> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return Text(
       formatDuration(_secondsRemaining),
-      style: TextStyle(fontSize: widget.fontSize, color: widget.color),
+      style: TextStyle(fontSize: isSmall ? 15 : 18, color: widget.color),
     );
   }
 }

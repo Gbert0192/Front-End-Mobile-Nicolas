@@ -97,7 +97,6 @@ class _AddBookingState extends State<AddBooking> {
                 // Button
                 Center(
                   child: ResponsiveButton(
-                    isSmall: isSmall,
                     isLoading: isLoading,
                     onPressed: () {
                       if (currentPage == 0) {

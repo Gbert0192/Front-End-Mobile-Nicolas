@@ -195,7 +195,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     ResponsivePINInput(
                       isLoading: isLoading,
                       key: pinKey,
-                      isSmall: isSmall,
+
                       errorText: otpError,
                       controller: otpController,
                       onCompleted: (value) {
@@ -310,7 +310,6 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                     textAlign: TextAlign.center,
                                   )
                                   : CountdownTimer(
-                                    isSmall: isSmall,
                                     countLong: count,
                                     countDownFunction:
                                         (int remain) => setState(() {
@@ -334,7 +333,6 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     ),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: isLoading,
                       onPressed: verifyOTP,
                       text: translate(context, "Continue", "Lanjut", "继续"),

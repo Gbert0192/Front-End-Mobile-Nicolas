@@ -208,7 +208,6 @@ class _EditProfileState extends State<EditProfile> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           controller: form.control('fullname'),
                           hint: 'Enter Fullname',
                           label: 'Fullname',
@@ -224,7 +223,6 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           controller: form.control('email'),
                           hint: 'Enter Email',
                           label: 'Email',
@@ -240,7 +238,6 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsivePhoneInput(
-                          isSmall: isSmall,
                           country_code: country_code,
                           controller: form.control("phone"),
                           hint: 'Enter Phone Number',
@@ -259,7 +256,6 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTimePicker(
-                          isSmall: isSmall,
                           type: DatePickerType.date,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',
@@ -267,7 +263,6 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveDropdown(
-                          isSmall: isSmall,
                           items: [
                             {"label": "Male", "value": "male"},
                             {"label": "Female", "value": "female"},
@@ -281,7 +276,6 @@ class _EditProfileState extends State<EditProfile> {
                     SizedBox(height: isSmall ? 50 : 70),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         final hasChanged =

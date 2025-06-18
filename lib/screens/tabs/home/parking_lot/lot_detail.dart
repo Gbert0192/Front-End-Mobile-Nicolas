@@ -218,8 +218,8 @@ class SearchDetail extends StatelessWidget {
                       ),
                     ),
                     ExpandableRichText(
-                      openTime: mall.openTime,
-                      closeTime: mall.closeTime,
+                      openTime: timeToString(mall.openTime),
+                      closeTime: timeToString(mall.closeTime),
                       buildingType: mall.buildingType,
                     ),
 
@@ -356,7 +356,6 @@ class SearchDetail extends StatelessWidget {
                       children: [
                         Expanded(
                           child: ResponsiveButton(
-                            isSmall: isSmall,
                             fontWeight: FontWeight.w600,
                             onPressed:
                                 () => Navigator.push(
@@ -377,7 +376,6 @@ class SearchDetail extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: ResponsiveButton(
-                            isSmall: isSmall,
                             onPressed:
                                 () => Navigator.push(
                                   context,

@@ -15,8 +15,27 @@ class ParkingLotProvider with ChangeNotifier {
   List<ParkingLot>? searchLot(User user, String key) {
     final keyword = key.trim().toLowerCase();
 
-    final mallKeywords = ['mall', 'mal', 'shopping', 'pusat perbelanjaan'];
-    final hotelKeywords = ['hotel', 'penginapan', 'akomodasi', 'inap'];
+    final mallKeywords = [
+      'mall',
+      'malls',
+      'mal',
+      'shopping',
+      'pusat perbelanjaan',
+      'shopping center',
+      'shopping centre',
+      'shopping mall',
+      'plaza',
+    ];
+
+    final hotelKeywords = [
+      'hotel',
+      'hotels',
+      'penginapan',
+      'akomodasi',
+      'inap',
+      'resort',
+      'motel',
+    ];
 
     final filterLots =
         lots.where((item) {

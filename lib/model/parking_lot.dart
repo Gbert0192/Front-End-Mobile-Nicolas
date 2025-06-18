@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
@@ -57,8 +58,8 @@ class ParkingLot {
   final String name;
   final BuildingType buildingType;
   final String address;
-  final String openTime;
-  final String closeTime;
+  final TimeOfDay openTime;
+  final TimeOfDay closeTime;
   final double? starterPrice;
   final double hourlyPrice;
   final String image;
@@ -209,21 +210,27 @@ class ParkingLot {
   }
 
   double maxTotalEarning() {
-    final open = _parseTime(openTime);
-    final close = _parseTime(closeTime);
+    final now = DateTime.now();
+
+    final open = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      openTime.hour,
+      openTime.minute,
+    );
+
+    final close = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      closeTime.hour,
+      closeTime.minute,
+    );
 
     Duration diff = close.difference(open);
-
     final hours = (diff.inMinutes / 60).ceil();
 
     return calculateAmount(hours);
-  }
-
-  DateTime _parseTime(String timeStr) {
-    final parts = timeStr.split(':');
-    final now = DateTime.now();
-    final hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    return DateTime(now.year, now.month, now.day, hour, minute);
   }
 }

@@ -27,7 +27,8 @@ class _BookingTimeState extends State<BookingTime> {
       DetailItem(label: "Parking Area", value: widget.mall.name),
       DetailItem(
         label: "Operate Time",
-        value: "${widget.mall.openTime} - ${widget.mall.closeTime}",
+        value:
+            "${timeToString(widget.mall.openTime)} - ${timeToString(widget.mall.closeTime)}",
       ),
       DetailItem(label: "Address", value: widget.mall.address),
       DetailItem(
@@ -89,10 +90,7 @@ class _BookingTimeState extends State<BookingTime> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    ResponsiveTimePicker(
-                      isSmall: isSmall,
-                      onChanged: widget.setDate,
-                    ),
+                    ResponsiveTimePicker(onChanged: widget.setDate),
                     const SizedBox(height: 10),
                     Text(
                       "Booking Time",
@@ -103,7 +101,6 @@ class _BookingTimeState extends State<BookingTime> {
                     ),
                     const SizedBox(height: 5),
                     ResponsiveTimePicker(
-                      isSmall: isSmall,
                       type: DatePickerType.time,
                       onChanged: widget.setTime,
                     ),

@@ -65,11 +65,13 @@ class DataCard extends StatelessWidget {
   final String title;
 
   const DataCard({super.key, required this.listData, required this.title});
-  final FontWeight fontWeight = FontWeight.w600;
-  final double fontSize = 13;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    final FontWeight fontWeight = FontWeight.w600;
+    final double fontSize = isSmall ? 13 : 20;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -77,7 +79,10 @@ class DataCard extends StatelessWidget {
           padding: EdgeInsets.only(left: 10),
           child: Text(
             title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              fontSize: isSmall ? 18 : 25,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         Card(

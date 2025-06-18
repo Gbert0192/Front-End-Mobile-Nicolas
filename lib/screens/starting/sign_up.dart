@@ -95,7 +95,6 @@ class _SignUpState extends State<SignUp> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           controller: form.control("email"),
                           hint: 'Enter your email',
@@ -116,7 +115,6 @@ class _SignUpState extends State<SignUp> {
                     SizedBox(height: isSmall ? 10 : 20),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;
@@ -184,7 +182,6 @@ class _SignUpState extends State<SignUp> {
                     ),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         Navigator.pushReplacement(

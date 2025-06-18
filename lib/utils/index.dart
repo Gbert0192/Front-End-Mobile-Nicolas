@@ -33,3 +33,12 @@ String formatCurrency({
   );
   return currencyFormat.format(nominal);
 }
+
+String timeToString(TimeOfDay time) {
+  return "${time.hour}:${time.minute}";
+}
+
+TimeOfDay stringToTime(String hhmm) {
+  final parts = hhmm.split(":");
+  return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+}
