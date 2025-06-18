@@ -4,7 +4,6 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 class ResponsiveDropdown<T> extends StatefulWidget {
   const ResponsiveDropdown({
     super.key,
-    required this.isSmall,
     required this.items,
     this.controller,
     this.onChanged,
@@ -12,6 +11,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     this.hint,
     this.errorText,
     this.isLoading,
+    this.disabled = false,
     this.leading,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
@@ -19,7 +19,6 @@ class ResponsiveDropdown<T> extends StatefulWidget {
     this.mode = StyleMode.outline,
   });
 
-  final bool isSmall;
   final List<Map<String, String>> items;
   final TextEditingController? controller;
   final Function(String)? onChanged;
@@ -32,6 +31,7 @@ class ResponsiveDropdown<T> extends StatefulWidget {
   final Color borderColor;
   final Color borderFocusColor;
   final bool? isLoading;
+  final bool disabled;
 
   @override
   State<ResponsiveDropdown<T>> createState() => _ResponsiveDropdownState<T>();
@@ -77,7 +77,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
     return widget.borderFocusColor;
   }
 
-  Future<void> _showDropdownMenu() async {
+  Future<void> _showDropdownMenu(bool isSmall) async {
     if (widget.isLoading != null ? !widget.isLoading! : true) {
       setState(() {
         _isFocused = true;
@@ -127,7 +127,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                                 isSelected
                                     ? FontWeight.w500
                                     : FontWeight.normal,
-                            fontSize: widget.isSmall ? 16 : 18,
+                            fontSize: isSmall ? 16 : 18,
                           ),
                         ),
                       ),
@@ -148,7 +148,6 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
       });
 
       if (selectedValue != null) {
-        // If the same item is selected again, deselect it
         if (_selectedValue == selectedValue) {
           setState(() {
             _selectedValue = null;
@@ -181,6 +180,10 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
   Widget build(BuildContext context) {
     final hasError = widget.errorText != null;
     final isOutline = widget.mode == StyleMode.outline;
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    final enabled =
+        widget.isLoading != null ? !widget.isLoading! : !widget.disabled;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,13 +193,9 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
               widget.label!,
-              style: TextStyle(
-                color: _getColor(),
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: _getColor(), fontSize: isSmall ? 12 : 16),
             ),
           ),
-
         Container(
           decoration: BoxDecoration(
             borderRadius: isOutline ? BorderRadius.circular(20) : null,
@@ -212,10 +211,16 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                     : null,
           ),
           child: GestureDetector(
-            onTap: _showDropdownMenu,
+            onTap: () async {
+              if ((widget.isLoading != null ? !widget.isLoading! : true) &&
+                  !widget.disabled) {
+                setState(() => _isFocused = true);
+                await _showDropdownMenu(isSmall);
+                setState(() => _isFocused = false);
+              }
+            },
             child: InputDecorator(
               decoration: InputDecoration(
-                enabled: widget.isLoading != null ? !widget.isLoading! : true,
                 labelText: widget.label,
                 hintText: widget.hint,
                 hintStyle: TextStyle(color: _getColor()),
@@ -223,24 +228,40 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                 floatingLabelStyle: TextStyle(color: _getColor()),
                 filled: true,
                 fillColor:
-                    hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+                    widget.mode == StyleMode.underline
+                        ? Colors.white
+                        : hasError
+                        ? const Color(0xFFFFEDED)
+                        : widget.fillColor,
                 contentPadding: EdgeInsets.symmetric(
-                  horizontal: widget.isSmall ? 18 : 20,
-                  vertical: widget.isSmall ? 12 : 16,
+                  horizontal: isSmall ? 18 : 20,
+                  vertical: isSmall ? 12 : 16,
                 ),
                 prefixIcon:
                     widget.leading != null
                         ? Icon(
                           widget.leading,
-                          size: widget.isSmall ? 20 : 24,
+                          size: isSmall ? 20 : 24,
                           color: _getColor(),
                         )
                         : null,
-                suffixIcon: Icon(
-                  _isMenuOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                  color: _getColor(),
+                suffixIcon: Opacity(
+                  opacity: enabled ? 1 : 0.4,
+                  child: Icon(
+                    _isMenuOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                    color: _getColor(),
+                  ),
                 ),
                 enabledBorder:
+                    isOutline
+                        ? OutlineInputBorder(
+                          borderSide: BorderSide(color: _getColor()),
+                          borderRadius: BorderRadius.circular(20),
+                        )
+                        : UnderlineInputBorder(
+                          borderSide: BorderSide(color: _getColor()),
+                        ),
+                disabledBorder:
                     isOutline
                         ? OutlineInputBorder(
                           borderSide: BorderSide(color: _getColor()),
@@ -287,11 +308,14 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                         ),
               ),
               isFocused: _isFocused || _isMenuOpen,
-              child: Text(
-                _selectedLabel ?? widget.hint ?? '',
-                style: TextStyle(
-                  fontSize: widget.isSmall ? 16 : 18,
-                  color: Colors.grey[800],
+              child: Opacity(
+                opacity: enabled ? 1 : 0.4,
+                child: Text(
+                  _selectedLabel ?? widget.hint ?? '',
+                  style: TextStyle(
+                    fontSize: isSmall ? 16 : 18,
+                    color: Colors.grey[800],
+                  ),
                 ),
               ),
             ),
@@ -305,10 +329,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 15,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 15),
             ),
           ),
       ],

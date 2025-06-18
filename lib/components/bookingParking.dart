@@ -69,7 +69,11 @@ class ParkingCard extends StatelessWidget {
         color: const Color(0xFFF6F9FF),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+          BoxShadow(
+            color: const Color.fromRGBO(0, 0, 0, 0.25),
+            blurRadius: 8,
+            offset: Offset(4, 4),
+          ),
         ],
       ),
       child: Row(
@@ -78,12 +82,12 @@ class ParkingCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             child: Image.asset(
               imageUrl,
-              width: 70,
+              width: 95,
               height: 70,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,11 +95,11 @@ class ParkingCard extends StatelessWidget {
                 Text(
                   placeName,
                   style: TextStyle(
-                    fontSize: isSmall ? 16 : 18,
+                    fontSize: isSmall ? 16 : 20,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 25),
                 Row(
                   children: [
                     Icon(
@@ -107,7 +111,7 @@ class ParkingCard extends StatelessWidget {
                     Text(
                       _getStatusText(statusText),
                       style: TextStyle(
-                        fontSize: isSmall ? 11 : 13,
+                        fontSize: 12,
                         color: _getStatusColor(statusText),
                         fontWeight: FontWeight.w500,
                       ),
@@ -122,14 +126,17 @@ class ParkingCard extends StatelessWidget {
             children: [
               Text(
                 dateText,
-                style: TextStyle(color: Colors.grey, fontSize: 12),
+                style: TextStyle(
+                  color: const Color.fromRGBO(0, 0, 0, 0.75),
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(height: 28),
               Text(
                 "${formatCurrency(nominal: priceText)}/h",
                 style: TextStyle(
                   fontSize: isSmall ? 13 : 15,
-                  color: Colors.grey,
+                  color: const Color.fromRGBO(0, 0, 0, 0.5),
                   fontWeight: FontWeight.w600,
                 ),
               ),

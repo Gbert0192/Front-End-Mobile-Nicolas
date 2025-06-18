@@ -52,7 +52,9 @@ class HistoryProvider with ChangeNotifier {
   List<ParkingLot>? getFrequentLots(User user) {
     return histories
         .firstWhereOrNull((item) => item.user == user)
-        ?.getFrequentLots();
+        ?.getFrequentLots()
+        .take(5)
+        .toList();
   }
 
   void chackAllStatus(User user) {

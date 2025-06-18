@@ -13,12 +13,42 @@ class ParkingLotProvider with ChangeNotifier {
   }
 
   List<ParkingLot>? searchLot(User user, String key) {
+    final keyword = key.trim().toLowerCase();
+
+    final mallKeywords = [
+      'mall',
+      'malls',
+      'mal',
+      'shopping',
+      'pusat perbelanjaan',
+      'shopping center',
+      'shopping centre',
+      'shopping mall',
+      'plaza',
+    ];
+
+    final hotelKeywords = [
+      'hotel',
+      'hotels',
+      'penginapan',
+      'akomodasi',
+      'inap',
+      'resort',
+      'motel',
+    ];
+
     final filterLots =
-        lots
-            .where(
-              (item) => item.name.toLowerCase().contains(key.toLowerCase()),
-            )
-            .toList();
+        lots.where((item) {
+          final nameMatch = item.name.toLowerCase().contains(keyword);
+
+          final buildingTypeMatch =
+              (mallKeywords.contains(keyword) &&
+                  item.buildingType == BuildingType.mall) ||
+              (hotelKeywords.contains(keyword) &&
+                  item.buildingType == BuildingType.hotel);
+
+          return nameMatch || buildingTypeMatch;
+        }).toList();
 
     var history = searches.firstWhereOrNull((item) => item.user == user);
 
@@ -27,9 +57,10 @@ class ParkingLotProvider with ChangeNotifier {
       searches.add(history);
     }
 
-    history.searchHistory.remove(key.trim());
+    // Update search history
+    history.searchHistory.remove(keyword);
+    history.searchHistory.insert(0, keyword);
 
-    history.searchHistory.insert(0, key.trim());
     notifyListeners();
     return filterLots;
   }

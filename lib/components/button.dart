@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 enum ButtonTypes { normal, outline }
 
 class ResponsiveButton extends StatelessWidget {
-  final bool isSmall;
   final VoidCallback? onPressed;
   final String? loadingText;
   final String text;
@@ -16,7 +15,6 @@ class ResponsiveButton extends StatelessWidget {
 
   const ResponsiveButton({
     super.key,
-    required this.isSmall,
     this.onPressed,
     this.loadingText,
     required this.text,
@@ -32,6 +30,8 @@ class ResponsiveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final buttonChild =
         isLoading != null && isLoading!
             ? Row(
@@ -91,7 +91,7 @@ class ResponsiveButton extends StatelessWidget {
                     isLoading != null
                         ? isLoading!
                             ? null
-                            : onPressed ?? () {}
+                            : onPressed
                         : () {},
                 style: outlineStyle,
                 child: buttonChild,
@@ -101,7 +101,7 @@ class ResponsiveButton extends StatelessWidget {
                     isLoading != null
                         ? isLoading!
                             ? null
-                            : onPressed ?? () {}
+                            : onPressed
                         : () {},
                 style: style,
                 child: buttonChild,

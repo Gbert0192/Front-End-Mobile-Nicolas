@@ -130,7 +130,6 @@ class _SubscriptionState extends State<Subscription> {
                             SizedBox(height: 10),
                             // Button
                             ResponsiveButton(
-                              isSmall: isSmall,
                               isLoading: isLoading,
                               onPressed:
                                   (selected != null && currentPage == 1) ||

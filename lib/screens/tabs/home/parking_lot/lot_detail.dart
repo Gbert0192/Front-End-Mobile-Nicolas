@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/enter_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -48,7 +50,7 @@ class SearchDetail extends StatelessWidget {
                 ),
                 Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(50),
                     child: Image.asset(
                       mall.image,
                       width: 400,
@@ -154,7 +156,7 @@ class SearchDetail extends StatelessWidget {
                               ),
                               SizedBox(width: 5),
                               Text(
-                                '${mall.openTime} - ${mall.closeTime}',
+                                '${timeToString(mall.openTime)} - ${timeToString(mall.closeTime)}',
                                 style: TextStyle(
                                   color: Color(0xFF4D5DFA),
                                   fontSize: isSmall ? 12 : 14,
@@ -216,8 +218,8 @@ class SearchDetail extends StatelessWidget {
                       ),
                     ),
                     ExpandableRichText(
-                      openTime: mall.openTime,
-                      closeTime: mall.closeTime,
+                      openTime: timeToString(mall.openTime),
+                      closeTime: timeToString(mall.closeTime),
                       buildingType: mall.buildingType,
                     ),
 
@@ -249,10 +251,7 @@ class SearchDetail extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                formatCurrency(
-                                  nominal:
-                                      mall.starterPrice ?? mall.hourlyPrice,
-                                ),
+                                formatCurrency(nominal: mall.hourlyPrice),
                                 style: TextStyle(
                                   color: Color(0xFF4D5DFA),
                                   fontWeight: FontWeight.bold,
@@ -354,28 +353,40 @@ class SearchDetail extends StatelessWidget {
                       children: [
                         Expanded(
                           child: ResponsiveButton(
-                            isSmall: isSmall,
                             fontWeight: FontWeight.w600,
+                            onPressed:
+                                () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AddBooking(mall),
+                                  ),
+                                ),
                             backgroundColor: Color(0xFFFFA35E),
                             text: translate(
                               context,
-                              'Enter Parking',
-                              'Masuk Parkir',
-                              '进入停车场',
+                              'Book Parking',
+                              'Pesan Parkir',
+                              '预订停车位',
                             ),
                           ),
                         ),
                         SizedBox(width: 10),
                         Expanded(
                           child: ResponsiveButton(
-                            isSmall: isSmall,
+                            onPressed:
+                                () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EnterQR(mall: mall),
+                                  ),
+                                ),
                             fontWeight: FontWeight.w600,
                             backgroundColor: Color(0xFF7573EE),
                             text: translate(
                               context,
-                              'Book Parking',
-                              'Pesan Parkir',
-                              '预订停车位',
+                              'Enter Parking',
+                              'Masuk Parkir',
+                              '进入停车场',
                             ),
                           ),
                         ),

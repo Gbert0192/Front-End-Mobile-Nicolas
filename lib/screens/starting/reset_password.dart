@@ -123,7 +123,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           controller: form.control("password"),
                           hint: 'Enter Password',
@@ -140,7 +139,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                         ),
                         const SizedBox(height: 10),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
                           isLoading: form.isLoading,
                           controller: form.control("conpassword"),
                           hint: 'Enter Confirm Password',
@@ -170,7 +168,6 @@ class _ResetPasswordState extends State<ResetPassword> {
                     ),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;

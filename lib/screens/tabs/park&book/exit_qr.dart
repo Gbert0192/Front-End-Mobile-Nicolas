@@ -3,17 +3,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 
-class BookingDetailPage extends StatefulWidget {
+class ExitQR extends StatefulWidget {
   final ParkingLot mall;
 
-  const BookingDetailPage({super.key, required this.mall});
+  const ExitQR({super.key, required this.mall});
 
   @override
-  State<BookingDetailPage> createState() => _BookingDetailPageState();
+  State<ExitQR> createState() => _ExitQRState();
 }
 
-class _BookingDetailPageState extends State<BookingDetailPage> {
+class _ExitQRState extends State<ExitQR> {
   @override
   Widget build(BuildContext context) {
     String formatDateTime(DateTime dt) {
@@ -163,18 +164,15 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    _buildDetailRow('Parking Area', widget.mall.name),
-                    const SizedBox(height: 12),
-                    _buildDetailRow(
-                      'Address',
-                      widget.mall.address.split(',')[0],
+                    DetailRow(label: 'Parking Area', value: widget.mall.name),
+                    DetailRow(label: 'Address', value: widget.mall.address),
+                    DetailRow(
+                      label: 'Booking Time',
+                      value: formatDateTime(today),
                     ),
-                    const SizedBox(height: 12),
-                    _buildDetailRow('Booking Time', formatDateTime(today)),
-                    const SizedBox(height: 12),
-                    _buildDetailRow(
-                      'Expired Time',
-                      formatDateTime(expired),
+                    DetailRow(
+                      label: 'Expired Time',
+                      value: formatDateTime(expired),
                       valueColor: Colors.red,
                     ),
                   ],
@@ -204,22 +202,6 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildDetailRow(String title, String value, {Color? valueColor}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title, style: const TextStyle(color: Colors.grey)),
-        Text(
-          value,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: valueColor ?? Colors.black,
-          ),
-        ),
-      ],
     );
   }
 }
