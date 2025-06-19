@@ -30,7 +30,6 @@ class FAQ extends StatelessWidget {
         title: '🅿️ Parking Rules',
         content: [
           "➤ Parking fees start from your **entry time**, not booking time.",
-          "➤ You can enter **up to 30 minutes early**, but availability is not guaranteed.",
           "➤ Entering early will **automatically claim** your booking.",
           "➤ Leaving before check-in time still counts as a **used** booking.",
           "➤ For best results, enter only when you’re **ready to park**.",
@@ -43,7 +42,7 @@ class FAQ extends StatelessWidget {
       FAQItem(
         title: '🚫 Cancel & Expired',
         content: [
-          '➤ Cancel **up to 1 hour** before your booking — no charge.',
+          '➤ Cancel **up to 30 Minutes** before your booking — no charge.',
           '➤ Booking expires if not checked in **within 30 minutes**.',
           '➤ A **no-show fee of Rp10,000** applies.',
           '➤ If balance goes negative, you must **top up** to book again.',

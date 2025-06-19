@@ -20,6 +20,40 @@ class BookingTime extends StatefulWidget {
 
 class _BookingTimeState extends State<BookingTime> {
   String? date;
+  TimeOfDay _calculateMinTime() {
+    if (date == null) return widget.mall.openTime;
+
+    final parts = date!.split('/');
+
+    final day = int.parse(parts[0]);
+    final month = int.parse(parts[1]);
+    final year = int.parse(parts[2]);
+
+    final selectedDate = DateTime(year, month, day);
+    final now = DateTime.now();
+
+    final isToday =
+        now.year == selectedDate.year &&
+        now.month == selectedDate.month &&
+        now.day == selectedDate.day;
+
+    if (isToday) {
+      final nowTime = TimeOfDay.fromDateTime(now);
+      final openTime = widget.mall.openTime;
+
+      final isAfterOpen =
+          nowTime.hour > openTime.hour ||
+          (nowTime.hour == openTime.hour && nowTime.minute >= openTime.minute);
+
+      if (isAfterOpen) {
+        final futureTime = now.add(Duration(minutes: 30));
+        return TimeOfDay.fromDateTime(futureTime);
+      }
+    }
+
+    return widget.mall.openTime;
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<DetailItem> parkingArea = [
@@ -58,7 +92,7 @@ class _BookingTimeState extends State<BookingTime> {
           onChanged: (val) {
             widget.setDate(val);
             setState(() {
-              date = val;
+              date = val != "" ? val : null;
             });
           },
           minDate: DateTime.now(),
@@ -68,7 +102,7 @@ class _BookingTimeState extends State<BookingTime> {
         label: "Booking Time",
         child: ResponsiveTimePicker(
           disabled: date == null,
-          minTime: widget.mall.openTime,
+          minTime: _calculateMinTime(),
           maxTime: widget.mall.closeTime,
           onChanged: widget.setDate,
           type: DatePickerType.time,

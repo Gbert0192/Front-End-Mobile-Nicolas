@@ -88,9 +88,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       widget.controller!.text = newTime ?? '';
     }
 
-    if (newTime != null) {
-      widget.onChanged?.call(newTime);
-    }
+    widget.onChanged?.call(newTime ?? "");
   }
 
   bool _isTimeInRange(TimeOfDay time) {

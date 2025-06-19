@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking/booking_slot.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking/booking_time.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_slot.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_time.dart';
 
 class AddBooking extends StatefulWidget {
   const AddBooking(this.mall);

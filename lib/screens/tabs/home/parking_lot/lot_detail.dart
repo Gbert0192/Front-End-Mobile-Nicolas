@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/booking.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/enter_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
