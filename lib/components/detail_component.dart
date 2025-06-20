@@ -67,9 +67,9 @@ class DetailItem {
 class DataCard extends StatelessWidget {
   final List<DetailItem>? listData;
   final String? title;
-  final List<DetailItem>? children;
+  final List<DetailItem>? listInput;
 
-  const DataCard({super.key, this.listData, this.title, this.children});
+  const DataCard({super.key, this.listData, this.title, this.listInput});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class DataCard extends StatelessWidget {
             child: Text(
               title!,
               style: TextStyle(
-                fontSize: isSmall ? 18 : 24,
+                fontSize: isSmall ? 18 : 22,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -137,14 +137,14 @@ class DataCard extends StatelessWidget {
                       return const SizedBox(height: 10);
                     }
                   }),
-                  if (children != null && children!.isNotEmpty)
+                  if (listInput != null && listInput!.isNotEmpty)
                     const SizedBox(height: 10),
                 ],
-                if (children != null && children!.isNotEmpty) ...[
-                  ...List.generate(children!.length * 2 - 1, (index) {
+                if (listInput != null && listInput!.isNotEmpty) ...[
+                  ...List.generate(listInput!.length * 2 - 1, (index) {
                     if (index.isEven) {
                       final i = index ~/ 2;
-                      final item = children![i];
+                      final item = listInput![i];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

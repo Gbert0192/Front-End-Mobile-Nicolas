@@ -3,27 +3,68 @@ import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
+import 'package:tugas_front_end_nicolas/utils/useform.dart';
 
 class BookingTime extends StatefulWidget {
   const BookingTime({
     required this.mall,
     required this.setDate,
     required this.setTime,
+    required this.date,
+    required this.time,
   });
   final ParkingLot mall;
   final Function(String) setDate;
   final Function(String) setTime;
+  final String? date;
+  final String? time;
 
   @override
   State<BookingTime> createState() => _BookingTimeState();
 }
 
 class _BookingTimeState extends State<BookingTime> {
-  String? date;
-  TimeOfDay _calculateMinTime() {
-    if (date == null) return widget.mall.openTime;
+  final form = UseForm(fields: ["date", "time"]);
 
-    final parts = date!.split('/');
+  @override
+  void initState() {
+    super.initState();
+    form.control('date').text = (widget.date ?? "");
+    form.control('time').text = (widget.time ?? "");
+  }
+
+  DateTime _getSmartDefaultDateTime() {
+    DateTime now = DateTime.now();
+    int currentMinute = now.minute;
+    int roundedMinute;
+    int hourOffset = 0;
+
+    if (currentMinute <= 15) {
+      roundedMinute = 0;
+      hourOffset = 1;
+    } else if (currentMinute <= 45) {
+      roundedMinute = 30;
+      hourOffset = 1;
+    } else {
+      roundedMinute = 0;
+      hourOffset = 2;
+    }
+
+    return DateTime(
+      now.year,
+      now.month,
+      now.day,
+      now.hour + hourOffset,
+      roundedMinute,
+    );
+  }
+
+  TimeOfDay _calculateMinTime() {
+    if (widget.date == null || widget.date!.isEmpty) {
+      return widget.mall.openTime;
+    }
+
+    final parts = widget.date!.split('/');
 
     final day = int.parse(parts[0]);
     final month = int.parse(parts[1]);
@@ -89,22 +130,23 @@ class _BookingTimeState extends State<BookingTime> {
       DetailItem(
         label: "Booking Date",
         child: ResponsiveTimePicker(
-          onChanged: (val) {
-            widget.setDate(val);
-            setState(() {
-              date = val != "" ? val : null;
-            });
-          },
+          controller: form.control("date"),
+          onChanged: widget.setDate,
           minDate: DateTime.now(),
         ),
       ),
       DetailItem(
         label: "Booking Time",
         child: ResponsiveTimePicker(
-          disabled: date == null,
+          controller: form.control("time"),
+          disabled: widget.date == null || widget.date!.isEmpty,
           minTime: _calculateMinTime(),
-          maxTime: widget.mall.closeTime,
-          onChanged: widget.setDate,
+          initialTime: _getSmartDefaultDateTime(),
+          maxTime: TimeOfDay(
+            hour: widget.mall.closeTime.hour - 1,
+            minute: widget.mall.closeTime.minute,
+          ),
+          onChanged: widget.setTime,
           type: DatePickerType.time,
         ),
       ),
@@ -117,7 +159,7 @@ class _BookingTimeState extends State<BookingTime> {
         const SizedBox(height: 12),
         DataCard(title: "Price Booking", listData: rateData),
         const SizedBox(height: 12),
-        DataCard(title: "Select Time", children: timeInput),
+        DataCard(title: "Select Time", listInput: timeInput),
       ],
     );
   }

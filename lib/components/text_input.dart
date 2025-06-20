@@ -23,6 +23,7 @@ class ResponsiveTextInput extends StatefulWidget {
     this.disabled = false,
     this.suffix,
     this.value,
+    this.autoFocus = false,
     this.mode = StyleMode.outline,
     this.maxLines = 1,
     this.type = TextInputTypes.text,
@@ -48,6 +49,7 @@ class ResponsiveTextInput extends StatefulWidget {
   final IconData? leading;
   final bool? isLoading;
   final bool disabled;
+  final bool autoFocus;
   final Widget? suffix;
   final Color fillColor;
   final Color borderColor;
@@ -111,6 +113,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     ],
           ),
           child: TextField(
+            autofocus: widget.autoFocus,
             enabled:
                 widget.isLoading != null
                     ? !widget.isLoading!

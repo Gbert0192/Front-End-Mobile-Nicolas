@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class EnterQR extends StatefulWidget {
   final ParkingLot mall;
@@ -88,10 +89,15 @@ class _EnterQRState extends State<EnterQR> {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: QrImageView(
-                data: uniqueId,
+                data: encryptQR(uniqueId),
                 version: QrVersions.auto,
                 size: isSmall ? 190 : 220,
-                gapless: false,
+                embeddedImage: const AssetImage(
+                  'assets/images/logo_no_padding.png',
+                ),
+                embeddedImageStyle: const QrEmbeddedImageStyle(
+                  size: Size(35, 35),
+                ),
               ),
             ),
             Text(

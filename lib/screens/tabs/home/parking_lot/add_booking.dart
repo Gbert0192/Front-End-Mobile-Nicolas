@@ -72,6 +72,7 @@ class _AddBookingState extends State<AddBooking> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 12),
                 SizedBox(
                   height: isSmall ? 700 : 740,
                   child: PageView(
@@ -79,6 +80,8 @@ class _AddBookingState extends State<AddBooking> {
                     physics: NeverScrollableScrollPhysics(),
                     children: [
                       BookingTime(
+                        date: date,
+                        time: time,
                         mall: widget.mall,
                         setDate: (String val) {
                           setState(() {
@@ -100,14 +103,18 @@ class _AddBookingState extends State<AddBooking> {
                 Center(
                   child: ResponsiveButton(
                     isLoading: isLoading,
-                    onPressed: () {
-                      if (currentPage == 0) {
-                        _controller.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      }
-                    },
+                    onPressed:
+                        (date?.isNotEmpty ?? false) ||
+                                (time?.isNotEmpty ?? false)
+                            ? () {
+                              if (currentPage == 0) {
+                                _controller.nextPage(
+                                  duration: Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              }
+                            }
+                            : null,
                     text: "Continue",
                   ),
                 ),
