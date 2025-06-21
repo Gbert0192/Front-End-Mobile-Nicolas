@@ -81,13 +81,29 @@ class _BookingTimeState extends State<BookingTime> {
     if (isToday) {
       final nowTime = TimeOfDay.fromDateTime(now);
       final openTime = widget.mall.openTime;
+      final closeTime = widget.mall.closeTime;
 
       final isAfterOpen =
           nowTime.hour > openTime.hour ||
           (nowTime.hour == openTime.hour && nowTime.minute >= openTime.minute);
 
       if (isAfterOpen) {
-        final futureTime = now.add(Duration(minutes: 30));
+        final futureTime = now.add(Duration(hours: 1));
+
+        final closeDateTime = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          closeTime.hour,
+          closeTime.minute,
+        );
+
+        final oneHourBeforeClose = closeDateTime.subtract(Duration(hours: 1));
+
+        if (futureTime.isAfter(oneHourBeforeClose)) {
+          return openTime;
+        }
+
         return TimeOfDay.fromDateTime(futureTime);
       }
     }

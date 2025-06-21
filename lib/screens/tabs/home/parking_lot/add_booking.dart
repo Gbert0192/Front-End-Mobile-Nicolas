@@ -104,7 +104,7 @@ class _AddBookingState extends State<AddBooking> {
                   child: ResponsiveButton(
                     isLoading: isLoading,
                     onPressed:
-                        (date?.isNotEmpty ?? false) ||
+                        (date?.isNotEmpty ?? false) &&
                                 (time?.isNotEmpty ?? false)
                             ? () {
                               if (currentPage == 0) {
