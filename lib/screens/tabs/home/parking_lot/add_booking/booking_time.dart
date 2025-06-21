@@ -33,16 +33,93 @@ class _BookingTimeState extends State<BookingTime> {
     form.control('time').text = (widget.time ?? "");
   }
 
+  bool _checkBookingClose() {
+    final now = DateTime.now();
+
+    final todayOpen = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      widget.mall.openTime.hour,
+      widget.mall.openTime.minute,
+    );
+
+    final todayClose = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      widget.mall.closeTime.hour,
+      widget.mall.closeTime.minute,
+    );
+
+    final oneHourBeforeClose = todayClose.subtract(const Duration(hours: 1));
+
+    final isBeforeOpen = now.isBefore(todayOpen);
+    final isAfterClose = now.isAfter(todayClose);
+    final isClosing = now.isAfter(oneHourBeforeClose);
+    return isBeforeOpen || isAfterClose || isClosing;
+  }
+
+  DateTime _getMinDate() {
+    final now = DateTime.now();
+
+    if (_checkBookingClose()) {
+      return DateTime(
+        now.year,
+        now.month,
+        now.day,
+      ).add(const Duration(days: 1));
+    }
+
+    return now;
+  }
+
+  TimeOfDay _calculateMinTime() {
+    if (widget.date == null || widget.date!.isEmpty) {
+      return widget.mall.openTime;
+    }
+
+    final parts = widget.date!.split('/');
+    final day = int.parse(parts[0]);
+    final month = int.parse(parts[1]);
+    final year = int.parse(parts[2]);
+
+    final selectedDate = DateTime(year, month, day);
+    final now = DateTime.now();
+
+    final isToday =
+        selectedDate.year == now.year &&
+        selectedDate.month == now.month &&
+        selectedDate.day == now.day;
+
+    if (isToday) {
+      final oneHourFromNow = now.add(const Duration(hours: 1));
+      return TimeOfDay(
+        hour: oneHourFromNow.hour,
+        minute: oneHourFromNow.minute,
+      );
+    } else {
+      return widget.mall.openTime;
+    }
+  }
+
   DateTime _getSmartDefaultDateTime() {
     DateTime now = DateTime.now();
     int currentMinute = now.minute;
     int roundedMinute;
     int hourOffset = 0;
 
-    if (currentMinute <= 15) {
-      roundedMinute = 0;
-      hourOffset = 1;
-    } else if (currentMinute <= 45) {
+    if (_checkBookingClose()) {
+      return DateTime(
+        now.year,
+        now.month,
+        now.day,
+        widget.mall.openTime.hour,
+        widget.mall.openTime.minute,
+      );
+    }
+
+    if (currentMinute <= 30) {
       roundedMinute = 30;
       hourOffset = 1;
     } else {
@@ -57,58 +134,6 @@ class _BookingTimeState extends State<BookingTime> {
       now.hour + hourOffset,
       roundedMinute,
     );
-  }
-
-  TimeOfDay _calculateMinTime() {
-    if (widget.date == null || widget.date!.isEmpty) {
-      return widget.mall.openTime;
-    }
-
-    final parts = widget.date!.split('/');
-
-    final day = int.parse(parts[0]);
-    final month = int.parse(parts[1]);
-    final year = int.parse(parts[2]);
-
-    final selectedDate = DateTime(year, month, day);
-    final now = DateTime.now();
-
-    final isToday =
-        now.year == selectedDate.year &&
-        now.month == selectedDate.month &&
-        now.day == selectedDate.day;
-
-    if (isToday) {
-      final nowTime = TimeOfDay.fromDateTime(now);
-      final openTime = widget.mall.openTime;
-      final closeTime = widget.mall.closeTime;
-
-      final isAfterOpen =
-          nowTime.hour > openTime.hour ||
-          (nowTime.hour == openTime.hour && nowTime.minute >= openTime.minute);
-
-      if (isAfterOpen) {
-        final futureTime = now.add(Duration(hours: 1));
-
-        final closeDateTime = DateTime(
-          now.year,
-          now.month,
-          now.day,
-          closeTime.hour,
-          closeTime.minute,
-        );
-
-        final oneHourBeforeClose = closeDateTime.subtract(Duration(hours: 1));
-
-        if (futureTime.isAfter(oneHourBeforeClose)) {
-          return openTime;
-        }
-
-        return TimeOfDay.fromDateTime(futureTime);
-      }
-    }
-
-    return widget.mall.openTime;
   }
 
   @override
@@ -148,7 +173,7 @@ class _BookingTimeState extends State<BookingTime> {
         child: ResponsiveTimePicker(
           controller: form.control("date"),
           onChanged: widget.setDate,
-          minDate: DateTime.now(),
+          minDate: _getMinDate(),
         ),
       ),
       DetailItem(
@@ -169,7 +194,7 @@ class _BookingTimeState extends State<BookingTime> {
     ];
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         DataCard(title: "Parking Area", listData: parkingArea),
         const SizedBox(height: 12),

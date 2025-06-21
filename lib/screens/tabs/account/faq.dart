@@ -20,10 +20,11 @@ class FAQ extends StatelessWidget {
         title: '📲 Booking & Payment',
         content: [
           "➤ Book in advance or walk in — no reservation needed.",
-          "➤ Always check **real-time availability** before arriving.",
           "➤ You may pay upon exit, or pay first and exit using the **Mall QR code** — this avoids walk time from being counted.",
           "➤ A single user may create **multiple parkings/bookings** on different devices.",
           "➤ To make a new parkings/bookings, any over-limit or unresolved parkings/bookings **must be settled first**.",
+          "➤ Booking must be made **at least 1 hour before** the desired parking time.",
+          "➤ Booking time must fall within **mall operational hours**.",
         ],
       ),
       FAQItem(

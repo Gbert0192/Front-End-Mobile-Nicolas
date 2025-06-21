@@ -94,7 +94,19 @@ class _AddBookingState extends State<AddBooking> {
                           });
                         },
                       ),
-                      BookingSlot(),
+                      BookingSlot(
+                        mall: widget.mall,
+                        setFloor: (String val) {
+                          setState(() {
+                            floor = val;
+                          });
+                        },
+                        setSlot: (String val) {
+                          setState(() {
+                            slot = val;
+                          });
+                        },
+                      ),
                     ],
                   ),
                 ),

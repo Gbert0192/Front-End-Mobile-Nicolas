@@ -162,7 +162,9 @@ class LotFactory {
 
     List<String> result = [];
     for (int i = start; i <= end; i++) {
-      result.add(formatFloor(i));
+      if (i != 0) {
+        result.add(formatFloor(i));
+      }
     }
     return result;
   }
