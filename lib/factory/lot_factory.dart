@@ -151,49 +151,66 @@ class LotFactory {
       return int.parse(label);
     }
 
-    String formatFloor(int floor) {
-      if (floor == -1) return 'G';
-      if (floor < -1) return 'G${-floor}';
-      return floor.toString();
-    }
-
     int start = parseFloor(first);
     int end = parseFloor(last);
 
-    List<String> result = [];
+    List<String> groundFloors = [];
+    List<String> upperFloors = [];
+
+    List<int> allFloors = [];
     for (int i = start; i <= end; i++) {
-      if (i != 0) {
-        result.add(formatFloor(i));
+      if (i == 0) continue;
+      allFloors.add(i);
+    }
+
+    final groundOnly = allFloors.where((f) => f < 0).toList();
+    final upperOnly = allFloors.where((f) => f > 0).toList();
+
+    if (groundOnly.length == 1 && groundOnly.first == -1) {
+      groundFloors.add('G');
+    } else {
+      for (int i = groundOnly.length - 1; i >= 0; i--) {
+        groundFloors.add('G${i + 1}');
       }
     }
-    return result;
+
+    for (int floor in upperOnly) {
+      upperFloors.add(floor.toString());
+    }
+
+    return [...groundFloors, ...upperFloors];
   }
 
   List<Floor> generateFloors({
     required String firstFloor,
     required String lastFloor,
-    int areaStep = 2, // jumlah lantai per area group
+    int areaStep = 2,
   }) {
     List<Floor> floors = [];
-    int spotCounter = 1;
-
     List<String> floorLabels = _buildFloorRange(firstFloor, lastFloor);
+
+    int currentGroup = -1;
+    int spotCounter = 1;
 
     for (int i = 0; i < floorLabels.length; i++) {
       String floorLabel = floorLabels[i];
 
-      // Hitung grup berdasarkan areaStep
       int group = i ~/ areaStep;
 
-      // Area names: setiap grup dapet 2 huruf area: A&B, C&D, E&F, dst.
+      if (group != currentGroup) {
+        currentGroup = group;
+        spotCounter = 1;
+      }
+
       String area1 = String.fromCharCode(65 + group * 2);
       String area2 = String.fromCharCode(65 + group * 2 + 1);
 
       List<Area> areas = [
         Area(name: area1, spots: _generateSpots(area1, spotCounter)),
-        Area(name: area2, spots: _generateSpots(area2, spotCounter + 6)),
+        Area(name: area2, spots: _generateSpots(area2, spotCounter)),
       ];
-      spotCounter += 12;
+
+      spotCounter += 6;
 
       floors.add(Floor(number: floorLabel, areas: areas));
     }

@@ -18,12 +18,13 @@ class _AddBookingState extends State<AddBooking> {
   bool isLoading = false;
   String? date;
   String? time;
-  String? floor;
+  late String floor;
   String? slot;
 
   @override
   void initState() {
     super.initState();
+    floor = widget.mall.renderAllSlot()[0].number;
     _controller.addListener(() {
       setState(() {
         currentPage = _controller.page!.round();
@@ -41,7 +42,7 @@ class _AddBookingState extends State<AddBooking> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: 8,
+              horizontal: isSmall ? 4 : 8,
               vertical: isSmall ? 5 : 10,
             ),
             child: Column(
@@ -62,7 +63,7 @@ class _AddBookingState extends State<AddBooking> {
                       },
                       icon: Icon(Icons.arrow_back_ios, size: isSmall ? 25 : 30),
                     ),
-                    const SizedBox(width: 8),
+                    SizedBox(width: isSmall ? 0 : 8),
                     Text(
                       "Create Booking",
                       style: TextStyle(
@@ -74,7 +75,12 @@ class _AddBookingState extends State<AddBooking> {
                 ),
                 const SizedBox(height: 12),
                 SizedBox(
-                  height: isSmall ? 700 : 740,
+                  height:
+                      isSmall
+                          ? currentPage == 0
+                              ? 700
+                              : 670
+                          : 740,
                   child: PageView(
                     controller: _controller,
                     physics: NeverScrollableScrollPhysics(),
@@ -95,6 +101,8 @@ class _AddBookingState extends State<AddBooking> {
                         },
                       ),
                       BookingSlot(
+                        floor: floor,
+                        slot: slot,
                         mall: widget.mall,
                         setFloor: (String val) {
                           setState(() {

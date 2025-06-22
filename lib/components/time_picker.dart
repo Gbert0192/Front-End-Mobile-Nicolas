@@ -25,7 +25,7 @@ class ResponsiveTimePicker extends StatefulWidget {
     this.disabledDates,
     this.minDate,
     this.maxDate,
-  }) : initialTime = initialTime ?? DateTime.now();
+  }) : initialTime = initialTime ?? minDate ?? DateTime.now();
 
   final TextEditingController? controller;
   final Function(String)? onChanged;
