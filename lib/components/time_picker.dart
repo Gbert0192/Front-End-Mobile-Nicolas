@@ -4,7 +4,7 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 enum DatePickerType { date, time, datetime }
 
 class ResponsiveTimePicker extends StatefulWidget {
-  const ResponsiveTimePicker({
+  ResponsiveTimePicker({
     super.key,
     this.controller,
     this.onChanged,
@@ -21,10 +21,11 @@ class ResponsiveTimePicker extends StatefulWidget {
     this.type = DatePickerType.date,
     this.minTime,
     this.maxTime,
+    DateTime? initialTime,
     this.disabledDates,
     this.minDate,
     this.maxDate,
-  });
+  }) : initialTime = initialTime ?? minDate ?? DateTime.now();
 
   final TextEditingController? controller;
   final Function(String)? onChanged;
@@ -39,6 +40,7 @@ class ResponsiveTimePicker extends StatefulWidget {
   final DatePickerType type;
   final bool? isLoading;
   final bool disabled;
+  final DateTime initialTime;
   final TimeOfDay? minTime;
   final TimeOfDay? maxTime;
   final List<DateTime>? disabledDates;
@@ -53,32 +55,6 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   bool _isFocused = false;
   String? _selectedTime;
 
-  DateTime _getSmartDefaultDateTime() {
-    DateTime now = DateTime.now();
-    int currentMinute = now.minute;
-    int roundedMinute;
-    int hourOffset = 0;
-
-    if (currentMinute <= 15) {
-      roundedMinute = 0;
-      hourOffset = 1;
-    } else if (currentMinute <= 45) {
-      roundedMinute = 30;
-      hourOffset = 1;
-    } else {
-      roundedMinute = 0;
-      hourOffset = 2;
-    }
-
-    return DateTime(
-      now.year,
-      now.month,
-      now.day,
-      now.hour + hourOffset,
-      roundedMinute,
-    );
-  }
-
   void _updateSelectedTime(String? newTime) {
     setState(() {
       _selectedTime = newTime;
@@ -88,9 +64,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       widget.controller!.text = newTime ?? '';
     }
 
-    if (newTime != null) {
-      widget.onChanged?.call(newTime);
-    }
+    widget.onChanged?.call(newTime ?? "");
   }
 
   bool _isTimeInRange(TimeOfDay time) {
@@ -212,10 +186,10 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
           initialDate = DateTime(now.year, now.month, now.day, hour, minute);
         }
       } catch (_) {
-        initialDate = _getSmartDefaultDateTime();
+        initialDate = widget.initialTime;
       }
     } else {
-      initialDate = _getSmartDefaultDateTime();
+      initialDate = widget.initialTime;
     }
 
     if (widget.type == DatePickerType.time) {
@@ -323,12 +297,21 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       String formatted;
       switch (widget.type) {
         case DatePickerType.date:
-          formatted = "${finalDate.day}/${finalDate.month}/${finalDate.year}";
+          formatted =
+              "${finalDate.day.toString().padLeft(2, '0')}/"
+              "${finalDate.month.toString().padLeft(2, '0')}/"
+              "${finalDate.year}";
           break;
+
         case DatePickerType.datetime:
           formatted =
-              "${finalDate.day}/${finalDate.month}/${finalDate.year} ${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
+              "${finalDate.day.toString().padLeft(2, '0')}/"
+              "${finalDate.month.toString().padLeft(2, '0')}/"
+              "${finalDate.year} "
+              "${finalDate.hour.toString().padLeft(2, '0')}:"
+              "${finalDate.minute.toString().padLeft(2, '0')}";
           break;
+
         default:
           formatted = '';
           break;
@@ -355,8 +338,6 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     if (widget.controller != null && widget.controller!.text.isNotEmpty) {
       _selectedTime = widget.controller!.text;
     } else {
-      // Tidak mengisi otomatis saat initState, biarkan kosong
-      // Waktu sekarang akan menjadi default saat picker dibuka
       _selectedTime = null;
     }
   }

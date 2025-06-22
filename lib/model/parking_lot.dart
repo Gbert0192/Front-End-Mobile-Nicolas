@@ -165,6 +165,16 @@ class ParkingLot {
     return false;
   }
 
+  SpotStatus? checkSpotStatus(String floorNumber, String spotCode) {
+    renderAllSlot();
+    final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
+    final spot = floor?.findSpot(spotCode);
+    if (spot != null) {
+      return spot.status;
+    }
+    return null;
+  }
+
   List<Floor> renderAllSlot() {
     final now = DateTime.now();
 

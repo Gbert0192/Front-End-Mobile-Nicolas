@@ -67,9 +67,9 @@ class DetailItem {
 class DataCard extends StatelessWidget {
   final List<DetailItem>? listData;
   final String? title;
-  final List<DetailItem>? children;
+  final List<DetailItem>? listInput;
 
-  const DataCard({super.key, this.listData, this.title, this.children});
+  const DataCard({super.key, this.listData, this.title, this.listInput});
 
   @override
   Widget build(BuildContext context) {
@@ -87,35 +87,67 @@ class DataCard extends StatelessWidget {
             child: Text(
               title!,
               style: TextStyle(
-                fontSize: isSmall ? 18 : 24,
+                fontSize: isSmall ? 18 : 22,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-        Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (listData != null && listData!.isNotEmpty) ...[
-                  ...List.generate(listData!.length * 2 - 1, (index) {
-                    if (index.isEven) {
-                      final i = index ~/ 2;
-                      final item = listData![i];
+        SizedBox(
+          width: double.infinity,
+          child: Card(
+            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (listData != null && listData!.isNotEmpty) ...[
+                    ...List.generate(listData!.length * 2 - 1, (index) {
+                      if (index.isEven) {
+                        final i = index ~/ 2;
+                        final item = listData![i];
 
-                      if (item.value != null) {
-                        return DetailRow(
-                          label: item.label,
-                          value: item.value!,
-                          fontSize: fontSize,
-                          fontWeight: fontWeight,
-                        );
-                      } else if (item.child != null) {
+                        if (item.value != null) {
+                          return DetailRow(
+                            label: item.label,
+                            value: item.value!,
+                            fontSize: fontSize,
+                            fontWeight: fontWeight,
+                          );
+                        } else if (item.child != null) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.label,
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: fontWeight,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              item.child!,
+                            ],
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      } else {
+                        return const SizedBox(height: 10);
+                      }
+                    }),
+                    if (listInput != null && listInput!.isNotEmpty)
+                      const SizedBox(height: 10),
+                  ],
+                  if (listInput != null && listInput!.isNotEmpty) ...[
+                    ...List.generate(listInput!.length * 2 - 1, (index) {
+                      if (index.isEven) {
+                        final i = index ~/ 2;
+                        final item = listInput![i];
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -131,40 +163,12 @@ class DataCard extends StatelessWidget {
                           ],
                         );
                       } else {
-                        return const SizedBox.shrink();
+                        return const SizedBox(height: 10);
                       }
-                    } else {
-                      return const SizedBox(height: 10);
-                    }
-                  }),
-                  if (children != null && children!.isNotEmpty)
-                    const SizedBox(height: 10),
+                    }),
+                  ],
                 ],
-                if (children != null && children!.isNotEmpty) ...[
-                  ...List.generate(children!.length * 2 - 1, (index) {
-                    if (index.isEven) {
-                      final i = index ~/ 2;
-                      final item = children![i];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.label,
-                            style: TextStyle(
-                              fontSize: fontSize,
-                              fontWeight: fontWeight,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          item.child!,
-                        ],
-                      );
-                    } else {
-                      return const SizedBox(height: 10);
-                    }
-                  }),
-                ],
-              ],
+              ),
             ),
           ),
         ),
