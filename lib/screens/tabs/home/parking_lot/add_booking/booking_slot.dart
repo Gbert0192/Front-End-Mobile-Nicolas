@@ -23,7 +23,6 @@ class BookingSlot extends StatefulWidget {
 }
 
 class _BookingSlotState extends State<BookingSlot> {
-  int currentFloor = 0;
   String _formatFloorLabel(String floor) {
     if (floor.startsWith('G')) {
       return "$floor Floor";
@@ -163,28 +162,86 @@ class _BookingSlotState extends State<BookingSlot> {
                 );
               }).toList(),
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromRGBO(0, 0, 0, 0.08),
-                blurRadius: 5,
-                offset: const Offset(0, 4),
-              ),
-            ],
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          elevation: 2,
+          shadowColor: Colors.black.withOpacity(0.1),
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: DetailRow(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            label: "Selected Parking Spot",
-            value:
-                widget.slot != null
-                    ? "${_formatFloorLabel(selectedFloor!)} ($selectedSpot)"
-                    : "Pick Your Slot",
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.white, Colors.grey.shade50],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color:
+                          widget.slot != null
+                              ? Colors.green.shade50
+                              : Colors.orange.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      widget.slot != null
+                          ? Icons.local_parking
+                          : Icons.location_searching,
+                      color:
+                          widget.slot != null
+                              ? Colors.green.shade600
+                              : Colors.orange.shade600,
+                      size: 20,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Selected Parking Spot",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          widget.slot != null
+                              ? "${_formatFloorLabel(selectedFloor!)} ($selectedSpot)"
+                              : "Pick Your Slot",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color:
+                                widget.slot != null
+                                    ? Colors.grey.shade800
+                                    : Colors.orange.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (widget.slot == null)
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey.shade400,
+                      size: 16,
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
         DataCard(

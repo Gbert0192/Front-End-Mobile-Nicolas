@@ -57,7 +57,6 @@ class ParkingLotProvider with ChangeNotifier {
       searches.add(history);
     }
 
-    // Update search history
     history.searchHistory.remove(keyword);
     history.searchHistory.insert(0, keyword);
 
@@ -76,12 +75,16 @@ class ParkingLotProvider with ChangeNotifier {
 
   List<Floor> getAvailableSpot(ParkingLot lot) {
     final index = lots.indexWhere((item) => item == lot);
-    return lots[index].renderAllSlot();
+    final floor = lots[index].renderAllSlot();
+    notifyListeners();
+    return floor;
   }
 
   String? occupyNearestSpot(ParkingLot lot, User user) {
     final index = lots.indexWhere((item) => item == lot);
-    return lots[index].occupyNearestSpot(user);
+    final floor = lots[index].occupyNearestSpot(user);
+    notifyListeners();
+    return floor;
   }
 
   String? bookSpot({
@@ -91,7 +94,9 @@ class ParkingLotProvider with ChangeNotifier {
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    return lots[index].bookSpot(floorNumber, spotCode, user);
+    final floor = lots[index].bookSpot(floorNumber, spotCode, user);
+    notifyListeners();
+    return floor;
   }
 
   String? claimSpot({
@@ -101,7 +106,9 @@ class ParkingLotProvider with ChangeNotifier {
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    return lots[index].claimSpot(floorNumber, spotCode, user);
+    final floor = lots[index].claimSpot(floorNumber, spotCode, user);
+    notifyListeners();
+    return floor;
   }
 
   bool freeSpot({
@@ -110,7 +117,20 @@ class ParkingLotProvider with ChangeNotifier {
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    return lots[index].freeSpot(floorNumber, spotCode);
+    final floor = lots[index].freeSpot(floorNumber, spotCode);
+    notifyListeners();
+    return floor;
+  }
+
+  SpotStatus? checkSpotStatus({
+    required ParkingLot lot,
+    required String floorNumber,
+    required String spotCode,
+  }) {
+    final index = lots.indexWhere((item) => item == lot);
+    final floor = lots[index].checkSpotStatus(floorNumber, spotCode);
+    notifyListeners();
+    return floor;
   }
 }
 

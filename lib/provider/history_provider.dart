@@ -58,8 +58,7 @@ class HistoryProvider with ChangeNotifier {
   }
 
   void chackAllStatus(User user) {
-    return histories
-        .firstWhereOrNull((item) => item.user == user)
-        ?.checkAllStatus();
+    histories.firstWhereOrNull((item) => item.user == user)?.checkAllStatus();
+    notifyListeners();
   }
 }

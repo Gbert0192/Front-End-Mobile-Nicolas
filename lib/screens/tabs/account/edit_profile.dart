@@ -121,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                           form.control("gender").text !=
                               (widget.user.gender ?? "");
                       if (hasChanged) {
-                        showAlertDialog(
+                        showConfirmDialog(
                           context: context,
                           title: "Go Back",
                           cancelText: "Back",

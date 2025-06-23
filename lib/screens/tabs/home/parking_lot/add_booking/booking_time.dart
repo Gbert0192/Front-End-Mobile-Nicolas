@@ -35,6 +35,7 @@ class _BookingTimeState extends State<BookingTime> {
 
   bool _checkBookingClose() {
     final now = DateTime.now();
+    final oneHourFromNow = now.add(const Duration(hours: 1));
 
     final todayOpen = DateTime(
       now.year,
@@ -52,12 +53,10 @@ class _BookingTimeState extends State<BookingTime> {
       widget.mall.closeTime.minute,
     );
 
-    final oneHourBeforeClose = todayClose.subtract(const Duration(hours: 1));
+    final isBeforeOpen = oneHourFromNow.isBefore(todayOpen);
+    final isAfterClose = oneHourFromNow.isAfter(todayClose);
 
-    final isBeforeOpen = now.isBefore(todayOpen);
-    final isAfterClose = now.isAfter(todayClose);
-    final isClosing = now.isAfter(oneHourBeforeClose);
-    return isBeforeOpen || isAfterClose || isClosing;
+    return isBeforeOpen || isAfterClose;
   }
 
   DateTime _getMinDate() {
@@ -119,8 +118,14 @@ class _BookingTimeState extends State<BookingTime> {
       );
     }
 
-    if (currentMinute <= 30) {
+    if (currentMinute <= 15) {
+      roundedMinute = 0;
+      hourOffset = 1;
+    } else if (currentMinute > 15 && currentMinute <= 35) {
       roundedMinute = 30;
+      hourOffset = 1;
+    } else if (currentMinute > 35 && currentMinute <= 50) {
+      roundedMinute = 45;
       hourOffset = 1;
     } else {
       roundedMinute = 0;
@@ -183,10 +188,7 @@ class _BookingTimeState extends State<BookingTime> {
           disabled: widget.date == null || widget.date!.isEmpty,
           minTime: _calculateMinTime(),
           initialTime: _getSmartDefaultDateTime(),
-          maxTime: TimeOfDay(
-            hour: widget.mall.closeTime.hour - 1,
-            minute: widget.mall.closeTime.minute,
-          ),
+          maxTime: widget.mall.closeTime,
           onChanged: widget.setTime,
           type: DatePickerType.time,
         ),

@@ -343,7 +343,7 @@ class _ProfileState extends State<Profile> {
                         SettingButtons(
                           onPressed:
                               () => {
-                                showAlertDialog(
+                                showConfirmDialog(
                                   context: context,
                                   loading: true,
                                   time: 1,

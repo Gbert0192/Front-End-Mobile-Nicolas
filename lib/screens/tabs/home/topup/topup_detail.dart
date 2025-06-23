@@ -86,18 +86,16 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
             actions: [
               TextButton(
                 onPressed: () {
-                  activityProvider.addActivity(
-                    user,
-                    ActivityItem(
-                      activityTypes: ActivityTypes.topUp,
-                      method: widget.method.name,
-                      nominal: finalAmount,
-                    ),
-                  );
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
-                child: Text("OK"),
+                child: Text(
+                  "OK",
+                  style: TextStyle(
+                    color: const Color(0xFF1F1E5B),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ],
           );
@@ -131,6 +129,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
         showFlexibleSnackbar(
           context,
           "Minimum top-up is ${formatCurrency(nominal: widget.method.minTo as num)}",
+          type: SnackbarType.error,
         );
         return;
       }
@@ -147,6 +146,15 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
               : amount;
 
       userProvider.topUp(finalAmount);
+
+      activityProvider.addActivity(
+        user,
+        ActivityItem(
+          activityTypes: ActivityTypes.topUp,
+          method: widget.method.name,
+          nominal: finalAmount,
+        ),
+      );
 
       setState(() {
         _isProcessing = false;
