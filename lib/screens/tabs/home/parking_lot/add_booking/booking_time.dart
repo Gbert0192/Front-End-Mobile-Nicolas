@@ -118,14 +118,38 @@ class _BookingTimeState extends State<BookingTime> {
       );
     }
 
-    if (currentMinute <= 15) {
-      roundedMinute = 0;
+    if (currentMinute < 5) {
+      roundedMinute = 5;
       hourOffset = 1;
-    } else if (currentMinute > 15 && currentMinute <= 35) {
+    } else if (currentMinute < 10) {
+      roundedMinute = 10;
+      hourOffset = 1;
+    } else if (currentMinute < 15) {
+      roundedMinute = 15;
+      hourOffset = 1;
+    } else if (currentMinute < 20) {
+      roundedMinute = 20;
+      hourOffset = 1;
+    } else if (currentMinute < 25) {
+      roundedMinute = 25;
+      hourOffset = 1;
+    } else if (currentMinute < 30) {
       roundedMinute = 30;
       hourOffset = 1;
-    } else if (currentMinute > 35 && currentMinute <= 50) {
+    } else if (currentMinute < 35) {
+      roundedMinute = 35;
+      hourOffset = 1;
+    } else if (currentMinute < 40) {
+      roundedMinute = 40;
+      hourOffset = 1;
+    } else if (currentMinute < 45) {
       roundedMinute = 45;
+      hourOffset = 1;
+    } else if (currentMinute < 50) {
+      roundedMinute = 50;
+      hourOffset = 1;
+    } else if (currentMinute < 55) {
+      roundedMinute = 55;
       hourOffset = 1;
     } else {
       roundedMinute = 0;

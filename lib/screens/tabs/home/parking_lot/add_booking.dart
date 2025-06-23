@@ -141,7 +141,9 @@ class _AddBookingState extends State<AddBooking> {
                               ? currentPage == 0
                                   ? 700
                                   : 670
-                              : 740,
+                              : currentPage == 0
+                              ? 760
+                              : 720,
                       child: PageView(
                         controller: _controller,
                         physics: const NeverScrollableScrollPhysics(),
@@ -175,7 +177,7 @@ class _AddBookingState extends State<AddBooking> {
                                     (time?.isNotEmpty ?? false) &&
                                     currentPage == 0
                                 ? () {
-                                  if (!validateDatetime()) {
+                                  if (validateDatetime()) {
                                     _controller.nextPage(
                                       duration: const Duration(
                                         milliseconds: 300,

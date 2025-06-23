@@ -76,18 +76,26 @@ class _BookingSlotState extends State<BookingSlot> {
 
       children.add(
         Positioned(
-          right: 15,
+          right: isSmall ? 15 : 10,
           top:
               areaIndex == 0
                   ? allOccupied
-                      ? 5
-                      : 1
+                      ? isSmall
+                          ? 5
+                          : 8
+                      : isSmall
+                      ? 1
+                      : 3
                   : null,
           bottom:
               areaIndex == 1
                   ? allOccupied
-                      ? 10
-                      : 7
+                      ? isSmall
+                          ? 10
+                          : 12
+                      : isSmall
+                      ? 7
+                      : 10
                   : null,
           child: Column(
             children: List.generate((spots.length / 2).ceil(), (index) {
@@ -252,7 +260,7 @@ class _BookingSlotState extends State<BookingSlot> {
                 children: [
                   Image.asset(
                     "assets/images/others/parking area.png",
-                    height: 400,
+                    height: isSmall ? 400 : 460,
                   ),
                   ...children,
                 ],
@@ -287,13 +295,16 @@ class SpotRender extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child:
           item.status != SpotStatus.free
-              ? Image.asset("assets/images/others/car.png", width: 67)
+              ? Image.asset(
+                "assets/images/others/car.png",
+                width: isSmall ? 67 : 84,
+              )
               : GestureDetector(
                 onTap: () => onTap("$currentFloor-${item.code}"),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 5,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSmall ? 16 : 24,
+                    vertical: isSmall ? 5 : 7,
                   ),
                   decoration: BoxDecoration(
                     color:
