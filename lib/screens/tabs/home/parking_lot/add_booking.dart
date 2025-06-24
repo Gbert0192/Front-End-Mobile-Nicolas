@@ -93,8 +93,9 @@ class _AddBookingState extends State<AddBooking> {
           backgroundColor: Colors.white,
           color: const Color(0xFF1F1E5B),
           onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            lotProvider.getAvailableSpot(widget.mall);
+            Future.delayed(const Duration(seconds: 2), () {
+              lotProvider.getAvailableSpot(widget.mall);
+            });
           },
           child: CustomScrollView(
             slivers: [
@@ -198,13 +199,57 @@ class _AddBookingState extends State<AddBooking> {
                                         textAlign: TextAlign.center,
                                       ),
                                       icon: Icons.warning_amber_rounded,
-                                      iconColor: Colors.orange,
+                                      color: Colors.orange,
                                     );
                                   }
                                 }
                                 : (slot?.isNotEmpty ?? false) &&
                                     currentPage == 1
-                                ? () {}
+                                ? () async {
+                                  final parts = slot!.split("-");
+                                  String floor = parts[0];
+                                  String spot = parts[1];
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await Future.delayed(
+                                    const Duration(seconds: 1),
+                                  );
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  bool isFree =
+                                      lotProvider.checkSpotStatus(
+                                        lot: widget.mall,
+                                        floorNumber: floor,
+                                        spotCode: spot,
+                                      ) ==
+                                      SpotStatus.free;
+                                  if (isFree) {
+                                    _controller.nextPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  } else {
+                                    showAlertDialog(
+                                      context: context,
+                                      title: "Spot Has Been Occupied",
+                                      content: Text(
+                                        "The selected parking spot is already taken. Please choose a other booking spot.",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade700,
+                                          height: 1.4,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      icon: Icons.event_busy,
+                                      color: Colors.redAccent,
+                                    );
+                                  }
+                                }
                                 : null,
                         text: "Continue",
                       ),

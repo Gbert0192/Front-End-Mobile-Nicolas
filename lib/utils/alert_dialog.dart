@@ -19,7 +19,7 @@ void showConfirmDialog({
     context: context,
     barrierLabel: "Dialog",
     barrierDismissible: true,
-    barrierColor: Colors.black.withAlpha(128),
+    barrierColor: Colors.black.withValues(alpha: 0.5),
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
       return const SizedBox();
@@ -57,7 +57,7 @@ void showConfirmDialog({
                       Container(
                         padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: color.withAlpha(42),
+                          color: color.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Icon(
@@ -171,10 +171,7 @@ void showAlertDialog({
   required Widget content,
   String? subtitle,
   IconData? icon,
-  Color? iconColor,
-  Color? titleColor,
-  Color? backgroundColor,
-  Color? buttonColor,
+  Color color = Colors.blueAccent,
   String buttonText = "OK",
   VoidCallback? onPressed,
   bool barrierDismissible = true,
@@ -184,9 +181,9 @@ void showAlertDialog({
     barrierDismissible: barrierDismissible,
     builder:
         (context) => AlertDialog(
-          backgroundColor: backgroundColor ?? Colors.white,
+          backgroundColor: Colors.white,
           elevation: 3,
-          shadowColor: Colors.black.withOpacity(0.15),
+          shadowColor: Colors.black.withValues(alpha: 0.15),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
@@ -199,14 +196,10 @@ void showAlertDialog({
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: (iconColor ?? Colors.orange).withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Icon(
-                    icon,
-                    color: iconColor ?? Colors.orange,
-                    size: 30,
-                  ),
+                  child: Icon(icon, color: color, size: 30),
                 ),
                 const SizedBox(width: 12),
               ],
@@ -219,7 +212,7 @@ void showAlertDialog({
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
-                        color: titleColor ?? Colors.grey.shade800,
+                        color: color,
                       ),
                     ),
                     if (subtitle != null) ...[
@@ -243,7 +236,7 @@ void showAlertDialog({
             TextButton(
               onPressed: onPressed ?? () => Navigator.pop(context),
               style: TextButton.styleFrom(
-                backgroundColor: buttonColor ?? const Color(0xFF1F1E5B),
+                backgroundColor: color,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,

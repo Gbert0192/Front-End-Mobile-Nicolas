@@ -442,7 +442,7 @@ class ActivityCard extends StatelessWidget {
         border: Border.all(color: const Color.fromARGB(255, 221, 221, 221)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(64),
+            color: Colors.black.withValues(alpha: 0.25),
             blurRadius: 5,
             offset: const Offset(4, 4),
           ),

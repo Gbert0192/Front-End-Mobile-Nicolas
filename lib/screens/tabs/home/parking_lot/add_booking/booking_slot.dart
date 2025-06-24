@@ -172,8 +172,6 @@ class _BookingSlotState extends State<BookingSlot> {
         ),
         Card(
           margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          elevation: 2,
-          shadowColor: Colors.black.withOpacity(0.1),
           color: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),

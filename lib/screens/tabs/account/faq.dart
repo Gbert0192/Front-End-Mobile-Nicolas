@@ -85,7 +85,7 @@ class FAQ extends StatelessWidget {
             child: Image.asset(
               "assets/images/others/FAQ.png",
               fit: BoxFit.cover,
-              color: Colors.white.withAlpha(26),
+              color: Colors.white.withValues(alpha: 0.1),
               colorBlendMode: BlendMode.dstATop,
             ),
           ),
