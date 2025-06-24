@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_confirm.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_slot.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_time.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
@@ -163,6 +164,12 @@ class _AddBookingState extends State<AddBooking> {
                             setFloor: (val) => setState(() => floor = val),
                             setSlot: (val) => setState(() => slot = val),
                           ),
+                          BookingConfirm(
+                            mall: widget.mall,
+                            date: date,
+                            time: time,
+                            slot: slot,
+                          ),
                         ],
                       ),
                     ),
@@ -192,7 +199,7 @@ class _AddBookingState extends State<AddBooking> {
                                       content: Text(
                                         "Please choose a time that is within the mall's operating hours and not in the past.",
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: isSmall ? 14 : 16,
                                           color: Colors.grey.shade700,
                                           height: 1.4,
                                         ),

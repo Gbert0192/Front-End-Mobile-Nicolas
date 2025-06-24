@@ -46,6 +46,23 @@ TimeOfDay stringToTime(String hhmm) {
   return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
 }
 
+DateTime stringToDate(String date, [TimeOfDay? time]) {
+  final parts = date.split("/");
+  final day = int.parse(parts[0]);
+  final month = int.parse(parts[1]);
+  final year = int.parse(parts[2]);
+  return DateTime(year, month, day, time?.hour ?? 0, time?.minute ?? 0);
+}
+
+String formatDate(DateTime date) {
+  return DateFormat('MMMM dd, yyyy', 'en_US').format(date);
+}
+
+String formatDateTime(DateTime date) {
+  final datePart = DateFormat('dd MMMM yyyy, hh:mm', 'id_ID').format(date);
+  return datePart;
+}
+
 final key = enc.Key.fromUtf8('CYNVBEITS3E2VJYFAZEWSDEPKSF2V2TB');
 final iv = enc.IV.fromLength(16);
 
@@ -59,4 +76,34 @@ String decryptQR(String encryptedBase64) {
   final encrypter = enc.Encrypter(enc.AES(key));
   final decrypted = encrypter.decrypt64(encryptedBase64, iv: iv);
   return decrypted;
+}
+
+String formatFloorLabel(String floor) {
+  if (floor.startsWith('G')) {
+    return "$floor Floor";
+  }
+
+  final num = int.tryParse(floor);
+  if (num == null) return "$floor Floor";
+
+  String suffix;
+  if (num >= 11 && num <= 13) {
+    suffix = "th";
+  } else {
+    switch (num % 10) {
+      case 1:
+        suffix = "st";
+        break;
+      case 2:
+        suffix = "nd";
+        break;
+      case 3:
+        suffix = "rd";
+        break;
+      default:
+        suffix = "th";
+    }
+  }
+
+  return "$num$suffix Floor";
 }
