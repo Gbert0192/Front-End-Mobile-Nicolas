@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showAlertDialog({
+void showConfirmDialog({
   required BuildContext context,
   bool loading = false,
   int time = 2,
@@ -19,7 +19,7 @@ void showAlertDialog({
     context: context,
     barrierLabel: "Dialog",
     barrierDismissible: true,
-    barrierColor: Colors.black.withAlpha(128),
+    barrierColor: Colors.black.withValues(alpha: 0.5),
     transitionDuration: const Duration(milliseconds: 300),
     pageBuilder: (context, animation, secondaryAnimation) {
       return const SizedBox();
@@ -54,7 +54,18 @@ void showAlertDialog({
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (icon != null)
-                      Icon(icon, size: isSmall ? 40 : 50, color: color),
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: color.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          icon,
+                          size: isSmall ? 40 : 50,
+                          color: color,
+                        ),
+                      ),
                     SizedBox(height: icon != null ? (isSmall ? 15 : 20) : 0),
                     Text(
                       title,
@@ -151,5 +162,99 @@ void showAlertDialog({
         ),
       );
     },
+  );
+}
+
+void showAlertDialog({
+  required BuildContext context,
+  required String title,
+  required Widget content,
+  String? subtitle,
+  IconData? icon,
+  Color color = Colors.blueAccent,
+  String buttonText = "OK",
+  VoidCallback? onPressed,
+  bool barrierDismissible = true,
+}) {
+  showDialog(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    builder:
+        (context) => AlertDialog(
+          backgroundColor: Colors.white,
+          elevation: 3,
+          shadowColor: Colors.black.withValues(alpha: 0.15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          titlePadding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+          contentPadding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+          actionsPadding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          title: Row(
+            children: [
+              if (icon != null) ...[
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: color.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Icon(icon, color: color, size: 30),
+                ),
+                const SizedBox(width: 12),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: color,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.grey.shade600,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
+          content: content,
+          actions: [
+            TextButton(
+              onPressed: onPressed ?? () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                backgroundColor: color,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+              child: Text(
+                buttonText,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
   );
 }

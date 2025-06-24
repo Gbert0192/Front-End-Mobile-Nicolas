@@ -109,7 +109,10 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                     horizontal: 16,
                   ),
                   decoration: BoxDecoration(
-                    color: isSelected ? widget.borderColor.withAlpha(20) : null,
+                    color:
+                        isSelected
+                            ? widget.borderColor.withValues(alpha: 0.1)
+                            : null,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -203,7 +206,7 @@ class _ResponsiveDropdownState<T> extends State<ResponsiveDropdown<T>> {
                 isOutline
                     ? [
                       BoxShadow(
-                        color: Colors.black.withAlpha(64),
+                        color: Colors.black.withValues(alpha: 0.25),
                         blurRadius: 6,
                         offset: const Offset(4, 4),
                       ),

@@ -26,6 +26,7 @@ class ActivityProvider with ChangeNotifier {
     } else {
       activities.add(UserActivity(user, [activity]));
     }
+    notifyListeners();
   }
 
   UserActivity? getActivity(User user) {

@@ -81,7 +81,7 @@ class _ProfileState extends State<Profile> {
               context: context,
               barrierLabel: "Dialog",
               barrierDismissible: false,
-              barrierColor: Colors.black.withAlpha(128),
+              barrierColor: Colors.black.withValues(alpha: 0.5),
               transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (context, animation, secondaryAnimation) {
                 return const SizedBox();
@@ -140,7 +140,7 @@ class _ProfileState extends State<Profile> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF6366F1).withAlpha(76),
+                          color: const Color(0xFF6366F1).withValues(alpha: 0.3),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                           spreadRadius: 2,
@@ -161,7 +161,7 @@ class _ProfileState extends State<Profile> {
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withAlpha(51),
+                                color: Colors.black.withValues(alpha: 0.2),
                                 blurRadius: 15,
                                 offset: const Offset(0, 5),
                               ),
@@ -201,7 +201,7 @@ class _ProfileState extends State<Profile> {
                                 user.email,
                                 style: TextStyle(
                                   fontSize: isSmall ? 14 : 16,
-                                  color: Colors.white.withAlpha(204),
+                                  color: Colors.white.withValues(alpha: 0.8),
                                 ),
                               ),
                               SizedBox(height: 4),
@@ -224,7 +224,7 @@ class _ProfileState extends State<Profile> {
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withAlpha(38),
+                                  color: Colors.black.withValues(alpha: 0.15),
                                   blurRadius: 10,
                                   offset: const Offset(0, 3),
                                 ),
@@ -270,7 +270,7 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withAlpha(64),
+                                  color: Colors.black.withValues(alpha: 0.25),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -301,7 +301,7 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withAlpha(64),
+                                  color: Colors.black.withValues(alpha: 0.25),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -332,7 +332,7 @@ class _ProfileState extends State<Profile> {
                               fontWeight: FontWeight.w500,
                               shadows: [
                                 Shadow(
-                                  color: Colors.black.withAlpha(64),
+                                  color: Colors.black.withValues(alpha: 0.25),
                                   blurRadius: 4,
                                   offset: const Offset(0, 2),
                                 ),
@@ -343,7 +343,7 @@ class _ProfileState extends State<Profile> {
                         SettingButtons(
                           onPressed:
                               () => {
-                                showAlertDialog(
+                                showConfirmDialog(
                                   context: context,
                                   loading: true,
                                   time: 1,
@@ -360,7 +360,7 @@ class _ProfileState extends State<Profile> {
                                     "您确定要退出您的账户吗？",
                                   ),
                                   icon: Icons.logout,
-                                  color: const Color.fromARGB(255, 220, 56, 45),
+                                  color: Colors.red,
                                   onContinue: () {
                                     userProvider.logout();
                                     showFlexibleSnackbar(
@@ -460,16 +460,19 @@ class SettingButtons extends StatelessWidget {
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(width: 1, color: borderColor.withAlpha(128)),
+            border: Border.all(
+              width: 1,
+              color: borderColor.withValues(alpha: 0.5),
+            ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withAlpha(20),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
                 spreadRadius: 0,
               ),
               BoxShadow(
-                color: Colors.black.withAlpha(10),
+                color: Colors.black.withValues(alpha: 0.04),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
                 spreadRadius: 0,

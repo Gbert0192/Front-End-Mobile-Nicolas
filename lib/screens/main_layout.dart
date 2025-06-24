@@ -80,7 +80,7 @@ class _MainLayoutState extends State<MainLayout>
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withAlpha(51),
+                color: Colors.grey.withValues(alpha: 0.2),
                 spreadRadius: 2,
                 blurRadius: 10,
                 offset: const Offset(0, 3),

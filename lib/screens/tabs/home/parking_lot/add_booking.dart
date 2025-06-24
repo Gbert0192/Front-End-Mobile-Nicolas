@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_slot.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_time.dart';
+import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 
 class AddBooking extends StatefulWidget {
   const AddBooking(this.mall);
@@ -34,112 +37,227 @@ class _AddBookingState extends State<AddBooking> {
 
   @override
   Widget build(BuildContext context) {
+    final lotProvider = Provider.of<ParkingLotProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
+    bool validateDatetime() {
+      final now = DateTime.now();
+
+      final dateParts = date!.split('/');
+      final day = int.parse(dateParts[0]);
+      final month = int.parse(dateParts[1]);
+      final year = int.parse(dateParts[2]);
+      final hourParts = time!.split(':');
+      final hour = int.parse(hourParts[0]);
+      final minute = int.parse(hourParts[1]);
+
+      final bookingTime = DateTime(year, month, day, hour, minute);
+
+      final bookingDayOpen = DateTime(
+        year,
+        month,
+        day,
+        widget.mall.openTime.hour,
+        widget.mall.openTime.minute,
+      );
+
+      final bookingDayClose = DateTime(
+        year,
+        month,
+        day,
+        widget.mall.closeTime.hour,
+        widget.mall.closeTime.minute,
+      );
+
+      final isWithinOpenHours =
+          !bookingTime.isBefore(bookingDayOpen) &&
+          bookingTime.isBefore(bookingDayClose);
+
+      final isSameDay =
+          bookingTime.year == now.year &&
+          bookingTime.month == now.month &&
+          bookingTime.day == now.day;
+
+      final isAtLeastOneHourFromNow =
+          !isSameDay ||
+          !bookingTime.isBefore(now.add(const Duration(hours: 1)));
+
+      return isWithinOpenHours && isAtLeastOneHourFromNow;
+    }
+
     return Scaffold(
-      backgroundColor: Color(0xFFEFF1F8),
+      backgroundColor: const Color(0xFFEFF1F8),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isSmall ? 4 : 8,
-              vertical: isSmall ? 5 : 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        if (currentPage == 0) {
-                          Navigator.pop(context);
-                        } else {
-                          _controller.previousPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        }
-                      },
-                      icon: Icon(Icons.arrow_back_ios, size: isSmall ? 25 : 30),
-                    ),
-                    SizedBox(width: isSmall ? 0 : 8),
-                    Text(
-                      "Create Booking",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: isSmall ? 20 : 25,
-                      ),
-                    ),
-                  ],
+        child: RefreshIndicator(
+          backgroundColor: Colors.white,
+          color: const Color(0xFF1F1E5B),
+          onRefresh: () async {
+            Future.delayed(const Duration(seconds: 2), () {
+              lotProvider.getAvailableSpot(widget.mall);
+            });
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: isSmall ? 4 : 8,
+                  vertical: isSmall ? 5 : 10,
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height:
-                      isSmall
-                          ? currentPage == 0
-                              ? 700
-                              : 670
-                          : 740,
-                  child: PageView(
-                    controller: _controller,
-                    physics: NeverScrollableScrollPhysics(),
-                    children: [
-                      BookingTime(
-                        date: date,
-                        time: time,
-                        mall: widget.mall,
-                        setDate: (String val) {
-                          setState(() {
-                            date = val;
-                          });
-                        },
-                        setTime: (String val) {
-                          setState(() {
-                            time = val;
-                          });
-                        },
-                      ),
-                      BookingSlot(
-                        floor: floor,
-                        slot: slot,
-                        mall: widget.mall,
-                        setFloor: (String val) {
-                          setState(() {
-                            floor = val;
-                          });
-                        },
-                        setSlot: (String val) {
-                          setState(() {
-                            slot = val;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 10),
-                // Button
-                Center(
-                  child: ResponsiveButton(
-                    isLoading: isLoading,
-                    onPressed:
-                        (date?.isNotEmpty ?? false) &&
-                                (time?.isNotEmpty ?? false)
-                            ? () {
-                              if (currentPage == 0) {
-                                _controller.nextPage(
-                                  duration: Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              }
+                sliver: SliverList(
+                  delegate: SliverChildListDelegate([
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            if (currentPage == 0) {
+                              Navigator.pop(context);
+                            } else {
+                              _controller.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
                             }
-                            : null,
-                    text: "Continue",
-                  ),
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            size: isSmall ? 25 : 30,
+                          ),
+                        ),
+                        SizedBox(width: isSmall ? 0 : 8),
+                        Text(
+                          "Create Booking",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: isSmall ? 20 : 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    // PageView for booking steps
+                    SizedBox(
+                      height:
+                          isSmall
+                              ? currentPage == 0
+                                  ? 700
+                                  : 670
+                              : currentPage == 0
+                              ? 760
+                              : 720,
+                      child: PageView(
+                        controller: _controller,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          BookingTime(
+                            date: date,
+                            time: time,
+                            mall: widget.mall,
+                            setDate: (val) => setState(() => date = val),
+                            setTime: (val) => setState(() => time = val),
+                          ),
+                          BookingSlot(
+                            floor: floor,
+                            slot: slot,
+                            mall: widget.mall,
+                            setFloor: (val) => setState(() => floor = val),
+                            setSlot: (val) => setState(() => slot = val),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: 10),
+
+                    // Continue button
+                    Center(
+                      child: ResponsiveButton(
+                        isLoading: isLoading,
+                        onPressed:
+                            (date?.isNotEmpty ?? false) &&
+                                    (time?.isNotEmpty ?? false) &&
+                                    currentPage == 0
+                                ? () {
+                                  if (validateDatetime()) {
+                                    _controller.nextPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  } else {
+                                    showAlertDialog(
+                                      context: context,
+                                      title: "Invalid Booking Time",
+                                      content: Text(
+                                        "Please choose a time that is within the mall's operating hours and not in the past.",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade700,
+                                          height: 1.4,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      icon: Icons.warning_amber_rounded,
+                                      color: Colors.orange,
+                                    );
+                                  }
+                                }
+                                : (slot?.isNotEmpty ?? false) &&
+                                    currentPage == 1
+                                ? () async {
+                                  final parts = slot!.split("-");
+                                  String floor = parts[0];
+                                  String spot = parts[1];
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await Future.delayed(
+                                    const Duration(seconds: 1),
+                                  );
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  bool isFree =
+                                      lotProvider.checkSpotStatus(
+                                        lot: widget.mall,
+                                        floorNumber: floor,
+                                        spotCode: spot,
+                                      ) ==
+                                      SpotStatus.free;
+                                  if (isFree) {
+                                    _controller.nextPage(
+                                      duration: const Duration(
+                                        milliseconds: 300,
+                                      ),
+                                      curve: Curves.easeInOut,
+                                    );
+                                  } else {
+                                    showAlertDialog(
+                                      context: context,
+                                      title: "Spot Has Been Occupied",
+                                      content: Text(
+                                        "The selected parking spot is already taken. Please choose a other booking spot.",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade700,
+                                          height: 1.4,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      icon: Icons.event_busy,
+                                      color: Colors.redAccent,
+                                    );
+                                  }
+                                }
+                                : null,
+                        text: "Continue",
+                      ),
+                    ),
+                  ]),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

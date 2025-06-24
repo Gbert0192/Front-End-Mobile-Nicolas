@@ -81,7 +81,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     if (widget.maxTime != null) {
       final maxTimeInMinutes =
           widget.maxTime!.hour * 60 + widget.maxTime!.minute;
-      if (timeInMinutes > maxTimeInMinutes) return false;
+      if (timeInMinutes >= maxTimeInMinutes) return false;
     }
 
     return true;
@@ -112,7 +112,21 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
+          child: Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: Color(0xFF1F1E5B),
+                onPrimary: Colors.white,
+                onSurface: Colors.black,
+              ),
+              primaryColor: const Color(0xFF1F1E5B),
+              textTheme: ThemeData.light().textTheme.copyWith(),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(foregroundColor: Color(0xFF1F1E5B)),
+              ),
+            ),
+            child: child!,
+          ),
         );
       },
     );
@@ -246,7 +260,23 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
               data: MediaQuery.of(
                 context,
               ).copyWith(alwaysUse24HourFormat: true),
-              child: child!,
+              child: Theme(
+                data: ThemeData.dark().copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: Color(0xFF1F1E5B),
+                    onPrimary: Colors.white,
+                    onSurface: Colors.black,
+                  ),
+                  primaryColor: const Color(0xFF1F1E5B),
+                  textTheme: ThemeData.light().textTheme.copyWith(),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Color(0xFF1F1E5B),
+                    ),
+                  ),
+                ),
+                child: child!,
+              ),
             );
           },
         );
@@ -373,7 +403,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                     isOutline
                         ? [
                           BoxShadow(
-                            color: Colors.black.withAlpha(64),
+                            color: Colors.black.withValues(alpha: 0.25),
                             blurRadius: 6,
                             offset: const Offset(4, 4),
                           ),

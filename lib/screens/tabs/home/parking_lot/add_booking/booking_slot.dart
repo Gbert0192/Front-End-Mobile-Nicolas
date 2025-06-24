@@ -23,7 +23,6 @@ class BookingSlot extends StatefulWidget {
 }
 
 class _BookingSlotState extends State<BookingSlot> {
-  int currentFloor = 0;
   String _formatFloorLabel(String floor) {
     if (floor.startsWith('G')) {
       return "$floor Floor";
@@ -77,18 +76,26 @@ class _BookingSlotState extends State<BookingSlot> {
 
       children.add(
         Positioned(
-          right: 15,
+          right: isSmall ? 15 : 10,
           top:
               areaIndex == 0
                   ? allOccupied
-                      ? 5
-                      : 1
+                      ? isSmall
+                          ? 5
+                          : 8
+                      : isSmall
+                      ? 1
+                      : 3
                   : null,
           bottom:
               areaIndex == 1
                   ? allOccupied
-                      ? 10
-                      : 7
+                      ? isSmall
+                          ? 10
+                          : 12
+                      : isSmall
+                      ? 7
+                      : 10
                   : null,
           child: Column(
             children: List.generate((spots.length / 2).ceil(), (index) {
@@ -163,28 +170,84 @@ class _BookingSlotState extends State<BookingSlot> {
                 );
               }).toList(),
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: const Color.fromRGBO(0, 0, 0, 0.08),
-                blurRadius: 5,
-                offset: const Offset(0, 4),
-              ),
-            ],
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: DetailRow(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            label: "Selected Parking Spot",
-            value:
-                widget.slot != null
-                    ? "${_formatFloorLabel(selectedFloor!)} ($selectedSpot)"
-                    : "Pick Your Slot",
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.white, Colors.grey.shade50],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color:
+                          widget.slot != null
+                              ? Colors.green.shade50
+                              : Colors.orange.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(
+                      widget.slot != null
+                          ? Icons.local_parking
+                          : Icons.location_searching,
+                      color:
+                          widget.slot != null
+                              ? Colors.green.shade600
+                              : Colors.orange.shade600,
+                      size: 20,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Selected Parking Spot",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          widget.slot != null
+                              ? "${_formatFloorLabel(selectedFloor!)} ($selectedSpot)"
+                              : "Pick Your Slot",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color:
+                                widget.slot != null
+                                    ? Colors.grey.shade800
+                                    : Colors.orange.shade700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (widget.slot == null)
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey.shade400,
+                      size: 16,
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
         DataCard(
@@ -195,7 +258,7 @@ class _BookingSlotState extends State<BookingSlot> {
                 children: [
                   Image.asset(
                     "assets/images/others/parking area.png",
-                    height: 400,
+                    height: isSmall ? 400 : 460,
                   ),
                   ...children,
                 ],
@@ -230,13 +293,16 @@ class SpotRender extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
       child:
           item.status != SpotStatus.free
-              ? Image.asset("assets/images/others/car.png", width: 67)
+              ? Image.asset(
+                "assets/images/others/car.png",
+                width: isSmall ? 67 : 84,
+              )
               : GestureDetector(
                 onTap: () => onTap("$currentFloor-${item.code}"),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 5,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSmall ? 16 : 24,
+                    vertical: isSmall ? 5 : 7,
                   ),
                   decoration: BoxDecoration(
                     color:
