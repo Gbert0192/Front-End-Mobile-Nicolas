@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-class Activity extends StatelessWidget {
+class Activity extends StatefulWidget {
   const Activity({super.key});
 
+  @override
+  State<Activity> createState() => _ActivityState();
+}
+
+class _ActivityState extends State<Activity> {
   String _getDateGroup(DateTime dateTime) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -100,84 +104,96 @@ class Activity extends StatelessWidget {
     User user = userProvider.currentUser!;
     final activityProvider = Provider.of<ActivityProvider>(context);
 
-    final activities = activityProvider.getActivity(user);
+    UserActivity? activities = activityProvider.getActivity(user);
     final groupedactivitys = _groupActivitiesByDate(activities?.activity ?? []);
     final sortedDateKeys = _getSortedDateKeys(groupedactivitys);
 
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              title: Text(
-                translate(context, 'Activities', 'Aktivitas', '活动'),
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: isSmall ? 25 : 30,
+        child: RefreshIndicator(
+          backgroundColor: Colors.white,
+          color: const Color(0xFF1F1E5B),
+          onRefresh: () async {
+            Future.delayed(const Duration(seconds: 2), () {
+              setState(() {
+                activities = activityProvider.getActivity(user);
+              });
+            });
+          },
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                title: Text(
+                  translate(context, 'Activities', 'Aktivitas', '活动'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: isSmall ? 25 : 30,
+                  ),
                 ),
+                centerTitle: true,
               ),
-              centerTitle: true,
-            ),
-            SliverToBoxAdapter(
-              child: Column(
-                children:
-                    activities != null && activities.activity.isNotEmpty
-                        ? [
-                          for (String dateKey in sortedDateKeys) ...[
-                            NotifTitle(
-                              dateTitle: _getTranslatedDateGroup(
-                                context,
-                                groupedactivitys[dateKey]!.first.date,
+              SliverToBoxAdapter(
+                child: Column(
+                  children:
+                      activities != null && activities.activity.isNotEmpty
+                          ? [
+                            for (String dateKey in sortedDateKeys) ...[
+                              NotifTitle(
+                                dateTitle: _getTranslatedDateGroup(
+                                  context,
+                                  groupedactivitys[dateKey]!.first.date,
+                                ),
                               ),
-                            ),
-                            ...groupedactivitys[dateKey]!.map(
-                              (activity) => ActivityCard(activity: activity),
+                              ...groupedactivitys[dateKey]!.map(
+                                (activity) => ActivityCard(activity: activity),
+                              ),
+                            ],
+                          ]
+                          : [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.7,
+                              child: Center(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Transform.translate(
+                                      offset: const Offset(0, 10),
+                                      child: Opacity(
+                                        opacity: 0.5,
+                                        child: Image.asset(
+                                          'assets/images/empty/activity_empty.png',
+                                          width: isSmall ? 240 : 320,
+                                          height: isSmall ? 240 : 320,
+                                        ),
+                                      ),
+                                    ),
+                                    Transform.translate(
+                                      offset: const Offset(0, -5),
+                                      child: Text(
+                                        translate(
+                                          context,
+                                          'No activities done yet!',
+                                          'Belum ada aktivitas dilakukan!',
+                                          '尚未完成任何活动！',
+                                        ),
+                                        style: TextStyle(
+                                          color: const Color(0xFFD3D3D3),
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: isSmall ? 20 : 25,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ],
-                        ]
-                        : [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.7,
-                            child: Center(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Transform.translate(
-                                    offset: Offset(0, 10),
-                                    child: Opacity(
-                                      opacity: 0.5,
-                                      child: Image.asset(
-                                        'assets/images/empty/activity_empty.png',
-                                        width: isSmall ? 240 : 320,
-                                        height: isSmall ? 240 : 320,
-                                      ),
-                                    ),
-                                  ),
-                                  Transform.translate(
-                                    offset: Offset(0, -5),
-                                    child: Text(
-                                      translate(
-                                        context,
-                                        'No activities done yet!',
-                                        'Belum ada aktivitas dilakukan!',
-                                        '尚未完成任何活动！',
-                                      ),
-                                      style: TextStyle(
-                                        color: Color(0xFFD3D3D3),
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: isSmall ? 20 : 25,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -404,27 +420,6 @@ class ActivityCard extends StatelessWidget {
     }
   }
 
-  String _formatDateTime(BuildContext context, DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
-
-    if (difference.inDays == 0) {
-      if (difference.inHours == 0) {
-        if (difference.inMinutes == 0) {
-          return translate(context, "Just now", "Baru saja", "刚刚");
-        }
-        return "${difference.inMinutes}${translate(context, "m ago", "m lalu", "分钟前")}";
-      }
-      return "${difference.inHours}${translate(context, "h ago", "j lalu", "小时前")}";
-    } else if (difference.inDays == 1) {
-      return translate(context, "Yesterday", "Kemarin", "昨天");
-    } else if (difference.inDays < 7) {
-      return "${difference.inDays}${translate(context, "d ago", "h lalu", "天前")}";
-    } else {
-      return DateFormat("dd MMM yyyy").format(dateTime);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -450,6 +445,11 @@ class ActivityCard extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.zero,
+        onTap: () {
+          if (activity.onPressed != null) {
+            activity.onPressed!(context);
+          }
+        },
         leading: Image.asset(
           _getActivityIcon(activity.activityTypes),
           width: isSmall ? 35 : 50,
@@ -467,7 +467,7 @@ class ActivityCard extends StatelessWidget {
               ),
             ),
             Text(
-              _formatDateTime(context, activity.date),
+              formatDateTimeLabel(context, activity.date),
               style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: isSmall ? 10 : 12,

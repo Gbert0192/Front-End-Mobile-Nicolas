@@ -1,60 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/model/history.dart';
+import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-enum ParkingStatus { isParking, isExited, bookingCancel, bookingExpired }
+class HistoryCard extends StatelessWidget {
+  final Parking history;
 
-class ParkingCard extends StatelessWidget {
-  final String imageUrl;
-  final String placeName;
-  final ParkingStatus statusText;
-  final String dateText;
-  final double priceText;
+  const HistoryCard(this.history);
 
-  const ParkingCard({
-    super.key,
-    required this.imageUrl,
-    required this.placeName,
-    this.statusText = ParkingStatus.isParking,
-    required this.dateText,
-    required this.priceText,
-  });
-
-  String _getStatusText(ParkingStatus status) {
+  String _getStatusText(HistoryStatus status) {
     switch (status) {
-      case ParkingStatus.isParking:
-        return "Is Parking";
-      case ParkingStatus.isExited:
-        return "Exited Parking Lot";
-      case ParkingStatus.bookingCancel:
+      case HistoryStatus.pending:
+      case HistoryStatus.fixed:
+        return "Booking Succeed";
+      case HistoryStatus.entered:
+      case HistoryStatus.unresolved:
+        return "Currently Parking";
+      case HistoryStatus.exited:
+        return "Parking Completed";
+      case HistoryStatus.cancel:
         return "Booking Canceled";
-      case ParkingStatus.bookingExpired:
+      case HistoryStatus.expired:
         return "Booking Expired";
     }
   }
 
-  IconData _getStatusIcon(ParkingStatus status) {
+  IconData _getStatusIcon(HistoryStatus status) {
     switch (status) {
-      case ParkingStatus.isParking:
-        return Icons.local_parking;
-      case ParkingStatus.isExited:
-        return Icons.directions_car;
-      case ParkingStatus.bookingCancel:
-        return Icons.cancel;
-      case ParkingStatus.bookingExpired:
-        return Icons.cancel_presentation;
+      case HistoryStatus.pending:
+      case HistoryStatus.fixed:
+        return Icons.check_circle_outline;
+      case HistoryStatus.entered:
+      case HistoryStatus.unresolved:
+        return Icons.local_parking_outlined;
+      case HistoryStatus.exited:
+        return Icons.exit_to_app;
+      case HistoryStatus.cancel:
+        return Icons.cancel_outlined;
+      case HistoryStatus.expired:
+        return Icons.schedule;
     }
   }
 
-  Color _getStatusColor(ParkingStatus status) {
+  Color _getStatusColor(HistoryStatus status) {
     switch (status) {
-      case ParkingStatus.isParking:
-        return Colors.green;
-      case ParkingStatus.isExited:
-        return Colors.blue;
-      case ParkingStatus.bookingCancel:
-        return Colors.red;
-      case ParkingStatus.bookingExpired:
-        return Colors.orange;
+      case HistoryStatus.pending:
+      case HistoryStatus.fixed:
+        return const Color(0xFF4CAF50);
+      case HistoryStatus.entered:
+      case HistoryStatus.unresolved:
+        return const Color(0xFF2196F3);
+      case HistoryStatus.exited:
+        return const Color(0xFF9C27B0);
+      case HistoryStatus.cancel:
+        return const Color(0xFFF44336);
+      case HistoryStatus.expired:
+        return const Color(0xFFFF9800);
     }
   }
 
@@ -62,87 +63,155 @@ class ParkingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+
     return Container(
-      margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F9FF),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color.fromRGBO(0, 0, 0, 0.25),
-            blurRadius: 8,
-            offset: Offset(4, 4),
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+            spreadRadius: 0,
           ),
         ],
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1), width: 1),
       ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              imageUrl,
-              width: 95,
-              height: 70,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 6),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  placeName,
-                  style: TextStyle(
-                    fontSize: isSmall ? 16 : 20,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 25),
-                Row(
-                  children: [
-                    Icon(
-                      _getStatusIcon(statusText),
-                      color: _getStatusColor(statusText),
-                      size: isSmall ? 14 : 18,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              // Add tap functionality here if needed
+            },
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  // Image container with enhanced styling
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 4),
-                    Text(
-                      _getStatusText(statusText),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: _getStatusColor(statusText),
-                        fontWeight: FontWeight.w500,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        history.lot.image,
+                        width: 80,
+                        height: 80,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(width: 16),
+
+                  // Content section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Place name and date row
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                history.lot.name,
+                                style: TextStyle(
+                                  fontSize: isSmall ? 16 : 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: const Color(0xFF1A1A1A),
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              formatDateTimeLabel(context, history.createdAt),
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: const Color(0xFF6B7280),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        // Price section (right aligned)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF3F4F6),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              "${formatCurrency(nominal: history.lot.hourlyPrice)}/h",
+                              style: TextStyle(
+                                fontSize: isSmall ? 14 : 16,
+                                color: const Color(0xFF374151),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        // Status with icon (bottom)
+                        Container(
+                          margin: EdgeInsets.only(top: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _getStatusColor(
+                              history.status,
+                            ).withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                _getStatusIcon(history.status),
+                                color: _getStatusColor(history.status),
+                                size: 16,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                _getStatusText(history.status),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: _getStatusColor(history.status),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                dateText,
-                style: TextStyle(
-                  color: const Color.fromRGBO(0, 0, 0, 0.75),
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(height: 28),
-              Text(
-                "${formatCurrency(nominal: priceText)}/h",
-                style: TextStyle(
-                  fontSize: isSmall ? 13 : 15,
-                  color: const Color.fromRGBO(0, 0, 0, 0.5),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -93,6 +93,12 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
           activityTypes: ActivityTypes.topUp,
           method: widget.method.name,
           nominal: finalAmount,
+          onPressed: (context) {
+            showFlexibleSnackbar(
+              context,
+              "Top up ${formatCurrency(nominal: finalAmount)} via ${widget.method.name}",
+            );
+          },
         ),
       );
 

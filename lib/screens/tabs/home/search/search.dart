@@ -245,7 +245,7 @@ class _SearchState extends State<Search> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // Gambar tetap kotak
                     SizedBox(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/booking.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/parking.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ParkingHistory extends StatelessWidget {
@@ -57,7 +56,9 @@ class ParkingHistory extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Parkings(),
+                                builder:
+                                    (context) =>
+                                        HistoryList(historyType.parking),
                               ),
                             );
                           },
@@ -119,7 +120,9 @@ class ParkingHistory extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Booking(),
+                                builder:
+                                    (context) =>
+                                        HistoryList(historyType.booking),
                               ),
                             );
                           },
