@@ -233,7 +233,7 @@ class Activity extends StatelessWidget {
                           (notification) =>
                               ActivityCard(notification: notification),
                         )
-                        .toList(),
+                        ,
                   ],
                 ],
               ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/receipt/booking.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class SearchDetail extends StatelessWidget {
@@ -334,6 +335,19 @@ class SearchDetail extends StatelessWidget {
                       children: [
                         Expanded(
                           child: ResponsiveButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => Booking(
+                                        spotTypeEn: 'Parking Spot',
+                                        spotTypeId: 'Pemarikiran Tempat',
+                                        spotTypeCn: 'ba',
+                                      ),
+                                ),
+                              );
+                            },
                             isSmall: isSmall,
                             fontWeight: FontWeight.w600,
                             backgroundColor: Color(0xFFFFA35E),
@@ -348,6 +362,19 @@ class SearchDetail extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: ResponsiveButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => Booking(
+                                        spotTypeEn: 'Booking Spot',
+                                        spotTypeId: 'Pemesanan Tempat',
+                                        spotTypeCn: 'ab',
+                                      ),
+                                ),
+                              );
+                            },
                             isSmall: isSmall,
                             fontWeight: FontWeight.w600,
                             backgroundColor: Color(0xFF7573EE),
