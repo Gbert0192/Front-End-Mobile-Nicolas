@@ -2,6 +2,7 @@ import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class Parking {
   final User user;
@@ -67,5 +68,64 @@ class Parking {
     final hours = duration!.inMinutes / 60;
 
     return hours.ceil();
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{
+      'user': user.toJson(),
+      'lot': lot.toJson(),
+      'floor': floor,
+      'code': code,
+      'createdAt': createdAt.toIso8601String(),
+      'status': historyStatusToString(status),
+    };
+
+    if (isMember != null) data['isMember'] = isMember;
+    if (checkinTime != null) {
+      data['checkinTime'] = checkinTime!.toIso8601String();
+    }
+    if (checkoutTime != null) {
+      data['checkoutTime'] = checkoutTime!.toIso8601String();
+    }
+    if (hours != null) data['hours'] = hours;
+    if (amount != null) data['amount'] = amount;
+    if (tax != null) data['tax'] = tax;
+    if (service != null) data['service'] = service;
+    if (voucher != null) data['voucher'] = voucher;
+    if (total != null) data['total'] = total;
+    if (unresolvedFee != null && unresolvedFee != 0) {
+      data['unresolvedFee'] = unresolvedFee;
+    }
+
+    return data;
+  }
+
+  factory Parking.fromJson(Map<String, dynamic> json) {
+    final parking = Parking(
+      user: User.fromJson(json['user']),
+      lot: ParkingLot.fromJson(json['lot']),
+      floor: json['floor'],
+      code: json['code'],
+    );
+
+    parking.isMember = json['isMember'];
+    parking.checkinTime =
+        json['checkinTime'] != null
+            ? DateTime.parse(json['checkinTime'])
+            : null;
+    parking.checkoutTime =
+        json['checkoutTime'] != null
+            ? DateTime.parse(json['checkoutTime'])
+            : null;
+    parking.status = historyStatusFromString(json['status']);
+    parking.hours = json['hours'];
+    parking.amount = (json['amount'] as num?)?.toDouble();
+    parking.tax = (json['tax'] as num?)?.toDouble();
+    parking.service = (json['service'] as num?)?.toDouble();
+    parking.voucher = (json['voucher'] as num?)?.toDouble();
+    parking.total = (json['total'] as num?)?.toDouble();
+    parking.unresolvedFee = (json['unresolvedFee'] as num?)?.toDouble() ?? 0;
+
+    return parking;
   }
 }

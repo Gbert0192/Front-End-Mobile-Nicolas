@@ -90,7 +90,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
       activityProvider.addActivity(
         user,
         ActivityItem(
-          activityTypes: ActivityTypes.topUp,
+          activityType: ActivityType.topUp,
           method: widget.method.name,
           nominal: finalAmount,
           onPressed: (context) {

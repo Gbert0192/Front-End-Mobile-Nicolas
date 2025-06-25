@@ -11,9 +11,11 @@ class SubscriptionSplash extends StatefulWidget {
 
 class _SubscriptionSplashState extends State<SubscriptionSplash> {
   @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
+    Future.delayed(const Duration(seconds: 3000), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -32,22 +34,20 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
 
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, elevation: 0),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(isSmall ? 30 : 50),
+            padding: EdgeInsets.symmetric(
+              horizontal: 30,
+              vertical: isSmall ? 30 : 50,
+            ),
             child: (Center(
               child: Column(
                     children: [
+                      SizedBox(height: isSmall ? 20 : 60),
                       Image.asset(
                         'assets/images/popup/subscription.png',
                         width: isSmall ? 200 : 300,
@@ -61,12 +61,13 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: isSmall ? 10 : 20),
+                      SizedBox(height: 10),
                       Text(
                         'Congrats, you have become our member',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Color(0xFF9C9CA0),
-                          fontSize: isSmall ? 16 : 18,
+                          fontSize: isSmall ? 16 : 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

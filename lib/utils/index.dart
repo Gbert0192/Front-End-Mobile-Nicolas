@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/model/history.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:encrypt/encrypt.dart' as enc;
 
@@ -132,3 +134,15 @@ String formatFloorLabel(String floor) {
 
   return "$num$suffix Floor";
 }
+
+String historyStatusToString(HistoryStatus status) =>
+    status.toString().split('.').last;
+
+HistoryStatus historyStatusFromString(String value) => HistoryStatus.values
+    .firstWhere((e) => e.toString().split('.').last == value);
+
+String activityTypeToString(ActivityType type) =>
+    type.toString().split('.').last;
+
+ActivityType activityTypeFromString(String value) => ActivityType.values
+    .firstWhere((e) => e.toString().split('.').last == value);

@@ -245,97 +245,97 @@ class ActivityCard extends StatelessWidget {
 
   const ActivityCard({super.key, required this.activity});
 
-  String _getActivityIcon(ActivityTypes type) {
+  String _getActivityIcon(ActivityType type) {
     switch (type) {
-      case ActivityTypes.bookSuccess:
+      case ActivityType.bookSuccess:
         return 'assets/images/icons/booking.png';
-      case ActivityTypes.bookCancel:
+      case ActivityType.bookCancel:
         return 'assets/images/icons/cancel.png';
-      case ActivityTypes.exitLot:
+      case ActivityType.exitLot:
         return 'assets/images/icons/exit.png';
-      case ActivityTypes.enterLot:
+      case ActivityType.enterLot:
         return 'assets/images/icons/enter.png';
-      case ActivityTypes.bookExp:
+      case ActivityType.bookExp:
         return 'assets/images/icons/expired.png';
-      case ActivityTypes.paySuccess:
+      case ActivityType.paySuccess:
         return 'assets/images/icons/payment.png';
-      case ActivityTypes.verify:
+      case ActivityType.verify:
         return 'assets/images/icons/verification.png';
-      // case ActivityTypes.twoFactor:
+      // case ActivityType.twoFactor:
       //   return 'assets/images/icons/locked.png';
-      case ActivityTypes.topUp:
+      case ActivityType.topUp:
         return 'assets/images/icons/topup.png';
-      case ActivityTypes.unresolved:
+      case ActivityType.unresolved:
         return 'assets/images/icons/unresolved.png';
     }
   }
 
-  String _cardTitle(BuildContext context, ActivityTypes type) {
+  String _cardTitle(BuildContext context, ActivityType type) {
     switch (type) {
-      case ActivityTypes.bookSuccess:
+      case ActivityType.bookSuccess:
         return translate(
           context,
           'Booking Successful!',
           'Pemesanan Berhasil!',
           '预订成功！',
         );
-      case ActivityTypes.bookCancel:
+      case ActivityType.bookCancel:
         return translate(
           context,
           'Booking Booking Canceled',
           'Pemesanan Parkir Dibatalkan',
           '停车预订已取消',
         );
-      case ActivityTypes.exitLot:
+      case ActivityType.exitLot:
         return translate(
           context,
           'Exit Parking Lot',
           'Keluar Area Parkir',
           '离开停车场',
         );
-      case ActivityTypes.enterLot:
+      case ActivityType.enterLot:
         return translate(
           context,
           'Enter Parking Lot',
           'Masuk Area Parkir',
           '进入停车场',
         );
-      case ActivityTypes.bookExp:
+      case ActivityType.bookExp:
         return translate(
           context,
           'Booking Has Been Expired!',
           'Pemesanan Telah Kedaluwarsa!',
           '预订已过期！',
         );
-      case ActivityTypes.paySuccess:
+      case ActivityType.paySuccess:
         return translate(
           context,
           'Payment Successful!',
           'Pembayaran Berhasil!',
           '付款成功！',
         );
-      case ActivityTypes.verify:
+      case ActivityType.verify:
         return translate(
           context,
           '2FA Now Set Up!',
           '2FA Terpasang!',
           '2FA 现已设置!',
         );
-      // case ActivityTypes.twoFactor:
+      // case ActivityType.twoFactor:
       //   return translate(
       //     context,
       //     'Protect your account with 2FA.',
       //     'Lindungi akun Anda dengan 2FA.',
       //     '使用 2FA 保护您的账户。',
       //   );
-      case ActivityTypes.topUp:
+      case ActivityType.topUp:
         return translate(
           context,
           'Top Up Successful',
           'Top Up Berhasil',
           '充值成功！',
         );
-      case ActivityTypes.unresolved:
+      case ActivityType.unresolved:
         return translate(
           context,
           'Unresolved Parking!',
@@ -345,72 +345,72 @@ class ActivityCard extends StatelessWidget {
     }
   }
 
-  String _cardDescription(BuildContext context, ActivityTypes type) {
+  String _cardDescription(BuildContext context, ActivityType type) {
     switch (type) {
-      case ActivityTypes.bookSuccess:
+      case ActivityType.bookSuccess:
         return translate(
           context,
           'Parking booking at ${activity.mall} was successfully booked!',
           'Pemesanan parkir di ${activity.mall} berhasil dipesan!',
           '在 ${activity.mall} 的停车预订已成功预订！',
         );
-      case ActivityTypes.bookCancel:
+      case ActivityType.bookCancel:
         return translate(
           context,
           'You have canceled booking at ${activity.mall}',
           'Anda telah membatalkan parkir di ${activity.mall}',
           '您已取消在 ${activity.mall} 的停车',
         );
-      case ActivityTypes.exitLot:
+      case ActivityType.exitLot:
         return translate(
           context,
           'You have exited parking lot at ${activity.mall}',
           'Anda telah keluar dari area parkir di ${activity.mall}',
           '您已离开 ${activity.mall} 的停车场',
         );
-      case ActivityTypes.enterLot:
+      case ActivityType.enterLot:
         return translate(
           context,
           'You have entered parking lot at ${activity.mall}',
           'Anda telah masuk dari area parkir di ${activity.mall}',
           '您已从 ${activity.mall} 的停车场进入',
         );
-      case ActivityTypes.bookExp:
+      case ActivityType.bookExp:
         return translate(
           context,
           'You missed your booking, no-show fee was charged.',
           'Anda melewatkan pemesanan, denda akan dikenakan.',
           '您错过了预订，已收取缺席费用。',
         );
-      case ActivityTypes.paySuccess:
+      case ActivityType.paySuccess:
         return translate(
           context,
           'Parking booking at ${activity.mall} was successfully paid',
           'Pemesanan parkir di ${activity.mall} berhasil dibayar',
           '在 ${activity.mall} 的停车预订已成功付款',
         );
-      case ActivityTypes.verify:
+      case ActivityType.verify:
         return translate(
           context,
           'Two Factor Authenticator set up successful!',
           'Autentikator Dua Faktor berhasil terpasang!',
           '双重身份验证器设置成功!',
         );
-      // case ActivityTypes.twoFactor:
+      // case ActivityType.twoFactor:
       //   return translate(
       //     context,
       //     'Account will be more secured with 2FA setup!',
       //     'Akun akan lebih aman dengan 2FA terpasang!',
       //     '设置 2FA 后帐户将更加安全!',
       //   );
-      case ActivityTypes.topUp:
+      case ActivityType.topUp:
         return translate(
           context,
           'You have successfully topped up ${formatCurrency(nominal: activity.nominal as num)} via ${activity.method}.',
           'Kamu berhasil melakukan top up sebesar ${formatCurrency(nominal: activity.nominal as num)} melalui ${activity.method}.',
           '您已成功通过 ${activity.method} 充值 ${formatCurrency(nominal: activity.nominal as num)}。',
         );
-      case ActivityTypes.unresolved:
+      case ActivityType.unresolved:
         return translate(
           context,
           'Your parking at ${activity.mall} has exceeded 20 hour',
@@ -451,14 +451,14 @@ class ActivityCard extends StatelessWidget {
           }
         },
         leading: Image.asset(
-          _getActivityIcon(activity.activityTypes),
+          _getActivityIcon(activity.activityType),
           width: isSmall ? 35 : 50,
         ),
         title: Row(
           children: [
             Expanded(
               child: Text(
-                _cardTitle(context, activity.activityTypes),
+                _cardTitle(context, activity.activityType),
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: isSmall ? 14 : 18,
@@ -477,7 +477,7 @@ class ActivityCard extends StatelessWidget {
           ],
         ),
         subtitle: Text(
-          _cardDescription(context, activity.activityTypes),
+          _cardDescription(context, activity.activityType),
           style: TextStyle(color: Colors.grey, fontSize: isSmall ? 12 : 14),
         ),
       ),

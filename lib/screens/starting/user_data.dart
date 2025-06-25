@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/avatar_picker.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
@@ -40,30 +41,6 @@ class _UserDataState extends State<UserData> {
       ],
     },
   );
-
-  int choice = -1;
-
-  List<String> userPP = [
-    "assets/images/users/female 1.jpg",
-    "assets/images/users/female 2.jpg",
-    "assets/images/users/male 2.jpg",
-    "assets/images/users/female 4.jpg",
-    "assets/images/users/male 5.jpg",
-    "assets/images/users/female 5.jpg",
-    "assets/images/users/male 1.jpg",
-    "assets/images/users/female 3.jpg",
-    "assets/images/users/male 4.jpg",
-    "assets/images/users/male 3.jpg",
-  ];
-
-  void changeAvatar() {
-    setState(() {
-      choice += 1;
-      if (choice == 10) {
-        choice = -1;
-      }
-    });
-  }
 
   @override
   void dispose() {
@@ -122,46 +99,10 @@ class _UserDataState extends State<UserData> {
                         ],
                       ),
                     ),
-                    Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: isSmall ? 70 : 100,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage:
-                              choice != -1 ? AssetImage(userPP[choice]) : null,
-                          child:
-                              choice == -1
-                                  ? Icon(
-                                    Icons.person,
-                                    size: 100,
-                                    color: Colors.grey[400],
-                                  )
-                                  : null,
-                        ),
-                        Positioned(
-                          bottom: 8,
-                          right: 8,
-                          child: Container(
-                            height: isSmall ? 30 : 45,
-                            width: isSmall ? 30 : 45,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1F1E5B),
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              iconSize: 16,
-                              onPressed: () {
-                                changeAvatar();
-                              },
-                              icon: Icon(Icons.edit),
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    SizedBox(height: 20),
+
+                    // Profile Image Section
+                    ResponsiveAvatarPicker(),
 
                     SizedBox(height: 20),
                     Column(
@@ -250,7 +191,8 @@ class _UserDataState extends State<UserData> {
                           Future.delayed(const Duration(seconds: 2), () {
                             userProvider.registerUser(
                               email: widget.email,
-                              profile_pic: choice == -1 ? null : userPP[choice],
+                              // profile_pic:
+                              //     _selectedImage?.path,
                               fullname: form.control("fullname").text,
                               country_code: country_code,
                               phone: form.control("phone").text,

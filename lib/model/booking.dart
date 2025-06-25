@@ -81,4 +81,49 @@ class Booking extends Parking {
 
     return status;
   }
+
+  @override
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+
+    data['bookingTime'] = bookingTime.toIso8601String();
+    if (cancelTime != null) data['cancelTime'] = cancelTime!.toIso8601String();
+    if (noshowFee != null && noshowFee != 0) {
+      data['noshowFee'] = noshowFee;
+    }
+
+    return data;
+  }
+
+  factory Booking.fromJson(Map<String, dynamic> json) {
+    final parking = Parking.fromJson(json);
+
+    final booking = Booking(
+      user: parking.user,
+      lot: parking.lot,
+      floor: parking.floor,
+      code: parking.code,
+      bookingTime: DateTime.parse(json['bookingTime']),
+    );
+
+    booking.isMember = parking.isMember;
+    booking.checkinTime = parking.checkinTime;
+    booking.checkoutTime = parking.checkoutTime;
+    booking.status = parking.status;
+    booking.hours = parking.hours;
+    booking.amount = parking.amount;
+    booking.tax = parking.tax;
+    booking.service = parking.service;
+    booking.voucher = parking.voucher;
+    booking.total = parking.total;
+    booking.unresolvedFee = parking.unresolvedFee;
+
+    if (json['cancelTime'] != null) {
+      booking.cancelTime = DateTime.parse(json['cancelTime']);
+    }
+
+    booking.noshowFee = (json['noshowFee'] as num?)?.toDouble() ?? 0;
+
+    return booking;
+  }
 }

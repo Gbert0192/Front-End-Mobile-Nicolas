@@ -46,7 +46,7 @@ class _AddBookingState extends State<AddBooking> {
   Widget build(BuildContext context) {
     final lotProvider = Provider.of<ParkingLotProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
-    final bookingProvider = Provider.of<HistoryProvider>(context);
+    final historyProvider = Provider.of<HistoryProvider>(context);
     User user = userProvider.currentUser!;
     final activityProvider = Provider.of<ActivityProvider>(context);
     final size = MediaQuery.of(context).size;
@@ -354,7 +354,7 @@ class _AddBookingState extends State<AddBooking> {
                                     return;
                                   }
                                   final dateTime = stringToDate(date!, time);
-                                  bookingProvider.addBooking(
+                                  historyProvider.addBooking(
                                     user,
                                     widget.mall,
                                     floor,
@@ -364,7 +364,7 @@ class _AddBookingState extends State<AddBooking> {
                                   activityProvider.addActivity(
                                     user,
                                     ActivityItem(
-                                      activityTypes: ActivityTypes.bookSuccess,
+                                      activityType: ActivityType.bookSuccess,
                                       mall: widget.mall.name,
                                       onPressed: (context) {},
                                     ),

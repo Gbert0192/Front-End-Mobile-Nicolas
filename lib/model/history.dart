@@ -53,4 +53,28 @@ class History {
 
     return entries.map((e) => e.key).toList();
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'user': user.toJson(),
+      'parkings': parkings.map((p) => p.toJson()).toList(),
+      'bookings': bookings.map((b) => b.toJson()).toList(),
+    };
+  }
+
+  factory History.fromJson(Map<String, dynamic> json) {
+    final user = User.fromJson(json['user']);
+
+    final parkings =
+        (json['parkings'] as List<dynamic>)
+            .map((e) => Parking.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+    final bookings =
+        (json['bookings'] as List<dynamic>)
+            .map((e) => Booking.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+    return History(user, parkings, bookings);
+  }
 }
