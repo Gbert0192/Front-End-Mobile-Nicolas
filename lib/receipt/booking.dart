@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/components/receipt.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class Booking extends StatefulWidget {
@@ -46,60 +47,55 @@ class _BookingState extends State<Booking> {
                   ),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            translate(
-                              context,
-                              'Parking Area',
-                              'Area Parkir',
-                              '停车场',
-                            ),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFF818181),
-                            ),
-                          ),
-                          Text(
-                            'mall.name',
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ],
+                      ReceiptText(
+                        left: translate(
+                          context,
+                          'Parking Area',
+                          'Area Parkir',
+                          '停车场',
+                        ),
+                        right: 'mall.name',
+                        isRed: false,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            translate(context, 'Adress', 'Alamat', '地址'),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFF818181),
-                            ),
-                          ),
-                          Text(
-                            'mall.address',
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                        ],
+                      ReceiptText(
+                        left: translate(context, 'Address', 'Alamat', '地址'),
+                        right: 'mall.address',
+                        isRed: false,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            translate(
-                              context,
-                              'Booking Spot',
-                              'Tempat Pemesanan',
-                              '预订地点',
-                            ),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Color(0xFF818181),
-                            ),
-                          ),
-                          Text('mall', style: const TextStyle(fontSize: 18)),
-                        ],
+                      ReceiptText(
+                        left: translate(
+                          context,
+                          'Booking Spot',
+                          'Tempat Pemesanan',
+                          '预订地点',
+                        ),
+                        right: 'mall.spot',
+                        isRed: false,
+                      ),
+                      ReceiptText(
+                        left: translate(context, 'Duration', 'Durasi', '持续时间'),
+                        right: 'mall',
+                        isRed: false,
+                      ),
+                      ReceiptText(
+                        left: translate(
+                          context,
+                          'Check-in Time',
+                          'Waktu Masuk',
+                          '签到时间',
+                        ),
+                        right: 'checkInTime',
+                        isRed: false,
+                      ),
+                      ReceiptText(
+                        left: translate(
+                          context,
+                          'Check-out Time',
+                          'Waktu Keluar',
+                          '签出时间',
+                        ),
+                        right: 'checkOutTime',
+                        isRed: true,
                       ),
                     ],
                   ),
