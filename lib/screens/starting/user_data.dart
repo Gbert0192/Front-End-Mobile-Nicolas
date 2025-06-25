@@ -167,7 +167,7 @@ class _UserDataState extends State<UserData> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control('fullname'),
                           hint: 'Enter Fullname',
                           label: 'Fullname',
@@ -183,7 +183,7 @@ class _UserDataState extends State<UserData> {
                         ),
                         const SizedBox(height: 10),
                         ResponsivePhoneInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           country_code: country_code,
                           controller: form.control("phone"),
                           hint: 'Enter Phone Number',
@@ -202,7 +202,7 @@ class _UserDataState extends State<UserData> {
                         ),
                         const SizedBox(height: 10),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control("password"),
                           hint: 'Enter Password',
                           label: 'Password',
@@ -218,7 +218,7 @@ class _UserDataState extends State<UserData> {
                         ),
                         const SizedBox(height: 10),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control("conpassword"),
                           hint: 'Enter Confirm Password',
                           label: 'Confirm Password',
@@ -238,7 +238,6 @@ class _UserDataState extends State<UserData> {
 
                     //Continue Button
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;

@@ -4,25 +4,31 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 enum DatePickerType { date, time, datetime }
 
 class ResponsiveTimePicker extends StatefulWidget {
-  const ResponsiveTimePicker({
+  ResponsiveTimePicker({
     super.key,
-    required this.controller,
+    this.controller,
     this.onChanged,
-    required this.isSmall,
     this.label,
     this.hint,
     this.errorText,
+    this.isLoading,
+    this.disabled = false,
     this.leading,
     this.fillColor = Colors.white,
     this.borderColor = const Color(0xFF1F1E5B),
     this.borderFocusColor = const Color(0xFF505050),
     this.mode = StyleMode.outline,
     this.type = DatePickerType.date,
-  });
+    this.minTime,
+    this.maxTime,
+    DateTime? initialTime,
+    this.disabledDates,
+    this.minDate,
+    this.maxDate,
+  }) : initialTime = initialTime ?? minDate ?? DateTime.now();
 
-  final bool isSmall;
   final TextEditingController? controller;
-  final VoidCallback? onChanged;
+  final Function(String)? onChanged;
   final String? label;
   final String? hint;
   final String? errorText;
@@ -32,6 +38,14 @@ class ResponsiveTimePicker extends StatefulWidget {
   final Color borderFocusColor;
   final StyleMode mode;
   final DatePickerType type;
+  final bool? isLoading;
+  final bool disabled;
+  final DateTime initialTime;
+  final TimeOfDay? minTime;
+  final TimeOfDay? maxTime;
+  final List<DateTime>? disabledDates;
+  final DateTime? minDate;
+  final DateTime? maxDate;
 
   @override
   State<ResponsiveTimePicker> createState() => _ResponsiveTimePickerState();
@@ -39,17 +53,129 @@ class ResponsiveTimePicker extends StatefulWidget {
 
 class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   bool _isFocused = false;
-  String? _selectedDate;
+  String? _selectedTime;
+
+  void _updateSelectedTime(String? newTime) {
+    setState(() {
+      _selectedTime = newTime;
+    });
+
+    if (widget.controller != null) {
+      widget.controller!.text = newTime ?? '';
+    }
+
+    widget.onChanged?.call(newTime ?? "");
+  }
+
+  bool _isTimeInRange(TimeOfDay time) {
+    if (widget.minTime == null && widget.maxTime == null) return true;
+
+    final timeInMinutes = time.hour * 60 + time.minute;
+
+    if (widget.minTime != null) {
+      final minTimeInMinutes =
+          widget.minTime!.hour * 60 + widget.minTime!.minute;
+      if (timeInMinutes < minTimeInMinutes) return false;
+    }
+
+    if (widget.maxTime != null) {
+      final maxTimeInMinutes =
+          widget.maxTime!.hour * 60 + widget.maxTime!.minute;
+      if (timeInMinutes >= maxTimeInMinutes) return false;
+    }
+
+    return true;
+  }
+
+  bool _isDateDisabled(DateTime date) {
+    if (widget.disabledDates == null) return false;
+
+    return widget.disabledDates!.any(
+      (disabledDate) =>
+          date.year == disabledDate.year &&
+          date.month == disabledDate.month &&
+          date.day == disabledDate.day,
+    );
+  }
+
+  String _formatTime24Hour(TimeOfDay time) {
+    return "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+  }
+
+  Future<TimeOfDay?> _showTimePickerWithConstraints(
+    BuildContext context,
+    TimeOfDay initialTime,
+  ) async {
+    TimeOfDay? selectedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: Theme(
+            data: ThemeData.dark().copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: Color(0xFF1F1E5B),
+                onPrimary: Colors.white,
+                onSurface: Colors.black,
+              ),
+              primaryColor: const Color(0xFF1F1E5B),
+              textTheme: ThemeData.light().textTheme.copyWith(),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(foregroundColor: Color(0xFF1F1E5B)),
+              ),
+            ),
+            child: child!,
+          ),
+        );
+      },
+    );
+
+    if (selectedTime != null && !_isTimeInRange(selectedTime)) {
+      String errorMessage = '';
+      if (widget.minTime != null && widget.maxTime != null) {
+        errorMessage =
+            'Please select a time between ${_formatTime24Hour(widget.minTime!)} and ${_formatTime24Hour(widget.maxTime!)}';
+      } else if (widget.minTime != null) {
+        errorMessage =
+            'Please select a time after ${_formatTime24Hour(widget.minTime!)}';
+      } else if (widget.maxTime != null) {
+        errorMessage =
+            'Please select a time before ${_formatTime24Hour(widget.maxTime!)}';
+      }
+
+      if (mounted) {
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: const Text('Invalid Time'),
+              content: Text(errorMessage),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      return await _showTimePickerWithConstraints(context, initialTime);
+    }
+
+    return selectedTime;
+  }
 
   Future<void> _pickDate() async {
-    DateTime now = DateTime.now();
-    DateTime? initialDate;
+    DateTime initialDate;
 
-    if (widget.controller != null && widget.controller!.text.isNotEmpty) {
+    if (_selectedTime != null && _selectedTime!.isNotEmpty) {
       try {
-        final text = widget.controller!.text;
         if (widget.type == DatePickerType.datetime) {
-          final dateTimeParts = text.split(' ');
+          final dateTimeParts = _selectedTime!.split(' ');
           final dateParts = dateTimeParts[0].split('/');
           final timeParts = dateTimeParts[1].split(':');
 
@@ -60,30 +186,35 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
           final minute = int.parse(timeParts[1]);
 
           initialDate = DateTime(year, month, day, hour, minute);
-        } else {
-          final parts = widget.controller!.text.split('/');
+        } else if (widget.type == DatePickerType.date) {
+          final parts = _selectedTime!.split('/');
           final day = int.parse(parts[0]);
           final month = int.parse(parts[1]);
           final year = int.parse(parts[2]);
           initialDate = DateTime(year, month, day);
+        } else {
+          final parts = _selectedTime!.split(':');
+          final hour = int.parse(parts[0]);
+          final minute = int.parse(parts[1]);
+          final now = DateTime.now();
+          initialDate = DateTime(now.year, now.month, now.day, hour, minute);
         }
-      } catch (_) {}
+      } catch (_) {
+        initialDate = widget.initialTime;
+      }
+    } else {
+      initialDate = widget.initialTime;
     }
 
-    initialDate ??= now;
-
     if (widget.type == DatePickerType.time) {
-      final TimeOfDay? pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.fromDateTime(initialDate),
+      final TimeOfDay? pickedTime = await _showTimePickerWithConstraints(
+        context,
+        TimeOfDay.fromDateTime(initialDate),
       );
 
       if (pickedTime != null) {
-        final formattedTime =
-            "${pickedTime.hour.toString().padLeft(2, '0')}:${pickedTime.minute.toString().padLeft(2, '0')}";
-        _selectedDate = formattedTime;
-        widget.controller?.text = formattedTime;
-        widget.onChanged?.call();
+        final formattedTime = _formatTime24Hour(pickedTime);
+        _updateSelectedTime(formattedTime);
       }
       return;
     }
@@ -91,8 +222,11 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
+      firstDate: widget.minDate ?? DateTime(2000),
+      lastDate: widget.maxDate ?? DateTime(2100),
+      selectableDayPredicate: (DateTime date) {
+        return !_isDateDisabled(date);
+      },
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.dark().copyWith(
@@ -121,8 +255,33 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
         final TimeOfDay? time = await showTimePicker(
           context: context,
           initialTime: TimeOfDay.fromDateTime(initialDate),
+          builder: (BuildContext context, Widget? child) {
+            return MediaQuery(
+              data: MediaQuery.of(
+                context,
+              ).copyWith(alwaysUse24HourFormat: true),
+              child: Theme(
+                data: ThemeData.dark().copyWith(
+                  colorScheme: const ColorScheme.light(
+                    primary: Color(0xFF1F1E5B),
+                    onPrimary: Colors.white,
+                    onSurface: Colors.black,
+                  ),
+                  primaryColor: const Color(0xFF1F1E5B),
+                  textTheme: ThemeData.light().textTheme.copyWith(),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Color(0xFF1F1E5B),
+                    ),
+                  ),
+                ),
+                child: child!,
+              ),
+            );
+          },
         );
-        if (time != null) {
+
+        if (time != null && _isTimeInRange(time)) {
           finalDate = DateTime(
             pickedDate.year,
             pickedDate.month,
@@ -130,34 +289,70 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
             time.hour,
             time.minute,
           );
+        } else if (time != null && !_isTimeInRange(time)) {
+          String errorMessage = '';
+          if (widget.minTime != null && widget.maxTime != null) {
+            errorMessage =
+                'Please select a time between ${_formatTime24Hour(widget.minTime!)} and ${_formatTime24Hour(widget.maxTime!)}';
+          } else if (widget.minTime != null) {
+            errorMessage =
+                'Please select a time after ${_formatTime24Hour(widget.minTime!)}';
+          } else if (widget.maxTime != null) {
+            errorMessage =
+                'Please select a time before ${_formatTime24Hour(widget.maxTime!)}';
+          }
+
+          if (mounted) {
+            await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext dialogContext) {
+                return AlertDialog(
+                  title: const Text('Invalid Time'),
+                  content: Text(errorMessage),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(dialogContext).pop(),
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
+          return;
         }
       }
 
       String formatted;
       switch (widget.type) {
         case DatePickerType.date:
-          formatted = "${finalDate.day}/${finalDate.month}/${finalDate.year}";
+          formatted =
+              "${finalDate.day.toString().padLeft(2, '0')}/"
+              "${finalDate.month.toString().padLeft(2, '0')}/"
+              "${finalDate.year}";
           break;
+
         case DatePickerType.datetime:
           formatted =
-              "${finalDate.day}/${finalDate.month}/${finalDate.year}:${finalDate.hour.toString().padLeft(2, '0')}:${finalDate.minute.toString().padLeft(2, '0')}";
+              "${finalDate.day.toString().padLeft(2, '0')}/"
+              "${finalDate.month.toString().padLeft(2, '0')}/"
+              "${finalDate.year} "
+              "${finalDate.hour.toString().padLeft(2, '0')}:"
+              "${finalDate.minute.toString().padLeft(2, '0')}";
           break;
+
         default:
           formatted = '';
           break;
       }
 
-      _selectedDate = formatted;
-      widget.controller?.text = formatted;
-      widget.onChanged?.call();
+      _updateSelectedTime(formatted);
     }
   }
 
   void _clearDate() {
-    setState(() {
-      _selectedDate = null;
-      widget.controller?.clear();
-    });
+    _updateSelectedTime(null);
   }
 
   Color _getColor() {
@@ -169,14 +364,22 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
   @override
   void initState() {
     super.initState();
-    _selectedDate =
-        widget.controller!.text.isNotEmpty ? widget.controller!.text : null;
+
+    if (widget.controller != null && widget.controller!.text.isNotEmpty) {
+      _selectedTime = widget.controller!.text;
+    } else {
+      _selectedTime = null;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final hasError = widget.errorText != null;
     final isOutline = widget.mode == StyleMode.outline;
+    final enabled =
+        widget.isLoading != null ? !widget.isLoading! : !widget.disabled;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +392,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                   widget.label ?? '',
                   style: TextStyle(
                     color: _getColor(),
-                    fontSize: widget.isSmall ? 12 : 16,
+                    fontSize: isSmall ? 12 : 16,
                   ),
                 )
                 : const SizedBox.shrink(),
@@ -200,7 +403,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                     isOutline
                         ? [
                           BoxShadow(
-                            color: Colors.black.withAlpha(64),
+                            color: Colors.black.withValues(alpha: 0.25),
                             blurRadius: 6,
                             offset: const Offset(4, 4),
                           ),
@@ -209,9 +412,12 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  setState(() => _isFocused = true);
-                  await _pickDate();
-                  setState(() => _isFocused = false);
+                  if ((widget.isLoading != null ? !widget.isLoading! : true) &&
+                      !widget.disabled) {
+                    setState(() => _isFocused = true);
+                    await _pickDate();
+                    setState(() => _isFocused = false);
+                  }
                 },
                 child: InputDecorator(
                   decoration: InputDecoration(
@@ -222,19 +428,58 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                     floatingLabelStyle: TextStyle(color: _getColor()),
                     filled: true,
                     fillColor:
-                        hasError ? const Color(0xFFFFEDED) : widget.fillColor,
+                        widget.mode == StyleMode.underline
+                            ? Colors.white
+                            : hasError
+                            ? const Color(0xFFFFEDED)
+                            : widget.fillColor,
                     contentPadding: EdgeInsets.symmetric(
-                      horizontal: widget.isSmall ? 18 : 20,
-                      vertical: widget.isSmall ? 12 : 16,
+                      horizontal: isSmall ? 18 : 20,
+                      vertical: isSmall ? 12 : 16,
                     ),
                     prefixIcon:
                         widget.leading != null
-                            ? Icon(
-                              widget.leading,
-                              size: widget.isSmall ? 20 : 28,
-                            )
+                            ? Icon(widget.leading, size: isSmall ? 20 : 28)
                             : null,
+                    suffixIcon: Opacity(
+                      opacity: enabled ? 1 : 0.4,
+                      child: IconButton(
+                        onPressed: () async {
+                          if (_selectedTime != null ||
+                              (widget.controller?.text.isNotEmpty ?? false)) {
+                            _clearDate();
+                          } else {
+                            if ((widget.isLoading != null
+                                    ? !widget.isLoading!
+                                    : true) &&
+                                !widget.disabled) {
+                              setState(() => _isFocused = true);
+                              await _pickDate();
+                              setState(() => _isFocused = false);
+                            }
+                          }
+                        },
+                        icon: Icon(
+                          _selectedTime != null ||
+                                  (widget.controller?.text.isNotEmpty ?? false)
+                              ? Icons.clear_outlined
+                              : widget.type == DatePickerType.time
+                              ? Icons.access_time
+                              : Icons.calendar_month_sharp,
+                          color: const Color(0xFF1F1E5B),
+                        ),
+                      ),
+                    ),
                     enabledBorder:
+                        isOutline
+                            ? OutlineInputBorder(
+                              borderSide: BorderSide(color: _getColor()),
+                              borderRadius: BorderRadius.circular(20),
+                            )
+                            : UnderlineInputBorder(
+                              borderSide: BorderSide(color: _getColor()),
+                            ),
+                    disabledBorder:
                         isOutline
                             ? OutlineInputBorder(
                               borderSide: BorderSide(color: _getColor()),
@@ -268,37 +513,16 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
                               borderSide: BorderSide(color: Colors.red),
                             ),
                   ),
-                  child: Text(
-                    _selectedDate ?? widget.hint ?? '',
-                    style: TextStyle(
-                      fontSize: widget.isSmall ? 16 : 18,
-                      color: Colors.grey[800],
+                  child: Opacity(
+                    opacity: enabled ? 1 : 0.4,
+                    child: Text(
+                      _selectedTime ?? widget.hint ?? '',
+                      style: TextStyle(
+                        fontSize: isSmall ? 16 : 18,
+                        color: Colors.grey[800],
+                      ),
                     ),
                   ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: widget.isSmall ? 12 : 16),
-              child: IconButton(
-                onPressed: () async {
-                  if (_selectedDate != null ||
-                      (widget.controller?.text.isNotEmpty ?? false)) {
-                    _clearDate();
-                  } else {
-                    setState(() => _isFocused = true);
-                    await _pickDate();
-                    setState(() => _isFocused = false);
-                  }
-                },
-                icon: Icon(
-                  _selectedDate != null ||
-                          (widget.controller?.text.isNotEmpty ?? false)
-                      ? Icons.clear_outlined
-                      : widget.type == DatePickerType.time
-                      ? Icons.access_time
-                      : Icons.calendar_month_sharp,
-                  color: const Color(0xFF1F1E5B),
                 ),
               ),
             ),
@@ -310,10 +534,7 @@ class _ResponsiveTimePickerState extends State<ResponsiveTimePicker> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 16),
             ),
           ),
       ],

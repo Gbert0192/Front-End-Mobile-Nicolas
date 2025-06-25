@@ -1,19 +1,18 @@
+import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
 
-enum ParkingStatus { entered, exited, unresolved }
-
-class Booking {
+class Parking {
   final User user;
   bool? isMember;
   final ParkingLot lot;
   DateTime? checkinTime;
   DateTime? checkoutTime;
   final DateTime createdAt = DateTime.now();
-  final int floor;
+  final String floor;
   final String code;
-  ParkingStatus status = ParkingStatus.entered;
+  HistoryStatus status = HistoryStatus.entered;
 
   int? hours;
   double? amount;
@@ -23,7 +22,7 @@ class Booking {
   double? total;
   double? unresolvedFee = 0;
 
-  Booking({
+  Parking({
     required this.user,
     required this.lot,
     required this.floor,
@@ -32,7 +31,7 @@ class Booking {
 
   void exitParking(Voucher voucher) {
     isMember = user.checkStatusMember();
-    status = ParkingStatus.exited;
+    status = HistoryStatus.exited;
     hours = calculateHour();
     amount = lot.calculateAmount(hours!);
     tax = amount! * 0.11;
@@ -41,10 +40,10 @@ class Booking {
     total = amount! + tax! + service! - this.voucher!;
   }
 
-  ParkingStatus checkStatus() {
-    if (status == ParkingStatus.entered && calculateHour() > 20) {
+  HistoryStatus checkStatus() {
+    if (status == HistoryStatus.entered && calculateHour() > 20) {
       isMember = user.checkStatusMember();
-      status = ParkingStatus.unresolved;
+      status = HistoryStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
       unresolvedFee = 10000;
       amount = lot.calculateAmount(20);
@@ -56,8 +55,8 @@ class Booking {
   }
 
   double? resolveUnresolve() {
-    if (status == ParkingStatus.unresolved) {
-      status = ParkingStatus.exited;
+    if (status == HistoryStatus.unresolved) {
+      status = HistoryStatus.exited;
       return total!;
     }
     return null;

@@ -8,7 +8,6 @@ enum StyleMode { outline, underline }
 class ResponsiveTextInput extends StatefulWidget {
   const ResponsiveTextInput({
     super.key,
-    required this.isSmall,
     this.readOnly = false,
     this.controller,
     this.clearButton = false,
@@ -21,8 +20,10 @@ class ResponsiveTextInput extends StatefulWidget {
     this.errorText,
     this.leading,
     this.isLoading,
+    this.disabled = false,
     this.suffix,
     this.value,
+    this.autoFocus = false,
     this.mode = StyleMode.outline,
     this.maxLines = 1,
     this.type = TextInputTypes.text,
@@ -31,7 +32,6 @@ class ResponsiveTextInput extends StatefulWidget {
     this.borderFocusColor = const Color(0xFF505050),
   });
 
-  final bool isSmall;
   final bool readOnly;
   final bool clearButton;
   final int maxLines;
@@ -48,6 +48,8 @@ class ResponsiveTextInput extends StatefulWidget {
   final TextInputTypes type;
   final IconData? leading;
   final bool? isLoading;
+  final bool disabled;
+  final bool autoFocus;
   final Widget? suffix;
   final Color fillColor;
   final Color borderColor;
@@ -82,6 +84,8 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final hasError = widget.errorText != null;
     final isPassword = widget.type == TextInputTypes.password;
 
@@ -91,10 +95,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
         widget.mode == StyleMode.underline
             ? Text(
               widget.label!,
-              style: TextStyle(
-                color: _getColor(),
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: _getColor(), fontSize: isSmall ? 12 : 16),
             )
             : SizedBox.shrink(),
         Container(
@@ -105,14 +106,18 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                     ? null
                     : [
                       BoxShadow(
-                        color: Colors.black.withAlpha(64),
+                        color: Colors.black.withValues(alpha: 0.25),
                         blurRadius: 6,
                         offset: const Offset(4, 4),
                       ),
                     ],
           ),
           child: TextField(
-            enabled: widget.isLoading != null ? !widget.isLoading! : true,
+            autofocus: widget.autoFocus,
+            enabled:
+                widget.isLoading != null
+                    ? !widget.isLoading!
+                    : !widget.disabled,
             readOnly: widget.readOnly,
             maxLines: widget.maxLines,
             focusNode: _focusNode,
@@ -154,12 +159,12 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
                       ? const Color(0xFFFFEDED)
                       : widget.fillColor,
               contentPadding: EdgeInsets.symmetric(
-                horizontal: widget.isSmall ? 18 : 20,
-                vertical: widget.isSmall ? 12 : 16,
+                horizontal: isSmall ? 18 : 20,
+                vertical: isSmall ? 12 : 16,
               ),
               prefixIcon:
                   widget.leading != null
-                      ? Icon(widget.leading, size: widget.isSmall ? 20 : 28)
+                      ? Icon(widget.leading, size: isSmall ? 20 : 28)
                       : null,
               suffixIcon:
                   isPassword
@@ -262,10 +267,7 @@ class _ResponsiveTextInputState extends State<ResponsiveTextInput> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 15,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 15),
             ),
           ),
       ],

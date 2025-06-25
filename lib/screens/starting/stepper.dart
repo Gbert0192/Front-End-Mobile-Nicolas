@@ -20,14 +20,14 @@ class StepModel {
   });
 }
 
-class StepperScreens extends StatefulWidget {
-  const StepperScreens({super.key});
+class StepperScreen extends StatefulWidget {
+  const StepperScreen({super.key});
 
   @override
-  _StepperScreensState createState() => _StepperScreensState();
+  _StepperScreenState createState() => _StepperScreenState();
 }
 
-class _StepperScreensState extends State<StepperScreens> {
+class _StepperScreenState extends State<StepperScreen> {
   final PageController _controller = PageController();
 
   int currentPage = 0;
@@ -156,7 +156,6 @@ class _StepperScreensState extends State<StepperScreens> {
             child: Column(
               children: [
                 ResponsiveButton(
-                  isSmall: isSmall,
                   onPressed: () => nextPage(context),
                   text: "Next",
                   textColor: Colors.white,
@@ -164,7 +163,6 @@ class _StepperScreensState extends State<StepperScreens> {
                 ),
                 SizedBox(height: isSmall ? 0 : 10),
                 ResponsiveButton(
-                  isSmall: isSmall,
                   onPressed: () => skipAll(context),
                   text: "Skip",
                   textColor: Color(0xFF4D5DFA),

@@ -45,7 +45,16 @@ class VoucherProvider with ChangeNotifier {
 
   void useVoucher(Voucher voucher, User user) {
     final index = vouchersHistories.indexWhere((v) => v.user == user);
-    vouchersHistories[index].useVoucher(voucher);
+
+    if (index == -1) {
+      final newHistory = UserVoucher(user, []);
+      newHistory.useVoucher(voucher);
+      vouchersHistories.add(newHistory);
+    } else {
+      vouchersHistories[index].useVoucher(voucher);
+    }
+
+    notifyListeners();
   }
 }
 

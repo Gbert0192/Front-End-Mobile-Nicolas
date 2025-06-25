@@ -8,6 +8,7 @@ import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/forget_password.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
+import 'package:tugas_front_end_nicolas/screens/starting/landing_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/sign_up.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
@@ -101,7 +102,7 @@ class _SignInState extends State<SignIn> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control("email"),
                           hint: 'Enter your email',
                           label: 'Email',
@@ -117,7 +118,7 @@ class _SignInState extends State<SignIn> {
                         ),
                         const SizedBox(height: 12),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control("password"),
                           hint: 'Enter your password',
                           label: 'Password',
@@ -137,7 +138,6 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: isSmall ? 10 : 20),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;
@@ -240,9 +240,14 @@ class _SignInState extends State<SignIn> {
                     ),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LandingScreen(),
+                          ),
+                        );
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => SignUp()),

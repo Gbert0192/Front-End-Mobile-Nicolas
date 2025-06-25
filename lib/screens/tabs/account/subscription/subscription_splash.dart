@@ -18,7 +18,7 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
-          pageBuilder: (_, __, ___) => MainLayout(4),
+          pageBuilder: (_, __, ___) => MainLayout(TabValue.profile),
           transitionsBuilder: (_, animation, __, child) {
             var tween = Tween(
               begin: const Offset(0, -1),
