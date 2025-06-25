@@ -13,6 +13,24 @@ class Spot {
   DateTime? date;
 
   Spot({this.user, required this.status, required this.code, this.date});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status.name,
+      'user': user?.toJson(),
+      'code': code,
+      'date': date?.toIso8601String(),
+    };
+  }
+
+  factory Spot.fromJson(Map<String, dynamic> json) {
+    return Spot(
+      status: SpotStatus.values.firstWhere((e) => e.name == json['status']),
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      code: json['code'],
+      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+    );
+  }
 }
 
 class Area {
@@ -28,6 +46,16 @@ class Area {
   Spot? findSpot(String code) {
     return spots.firstWhereOrNull((spot) => spot.code == code);
   }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'spots': spots.map((s) => s.toJson()).toList(),
+  };
+
+  factory Area.fromJson(Map<String, dynamic> json) => Area(
+    name: json['name'],
+    spots: (json['spots'] as List).map((e) => Spot.fromJson(e)).toList(),
+  );
 }
 
 class Floor {
@@ -51,6 +79,16 @@ class Floor {
     }
     return null;
   }
+
+  Map<String, dynamic> toJson() => {
+    'number': number,
+    'areas': areas.map((a) => a.toJson()).toList(),
+  };
+
+  factory Floor.fromJson(Map<String, dynamic> json) => Floor(
+    number: json['number'],
+    areas: (json['areas'] as List).map((e) => Area.fromJson(e)).toList(),
+  );
 }
 
 class ParkingLot {
@@ -78,6 +116,11 @@ class ParkingLot {
     required this.spots,
     this.starterPrice,
   });
+
+  @override
+  bool operator ==(Object other) {
+    return other is ParkingLot && other.prefix == prefix;
+  }
 
   int floorWeight(String label) {
     if (label == 'G') return 0;
@@ -243,4 +286,39 @@ class ParkingLot {
 
     return calculateAmount(hours);
   }
+
+  Map<String, dynamic> toJson() => {
+    'prefix': prefix,
+    'name': name,
+    'buildingType': buildingType.name,
+    'address': address,
+    'openTime': {'hour': openTime.hour, 'minute': openTime.minute},
+    'closeTime': {'hour': closeTime.hour, 'minute': closeTime.minute},
+    'starterPrice': starterPrice,
+    'hourlyPrice': hourlyPrice,
+    'image': image,
+    'spots': spots.map((f) => f.toJson()).toList(),
+    'spotCount': spotCount,
+  };
+
+  factory ParkingLot.fromJson(Map<String, dynamic> json) => ParkingLot(
+    prefix: json['prefix'],
+    name: json['name'],
+    buildingType: BuildingType.values.firstWhere(
+      (e) => e.name == json['buildingType'],
+    ),
+    address: json['address'],
+    openTime: TimeOfDay(
+      hour: json['openTime']['hour'],
+      minute: json['openTime']['minute'],
+    ),
+    closeTime: TimeOfDay(
+      hour: json['closeTime']['hour'],
+      minute: json['closeTime']['minute'],
+    ),
+    starterPrice: (json['starterPrice'] as num?)?.toDouble(),
+    hourlyPrice: (json['hourlyPrice'] as num).toDouble(),
+    image: json['image'],
+    spots: (json['spots'] as List).map((e) => Floor.fromJson(e)).toList(),
+  )..spotCount = json['spotCount'];
 }

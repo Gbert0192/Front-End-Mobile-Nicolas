@@ -364,7 +364,7 @@ class _AddBookingState extends State<AddBooking> {
                                   activityProvider.addActivity(
                                     user,
                                     ActivityItem(
-                                      activityTypes: ActivityTypes.bookSuccess,
+                                      activityType: ActivityType.bookSuccess,
                                       mall: widget.mall.name,
                                       onPressed: (context) {},
                                     ),

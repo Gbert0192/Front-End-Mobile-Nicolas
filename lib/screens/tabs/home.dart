@@ -363,7 +363,7 @@ class _HomeState extends State<Home> {
                                         activityProvider.addActivity(
                                           user,
                                           ActivityItem(
-                                            activityTypes: ActivityTypes.verify,
+                                            activityType: ActivityType.verify,
                                           ),
                                         );
                                       },

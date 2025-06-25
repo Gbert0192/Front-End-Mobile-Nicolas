@@ -7,6 +7,7 @@ import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 
@@ -51,14 +52,18 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final isLogin = userProvider.currentUser != null;
+    if (userProvider.isLoading) {
+      return const SplashScreen();
+    }
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
-          pageBuilder: (_, __, ___) => StepperScreen(),
+          pageBuilder: (_, __, ___) => isLogin ? MainLayout() : StepperScreen(),
           transitionsBuilder: (_, animation, __, child) {
             var tween = Tween(
               begin: const Offset(0, -1),
@@ -72,10 +77,6 @@ class _MainAppState extends State<MainApp> {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return const SplashScreen();
   }
 }

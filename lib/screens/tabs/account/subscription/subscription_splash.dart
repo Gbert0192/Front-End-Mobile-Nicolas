@@ -11,8 +11,10 @@ class SubscriptionSplash extends StatefulWidget {
 
 class _SubscriptionSplashState extends State<SubscriptionSplash> {
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     Future.delayed(const Duration(seconds: 3000), () {
       Navigator.pushReplacement(
         context,
@@ -32,12 +34,6 @@ class _SubscriptionSplashState extends State<SubscriptionSplash> {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
 
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, elevation: 0),

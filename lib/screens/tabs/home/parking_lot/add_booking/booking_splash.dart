@@ -11,8 +11,10 @@ class BookingSplash extends StatefulWidget {
 
 class _BookingSplashState extends State<BookingSplash> {
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+
     Future.delayed(const Duration(seconds: 3000), () {
       Navigator.pushReplacement(
         context,
@@ -32,12 +34,6 @@ class _BookingSplashState extends State<BookingSplash> {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
 
     return Scaffold(
       appBar: AppBar(automaticallyImplyLeading: false, elevation: 0),
