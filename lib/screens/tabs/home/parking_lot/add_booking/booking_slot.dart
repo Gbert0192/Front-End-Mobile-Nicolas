@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class BookingSlot extends StatefulWidget {
   const BookingSlot({
@@ -23,36 +24,6 @@ class BookingSlot extends StatefulWidget {
 }
 
 class _BookingSlotState extends State<BookingSlot> {
-  String _formatFloorLabel(String floor) {
-    if (floor.startsWith('G')) {
-      return "$floor Floor";
-    }
-
-    final num = int.tryParse(floor);
-    if (num == null) return "$floor Floor";
-
-    String suffix;
-    if (num >= 11 && num <= 13) {
-      suffix = "th";
-    } else {
-      switch (num % 10) {
-        case 1:
-          suffix = "st";
-          break;
-        case 2:
-          suffix = "nd";
-          break;
-        case 3:
-          suffix = "rd";
-          break;
-        default:
-          suffix = "th";
-      }
-    }
-
-    return "$num$suffix Floor";
-  }
-
   @override
   Widget build(BuildContext context) {
     final lotProvider = Provider.of<ParkingLotProvider>(context);
@@ -140,7 +111,7 @@ class _BookingSlotState extends State<BookingSlot> {
           runSpacing: isSmall ? 6 : 8,
           children:
               allSlots.map((item) {
-                final floorLabel = _formatFloorLabel(item.number);
+                final floorLabel = formatFloorLabel(item.number);
                 return GestureDetector(
                   onTap: () {
                     widget.setFloor(item.number);
@@ -225,7 +196,7 @@ class _BookingSlotState extends State<BookingSlot> {
                         SizedBox(height: 4),
                         Text(
                           widget.slot != null
-                              ? "${_formatFloorLabel(selectedFloor!)} ($selectedSpot)"
+                              ? "${formatFloorLabel(selectedFloor!)} ($selectedSpot)"
                               : "Pick Your Slot",
                           style: TextStyle(
                             fontSize: 14,

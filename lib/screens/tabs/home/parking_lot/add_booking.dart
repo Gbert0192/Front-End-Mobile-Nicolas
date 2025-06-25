@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_confirm.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_slot.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_splash.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_time.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class AddBooking extends StatefulWidget {
   const AddBooking(this.mall);
@@ -38,6 +45,10 @@ class _AddBookingState extends State<AddBooking> {
   @override
   Widget build(BuildContext context) {
     final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    final bookingProvider = Provider.of<HistoryProvider>(context);
+    User user = userProvider.currentUser!;
+    final activityProvider = Provider.of<ActivityProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -141,10 +152,14 @@ class _AddBookingState extends State<AddBooking> {
                           isSmall
                               ? currentPage == 0
                                   ? 700
-                                  : 670
+                                  : currentPage == 1
+                                  ? 670
+                                  : 600
                               : currentPage == 0
                               ? 760
-                              : 720,
+                              : currentPage == 1
+                              ? 720
+                              : 680,
                       child: PageView(
                         controller: _controller,
                         physics: const NeverScrollableScrollPhysics(),
@@ -163,6 +178,12 @@ class _AddBookingState extends State<AddBooking> {
                             setFloor: (val) => setState(() => floor = val),
                             setSlot: (val) => setState(() => slot = val),
                           ),
+                          BookingConfirm(
+                            mall: widget.mall,
+                            date: date,
+                            time: time,
+                            slot: slot,
+                          ),
                         ],
                       ),
                     ),
@@ -173,6 +194,7 @@ class _AddBookingState extends State<AddBooking> {
                     Center(
                       child: ResponsiveButton(
                         isLoading: isLoading,
+                        fontWeight: FontWeight.w600,
                         onPressed:
                             (date?.isNotEmpty ?? false) &&
                                     (time?.isNotEmpty ?? false) &&
@@ -192,7 +214,7 @@ class _AddBookingState extends State<AddBooking> {
                                       content: Text(
                                         "Please choose a time that is within the mall's operating hours and not in the past.",
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: isSmall ? 14 : 16,
                                           color: Colors.grey.shade700,
                                           height: 1.4,
                                         ),
@@ -250,8 +272,112 @@ class _AddBookingState extends State<AddBooking> {
                                     );
                                   }
                                 }
+                                : currentPage == 2
+                                ? () async {
+                                  if (!validateDatetime()) {
+                                    showAlertDialog(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          date = null;
+                                          time = null;
+                                        });
+                                        _controller.animateToPage(
+                                          0,
+                                          duration: const Duration(
+                                            milliseconds: 300,
+                                          ),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      },
+                                      context: context,
+                                      title: "Invalid Booking Time",
+                                      content: Text(
+                                        "Please choose a time that is within the mall's operating hours and not in the past.",
+                                        style: TextStyle(
+                                          fontSize: isSmall ? 14 : 16,
+                                          color: Colors.grey.shade700,
+                                          height: 1.4,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      icon: Icons.warning_amber_rounded,
+                                      color: Colors.orange,
+                                    );
+                                    return;
+                                  }
+                                  final parts = slot!.split("-");
+                                  String floor = parts[0];
+                                  String spot = parts[1];
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  await Future.delayed(
+                                    const Duration(seconds: 1),
+                                  );
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  bool isFree =
+                                      lotProvider.checkSpotStatus(
+                                        lot: widget.mall,
+                                        floorNumber: floor,
+                                        spotCode: spot,
+                                      ) ==
+                                      SpotStatus.free;
+                                  if (!isFree) {
+                                    showAlertDialog(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        _controller.animateToPage(
+                                          1,
+                                          duration: const Duration(
+                                            milliseconds: 300,
+                                          ),
+                                          curve: Curves.easeInOut,
+                                        );
+                                      },
+                                      context: context,
+                                      title: "Spot Has Been Occupied",
+                                      content: Text(
+                                        "The selected parking spot is already taken. Please choose a other booking spot.",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey.shade700,
+                                          height: 1.4,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      icon: Icons.event_busy,
+                                      color: Colors.redAccent,
+                                    );
+                                    return;
+                                  }
+                                  final dateTime = stringToDate(date!, time);
+                                  bookingProvider.addBooking(
+                                    user,
+                                    widget.mall,
+                                    floor,
+                                    spot,
+                                    dateTime,
+                                  );
+                                  activityProvider.addActivity(
+                                    user,
+                                    ActivityItem(
+                                      activityTypes: ActivityTypes.bookSuccess,
+                                      mall: widget.mall.name,
+                                      onPressed: (context) {},
+                                    ),
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BookingSplash(),
+                                    ),
+                                  );
+                                }
                                 : null,
-                        text: "Continue",
+                        text: currentPage == 2 ? "Confirm Booking" : "Continue",
                       ),
                     ),
                   ]),

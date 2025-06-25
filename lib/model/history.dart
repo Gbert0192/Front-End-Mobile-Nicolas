@@ -30,11 +30,11 @@ class History {
   }
 
   void addParking(Parking parking) {
-    parkings.add(parking);
+    parkings.insert(0, parking);
   }
 
   void addBooking(Booking booking) {
-    bookings.add(booking);
+    bookings.insert(0, booking);
   }
 
   List<ParkingLot> getFrequentLots() {

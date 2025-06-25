@@ -43,33 +43,6 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
     User user = userProvider.currentUser!;
     final activityProvider = Provider.of<ActivityProvider>(context);
 
-    void showSuccessDialog(double originalAmount, double finalAmount) {
-      showAlertDialog(
-        context: context,
-        title: "Top-up Successful!",
-        icon: Icons.check_circle,
-        color: Colors.green,
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Payment Method: ${widget.method.name}"),
-            Text("Amount: ${formatCurrency(nominal: originalAmount)}"),
-            if (widget.method.adminFee != null) ...[
-              Text(
-                "Admin Fee: ${formatCurrency(nominal: widget.method.adminFee as num)}",
-              ),
-              Divider(),
-              Text(
-                "Credit Added: ${formatCurrency(nominal: finalAmount)}",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ],
-        ),
-      );
-    }
-
     Future<void> simulateTopUp() async {
       if (_amountController.text.isEmpty) {
         showFlexibleSnackbar(
@@ -120,6 +93,12 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
           activityTypes: ActivityTypes.topUp,
           method: widget.method.name,
           nominal: finalAmount,
+          onPressed: (context) {
+            showFlexibleSnackbar(
+              context,
+              "Top up ${formatCurrency(nominal: finalAmount)} via ${widget.method.name}",
+            );
+          },
         ),
       );
 
@@ -127,7 +106,34 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
         _isProcessing = false;
       });
 
-      showSuccessDialog(amount, finalAmount);
+      showAlertDialog(
+        context: context,
+        title: "Top-up Successful!",
+        icon: Icons.check_circle,
+        color: Colors.green,
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+        },
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Payment Method: ${widget.method.name}"),
+            Text("Amount: ${formatCurrency(nominal: amount)}"),
+            if (widget.method.adminFee != null) ...[
+              Text(
+                "Admin Fee: ${formatCurrency(nominal: widget.method.adminFee as num)}",
+              ),
+              Divider(),
+              Text(
+                "Credit Added: ${formatCurrency(nominal: finalAmount)}",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ],
+        ),
+      );
     }
 
     return Scaffold(
@@ -269,6 +275,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                         ),
                         SizedBox(height: 8),
                         ResponsiveTextInput(
+                          isLoading: _isProcessing,
                           hint: "Enter amount",
                           type: TextInputTypes.number,
                           controller: _amountController,

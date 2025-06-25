@@ -78,12 +78,7 @@ class _BookingTimeState extends State<BookingTime> {
       return widget.mall.openTime;
     }
 
-    final parts = widget.date!.split('/');
-    final day = int.parse(parts[0]);
-    final month = int.parse(parts[1]);
-    final year = int.parse(parts[2]);
-
-    final selectedDate = DateTime(year, month, day);
+    final selectedDate = stringToDate(widget.date!);
     final now = DateTime.now();
 
     final isToday =

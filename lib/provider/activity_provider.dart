@@ -46,7 +46,7 @@ class ActivityItem {
   final String? mall;
   final String? method;
   final double? nominal;
-  final VoidCallback? onPressed;
+  final Function(BuildContext)? onPressed;
   final DateTime date;
 
   ActivityItem({
