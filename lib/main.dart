@@ -8,7 +8,6 @@ import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
-import 'package:tugas_front_end_nicolas/receipt/booking.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 
@@ -39,7 +38,7 @@ void main() {
           popupMenuTheme: PopupMenuThemeData(color: Colors.white),
         ),
         debugShowCheckedModeBanner: false,
-        home: Booking(),
+        home: MainApp(),
       ),
     ),
   );
