@@ -34,7 +34,7 @@ class ParkingHistory extends StatelessWidget {
               child: Column(
                 children: [
                   // Divider(indent: 20, thickness: 1),
-                  // SizedBox(height: isSmall ? 0 : 15),
+                  SizedBox(height: isSmall ? 0 : 40),
                   Padding(
                     padding: EdgeInsets.only(
                       left: isSmall ? 12 : 24,
@@ -105,7 +105,7 @@ class ParkingHistory extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: isSmall ? 12 : 30),
+                        SizedBox(height: isSmall ? 12 : 50),
                         // Button Booking
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(

@@ -13,7 +13,7 @@ class _BookingSplashState extends State<BookingSplash> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3000), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
@@ -44,30 +44,34 @@ class _BookingSplashState extends State<BookingSplash> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(isSmall ? 30 : 50),
+            padding: EdgeInsets.symmetric(
+              horizontal: 30,
+              vertical: isSmall ? 30 : 50,
+            ),
             child: (Center(
               child: Column(
                     children: [
+                      SizedBox(height: isSmall ? 50 : 150),
                       Image.asset(
                         'assets/images/popup/booking made.png',
                         width: isSmall ? 200 : 300,
                       ),
-                      SizedBox(height: isSmall ? 20 : 40),
+                      SizedBox(height: isSmall ? 10 : 20),
                       Text(
                         'Successful!',
                         style: TextStyle(
                           color: Color(0xFF4D5DFA),
-                          fontSize: isSmall ? 24 : 28,
-                          fontWeight: FontWeight.bold,
+                          fontSize: isSmall ? 28 : 32,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      SizedBox(height: isSmall ? 10 : 20),
+                      SizedBox(height: isSmall ? 5 : 10),
                       Text(
                         'Successfully add booking detail',
                         style: TextStyle(
                           color: Color(0xFF666262),
-                          fontSize: isSmall ? 16 : 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: isSmall ? 18 : 20,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
