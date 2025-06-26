@@ -10,7 +10,7 @@ class UserProvider with ChangeNotifier {
   List<User> userList = [
     User(
       email: "johndoer@gmail.com",
-      profilePic: "assets/images/users/male 2.jpg",
+      profilePic: null,
       fullname: "JOHN DOER",
       countryCode: "CN",
       dialCode: "86",
@@ -86,11 +86,17 @@ class UserProvider with ChangeNotifier {
     userList.add(newUser);
     currentUser = newUser;
     await prefs.setString('currentEmail', email);
+    saveUsersToPrefs();
     notifyListeners();
   }
 
   User? findUserByEmail(String email) {
     final user = userList.firstWhereOrNull((u) => u.email == email);
+    return user;
+  }
+
+  User? findUserByPhone(String phone) {
+    final user = userList.firstWhereOrNull((u) => u.phone == phone);
     return user;
   }
 

@@ -6,6 +6,7 @@ import 'package:tugas_front_end_nicolas/components/avatar_picker.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
+import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
@@ -198,20 +199,35 @@ class _UserDataState extends State<UserData> {
                         });
                         if (isValid) {
                           setState(() => form.isLoading = true);
+                          User? user = userProvider.findUserByPhone(
+                            form.control("phone").text,
+                          );
+                          if (user != null) {
+                            showFlexibleSnackbar(
+                              context,
+                              "${translate(context, "Phone Number already used", "Nomor Telepon sudah terpakai", "电话号码已被使用")}!",
+                              type: SnackbarType.error,
+                            );
+                            setState(() => form.isLoading = false);
+                            return;
+                          }
                           await Future.delayed(const Duration(seconds: 2));
                           String? path;
                           try {
                             if (profileImg != null) {
                               path = await saveImageFile(profileImg!);
                               print(">> Image saved at: $path");
-                            } else {
-                              print(">> Tidak ada gambar");
                             }
                           } catch (e) {
                             print(">> Gagal menyimpan gambar: $e");
                             showFlexibleSnackbar(
                               context,
-                              "Gagal menyimpan gambar.",
+                              translate(
+                                context,
+                                "Failed to save image.",
+                                "Gagal menyimpan gambar.",
+                                "保存图像失败。",
+                              ),
                             );
                             setState(() => form.isLoading = false);
                             return;

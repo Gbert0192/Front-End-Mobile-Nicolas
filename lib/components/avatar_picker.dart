@@ -6,9 +6,15 @@ import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class ResponsiveAvatarPicker extends StatefulWidget {
-  ResponsiveAvatarPicker({super.key, this.onChanged, this.isLoading});
+  ResponsiveAvatarPicker({
+    super.key,
+    this.initValue,
+    this.onChanged,
+    this.isLoading,
+  });
 
-  final Function(File)? onChanged;
+  final File? initValue;
+  final Function(File?)? onChanged;
   final bool? isLoading;
 
   @override
@@ -207,6 +213,9 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                       Navigator.of(context).pop();
                       setState(() {
                         _selectedImage = null;
+                        if (widget.onChanged != null) {
+                          widget.onChanged!(null);
+                        }
                       });
                     },
                     isDestructive: true,
@@ -218,6 +227,12 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedImage = widget.initValue;
   }
 
   @override
