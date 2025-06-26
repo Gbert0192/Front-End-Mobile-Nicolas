@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/avatar_picker.dart';
@@ -21,6 +23,7 @@ class UserData extends StatefulWidget {
 
 class _UserDataState extends State<UserData> {
   String country_code = "ID";
+  File? profileImg;
 
   final form = UseForm(
     fields: ["fullname", "phone", "password", "conpassword"],
@@ -102,7 +105,14 @@ class _UserDataState extends State<UserData> {
                     SizedBox(height: 20),
 
                     // Profile Image Section
-                    ResponsiveAvatarPicker(),
+                    ResponsiveAvatarPicker(
+                      isLoading: form.isLoading,
+                      onChanged: (val) {
+                        setState(() {
+                          profileImg = val;
+                        });
+                      },
+                    ),
 
                     SizedBox(height: 20),
                     Column(
@@ -180,7 +190,7 @@ class _UserDataState extends State<UserData> {
                     //Continue Button
                     ResponsiveButton(
                       isLoading: form.isLoading,
-                      onPressed: () {
+                      onPressed: () async {
                         bool isValid = false;
                         setState(() {
                           form.isSubmitted = true;
@@ -188,29 +198,45 @@ class _UserDataState extends State<UserData> {
                         });
                         if (isValid) {
                           setState(() => form.isLoading = true);
-                          Future.delayed(const Duration(seconds: 2), () {
-                            userProvider.registerUser(
-                              email: widget.email,
-                              // profile_pic:
-                              //     _selectedImage?.path,
-                              fullname: form.control("fullname").text,
-                              country_code: country_code,
-                              phone: form.control("phone").text,
-                              password: form.control("password").text,
-                            );
-                            setState(() => form.isLoading = false);
+                          await Future.delayed(const Duration(seconds: 2));
+                          String? path;
+                          try {
+                            if (profileImg != null) {
+                              path = await saveImageFile(profileImg!);
+                              print(">> Image saved at: $path");
+                            } else {
+                              print(">> Tidak ada gambar");
+                            }
+                          } catch (e) {
+                            print(">> Gagal menyimpan gambar: $e");
                             showFlexibleSnackbar(
                               context,
-                              "${translate(context, "Welcome to ParkID", "Selamat datang di ParkID", "欢迎来到 ParkID")}, ${form.control("fullname").text.split(" ")[0]}!",
+                              "Gagal menyimpan gambar.",
                             );
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainLayout(),
-                              ),
-                              (Route<dynamic> route) => false,
-                            );
-                          });
+                            setState(() => form.isLoading = false);
+                            return;
+                          }
+
+                          userProvider.registerUser(
+                            email: widget.email,
+                            profile_pic: path,
+                            fullname: form.control("fullname").text,
+                            country_code: country_code,
+                            phone: form.control("phone").text,
+                            password: form.control("password").text,
+                          );
+                          setState(() => form.isLoading = false);
+                          showFlexibleSnackbar(
+                            context,
+                            "${translate(context, "Welcome to ParkID", "Selamat datang di ParkID", "欢迎来到 ParkID")}, ${form.control("fullname").text.split(" ")[0]}!",
+                          );
+                          Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MainLayout(),
+                            ),
+                            (Route<dynamic> route) => false,
+                          );
                         }
                       },
                       text: translate(context, "Register", "Daftar", "登记"),

@@ -5,6 +5,9 @@ import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
 import 'package:encrypt/encrypt.dart' as enc;
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 extension FirstWhereOrNullExtension<E> on Iterable<E> {
   E? firstWhereOrNull(bool Function(E element) test) {
@@ -146,3 +149,26 @@ String activityTypeToString(ActivityType type) =>
 
 ActivityType activityTypeFromString(String value) => ActivityType.values
     .firstWhere((e) => e.toString().split('.').last == value);
+
+Future<String> saveImageFile(File imageFile) async {
+  final directory = await getApplicationDocumentsDirectory();
+
+  final ext = p.extension(imageFile.path);
+  final fileName = '${DateTime.now().millisecondsSinceEpoch}$ext';
+
+  final savedImagePath = p.join(directory.path, fileName);
+
+  await imageFile.copy(savedImagePath);
+
+  return savedImagePath;
+}
+
+Future<void> deleteImage(String fileName) async {
+  final dir = await getApplicationDocumentsDirectory();
+  final filePath = p.join(dir.path, fileName);
+  final file = File(filePath);
+
+  if (await file.exists()) {
+    await file.delete();
+  }
+}

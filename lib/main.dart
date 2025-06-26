@@ -13,6 +13,7 @@ import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/receipt%20copy.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [

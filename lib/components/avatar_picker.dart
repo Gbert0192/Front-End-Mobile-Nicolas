@@ -8,7 +8,7 @@ import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 class ResponsiveAvatarPicker extends StatefulWidget {
   ResponsiveAvatarPicker({super.key, this.onChanged, this.isLoading});
 
-  final Function(String)? onChanged;
+  final Function(File)? onChanged;
   final bool? isLoading;
 
   @override
@@ -31,6 +31,9 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
       if (image != null) {
         setState(() {
           _selectedImage = File(image.path);
+          if (widget.onChanged != null) {
+            widget.onChanged!(_selectedImage!);
+          }
         });
       }
     } catch (e) {
@@ -54,6 +57,8 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
     required VoidCallback onTap,
     bool isDestructive = false,
   }) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final Color iconColor =
         isDestructive ? Colors.red : const Color(0xFF2C39B8);
     final Color textColor = isDestructive ? Colors.red : Colors.black87;
@@ -72,12 +77,12 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
           child: Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(isSmall ? 8 : 10),
                 decoration: BoxDecoration(
                   color: iconColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(icon, color: iconColor, size: 24),
+                child: Icon(icon, color: iconColor, size: isSmall ? 24 : 28),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -87,7 +92,7 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                     Text(
                       title,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: isSmall ? 16 : 18,
                         fontWeight: FontWeight.w500,
                         color: textColor,
                       ),
@@ -95,12 +100,19 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: isSmall ? 12 : 14,
+                        color: Colors.grey[600],
+                      ),
                     ),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: Colors.grey[400], size: 20),
+              Icon(
+                Icons.chevron_right,
+                color: Colors.grey[400],
+                size: isSmall ? 20 : 28,
+              ),
             ],
           ),
         ),
@@ -109,6 +121,8 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
   }
 
   Future<void> _showImageSourceBottomSheet(BuildContext context) async {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     return showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -134,12 +148,12 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                     "Pilih Sumber Gambar",
                     "选择图片来源",
                   ),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontSize: 20,
+                    fontSize: isSmall ? 20 : 26,
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: isSmall ? 16 : 20),
                 _buildImageSourceOption(
                   context: context,
                   icon: Icons.camera_alt,
@@ -155,7 +169,7 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                     _pickImage(ImageSource.camera, context);
                   },
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: isSmall ? 8 : 16),
                 _buildImageSourceOption(
                   context: context,
                   icon: Icons.photo_library,
@@ -172,7 +186,7 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                   },
                 ),
                 if (_selectedImage != null) ...[
-                  const SizedBox(height: 8),
+                  SizedBox(height: 8),
                   const Divider(height: 16),
                   _buildImageSourceOption(
                     context: context,
@@ -229,28 +243,30 @@ class _ResponsiveAvatarPickerState extends State<ResponsiveAvatarPicker> {
                     )
                     : null,
           ),
-          Positioned(
-            bottom: 8,
-            right: 8,
-            child: Container(
-              height: isSmall ? 30 : 45,
-              width: isSmall ? 30 : 45,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1F1E5B),
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-              ),
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                iconSize: 16,
-                onPressed: () => _showImageSourceBottomSheet(context),
-                icon: Icon(
-                  _selectedImage == null ? Icons.photo_camera : Icons.edit,
+          !(widget.isLoading ?? false)
+              ? Positioned(
+                bottom: 8,
+                right: 8,
+                child: Container(
+                  height: isSmall ? 30 : 45,
+                  width: isSmall ? 30 : 45,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1F1E5B),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
+                  ),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    iconSize: 16,
+                    onPressed: () => _showImageSourceBottomSheet(context),
+                    icon: Icon(
+                      _selectedImage == null ? Icons.photo_camera : Icons.edit,
+                    ),
+                    color: Colors.white,
+                  ),
                 ),
-                color: Colors.white,
-              ),
-            ),
-          ),
+              )
+              : SizedBox.shrink(),
         ],
       ),
     );
