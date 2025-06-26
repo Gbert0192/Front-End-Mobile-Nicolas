@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
+import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/components/receipt.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
@@ -9,6 +10,7 @@ class Receipt extends StatefulWidget {
   final String spotTypeEn;
   final String spotTypeId;
   final String spotTypeCn;
+  final String? slot;
 
   const Receipt({
     super.key,
@@ -16,6 +18,7 @@ class Receipt extends StatefulWidget {
     required this.spotTypeEn,
     required this.spotTypeId,
     required this.spotTypeCn,
+    required this.slot,
   });
 
   @override
@@ -25,6 +28,61 @@ class Receipt extends StatefulWidget {
 class _ReceiptState extends State<Receipt> {
   @override
   Widget build(BuildContext context) {
+    final parts = widget.slot!.split("-");
+    final List<DetailItem> bookInfo = [
+      DetailItem(
+        label: translate(context, 'Parking Area', 'Area Parkir', '停车场'),
+        value: widget.mall.name,
+      ),
+      DetailItem(
+        label: translate(context, 'Address', 'Alamat', '地址'),
+        value: widget.mall.address,
+      ),
+      DetailItem(
+        label: translate(
+          context,
+          widget.spotTypeEn,
+          widget.spotTypeId,
+          widget.spotTypeCn,
+        ),
+        value: "${formatFloorLabel(parts[0])} (${parts[1]})",
+      ),
+      DetailItem(
+        label: translate(context, 'Duration', 'Durasi', '持续时间'),
+        value: widget.mall.address,
+      ),
+      DetailItem(
+        label: translate(context, 'Address', 'Alamat', '地址'),
+        value: widget.mall.address,
+      ),
+      DetailItem(
+        label: translate(context, 'Address', 'Alamat', '地址'),
+        value: widget.mall.address,
+      ),
+    ];
+
+    final List<DetailItem> prices = [
+      DetailItem(
+        label: "Amount",
+        value: "${formatFloorLabel(parts[0])} (${parts[1]})",
+      ),
+      DetailItem(
+        label: "Booking Date",
+        value: formatDate(stringToDate(widget.date!)),
+      ),
+      DetailItem(
+        label: "Booking Date",
+        value: formatDate(stringToDate(widget.date!)),
+      ),
+      DetailItem(
+        label: "Total",
+        value: formatCurrency(
+          nominal: widget.mall.hourlyPrice,
+          decimalPlace: 0,
+        ),
+      ),
+    ];
+
     return Scaffold(
       backgroundColor: const Color(0xFFEFF1F8),
       body: SafeArea(
@@ -62,21 +120,9 @@ class _ReceiptState extends State<Receipt> {
                       ),
                       child: Column(
                         children: [
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Parking Area',
-                              'Area Parkir',
-                              '停车场',
-                            ),
-                            right: widget.mall.name,
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(context, 'Address', 'Alamat', '地址'),
-                            right: 'mall.address',
-                            isRed: false,
-                          ),
+                          DataCard(listData: bookInfo),
+                          DataCard(listData: prices),
+
                           ReceiptText(
                             left: translate(
                               context,
@@ -84,7 +130,8 @@ class _ReceiptState extends State<Receipt> {
                               widget.spotTypeId,
                               widget.spotTypeCn,
                             ),
-                            right: 'mall.spot',
+                            right:
+                                "${formatFloorLabel(parts[0])} (${parts[1]})",
                             isRed: false,
                           ),
                           ReceiptText(
@@ -132,12 +179,7 @@ class _ReceiptState extends State<Receipt> {
                         children: [
                           ReceiptText(
                             left: translate(context, 'Amount', 'Jumlah', '停车场'),
-                            right: 'mall.price',
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(context, 'Address', 'Alamat', '地址'),
-                            right: 'mall.address',
+                            right: '${widget.mall.hourlyPrice}',
                             isRed: false,
                           ),
                           ReceiptText(
