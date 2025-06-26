@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
-import 'package:tugas_front_end_nicolas/components/receipt.dart';
-import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
+import 'package:tugas_front_end_nicolas/model/parking.dart';
 
 class Receipt extends StatefulWidget {
-  final ParkingLot mall;
+  final Parking parking;
   final String spotTypeEn;
   final String spotTypeId;
   final String spotTypeCn;
@@ -14,7 +13,7 @@ class Receipt extends StatefulWidget {
 
   const Receipt({
     super.key,
-    required this.mall,
+    required this.parking,
     required this.spotTypeEn,
     required this.spotTypeId,
     required this.spotTypeCn,
@@ -32,11 +31,11 @@ class _ReceiptState extends State<Receipt> {
     final List<DetailItem> bookInfo = [
       DetailItem(
         label: translate(context, 'Parking Area', 'Area Parkir', '停车场'),
-        value: widget.mall.name,
+        value: widget.parking.lot.name,
       ),
       DetailItem(
         label: translate(context, 'Address', 'Alamat', '地址'),
-        value: widget.mall.address,
+        value: widget.parking.lot.address,
       ),
       DetailItem(
         label: translate(
@@ -49,35 +48,51 @@ class _ReceiptState extends State<Receipt> {
       ),
       DetailItem(
         label: translate(context, 'Duration', 'Durasi', '持续时间'),
-        value: widget.mall.address,
+        value: '${widget.parking.calculateHour()} hours',
       ),
       DetailItem(
-        label: translate(context, 'Address', 'Alamat', '地址'),
-        value: widget.mall.address,
+        label: translate(context, 'Check-in Time', 'Waktu Masuk', '签到时间'),
+        value:
+            widget.parking.checkoutTime != null
+                ? formatDateTime(widget.parking.checkoutTime!)
+                : '-',
       ),
+
       DetailItem(
-        label: translate(context, 'Address', 'Alamat', '地址'),
-        value: widget.mall.address,
+        label: translate(context, 'Check-out Time', 'Waktu Keluar', '签出时间'),
+        value:
+            widget.parking.checkinTime != null
+                ? formatDateTime(widget.parking.checkinTime!)
+                : '-',
       ),
     ];
 
     final List<DetailItem> prices = [
       DetailItem(
         label: "Amount",
-        value: "${formatFloorLabel(parts[0])} (${parts[1]})",
+        value: formatCurrency(
+          nominal: widget.parking.amount ?? 0,
+          decimalPlace: 0,
+        ),
       ),
       DetailItem(
-        label: "Booking Date",
-        value: formatDate(stringToDate(widget.date!)),
+        label: "Taxes (11%)",
+        value: formatCurrency(
+          nominal: widget.parking.tax ?? 0,
+          decimalPlace: 0,
+        ),
       ),
       DetailItem(
-        label: "Booking Date",
-        value: formatDate(stringToDate(widget.date!)),
+        label: "Service Fee",
+        value: formatCurrency(
+          nominal: widget.parking.service ?? 0,
+          decimalPlace: 0,
+        ),
       ),
       DetailItem(
         label: "Total",
         value: formatCurrency(
-          nominal: widget.mall.hourlyPrice,
+          nominal: widget.parking.total ?? 0,
           decimalPlace: 0,
         ),
       ),
@@ -111,117 +126,10 @@ class _ReceiptState extends State<Receipt> {
                 ),
                 child: Column(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        children: [
-                          DataCard(listData: bookInfo),
-                          DataCard(listData: prices),
+                    DataCard(listData: bookInfo),
+                    const SizedBox(height: 20),
+                    DataCard(listData: prices),
 
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              widget.spotTypeEn,
-                              widget.spotTypeId,
-                              widget.spotTypeCn,
-                            ),
-                            right:
-                                "${formatFloorLabel(parts[0])} (${parts[1]})",
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Duration',
-                              'Durasi',
-                              '持续时间',
-                            ),
-                            right: 'mall',
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Check-in Time',
-                              'Waktu Masuk',
-                              '签到时间',
-                            ),
-                            right: 'checkInTime',
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Check-out Time',
-                              'Waktu Keluar',
-                              '签出时间',
-                            ),
-                            right: 'checkOutTime',
-                            isRed: true,
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 30),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.white),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        children: [
-                          ReceiptText(
-                            left: translate(context, 'Amount', 'Jumlah', '停车场'),
-                            right: '${widget.mall.hourlyPrice}',
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Taxes (11%)',
-                              'Tempat Pemesanan',
-                              '预订地点',
-                            ),
-                            right: 'mall.spot',
-                            isRed: false,
-                          ),
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Duration',
-                              'Durasi',
-                              '持续时间',
-                            ),
-                            right: 'mall',
-                            isRed: false,
-                          ),
-
-                          ReceiptText(
-                            left: translate(
-                              context,
-                              'Service Fee',
-                              'Biaya Pelayanan',
-                              '签出时间',
-                            ),
-                            right: 'checkOutTime',
-                            isRed: true,
-                          ),
-                          Divider(indent: 5),
-                          ReceiptText(
-                            left: translate(context, 'Total', 'Total', ''),
-                            right: 'totalPrice',
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 70),
                     ResponsiveButton(
                       text: translate(
                         context,
