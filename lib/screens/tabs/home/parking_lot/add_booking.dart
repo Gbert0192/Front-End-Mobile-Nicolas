@@ -11,6 +11,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_bookin
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_slot.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_splash.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_time.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/receipt.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
