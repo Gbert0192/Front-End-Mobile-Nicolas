@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/language_modal.dart';
@@ -172,7 +174,7 @@ class _ProfileState extends State<Profile> {
                             backgroundColor: Colors.white,
                             backgroundImage:
                                 user.profilePic != null
-                                    ? AssetImage(user.profilePic!)
+                                    ? FileImage(File(user.profilePic!))
                                     : null,
                             child:
                                 user.profilePic == null

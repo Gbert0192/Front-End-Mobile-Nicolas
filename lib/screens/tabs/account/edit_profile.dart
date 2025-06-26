@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/avatar_picker.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/dropdown.dart';
 import 'package:tugas_front_end_nicolas/components/phone_input.dart';
@@ -7,6 +10,7 @@ import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
@@ -22,6 +26,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
   String country_code = "ID";
+  File? profileImg;
 
   final form = UseForm(
     fields: ["fullname", "email", "phone", "birth_date", "gender"],
@@ -42,21 +47,6 @@ class _EditProfileState extends State<EditProfile> {
     },
   );
 
-  int choice = -1;
-
-  List<String> userPP = [
-    "assets/images/users/female 1.jpg",
-    "assets/images/users/female 2.jpg",
-    "assets/images/users/male 2.jpg",
-    "assets/images/users/female 4.jpg",
-    "assets/images/users/male 5.jpg",
-    "assets/images/users/female 5.jpg",
-    "assets/images/users/male 1.jpg",
-    "assets/images/users/female 3.jpg",
-    "assets/images/users/male 4.jpg",
-    "assets/images/users/male 3.jpg",
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -68,19 +58,8 @@ class _EditProfileState extends State<EditProfile> {
     form.control('gender').text = (user.gender) ?? '';
 
     country_code = (user.countryCode);
-
-    if (user.profilePic != null) {
-      choice = userPP.indexWhere((item) => item == user.profilePic);
-    }
-  }
-
-  void changeAvatar() {
-    setState(() {
-      choice += 1;
-      if (choice == 10) {
-        choice = -1;
-      }
-    });
+    profileImg =
+        widget.user.profilePic != null ? File(widget.user.profilePic!) : null;
   }
 
   @override
@@ -113,8 +92,7 @@ class _EditProfileState extends State<EditProfile> {
                               widget.user.fullname ||
                           form.control("email").text != widget.user.email ||
                           form.control("phone").text != widget.user.phone ||
-                          (choice == -1 ? null : userPP[choice]) !=
-                              widget.user.profilePic ||
+                          (profileImg?.path) != widget.user.profilePic ||
                           country_code != widget.user.countryCode ||
                           form.control("birth_date").text !=
                               (widget.user.birthDate ?? "") ||
@@ -163,45 +141,18 @@ class _EditProfileState extends State<EditProfile> {
                         fontSize: isSmall ? 32 : 40,
                       ),
                     ),
-                    Stack(
-                      children: [
-                        CircleAvatar(
-                          radius: isSmall ? 70 : 110,
-                          backgroundColor: Colors.grey[300],
-                          backgroundImage:
-                              choice != -1 ? AssetImage(userPP[choice]) : null,
-                          child:
-                              choice == -1
-                                  ? Icon(
-                                    Icons.person,
-                                    size: 100,
-                                    color: Colors.grey[400],
-                                  )
-                                  : null,
-                        ),
-                        Positioned(
-                          bottom: 8,
-                          right: 8,
-                          child: Container(
-                            height: isSmall ? 30 : 45,
-                            width: isSmall ? 30 : 45,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF1F1E5B),
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              iconSize: 16,
-                              onPressed: () {
-                                changeAvatar();
-                              },
-                              icon: Icon(Icons.edit),
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+
+                    ResponsiveAvatarPicker(
+                      isLoading: form.isLoading,
+                      onChanged: (val) {
+                        setState(() {
+                          profileImg = val;
+                        });
+                      },
+                      initValue:
+                          widget.user.profilePic != null
+                              ? File(widget.user.profilePic!)
+                              : null,
                     ),
 
                     SizedBox(height: 20),
@@ -282,14 +233,13 @@ class _EditProfileState extends State<EditProfile> {
 
                     ResponsiveButton(
                       isLoading: form.isLoading,
-                      onPressed: () {
+                      onPressed: () async {
                         final hasChanged =
                             form.control("fullname").text !=
                                 widget.user.fullname ||
                             form.control("email").text != widget.user.email ||
                             form.control("phone").text != widget.user.phone ||
-                            (choice == -1 ? null : userPP[choice]) !=
-                                widget.user.profilePic ||
+                            (profileImg?.path) != widget.user.profilePic ||
                             country_code != widget.user.countryCode ||
                             form.control("birth_date").text !=
                                 (widget.user.birthDate ?? "") ||
@@ -302,29 +252,74 @@ class _EditProfileState extends State<EditProfile> {
                         });
                         if (isValid && hasChanged) {
                           setState(() => form.isLoading = true);
-                          Future.delayed(const Duration(seconds: 2), () {
-                            userProvider.editProfile(
-                              fullname: form.control("fullname").text,
-                              email: form.control("email").text,
-                              phone: form.control("phone").text,
-                              countryCode: country_code,
-                              profilePic: choice == -1 ? null : userPP[choice],
-                              birthDate:
-                                  form.control("birth_date").text == ""
-                                      ? null
-                                      : form.control("birth_date").text,
-                              gender:
-                                  form.control("gender").text == ""
-                                      ? null
-                                      : form.control("gender").text,
-                            );
-                            setState(() => form.isLoading = false);
+                          await Future.delayed(const Duration(seconds: 2));
+                          User? userEmail = userProvider.findUserByEmail(
+                            form.control("email").text,
+                          );
+                          if (userEmail != null &&
+                              form.control("email").text != widget.user.email) {
                             showFlexibleSnackbar(
                               context,
-                              "Profile has been updated!",
+                              "Email already used!",
+                              type: SnackbarType.error,
                             );
-                            Navigator.pop(context);
-                          });
+                            setState(() => form.isLoading = false);
+                            return;
+                          }
+                          User? userPhone = userProvider.findUserByPhone(
+                            form.control("phone").text,
+                          );
+                          if (userPhone != null &&
+                              form.control("phone").text != widget.user.phone) {
+                            showFlexibleSnackbar(
+                              context,
+                              "Phone Number already used!",
+                              type: SnackbarType.error,
+                            );
+                            setState(() => form.isLoading = false);
+                            return;
+                          }
+                          String? path;
+                          try {
+                            if (profileImg != null) {
+                              path = await saveImageFile(profileImg!);
+                              print(">> Image saved at: $path");
+                            }
+                          } catch (e) {
+                            print(">> Gagal menyimpan gambar: $e");
+                            showFlexibleSnackbar(
+                              context,
+                              translate(
+                                context,
+                                "Failed to save image.",
+                                "Gagal menyimpan gambar.",
+                                "保存图像失败。",
+                              ),
+                            );
+                            setState(() => form.isLoading = false);
+                            return;
+                          }
+                          userProvider.editProfile(
+                            fullname: form.control("fullname").text,
+                            email: form.control("email").text,
+                            phone: form.control("phone").text,
+                            countryCode: country_code,
+                            profilePic: path,
+                            birthDate:
+                                form.control("birth_date").text == ""
+                                    ? null
+                                    : form.control("birth_date").text,
+                            gender:
+                                form.control("gender").text == ""
+                                    ? null
+                                    : form.control("gender").text,
+                          );
+                          setState(() => form.isLoading = false);
+                          showFlexibleSnackbar(
+                            context,
+                            "Profile has been updated!",
+                          );
+                          Navigator.pop(context);
                         } else {
                           Navigator.pop(context);
                         }

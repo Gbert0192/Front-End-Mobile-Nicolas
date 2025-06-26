@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
@@ -136,7 +138,7 @@ class _HomeState extends State<Home> {
                     CircleAvatar(
                       backgroundImage:
                           user.profilePic != null
-                              ? AssetImage(user.profilePic!)
+                              ? FileImage(File(user.profilePic!))
                               : null,
                       radius: isSmall ? 40 : 70,
                       backgroundColor: Colors.grey[300],

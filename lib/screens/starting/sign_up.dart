@@ -92,6 +92,7 @@ class _SignUpState extends State<SignUp> {
                       'assets/images/starting/enter_park.png',
                       height: isSmall ? 240 : 360,
                     ),
+                    SizedBox(height: isSmall ? 10 : 20),
                     Column(
                       children: [
                         ResponsiveTextInput(
