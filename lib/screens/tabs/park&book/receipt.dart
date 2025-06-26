@@ -1,29 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/receipt.dart';
+import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-class Booking extends StatefulWidget {
+class Receipt extends StatefulWidget {
+  final ParkingLot mall;
   final String spotTypeEn;
   final String spotTypeId;
   final String spotTypeCn;
 
-  const Booking({
+  const Receipt({
     super.key,
+    required this.mall,
     required this.spotTypeEn,
     required this.spotTypeId,
     required this.spotTypeCn,
   });
 
   @override
-  State<Booking> createState() => _BookingState();
+  State<Receipt> createState() => _ReceiptState();
 }
 
-class _BookingState extends State<Booking> {
+class _ReceiptState extends State<Receipt> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    final isSmall = size.height < 700;
     return Scaffold(
       backgroundColor: const Color(0xFFEFF1F8),
       body: SafeArea(
@@ -68,7 +69,7 @@ class _BookingState extends State<Booking> {
                               'Area Parkir',
                               '停车场',
                             ),
-                            right: 'mall.name',
+                            right: widget.mall.name,
                             isRed: false,
                           ),
                           ReceiptText(
@@ -76,16 +77,16 @@ class _BookingState extends State<Booking> {
                             right: 'mall.address',
                             isRed: false,
                           ),
-                          // ReceiptText(
-                          //   left: translate(
-                          //     context,
-                          //     spotTypeEn,
-                          //     spotTypeId,
-                          //     spotTypeCn,
-                          //   ),
-                          //   right: 'mall.spot',
-                          //   isRed: false,
-                          // ),
+                          ReceiptText(
+                            left: translate(
+                              context,
+                              widget.spotTypeEn,
+                              widget.spotTypeId,
+                              widget.spotTypeCn,
+                            ),
+                            right: 'mall.spot',
+                            isRed: false,
+                          ),
                           ReceiptText(
                             left: translate(
                               context,
