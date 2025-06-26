@@ -12,6 +12,7 @@ import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(
     MultiProvider(
       providers: [
