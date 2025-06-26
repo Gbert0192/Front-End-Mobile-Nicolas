@@ -54,7 +54,7 @@ class VoucherCard extends StatelessWidget {
                     child: Text(
                       voucher.type == VoucherFlag.free
                           ? "Free"
-                          : "Disc ${voucher.type == VoucherFlag.percent ? "${voucher.nominal}%" : (formatCurrency(nominal: voucher.nominal!))}",
+                          : "Disc ${voucher.type == VoucherFlag.percent ? "${(voucher.nominal!.toInt())}%" : (formatCurrency(nominal: voucher.nominal!))}",
                       style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
@@ -149,47 +149,64 @@ class VoucherCard extends StatelessWidget {
   }
 }
 
-class VoucherScreen extends StatelessWidget {
+class VoucherScreen extends StatefulWidget {
   const VoucherScreen({super.key});
 
+  @override
+  State<VoucherScreen> createState() => _VoucherScreenState();
+}
+
+class _VoucherScreenState extends State<VoucherScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     final voucherProvider = Provider.of<VoucherProvider>(context);
+    List<Voucher> voucherList = voucherProvider.getAvailableVoucher();
 
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: Text(
-                translate(
-                  context,
-                  'Available Voucher',
-                  'Voucher Tersedia',
-                  '可用优惠券',
-                ),
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: isSmall ? 25 : 30,
+        child: RefreshIndicator(
+          backgroundColor: Colors.white,
+          color: const Color(0xFF1F1E5B),
+          onRefresh: () async {
+            Future.delayed(const Duration(seconds: 2), () {
+              setState(() {
+                voucherList = voucherProvider.getAvailableVoucher();
+              });
+            });
+          },
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                centerTitle: true,
+                title: Text(
+                  translate(
+                    context,
+                    'Available Voucher',
+                    'Voucher Tersedia',
+                    '可用优惠券',
+                  ),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: isSmall ? 25 : 30,
+                  ),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children:
-                      voucherProvider.vouchers
-                          .map((voucher) => VoucherCard(voucher: voucher))
-                          .toList(),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children:
+                        voucherList
+                            .map((voucher) => VoucherCard(voucher: voucher))
+                            .toList(),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

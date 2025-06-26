@@ -24,10 +24,16 @@ class User {
     required this.dialCode,
     required this.phone,
     required this.password,
+    DateTime? createdAt,
   });
 
   User call() {
     return this;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is User && other.email == email;
   }
 
   int changePassword(String oldPass, String newPass) {
@@ -112,6 +118,67 @@ class User {
     }
     balance -= nominal;
     return 1;
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+
+    data['email'] = email;
+    data['fullname'] = fullname;
+    data['countryCode'] = countryCode;
+    data['dialCode'] = dialCode;
+    data['phone'] = phone;
+    data['password'] = password;
+    data['createdAt'] = createdAt.toIso8601String();
+    data['balance'] = balance;
+    data['isMember'] = isMember;
+    data['twoFactor'] = twoFactor;
+
+    if (profilePic != null) data['profilePic'] = profilePic;
+    if (birthDate != null) data['birthDate'] = birthDate;
+    if (gender != null) data['gender'] = gender;
+    if (rating != null) data['rating'] = rating;
+    if (memberSince != null) {
+      data['memberSince'] = memberSince!.toIso8601String();
+    }
+    if (memberUntil != null) {
+      data['memberUntil'] = memberUntil!.toIso8601String();
+    }
+
+    return data;
+  }
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    final user = User(
+      email: json['email'],
+      profilePic: json['profilePic'],
+      fullname: json['fullname'],
+      countryCode: json['countryCode'],
+      dialCode: json['dialCode'],
+      phone: json['phone'],
+      password: json['password'],
+      createdAt:
+          json['createdAt'] != null
+              ? DateTime.parse(json['createdAt'])
+              : DateTime.now(),
+    );
+
+    user.birthDate = json['birthDate'];
+    user.gender = json['gender'];
+    user.rating = json['rating'];
+    user.balance = (json['balance'] as num?)?.toDouble() ?? 0;
+    user.isMember = json['isMember'] ?? false;
+    user.twoFactor = json['twoFactor'] ?? false;
+    user.memberSince =
+        json['memberSince'] != null
+            ? DateTime.parse(json['memberSince'])
+            : null;
+    user.memberUntil =
+        json['memberUntil'] != null
+            ? DateTime.parse(json['memberUntil'])
+            : null;
+
+    return user;
   }
 }
 

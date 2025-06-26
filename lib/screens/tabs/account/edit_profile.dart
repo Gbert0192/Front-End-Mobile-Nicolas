@@ -121,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                           form.control("gender").text !=
                               (widget.user.gender ?? "");
                       if (hasChanged) {
-                        showAlertDialog(
+                        showConfirmDialog(
                           context: context,
                           title: "Go Back",
                           cancelText: "Back",
@@ -208,7 +208,7 @@ class _EditProfileState extends State<EditProfile> {
                     Column(
                       children: [
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control('fullname'),
                           hint: 'Enter Fullname',
                           label: 'Fullname',
@@ -224,7 +224,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTextInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           controller: form.control('email'),
                           hint: 'Enter Email',
                           label: 'Email',
@@ -240,7 +240,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsivePhoneInput(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           country_code: country_code,
                           controller: form.control("phone"),
                           hint: 'Enter Phone Number',
@@ -259,7 +259,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveTimePicker(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           type: DatePickerType.date,
                           controller: form.control("birth_date"),
                           hint: 'Select Birth Date',
@@ -267,7 +267,7 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                         SizedBox(height: isSmall ? 10 : 20),
                         ResponsiveDropdown(
-                          isSmall: isSmall,
+                          isLoading: form.isLoading,
                           items: [
                             {"label": "Male", "value": "male"},
                             {"label": "Female", "value": "female"},
@@ -281,15 +281,26 @@ class _EditProfileState extends State<EditProfile> {
                     SizedBox(height: isSmall ? 50 : 70),
 
                     ResponsiveButton(
-                      isSmall: isSmall,
                       isLoading: form.isLoading,
                       onPressed: () {
+                        final hasChanged =
+                            form.control("fullname").text !=
+                                widget.user.fullname ||
+                            form.control("email").text != widget.user.email ||
+                            form.control("phone").text != widget.user.phone ||
+                            (choice == -1 ? null : userPP[choice]) !=
+                                widget.user.profilePic ||
+                            country_code != widget.user.countryCode ||
+                            form.control("birth_date").text !=
+                                (widget.user.birthDate ?? "") ||
+                            form.control("gender").text !=
+                                (widget.user.gender ?? "");
                         bool isValid = false;
                         setState(() {
                           form.isSubmitted = true;
                           isValid = form.validate();
                         });
-                        if (isValid) {
+                        if (isValid && hasChanged) {
                           setState(() => form.isLoading = true);
                           Future.delayed(const Duration(seconds: 2), () {
                             userProvider.editProfile(
@@ -314,6 +325,8 @@ class _EditProfileState extends State<EditProfile> {
                             );
                             Navigator.pop(context);
                           });
+                        } else {
+                          Navigator.pop(context);
                         }
                       },
                       text: "Save",

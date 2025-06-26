@@ -1,19 +1,19 @@
+import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-enum ParkingStatus { entered, exited, unresolved }
-
-class Booking {
+class Parking {
   final User user;
   bool? isMember;
   final ParkingLot lot;
   DateTime? checkinTime;
   DateTime? checkoutTime;
   final DateTime createdAt = DateTime.now();
-  final int floor;
+  final String floor;
   final String code;
-  ParkingStatus status = ParkingStatus.entered;
+  HistoryStatus status = HistoryStatus.entered;
 
   int? hours;
   double? amount;
@@ -23,7 +23,7 @@ class Booking {
   double? total;
   double? unresolvedFee = 0;
 
-  Booking({
+  Parking({
     required this.user,
     required this.lot,
     required this.floor,
@@ -32,7 +32,7 @@ class Booking {
 
   void exitParking(Voucher voucher) {
     isMember = user.checkStatusMember();
-    status = ParkingStatus.exited;
+    status = HistoryStatus.exited;
     hours = calculateHour();
     amount = lot.calculateAmount(hours!);
     tax = amount! * 0.11;
@@ -41,10 +41,10 @@ class Booking {
     total = amount! + tax! + service! - this.voucher!;
   }
 
-  ParkingStatus checkStatus() {
-    if (status == ParkingStatus.entered && calculateHour() > 20) {
+  HistoryStatus checkStatus() {
+    if (status == HistoryStatus.entered && calculateHour() > 20) {
       isMember = user.checkStatusMember();
-      status = ParkingStatus.unresolved;
+      status = HistoryStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
       unresolvedFee = 10000;
       amount = lot.calculateAmount(20);
@@ -56,8 +56,8 @@ class Booking {
   }
 
   double? resolveUnresolve() {
-    if (status == ParkingStatus.unresolved) {
-      status = ParkingStatus.exited;
+    if (status == HistoryStatus.unresolved) {
+      status = HistoryStatus.exited;
       return total!;
     }
     return null;
@@ -68,5 +68,64 @@ class Booking {
     final hours = duration!.inMinutes / 60;
 
     return hours.ceil();
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{
+      'user': user.toJson(),
+      'lot': lot.toJson(),
+      'floor': floor,
+      'code': code,
+      'createdAt': createdAt.toIso8601String(),
+      'status': historyStatusToString(status),
+    };
+
+    if (isMember != null) data['isMember'] = isMember;
+    if (checkinTime != null) {
+      data['checkinTime'] = checkinTime!.toIso8601String();
+    }
+    if (checkoutTime != null) {
+      data['checkoutTime'] = checkoutTime!.toIso8601String();
+    }
+    if (hours != null) data['hours'] = hours;
+    if (amount != null) data['amount'] = amount;
+    if (tax != null) data['tax'] = tax;
+    if (service != null) data['service'] = service;
+    if (voucher != null) data['voucher'] = voucher;
+    if (total != null) data['total'] = total;
+    if (unresolvedFee != null && unresolvedFee != 0) {
+      data['unresolvedFee'] = unresolvedFee;
+    }
+
+    return data;
+  }
+
+  factory Parking.fromJson(Map<String, dynamic> json) {
+    final parking = Parking(
+      user: User.fromJson(json['user']),
+      lot: ParkingLot.fromJson(json['lot']),
+      floor: json['floor'],
+      code: json['code'],
+    );
+
+    parking.isMember = json['isMember'];
+    parking.checkinTime =
+        json['checkinTime'] != null
+            ? DateTime.parse(json['checkinTime'])
+            : null;
+    parking.checkoutTime =
+        json['checkoutTime'] != null
+            ? DateTime.parse(json['checkoutTime'])
+            : null;
+    parking.status = historyStatusFromString(json['status']);
+    parking.hours = json['hours'];
+    parking.amount = (json['amount'] as num?)?.toDouble();
+    parking.tax = (json['tax'] as num?)?.toDouble();
+    parking.service = (json['service'] as num?)?.toDouble();
+    parking.voucher = (json['voucher'] as num?)?.toDouble();
+    parking.total = (json['total'] as num?)?.toDouble();
+    parking.unresolvedFee = (json['unresolvedFee'] as num?)?.toDouble() ?? 0;
+
+    return parking;
   }
 }

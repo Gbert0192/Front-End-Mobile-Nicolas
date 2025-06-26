@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/countries.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
@@ -24,13 +25,14 @@ List<String> allowedCountryCodes = [
 class ResponsivePhoneInput extends StatefulWidget {
   const ResponsivePhoneInput({
     super.key,
-    required this.isSmall,
     this.controller,
     this.onChanged,
     this.onCountryChanged,
     this.hint,
     this.label,
     this.errorText,
+    this.isLoading,
+    this.disabled = false,
     this.country_code,
     this.mode = StyleMode.outline,
     this.fillColor = Colors.white,
@@ -38,7 +40,6 @@ class ResponsivePhoneInput extends StatefulWidget {
     this.borderFocusColor = const Color(0xFF505050),
   });
 
-  final bool isSmall;
   final TextEditingController? controller;
   final VoidCallback? onChanged;
   final ValueChanged<Country>? onCountryChanged;
@@ -50,6 +51,8 @@ class ResponsivePhoneInput extends StatefulWidget {
   final StyleMode mode;
   final Color borderColor;
   final Color borderFocusColor;
+  final bool? isLoading;
+  final bool disabled;
 
   @override
   State<ResponsivePhoneInput> createState() => _ResponsivePhoneInputState();
@@ -78,6 +81,8 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
     final hasError = widget.errorText != null;
 
     return Column(
@@ -86,10 +91,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
         widget.mode == StyleMode.underline
             ? Text(
               widget.label!,
-              style: TextStyle(
-                color: _getColor(),
-                fontSize: widget.isSmall ? 12 : 16,
-              ),
+              style: TextStyle(color: _getColor(), fontSize: isSmall ? 12 : 16),
             )
             : SizedBox.shrink(),
         Container(
@@ -100,13 +102,17 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                     ? null
                     : [
                       BoxShadow(
-                        color: Colors.black.withAlpha(64),
+                        color: Colors.black.withValues(alpha: 0.25),
                         blurRadius: 6,
                         offset: const Offset(4, 4),
                       ),
                     ],
           ),
           child: IntlPhoneField(
+            enabled:
+                widget.isLoading != null
+                    ? !widget.isLoading!
+                    : !widget.disabled,
             focusNode: _focusNode,
             controller: widget.controller,
             onCountryChanged: widget.onCountryChanged,
@@ -135,8 +141,8 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
                       ? const Color(0xFFFFEDED)
                       : widget.fillColor,
               contentPadding: EdgeInsets.symmetric(
-                horizontal: widget.isSmall ? 18 : 20,
-                vertical: widget.isSmall ? 12 : 16,
+                horizontal: isSmall ? 18 : 20,
+                vertical: isSmall ? 12 : 16,
               ),
               border:
                   widget.mode == StyleMode.underline
@@ -174,6 +180,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
             ),
             initialCountryCode: widget.country_code,
             disableLengthCheck: true,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           ),
         ),
         const SizedBox(height: 4),
@@ -182,10 +189,7 @@ class _ResponsivePhoneInputState extends State<ResponsivePhoneInput> {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               widget.errorText!,
-              style: TextStyle(
-                color: Colors.red,
-                fontSize: widget.isSmall ? 12 : 15,
-              ),
+              style: TextStyle(color: Colors.red, fontSize: isSmall ? 12 : 15),
             ),
           ),
       ],

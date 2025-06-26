@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
@@ -12,6 +13,24 @@ class Spot {
   DateTime? date;
 
   Spot({this.user, required this.status, required this.code, this.date});
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status.name,
+      'user': user?.toJson(),
+      'code': code,
+      'date': date?.toIso8601String(),
+    };
+  }
+
+  factory Spot.fromJson(Map<String, dynamic> json) {
+    return Spot(
+      status: SpotStatus.values.firstWhere((e) => e.name == json['status']),
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
+      code: json['code'],
+      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+    );
+  }
 }
 
 class Area {
@@ -27,6 +46,16 @@ class Area {
   Spot? findSpot(String code) {
     return spots.firstWhereOrNull((spot) => spot.code == code);
   }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'spots': spots.map((s) => s.toJson()).toList(),
+  };
+
+  factory Area.fromJson(Map<String, dynamic> json) => Area(
+    name: json['name'],
+    spots: (json['spots'] as List).map((e) => Spot.fromJson(e)).toList(),
+  );
 }
 
 class Floor {
@@ -50,22 +79,33 @@ class Floor {
     }
     return null;
   }
+
+  Map<String, dynamic> toJson() => {
+    'number': number,
+    'areas': areas.map((a) => a.toJson()).toList(),
+  };
+
+  factory Floor.fromJson(Map<String, dynamic> json) => Floor(
+    number: json['number'],
+    areas: (json['areas'] as List).map((e) => Area.fromJson(e)).toList(),
+  );
 }
 
 class ParkingLot {
+  final String prefix;
   final String name;
   final BuildingType buildingType;
   final String address;
-  final String openTime;
-  final String closeTime;
+  final TimeOfDay openTime;
+  final TimeOfDay closeTime;
   final double? starterPrice;
   final double hourlyPrice;
   final String image;
-  int spotCount;
-  final int floor;
+  int spotCount = 0;
   final List<Floor> spots;
 
   ParkingLot({
+    required this.prefix,
     required this.name,
     required this.buildingType,
     required this.address,
@@ -73,16 +113,50 @@ class ParkingLot {
     required this.closeTime,
     required this.hourlyPrice,
     required this.image,
-    required this.spotCount,
-    required this.floor,
     required this.spots,
     this.starterPrice,
   });
 
+  @override
+  bool operator ==(Object other) {
+    return other is ParkingLot && other.prefix == prefix;
+  }
+
+  int floorWeight(String label) {
+    if (label == 'G') return 0;
+    if (label.startsWith('G')) return -int.parse(label.substring(1));
+    return int.parse(label);
+  }
+
   String? occupyNearestSpot(User user) {
-    final sortedFloors = [...spots]
-      ..sort((a, b) => a.number.compareTo(b.number));
-    for (final floor in sortedFloors) {
+    renderAllSlot();
+
+    final aboveFloors = spots.where((f) => floorWeight(f.number) > 1).toList();
+    final belowFloors = spots.where((f) => floorWeight(f.number) < 1).toList();
+    final floor1 = spots.firstWhereOrNull((f) => floorWeight(f.number) == 1);
+
+    List<Floor> orderedFloors = [];
+
+    if (floor1 != null) {
+      orderedFloors.add(floor1);
+    }
+
+    aboveFloors.sort(
+      (a, b) => floorWeight(a.number).compareTo(floorWeight(b.number)),
+    );
+    belowFloors.sort(
+      (a, b) => floorWeight(a.number).compareTo(floorWeight(b.number)),
+    );
+
+    if (aboveFloors.length >= belowFloors.length) {
+      orderedFloors.addAll(aboveFloors);
+      orderedFloors.addAll(belowFloors);
+    } else {
+      orderedFloors.addAll(belowFloors);
+      orderedFloors.addAll(aboveFloors);
+    }
+
+    for (final floor in orderedFloors) {
       final spot = floor.getFirstAvailableSpot();
       if (spot != null) {
         spot.status = SpotStatus.occupied;
@@ -92,23 +166,11 @@ class ParkingLot {
         return spot.code;
       }
     }
+
     return null;
   }
 
-  String? occupySpot(int floorNumber, String spotCode, User user) {
-    final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
-    final spot = floor?.findSpot(spotCode);
-    if (spot != null && spot.status == SpotStatus.free) {
-      spot.status = SpotStatus.occupied;
-      spot.date = DateTime.now();
-      spot.user = user;
-      spotCount -= 1;
-      return spot.code;
-    }
-    return null;
-  }
-
-  String? bookSpot(int floorNumber, String spotCode, User user) {
+  String? bookSpot(String floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
@@ -121,7 +183,7 @@ class ParkingLot {
     return null;
   }
 
-  String? claimSpot(int floorNumber, String spotCode, User user) {
+  String? claimSpot(String floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.booked) {
@@ -133,7 +195,7 @@ class ParkingLot {
     return null;
   }
 
-  bool freeSpot(int floorNumber, String spotCode) {
+  bool freeSpot(String floorNumber, String spotCode) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.occupied) {
@@ -144,6 +206,16 @@ class ParkingLot {
       return true;
     }
     return false;
+  }
+
+  SpotStatus? checkSpotStatus(String floorNumber, String spotCode) {
+    renderAllSlot();
+    final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
+    final spot = floor?.findSpot(spotCode);
+    if (spot != null) {
+      return spot.status;
+    }
+    return null;
   }
 
   List<Floor> renderAllSlot() {
@@ -191,21 +263,62 @@ class ParkingLot {
   }
 
   double maxTotalEarning() {
-    final open = _parseTime(openTime);
-    final close = _parseTime(closeTime);
+    final now = DateTime.now();
+
+    final open = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      openTime.hour,
+      openTime.minute,
+    );
+
+    final close = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      closeTime.hour,
+      closeTime.minute,
+    );
 
     Duration diff = close.difference(open);
-
     final hours = (diff.inMinutes / 60).ceil();
 
     return calculateAmount(hours);
   }
 
-  DateTime _parseTime(String timeStr) {
-    final parts = timeStr.split(':');
-    final now = DateTime.now();
-    final hour = int.parse(parts[0]);
-    final minute = int.parse(parts[1]);
-    return DateTime(now.year, now.month, now.day, hour, minute);
-  }
+  Map<String, dynamic> toJson() => {
+    'prefix': prefix,
+    'name': name,
+    'buildingType': buildingType.name,
+    'address': address,
+    'openTime': {'hour': openTime.hour, 'minute': openTime.minute},
+    'closeTime': {'hour': closeTime.hour, 'minute': closeTime.minute},
+    'starterPrice': starterPrice,
+    'hourlyPrice': hourlyPrice,
+    'image': image,
+    'spots': spots.map((f) => f.toJson()).toList(),
+    'spotCount': spotCount,
+  };
+
+  factory ParkingLot.fromJson(Map<String, dynamic> json) => ParkingLot(
+    prefix: json['prefix'],
+    name: json['name'],
+    buildingType: BuildingType.values.firstWhere(
+      (e) => e.name == json['buildingType'],
+    ),
+    address: json['address'],
+    openTime: TimeOfDay(
+      hour: json['openTime']['hour'],
+      minute: json['openTime']['minute'],
+    ),
+    closeTime: TimeOfDay(
+      hour: json['closeTime']['hour'],
+      minute: json['closeTime']['minute'],
+    ),
+    starterPrice: (json['starterPrice'] as num?)?.toDouble(),
+    hourlyPrice: (json['hourlyPrice'] as num).toDouble(),
+    image: json['image'],
+    spots: (json['spots'] as List).map((e) => Floor.fromJson(e)).toList(),
+  )..spotCount = json['spotCount'];
 }

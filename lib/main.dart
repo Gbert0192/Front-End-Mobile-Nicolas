@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tugas_front_end_nicolas/provider/booking_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/language_provider.dart';
-import 'package:tugas_front_end_nicolas/provider/notification_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
-import 'package:tugas_front_end_nicolas/provider/parking_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
-import 'package:tugas_front_end_nicolas/receipt/booking.dart';
+import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/splash_screen.dart';
 import 'package:tugas_front_end_nicolas/screens/starting/stepper.dart';
 
-void main() {
+void main() async {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => OTPProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ParkingLotProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(create: (_) => ActivityProvider()),
         ChangeNotifierProvider(create: (_) => VoucherProvider()),
-        ChangeNotifierProvider(create: (_) => ParkingProvider()),
-        ChangeNotifierProvider(create: (_) => BookingProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
       child: MaterialApp(
@@ -54,14 +52,18 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   @override
-  void initState() {
-    super.initState();
+  Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final isLogin = userProvider.currentUser != null;
+    if (userProvider.isLoading) {
+      return const SplashScreen();
+    }
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
-          pageBuilder: (_, __, ___) => StepperScreens(),
+          pageBuilder: (_, __, ___) => isLogin ? MainLayout() : StepperScreen(),
           transitionsBuilder: (_, animation, __, child) {
             var tween = Tween(
               begin: const Offset(0, -1),
@@ -75,10 +77,6 @@ class _MainAppState extends State<MainApp> {
         ),
       );
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return const SplashScreen();
   }
 }

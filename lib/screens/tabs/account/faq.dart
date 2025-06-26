@@ -20,17 +20,17 @@ class FAQ extends StatelessWidget {
         title: '📲 Booking & Payment',
         content: [
           "➤ Book in advance or walk in — no reservation needed.",
-          "➤ Always check **real-time availability** before arriving.",
           "➤ You may pay upon exit, or pay first and exit using the **Mall QR code** — this avoids walk time from being counted.",
           "➤ A single user may create **multiple parkings/bookings** on different devices.",
           "➤ To make a new parkings/bookings, any over-limit or unresolved parkings/bookings **must be settled first**.",
+          "➤ Booking must be made **at least 1 hour before** the desired parking time.",
+          "➤ Booking time must fall within **mall operational hours**.",
         ],
       ),
       FAQItem(
         title: '🅿️ Parking Rules',
         content: [
           "➤ Parking fees start from your **entry time**, not booking time.",
-          "➤ You can enter **up to 30 minutes early**, but availability is not guaranteed.",
           "➤ Entering early will **automatically claim** your booking.",
           "➤ Leaving before check-in time still counts as a **used** booking.",
           "➤ For best results, enter only when you’re **ready to park**.",
@@ -43,7 +43,7 @@ class FAQ extends StatelessWidget {
       FAQItem(
         title: '🚫 Cancel & Expired',
         content: [
-          '➤ Cancel **up to 1 hour** before your booking — no charge.',
+          '➤ Cancel **up to 30 Minutes** before your booking — no charge.',
           '➤ Booking expires if not checked in **within 30 minutes**.',
           '➤ A **no-show fee of Rp10,000** applies.',
           '➤ If balance goes negative, you must **top up** to book again.',
@@ -85,7 +85,7 @@ class FAQ extends StatelessWidget {
             child: Image.asset(
               "assets/images/others/FAQ.png",
               fit: BoxFit.cover,
-              color: Colors.white.withAlpha(26),
+              color: Colors.white.withValues(alpha: 0.1),
               colorBlendMode: BlendMode.dstATop,
             ),
           ),

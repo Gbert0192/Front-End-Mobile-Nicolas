@@ -2,42 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/components/verfy_account.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/otp_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/lot_detail.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/search/search.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
-// ParkingSpot model
-class ParkingSpot {
-  final String name;
-  final String imageUrl;
-  final num price;
-
-  ParkingSpot({
-    required this.name,
-    required this.imageUrl,
-    required this.price,
-  });
-}
-
-class Mall {
-  final String name;
-  final String address;
-  final String image;
-  final num price;
-
-  Mall({
-    required this.name,
-    required this.address,
-    required this.image,
-    required this.price,
-  });
-}
-
-// Main Home
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -49,69 +24,57 @@ class _HomeState extends State<Home> {
   final PageController _controller = PageController();
   int _currentIndex = 0;
 
-  final List<ParkingSpot> spots = [
-    ParkingSpot(
-      name: 'Sun Plaza',
-      imageUrl: 'assets/images/building/Sun Plaza.png',
-      price: 3000,
-    ),
-    ParkingSpot(
-      name: 'Centre Point',
-      imageUrl: 'assets/images/building/Centre Point.png',
-      price: 2500,
-    ),
-    ParkingSpot(
-      name: 'Aryaduta',
-      imageUrl: 'assets/images/building/Aryaduta.png',
-      price: 4000,
-    ),
-  ];
-
-  void _nextSpot() {
-    if (_currentIndex < spots.length - 1) {
-      _controller.nextPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _controller.animateToPage(
-        0,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      setState(() {
-        _currentIndex = 0;
-      });
-    }
-  }
-
-  void _prevSpot() {
-    if (_currentIndex > 0) {
-      _controller.previousPage(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _controller.animateToPage(
-        spots.length - 1,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      setState(() {
-        _currentIndex = spots.length - 1;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
-    final currentSpot = spots[_currentIndex];
     final userProvider = Provider.of<UserProvider>(context);
     final otpProvider = Provider.of<OTPProvider>(context);
     User user = userProvider.currentUser!;
+    final activityProvider = Provider.of<ActivityProvider>(context);
+    final historyProvider = Provider.of<HistoryProvider>(
+      context,
+      listen: false,
+    );
+    final frequent = historyProvider.getFrequentLots(user);
+    final currentSpot = frequent?[_currentIndex];
+
+    void nextSpot() {
+      if (_currentIndex < frequent!.length) {
+        _controller.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _controller.animateToPage(
+          0,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentIndex = 0;
+        });
+      }
+    }
+
+    void prevSpot() {
+      if (_currentIndex > 0) {
+        _controller.previousPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      } else {
+        _controller.animateToPage(
+          frequent!.length,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        setState(() {
+          _currentIndex = frequent.length;
+        });
+      }
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -266,11 +229,11 @@ class _HomeState extends State<Home> {
                             Container(
                               padding: EdgeInsets.all(isSmall ? 5 : 10),
                               decoration: BoxDecoration(
-                                color: Colors.white.withAlpha(38),
+                                color: Colors.white.withValues(alpha: 0.15),
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withAlpha(51),
+                                    color: Colors.black.withValues(alpha: 0.2),
                                     blurRadius: 6,
                                     offset: const Offset(0, 3),
                                   ),
@@ -290,7 +253,7 @@ class _HomeState extends State<Home> {
                                 fontWeight: FontWeight.w600,
                                 shadows: [
                                   Shadow(
-                                    color: Colors.black.withAlpha(77),
+                                    color: Colors.black.withValues(alpha: 0.3),
                                     blurRadius: 3,
                                     offset: const Offset(0, 1),
                                   ),
@@ -338,7 +301,7 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-                  isSmall: isSmall,
+
                   readOnly: true,
                   hint: translate(context, "Search", "Telusuri", "搜索"),
                   leading: Icons.search,
@@ -397,6 +360,12 @@ class _HomeState extends State<Home> {
                                       onSubmit: () {
                                         userProvider.setUp2Fac();
                                         Navigator.pop(context);
+                                        activityProvider.addActivity(
+                                          user,
+                                          ActivityItem(
+                                            activityType: ActivityType.verify,
+                                          ),
+                                        );
                                       },
                                     ),
                               ),
@@ -416,101 +385,157 @@ class _HomeState extends State<Home> {
                 ],
 
                 // FREQUENT SPOTS
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    translate(
-                      context,
-                      "Frequent Spots",
-                      "Spot Favorit",
-                      "常见景点",
-                    ),
-                    style: TextStyle(
-                      fontSize: isSmall ? 24 : 30,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFF1F1E5B),
-                      shadows: [
-                        Shadow(
-                          offset: Offset(4, 4),
-                          blurRadius: 6.0,
-                          color: Color.fromRGBO(0, 0, 0, 0.247),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  height: isSmall ? 160 : 260,
-                  child: PageView.builder(
-                    controller: _controller,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: spots.length,
-                    onPageChanged: (index) {
-                      setState(() {
-                        _currentIndex = index;
-                      });
-                    },
-                    itemBuilder: (context, index) {
-                      return Center(child: HistoryCarausel(spots[index]));
-                    },
-                  ),
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: _prevSpot,
-                      icon: Icon(
-                        Icons.arrow_circle_left,
-                        size: isSmall ? 40 : 50,
-                        color: Color(0xFF1F1E5B),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          currentSpot.name,
+                ...frequent != null
+                    ? [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          translate(
+                            context,
+                            "Frequent Spots",
+                            "Spot Favorit",
+                            "常见景点",
+                          ),
                           style: TextStyle(
-                            fontSize: isSmall ? 16 : 24,
+                            fontSize: isSmall ? 24 : 30,
                             fontWeight: FontWeight.w500,
+                            color: const Color(0xFF1F1E5B),
+                            shadows: [
+                              Shadow(
+                                offset: Offset(4, 4),
+                                blurRadius: 6.0,
+                                color: Color.fromRGBO(0, 0, 0, 0.247),
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          "${formatCurrency(nominal: spots[_currentIndex].price)} / ${translate(context, "Hour", "Jam", "小时")}",
-                          style: TextStyle(fontSize: isSmall ? 14 : 18),
-                        ),
-                        SizedBox(height: isSmall ? 6 : 10),
-                        ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF1F1E5B),
-                            foregroundColor: Colors.white,
-                          ),
-                          child: Text(
-                            translate(
-                              context,
-                              "Get Parking Now",
-                              "Parkir Sekarang",
-                              "立即停车",
-                            ),
-                            style: TextStyle(fontSize: isSmall ? 14 : 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: _nextSpot,
-                      icon: Icon(
-                        Icons.arrow_circle_right,
-                        size: isSmall ? 40 : 50,
-                        color: Color(0xFF1F1E5B),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
+
+                      SizedBox(
+                        height: isSmall ? 160 : 260,
+                        child: PageView.builder(
+                          controller: _controller,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: frequent.length,
+                          onPageChanged: (index) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                          itemBuilder: (context, index) {
+                            return Center(
+                              child: HistoryCarausel(currentSpot!.image),
+                            );
+                          },
+                        ),
+                      ),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            onPressed: prevSpot,
+                            icon: Icon(
+                              Icons.arrow_circle_left,
+                              size: isSmall ? 40 : 50,
+                              color: Color(0xFF1F1E5B),
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                currentSpot!.name,
+                                style: TextStyle(
+                                  fontSize: isSmall ? 16 : 24,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "${formatCurrency(nominal: currentSpot.hourlyPrice)} / ${translate(context, "Hour", "Jam", "小时")}",
+                                style: TextStyle(fontSize: isSmall ? 14 : 18),
+                              ),
+                              SizedBox(height: isSmall ? 6 : 10),
+                              ElevatedButton(
+                                onPressed:
+                                    () => Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                SearchDetail(mall: currentSpot),
+                                      ),
+                                    ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF1F1E5B),
+                                  foregroundColor: Colors.white,
+                                ),
+                                child: Text(
+                                  translate(
+                                    context,
+                                    "Get Parking Now",
+                                    "Parkir Sekarang",
+                                    "立即停车",
+                                  ),
+                                  style: TextStyle(fontSize: isSmall ? 14 : 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: nextSpot,
+                            icon: Icon(
+                              Icons.arrow_circle_right,
+                              size: isSmall ? 40 : 50,
+                              color: Color(0xFF1F1E5B),
+                            ),
+                          ),
+                        ],
+                      ),
+                      user.twoFactor ? SizedBox.shrink() : SizedBox(height: 10),
+                    ]
+                    : [
+                      Transform.translate(
+                        offset: Offset(
+                          0,
+                          user.twoFactor
+                              ? isSmall
+                                  ? 0
+                                  : 30
+                              : isSmall
+                              ? -15
+                              : -20,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Transform.translate(
+                              offset: Offset(0, 10),
+                              child: Opacity(
+                                opacity: 0.5,
+                                child: Image.asset(
+                                  'assets/images/empty/empty_history.png',
+                                  width: isSmall ? 240 : 300,
+                                  height: isSmall ? 240 : 300,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              translate(
+                                context,
+                                "No parking history yet!",
+                                "Belum ada riwayat parkir!",
+                                "暂无停车记录！",
+                              ),
+                              style: TextStyle(
+                                color: Color(0xFFD3D3D3),
+                                fontWeight: FontWeight.w700,
+                                fontSize: isSmall ? 20 : 25,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
               ],
             ),
           ),
@@ -521,8 +546,8 @@ class _HomeState extends State<Home> {
 }
 
 class HistoryCarausel extends StatelessWidget {
-  const HistoryCarausel(this.step, {super.key});
-  final ParkingSpot step;
+  const HistoryCarausel(this.image, {super.key});
+  final String image;
 
   @override
   Widget build(BuildContext context) {
@@ -537,7 +562,7 @@ class HistoryCarausel extends StatelessWidget {
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
-          child: Image.asset(step.imageUrl, fit: BoxFit.cover),
+          child: Image.asset(image, fit: BoxFit.cover),
         ),
       ),
     );

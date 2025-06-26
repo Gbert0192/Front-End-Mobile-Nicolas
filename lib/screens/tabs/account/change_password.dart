@@ -99,7 +99,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                     ResponsiveTextInput(
-                      isSmall: isSmall,
+                      isLoading: form.isLoading,
                       controller: form.control("oldPassword"),
                       hint: 'Enter Current password',
                       label: 'Current Password',
@@ -115,7 +115,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                     ResponsiveTextInput(
-                      isSmall: isSmall,
+                      isLoading: form.isLoading,
                       controller: form.control("newPassword"),
                       hint: 'Enter New password',
                       label: 'New Password',
@@ -131,7 +131,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     SizedBox(height: isSmall ? 10 : 20),
                     ResponsiveTextInput(
-                      isSmall: isSmall,
                       controller: form.control("confPassword"),
                       hint: 'Enter Confirm Password',
                       label: 'Confirm Password',
@@ -149,7 +148,7 @@ class _ChangePasswordState extends State<ChangePassword> {
 
                     ResponsiveButton(
                       backgroundColor: const Color(0xFF1F1E5B),
-                      isSmall: isSmall,
+
                       isLoading: form.isLoading,
                       onPressed: () {
                         bool isValid = false;

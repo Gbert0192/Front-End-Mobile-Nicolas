@@ -173,15 +173,13 @@ class _BookingState extends State<Booking> {
                           Divider(indent: 5),
                           ReceiptText(
                             left: translate(context, 'Total', 'Total', ''),
-                            right: 'totalProce',
+                            right: 'totalPrice',
                           ),
                         ],
                       ),
                     ),
                     SizedBox(height: 70),
                     ResponsiveButton(
-                      isSmall: isSmall,
-
                       text: translate(
                         context,
                         'View Parking Area',
