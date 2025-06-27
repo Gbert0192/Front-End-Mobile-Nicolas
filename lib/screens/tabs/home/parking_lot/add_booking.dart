@@ -11,7 +11,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_bookin
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_slot.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_splash.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_booking/booking_time.dart';
-import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class AddBooking extends StatefulWidget {
@@ -46,8 +46,8 @@ class _AddBookingState extends State<AddBooking> {
   Widget build(BuildContext context) {
     final lotProvider = Provider.of<ParkingLotProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
-    final historyProvider = Provider.of<HistoryProvider>(context);
     User user = userProvider.currentUser!;
+    final historyProvider = Provider.of<HistoryProvider>(context);
     final activityProvider = Provider.of<ActivityProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -104,9 +104,8 @@ class _AddBookingState extends State<AddBooking> {
           backgroundColor: Colors.white,
           color: const Color(0xFF1F1E5B),
           onRefresh: () async {
-            Future.delayed(const Duration(seconds: 2), () {
-              lotProvider.getAvailableSpot(widget.mall);
-            });
+            await Future.delayed(const Duration(seconds: 2));
+            lotProvider.getAvailableSpot(widget.mall);
           },
           child: CustomScrollView(
             slivers: [
@@ -124,6 +123,9 @@ class _AddBookingState extends State<AddBooking> {
                             if (currentPage == 0) {
                               Navigator.pop(context);
                             } else {
+                              if (isLoading) {
+                                return;
+                              }
                               _controller.previousPage(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeInOut,

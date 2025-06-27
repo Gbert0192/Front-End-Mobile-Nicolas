@@ -38,14 +38,13 @@ class _HistoryListState extends State<HistoryList> {
           backgroundColor: Colors.white,
           color: const Color(0xFF1F1E5B),
           onRefresh: () async {
-            Future.delayed(const Duration(seconds: 2), () {
-              setState(() {
-                historyList =
-                    (isBooking
-                        ? historyProvider.getBooking(user)
-                        : historyProvider.getParking(user)) ??
-                    [];
-              });
+            await Future.delayed(const Duration(seconds: 2));
+            setState(() {
+              historyList =
+                  (isBooking
+                      ? historyProvider.getBooking(user)
+                      : historyProvider.getParking(user)) ??
+                  [];
             });
           },
           child: CustomScrollView(

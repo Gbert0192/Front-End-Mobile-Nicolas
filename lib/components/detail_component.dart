@@ -24,7 +24,7 @@ class DetailRow extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 120, maxWidth: 150),
+            constraints: const BoxConstraints(minWidth: 100, maxWidth: 150),
             child: Text(
               label,
               style: TextStyle(

@@ -303,241 +303,283 @@ class _HomeState extends State<Home> {
                       ),
                     );
                   },
-
                   readOnly: true,
                   hint: translate(context, "Search", "Telusuri", "搜索"),
                   leading: Icons.search,
                 ),
-                SizedBox(height: isSmall ? 10 : 20),
 
-                if (!user.twoFactor) ...[
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.blueAccent),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.info_outline,
-                          color: Colors.blueAccent,
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            translate(
-                              context,
-                              "For account security, enable Two-Factor Authentication (2FA).",
-                              'Untuk keamanan akun, aktifkan Two-Factor Authentication (2FA).',
-                              "为了帐户安全，请启用双因素身份验证 (2FA)。",
-                            ),
-                            style: TextStyle(
-                              color: Colors.blue[900],
-                              fontSize: isSmall ? 13 : null,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            otpProvider.email = user.email;
-                            otpProvider.generateOTP();
-                            showFlexibleSnackbar(
-                              context,
-                              "Your OTP is ${otpProvider.OTP}",
-                            );
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => VerifyAccount(
-                                      successMessage: translate(
-                                        context,
-                                        '2FA Now Set Up!',
-                                        '2FA Terpasang!',
-                                        '2FA 现已设置!',
+                RefreshIndicator(
+                  backgroundColor: Colors.white,
+                  color: const Color(0xFF1F1E5B),
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 2));
+                  },
+                  child: CustomScrollView(
+                    shrinkWrap: true,
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            SizedBox(height: isSmall ? 10 : 20),
+                            if (!user.twoFactor) ...[
+                              Container(
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: Colors.blue[50],
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.blueAccent),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.info_outline,
+                                      color: Colors.blueAccent,
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        translate(
+                                          context,
+                                          "For account security, enable Two-Factor Authentication (2FA).",
+                                          'Untuk keamanan akun, aktifkan Two-Factor Authentication (2FA).',
+                                          "为了帐户安全，请启用双因素身份验证 (2FA)。",
+                                        ),
+                                        style: TextStyle(
+                                          color: Colors.blue[900],
+                                          fontSize: isSmall ? 13 : null,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                      onSubmit: () {
-                                        userProvider.setUp2Fac();
-                                        Navigator.pop(context);
-                                        activityProvider.addActivity(
-                                          user,
-                                          ActivityItem(
-                                            activityType: ActivityType.verify,
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        otpProvider.email = user.email;
+                                        otpProvider.generateOTP();
+                                        showFlexibleSnackbar(
+                                          context,
+                                          "Your OTP is ${otpProvider.OTP}",
+                                        );
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => VerifyAccount(
+                                                  successMessage: translate(
+                                                    context,
+                                                    '2FA Now Set Up!',
+                                                    '2FA Terpasang!',
+                                                    '2FA 现已设置!',
+                                                  ),
+                                                  onSubmit: () {
+                                                    userProvider.setUp2Fac();
+                                                    Navigator.pop(context);
+                                                    activityProvider
+                                                        .addActivity(
+                                                          user,
+                                                          ActivityItem(
+                                                            activityType:
+                                                                ActivityType
+                                                                    .verify,
+                                                          ),
+                                                        );
+                                                  },
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.blueAccent,
+                                      ),
+                                      child: Text(
+                                        translate(
+                                          context,
+                                          "Set Up",
+                                          "Aktifkan",
+                                          "设置",
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: isSmall ? 10 : 20),
+                            ],
+
+                            // FREQUENT SPOTS
+                            ...frequent != null
+                                ? [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      translate(
+                                        context,
+                                        "Frequent Spots",
+                                        "Spot Favorit",
+                                        "常见景点",
+                                      ),
+                                      style: TextStyle(
+                                        fontSize: isSmall ? 24 : 30,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color(0xFF1F1E5B),
+                                        shadows: [
+                                          Shadow(
+                                            offset: Offset(4, 4),
+                                            blurRadius: 6.0,
+                                            color: Color.fromRGBO(
+                                              0,
+                                              0,
+                                              0,
+                                              0.247,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(
+                                    height: isSmall ? 160 : 260,
+                                    child: PageView.builder(
+                                      controller: _controller,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: frequent.length,
+                                      onPageChanged: (index) {
+                                        setState(() {
+                                          _currentIndex = index;
+                                        });
+                                      },
+                                      itemBuilder: (context, index) {
+                                        return Center(
+                                          child: HistoryCarausel(
+                                            currentSpot!.image,
                                           ),
                                         );
                                       },
                                     ),
-                              ),
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.blueAccent,
-                          ),
-                          child: Text(
-                            translate(context, "Set Up", "Aktifkan", "设置"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: isSmall ? 10 : 20),
-                ],
-
-                // FREQUENT SPOTS
-                ...frequent != null
-                    ? [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          translate(
-                            context,
-                            "Frequent Spots",
-                            "Spot Favorit",
-                            "常见景点",
-                          ),
-                          style: TextStyle(
-                            fontSize: isSmall ? 24 : 30,
-                            fontWeight: FontWeight.w500,
-                            color: const Color(0xFF1F1E5B),
-                            shadows: [
-                              Shadow(
-                                offset: Offset(4, 4),
-                                blurRadius: 6.0,
-                                color: Color.fromRGBO(0, 0, 0, 0.247),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: isSmall ? 160 : 260,
-                        child: PageView.builder(
-                          controller: _controller,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: frequent.length,
-                          onPageChanged: (index) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          },
-                          itemBuilder: (context, index) {
-                            return Center(
-                              child: HistoryCarausel(currentSpot!.image),
-                            );
-                          },
-                        ),
-                      ),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            onPressed: prevSpot,
-                            icon: Icon(
-                              Icons.arrow_circle_left,
-                              size: isSmall ? 40 : 50,
-                              color: Color(0xFF1F1E5B),
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                currentSpot!.name,
-                                style: TextStyle(
-                                  fontSize: isSmall ? 16 : 24,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                "${formatCurrency(nominal: currentSpot.hourlyPrice)} / ${translate(context, "Hour", "Jam", "小时")}",
-                                style: TextStyle(fontSize: isSmall ? 14 : 18),
-                              ),
-                              SizedBox(height: isSmall ? 6 : 10),
-                              ElevatedButton(
-                                onPressed:
-                                    () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) =>
-                                                SearchDetail(mall: currentSpot),
-                                      ),
-                                    ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF1F1E5B),
-                                  foregroundColor: Colors.white,
-                                ),
-                                child: Text(
-                                  translate(
-                                    context,
-                                    "Get Parking Now",
-                                    "Parkir Sekarang",
-                                    "立即停车",
                                   ),
-                                  style: TextStyle(fontSize: isSmall ? 14 : 16),
-                                ),
-                              ),
-                            ],
-                          ),
-                          IconButton(
-                            onPressed: nextSpot,
-                            icon: Icon(
-                              Icons.arrow_circle_right,
-                              size: isSmall ? 40 : 50,
-                              color: Color(0xFF1F1E5B),
-                            ),
-                          ),
-                        ],
-                      ),
-                      user.twoFactor ? SizedBox.shrink() : SizedBox(height: 10),
-                    ]
-                    : [
-                      Transform.translate(
-                        offset: Offset(
-                          0,
-                          user.twoFactor
-                              ? isSmall
-                                  ? 0
-                                  : 30
-                              : isSmall
-                              ? -15
-                              : -20,
-                        ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Transform.translate(
-                              offset: Offset(0, 10),
-                              child: Opacity(
-                                opacity: 0.5,
-                                child: Image.asset(
-                                  'assets/images/empty/empty_history.png',
-                                  width: isSmall ? 240 : 300,
-                                  height: isSmall ? 240 : 300,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              translate(
-                                context,
-                                "No parking history yet!",
-                                "Belum ada riwayat parkir!",
-                                "暂无停车记录！",
-                              ),
-                              style: TextStyle(
-                                color: Color(0xFFD3D3D3),
-                                fontWeight: FontWeight.w700,
-                                fontSize: isSmall ? 20 : 25,
-                              ),
-                            ),
+
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        onPressed: prevSpot,
+                                        icon: Icon(
+                                          Icons.arrow_circle_left,
+                                          size: isSmall ? 40 : 50,
+                                          color: Color(0xFF1F1E5B),
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            currentSpot!.name,
+                                            style: TextStyle(
+                                              fontSize: isSmall ? 16 : 24,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            "${formatCurrency(nominal: currentSpot.hourlyPrice)} / ${translate(context, "Hour", "Jam", "小时")}",
+                                            style: TextStyle(
+                                              fontSize: isSmall ? 14 : 18,
+                                            ),
+                                          ),
+                                          SizedBox(height: isSmall ? 6 : 10),
+                                          ElevatedButton(
+                                            onPressed:
+                                                () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder:
+                                                        (context) =>
+                                                            SearchDetail(
+                                                              mall: currentSpot,
+                                                            ),
+                                                  ),
+                                                ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: const Color(
+                                                0xFF1F1E5B,
+                                              ),
+                                              foregroundColor: Colors.white,
+                                            ),
+                                            child: Text(
+                                              translate(
+                                                context,
+                                                "Get Parking Now",
+                                                "Parkir Sekarang",
+                                                "立即停车",
+                                              ),
+                                              style: TextStyle(
+                                                fontSize: isSmall ? 14 : 16,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        onPressed: nextSpot,
+                                        icon: Icon(
+                                          Icons.arrow_circle_right,
+                                          size: isSmall ? 40 : 50,
+                                          color: Color(0xFF1F1E5B),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  user.twoFactor
+                                      ? SizedBox.shrink()
+                                      : SizedBox(height: 10),
+                                ]
+                                : [
+                                  Transform.translate(
+                                    offset: Offset(
+                                      0,
+                                      user.twoFactor
+                                          ? isSmall
+                                              ? 0
+                                              : 30
+                                          : isSmall
+                                          ? -15
+                                          : -20,
+                                    ),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Transform.translate(
+                                          offset: Offset(0, 10),
+                                          child: Opacity(
+                                            opacity: 0.5,
+                                            child: Image.asset(
+                                              'assets/images/empty/empty_history.png',
+                                              width: isSmall ? 240 : 300,
+                                              height: isSmall ? 240 : 300,
+                                            ),
+                                          ),
+                                        ),
+                                        Text(
+                                          translate(
+                                            context,
+                                            "No parking history yet!",
+                                            "Belum ada riwayat parkir!",
+                                            "暂无停车记录！",
+                                          ),
+                                          style: TextStyle(
+                                            color: Color(0xFFD3D3D3),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: isSmall ? 20 : 25,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                           ],
                         ),
                       ),
                     ],
+                  ),
+                ),
               ],
             ),
           ),

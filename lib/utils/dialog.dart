@@ -293,24 +293,10 @@ void showAlertDialog({
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
           ),
-          titlePadding: EdgeInsets.fromLTRB(
-            isSmall ? 24 : 20,
-            24,
-            isSmall ? 24 : 20,
-            8,
-          ),
-          contentPadding: EdgeInsets.fromLTRB(
-            isSmall ? 24 : 20,
-            0,
-            isSmall ? 24 : 20,
-            16,
-          ),
-          actionsPadding: EdgeInsets.fromLTRB(
-            isSmall ? 16 : 14,
-            8,
-            isSmall ? 16 : 14,
-            16,
-          ),
+          insetPadding: EdgeInsets.all(20),
+          titlePadding: EdgeInsets.fromLTRB(20, 24, 20, 8),
+          contentPadding: EdgeInsets.fromLTRB(20, 0, 20, 16),
+          actionsPadding: EdgeInsets.fromLTRB(14, 8, 14, 16),
           title: Row(
             children: [
               if (icon != null) ...[

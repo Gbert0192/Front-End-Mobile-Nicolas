@@ -9,7 +9,7 @@ import 'package:tugas_front_end_nicolas/components/phone_input.dart';
 import 'package:tugas_front_end_nicolas/components/text_input.dart';
 import 'package:tugas_front_end_nicolas/components/time_picker.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/utils/useform.dart';
@@ -98,6 +98,9 @@ class _EditProfileState extends State<EditProfile> {
                               (widget.user.birthDate ?? "") ||
                           form.control("gender").text !=
                               (widget.user.gender ?? "");
+                      if (form.isLoading) {
+                        return;
+                      }
                       if (hasChanged) {
                         showConfirmDialog(
                           context: context,

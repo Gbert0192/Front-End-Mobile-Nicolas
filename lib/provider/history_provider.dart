@@ -47,7 +47,7 @@ class HistoryProvider with ChangeNotifier {
     } else {
       histories.add(History(user, [parking], []));
     }
-    loadHistoriesFromPrefs();
+    saveHistoriesToPrefs();
     notifyListeners();
   }
 
@@ -71,29 +71,32 @@ class HistoryProvider with ChangeNotifier {
     } else {
       histories.add(History(user, [], [booking]));
     }
-    loadHistoriesFromPrefs();
+    saveHistoriesToPrefs();
     notifyListeners();
   }
 
   List<Parking>? getParking(User user) {
+    chackAllStatus(user);
     return histories.firstWhereOrNull((item) => item.user == user)?.parkings;
   }
 
   List<Parking>? getBooking(User user) {
+    chackAllStatus(user);
     return histories.firstWhereOrNull((item) => item.user == user)?.bookings;
   }
 
   List<ParkingLot>? getFrequentLots(User user) {
-    return histories
-        .firstWhereOrNull((item) => item.user == user)
-        ?.getFrequentLots()
-        .take(5)
-        .toList();
+    chackAllStatus(user);
+    final frequent =
+        histories
+            .firstWhereOrNull((item) => item.user == user)
+            ?.getFrequentLots();
+    return (frequent ?? []).isNotEmpty ? frequent!.take(5).toList() : null;
   }
 
   void chackAllStatus(User user) {
     histories.firstWhereOrNull((item) => item.user == user)?.checkAllStatus();
-    loadHistoriesFromPrefs();
+    saveHistoriesToPrefs();
     notifyListeners();
   }
 }

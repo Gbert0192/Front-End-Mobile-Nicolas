@@ -104,6 +104,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
                   elevation: 2,
                   child: ElevatedButton(
                     onPressed: () {
+                      if (isLoading) {
+                        return;
+                      }
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(

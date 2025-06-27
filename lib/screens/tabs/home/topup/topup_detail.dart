@@ -8,7 +8,7 @@ import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
-import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
@@ -148,6 +148,9 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
                 elevation: 2,
                 child: ElevatedButton(
                   onPressed: () {
+                    if (_isProcessing) {
+                      return;
+                    }
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(

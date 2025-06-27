@@ -41,11 +41,15 @@ class History {
     final Map<ParkingLot, int> counts = {};
 
     for (final p in parkings) {
-      counts[p.lot] = (counts[p.lot] ?? 0) + 1;
+      if (p.status == HistoryStatus.exited) {
+        counts[p.lot] = (counts[p.lot] ?? 0) + 1;
+      }
     }
 
     for (final b in bookings) {
-      counts[b.lot] = (counts[b.lot] ?? 0) + 1;
+      if (b.status == HistoryStatus.exited) {
+        counts[b.lot] = (counts[b.lot] ?? 0) + 1;
+      }
     }
 
     final entries =
