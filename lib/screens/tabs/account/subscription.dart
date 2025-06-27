@@ -69,6 +69,9 @@ class _SubscriptionState extends State<Subscription> {
                       if (currentPage == 0) {
                         Navigator.pop(context);
                       } else {
+                        if (isLoading) {
+                          return;
+                        }
                         _controller.previousPage(
                           duration: Duration(milliseconds: 300),
                           curve: Curves.easeInOut,

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -78,13 +80,14 @@ final iv = enc.IV.fromLength(16);
 String encryptQR(String plainText) {
   final encrypter = enc.Encrypter(enc.AES(key));
   final encrypted = encrypter.encrypt(plainText, iv: iv);
-  return encrypted.base64;
+  return base64UrlEncode(encrypted.bytes);
 }
 
-String decryptQR(String encryptedBase64) {
+String decryptQR(String encryptedBase64Url) {
   final encrypter = enc.Encrypter(enc.AES(key));
-  final decrypted = encrypter.decrypt64(encryptedBase64, iv: iv);
-  return decrypted;
+  final encryptedBytes = base64Url.decode(encryptedBase64Url);
+  final encrypted = enc.Encrypted(encryptedBytes);
+  return encrypter.decrypt(encrypted, iv: iv);
 }
 
 String formatDateTimeLabel(BuildContext context, DateTime dateTime) {

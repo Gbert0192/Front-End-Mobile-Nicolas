@@ -15,7 +15,7 @@ class _BookingSplashState extends State<BookingSplash> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
-    Future.delayed(const Duration(seconds: 3000), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(

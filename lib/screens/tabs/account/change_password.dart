@@ -58,6 +58,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                   elevation: 2,
                   child: ElevatedButton(
                     onPressed: () {
+                      if (form.isLoading) {
+                        return;
+                      }
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(

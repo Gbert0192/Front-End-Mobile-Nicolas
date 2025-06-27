@@ -54,6 +54,9 @@ class _ResetPasswordState extends State<ResetPassword> {
                   elevation: 2,
                   child: ElevatedButton(
                     onPressed: () {
+                      if (form.isLoading) {
+                        return;
+                      }
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(

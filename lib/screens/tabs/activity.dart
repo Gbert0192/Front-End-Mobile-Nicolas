@@ -114,10 +114,9 @@ class _ActivityState extends State<Activity> {
           backgroundColor: Colors.white,
           color: const Color(0xFF1F1E5B),
           onRefresh: () async {
-            Future.delayed(const Duration(seconds: 2), () {
-              setState(() {
-                activities = activityProvider.getActivity(user);
-              });
+            await Future.delayed(const Duration(seconds: 2));
+            setState(() {
+              activities = activityProvider.getActivity(user);
             });
           },
           child: CustomScrollView(

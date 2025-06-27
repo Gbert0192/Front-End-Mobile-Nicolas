@@ -63,7 +63,12 @@ class _SearchState extends State<Search> {
                 child: Row(
                   children: [
                     IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        if (isLoading) {
+                          return;
+                        }
+                        Navigator.pop(context);
+                      },
                       icon: Icon(Icons.arrow_back_ios, size: isSmall ? 25 : 30),
                     ),
                     Text(
@@ -110,17 +115,24 @@ class _SearchState extends State<Search> {
               ),
 
               Expanded(
-                child:
-                    isLoading
-                        ? _buildLoadingState(context)
-                        : isSubmited
-                        ? _buildSearchResults(malls, context)
-                        : _buildSearchHistory(
-                          history,
-                          lotProvider,
-                          user,
-                          context,
-                        ),
+                child: RefreshIndicator(
+                  backgroundColor: Colors.white,
+                  color: const Color(0xFF1F1E5B),
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 2));
+                  },
+                  child:
+                      isLoading
+                          ? _buildLoadingState(context)
+                          : isSubmited
+                          ? _buildSearchResults(malls, context)
+                          : _buildSearchHistory(
+                            history,
+                            lotProvider,
+                            user,
+                            context,
+                          ),
+                ),
               ),
             ],
           ),
@@ -172,6 +184,7 @@ class _SearchState extends State<Search> {
     if (malls.isEmpty) {
       return Center(
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -212,6 +225,7 @@ class _SearchState extends State<Search> {
     }
 
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
           SizedBox(height: 10),
@@ -365,6 +379,7 @@ class _SearchState extends State<Search> {
     if (history.isEmpty) {
       return Center(
         child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -408,6 +423,7 @@ class _SearchState extends State<Search> {
     }
 
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/voucher_provider.dart';
@@ -122,9 +121,9 @@ class VoucherCard extends StatelessWidget {
                     child: Text(
                       translate(
                         context,
-                        'Valid Until ${DateFormat.yMMMMd().format(voucher.validUntil)}',
-                        'Berlaku Hingga ${DateFormat.yMMMMd().format(voucher.validUntil)}',
-                        '有效期至${DateFormat.yMMMMd().format(voucher.validUntil)}',
+                        'Valid Until ${formatDate(voucher.validUntil)}',
+                        'Berlaku Hingga ${formatDate(voucher.validUntil)}',
+                        '有效期至${formatDate(voucher.validUntil)}',
                       ),
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
@@ -170,10 +169,9 @@ class _VoucherScreenState extends State<VoucherScreen> {
           backgroundColor: Colors.white,
           color: const Color(0xFF1F1E5B),
           onRefresh: () async {
-            Future.delayed(const Duration(seconds: 2), () {
-              setState(() {
-                voucherList = voucherProvider.getAvailableVoucher();
-              });
+            await Future.delayed(const Duration(seconds: 2));
+            setState(() {
+              voucherList = voucherProvider.getAvailableVoucher();
             });
           },
           child: CustomScrollView(
@@ -199,9 +197,47 @@ class _VoucherScreenState extends State<VoucherScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     children:
-                        voucherList
-                            .map((voucher) => VoucherCard(voucher: voucher))
-                            .toList(),
+                        voucherList.isNotEmpty
+                            ? voucherList
+                                .map((voucher) => VoucherCard(voucher: voucher))
+                                .toList()
+                            : [
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Transform.translate(
+                                        offset: const Offset(0, 10),
+                                        child: Image.asset(
+                                          'assets/images/empty/voucher_empty.png',
+                                          width: isSmall ? 240 : 320,
+                                          height: isSmall ? 240 : 320,
+                                        ),
+                                      ),
+                                      Transform.translate(
+                                        offset: const Offset(0, -5),
+                                        child: Text(
+                                          translate(
+                                            context,
+                                            'No Voucher Available!',
+                                            'Tidak Ada Voucher Tersedia!',
+                                            '无可用优惠券！',
+                                          ),
+                                          style: TextStyle(
+                                            color: const Color(0xFFD3D3D3),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: isSmall ? 20 : 25,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                   ),
                 ),
               ),

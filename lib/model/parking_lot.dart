@@ -128,7 +128,7 @@ class ParkingLot {
     return int.parse(label);
   }
 
-  String? occupyNearestSpot(User user) {
+  Slot? occupyNearestSpot(User user) {
     renderAllSlot();
 
     final aboveFloors = spots.where((f) => floorWeight(f.number) > 1).toList();
@@ -163,14 +163,14 @@ class ParkingLot {
         spot.date = DateTime.now();
         spot.user = user;
         spotCount -= 1;
-        return spot.code;
+        return Slot(spot.code, floor.number);
       }
     }
 
     return null;
   }
 
-  String? bookSpot(String floorNumber, String spotCode, User user) {
+  Slot? bookSpot(String floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.free) {
@@ -178,24 +178,24 @@ class ParkingLot {
       spot.date = DateTime.now();
       spot.user = user;
       spotCount -= 1;
-      return spot.code;
+      return Slot(spot.code, floor!.number);
     }
     return null;
   }
 
-  String? claimSpot(String floorNumber, String spotCode, User user) {
+  Slot? claimSpot(String floorNumber, String spotCode, User user) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.booked) {
       spot.status = SpotStatus.occupied;
       spot.date = DateTime.now();
       spot.user = user;
-      return spot.code;
+      return Slot(spot.code, floor!.number);
     }
     return null;
   }
 
-  bool freeSpot(String floorNumber, String spotCode) {
+  Slot? freeSpot(String floorNumber, String spotCode) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.occupied) {
@@ -203,9 +203,9 @@ class ParkingLot {
       spot.date = null;
       spot.user = null;
       spotCount += 1;
-      return true;
+      return Slot(spot.code, floor!.number);
     }
-    return false;
+    return null;
   }
 
   SpotStatus? checkSpotStatus(String floorNumber, String spotCode) {
@@ -321,4 +321,11 @@ class ParkingLot {
     image: json['image'],
     spots: (json['spots'] as List).map((e) => Floor.fromJson(e)).toList(),
   )..spotCount = json['spotCount'];
+}
+
+class Slot {
+  final String spot;
+  final String floor;
+
+  Slot(this.spot, this.floor);
 }

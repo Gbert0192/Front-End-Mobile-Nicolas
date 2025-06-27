@@ -50,6 +50,9 @@ class _SignUpState extends State<SignUp> {
                   elevation: 2,
                   child: ElevatedButton(
                     onPressed: () {
+                      if (form.isLoading) {
+                        return;
+                      }
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(

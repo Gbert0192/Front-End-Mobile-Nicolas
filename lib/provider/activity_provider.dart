@@ -55,6 +55,7 @@ class ActivityProvider with ChangeNotifier {
     } else {
       activities.add(UserActivity(user, [activity]));
     }
+    saveActivitiesToPrefs();
     notifyListeners();
   }
 

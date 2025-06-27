@@ -12,7 +12,7 @@ import 'package:tugas_front_end_nicolas/screens/tabs/account/edit_profile.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/faq.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/rate_dialog.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/account/subscription.dart';
-import 'package:tugas_front_end_nicolas/utils/alert_dialog.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';

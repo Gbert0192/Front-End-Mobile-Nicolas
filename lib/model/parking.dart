@@ -10,7 +10,7 @@ class Parking {
   final ParkingLot lot;
   DateTime? checkinTime;
   DateTime? checkoutTime;
-  final DateTime createdAt = DateTime.now();
+  DateTime createdAt;
   final String floor;
   final String code;
   HistoryStatus status = HistoryStatus.entered;
@@ -28,7 +28,8 @@ class Parking {
     required this.lot,
     required this.floor,
     required this.code,
-  });
+    DateTime? createdAt,
+  }) : createdAt = createdAt ?? DateTime.now();
 
   void exitParking(Voucher voucher) {
     isMember = user.checkStatusMember();
@@ -106,6 +107,7 @@ class Parking {
       lot: ParkingLot.fromJson(json['lot']),
       floor: json['floor'],
       code: json['code'],
+      createdAt: DateTime.parse(json['createdAt']),
     );
 
     parking.isMember = json['isMember'];

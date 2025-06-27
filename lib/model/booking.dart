@@ -108,6 +108,7 @@ class Booking extends Parking {
 
     booking.isMember = parking.isMember;
     booking.checkinTime = parking.checkinTime;
+    booking.createdAt = parking.createdAt;
     booking.checkoutTime = parking.checkoutTime;
     booking.status = parking.status;
     booking.hours = parking.hours;

@@ -86,7 +86,7 @@ class UserProvider with ChangeNotifier {
     userList.add(newUser);
     currentUser = newUser;
     await prefs.setString('currentEmail', email);
-    saveUsersToPrefs();
+    await saveUsersToPrefs();
     notifyListeners();
   }
 

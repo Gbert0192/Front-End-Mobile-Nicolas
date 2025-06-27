@@ -95,6 +95,8 @@ class ParkingLotProvider with ChangeNotifier {
 
     final filterLots =
         lots.where((item) {
+          getAvailableSpot(item);
+
           final nameMatch = item.name.toLowerCase().contains(keyword);
 
           final buildingTypeMatch =
@@ -133,56 +135,56 @@ class ParkingLotProvider with ChangeNotifier {
 
   List<Floor> getAvailableSpot(ParkingLot lot) {
     final index = lots.indexWhere((item) => item == lot);
-    final floor = lots[index].renderAllSlot();
-    saveSearchHistoriesToPrefs();
-    notifyListeners();
-    return floor;
-  }
-
-  String? occupyNearestSpot(ParkingLot lot, User user) {
-    final index = lots.indexWhere((item) => item == lot);
-    final floor = lots[index].occupyNearestSpot(user);
+    final floors = lots[index].renderAllSlot();
     saveParkingLotToPrefs();
     notifyListeners();
-    return floor;
+    return floors;
   }
 
-  String? bookSpot({
+  Slot? occupyNearestSpot(ParkingLot lot, User user) {
+    final index = lots.indexWhere((item) => item == lot);
+    final slot = lots[index].occupyNearestSpot(user);
+    saveParkingLotToPrefs();
+    notifyListeners();
+    return slot;
+  }
+
+  Slot? bookSpot({
     required ParkingLot lot,
     required User user,
     required String floorNumber,
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    final floor = lots[index].bookSpot(floorNumber, spotCode, user);
+    final slot = lots[index].bookSpot(floorNumber, spotCode, user);
     saveParkingLotToPrefs();
     notifyListeners();
-    return floor;
+    return slot;
   }
 
-  String? claimSpot({
+  Slot? claimSpot({
     required ParkingLot lot,
     required User user,
     required String floorNumber,
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    final floor = lots[index].claimSpot(floorNumber, spotCode, user);
+    final slot = lots[index].claimSpot(floorNumber, spotCode, user);
     saveParkingLotToPrefs();
     notifyListeners();
-    return floor;
+    return slot;
   }
 
-  bool freeSpot({
+  Slot? freeSpot({
     required ParkingLot lot,
     required String floorNumber,
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    final floor = lots[index].freeSpot(floorNumber, spotCode);
+    final slot = lots[index].freeSpot(floorNumber, spotCode);
     saveParkingLotToPrefs();
     notifyListeners();
-    return floor;
+    return slot;
   }
 
   SpotStatus? checkSpotStatus({
@@ -191,10 +193,10 @@ class ParkingLotProvider with ChangeNotifier {
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    final floor = lots[index].checkSpotStatus(floorNumber, spotCode);
+    final status = lots[index].checkSpotStatus(floorNumber, spotCode);
     saveSearchHistoriesToPrefs();
     notifyListeners();
-    return floor;
+    return status;
   }
 }
 

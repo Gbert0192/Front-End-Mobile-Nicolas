@@ -93,6 +93,9 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     alignment: Alignment.topLeft,
                     child: ElevatedButton(
                       onPressed: () {
+                        if (form.isLoading) {
+                          return;
+                        }
                         Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
