@@ -192,6 +192,7 @@ class _ProfileState extends State<Profile> {
                             children: [
                               Text(
                                 user.fullname,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: isSmall ? 18 : 20,
@@ -208,7 +209,8 @@ class _ProfileState extends State<Profile> {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                '+${user.dialCode}${user.phone}',
+                                formatPhone(user.dialCode, user.phone),
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: isSmall ? 16 : 18,
                                   fontWeight: FontWeight.w500,

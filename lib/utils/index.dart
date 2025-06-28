@@ -74,6 +74,20 @@ String formatDateTime(DateTime date) {
   return datePart;
 }
 
+String formatPhone(String code, String phone) {
+  String part1 = phone.length >= 4 ? phone.substring(0, 4) : phone;
+  String part2 =
+      phone.length >= 8
+          ? phone.substring(4, 8)
+          : (phone.length > 4 ? phone.substring(4) : '');
+  String part3 = phone.length > 8 ? phone.substring(8) : '';
+
+  final parts = [part1, part2, part3].where((p) => p.isNotEmpty).toList();
+  final formattedPhone = parts.join('-');
+
+  return '+$code $formattedPhone';
+}
+
 final key = enc.Key.fromUtf8('CYNVBEITS3E2VJYFAZEWSDEPKSF2V2TB');
 final iv = enc.IV.fromLength(16);
 

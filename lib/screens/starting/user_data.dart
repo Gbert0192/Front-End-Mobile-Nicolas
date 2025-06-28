@@ -202,9 +202,12 @@ class _UserDataState extends State<UserData> {
                         });
                         if (isValid) {
                           setState(() => form.isLoading = true);
+                          await Future.delayed(const Duration(seconds: 2));
                           User? user = userProvider.findUserByPhone(
                             form.control("phone").text,
+                            country_code,
                           );
+                          print(country_code);
                           if (user != null) {
                             showFlexibleSnackbar(
                               context,
@@ -214,7 +217,6 @@ class _UserDataState extends State<UserData> {
                             setState(() => form.isLoading = false);
                             return;
                           }
-                          await Future.delayed(const Duration(seconds: 2));
                           String? path;
                           try {
                             if (profileImg != null) {

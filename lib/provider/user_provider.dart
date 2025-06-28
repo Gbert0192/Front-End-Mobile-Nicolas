@@ -9,7 +9,7 @@ import '../model/user.dart';
 class UserProvider with ChangeNotifier {
   List<User> userList = [
     User(
-      email: "johndoer@gmail.com",
+      email: "john.doer@gmail.com",
       profilePic: null,
       fullname: "JOHN DOER",
       countryCode: "CN",
@@ -75,12 +75,12 @@ class UserProvider with ChangeNotifier {
             .firstWhereOrNull((item) => item.code == country_code)!
             .dialCode;
     final newUser = User(
-      email: email,
+      email: email.trim().toLowerCase(),
       profilePic: profile_pic,
       fullname: fullname,
       countryCode: country_code,
       dialCode: dialCode,
-      phone: phone,
+      phone: phone.trim(),
       password: password,
     );
     userList.add(newUser);
@@ -91,12 +91,16 @@ class UserProvider with ChangeNotifier {
   }
 
   User? findUserByEmail(String email) {
-    final user = userList.firstWhereOrNull((u) => u.email == email);
+    final user = userList.firstWhereOrNull(
+      (u) => u.email == email.trim().toLowerCase(),
+    );
     return user;
   }
 
-  User? findUserByPhone(String phone) {
-    final user = userList.firstWhereOrNull((u) => u.phone == phone);
+  User? findUserByPhone(String phone, String countryCode) {
+    final user = userList.firstWhereOrNull(
+      (u) => u.phone == phone.trim() && u.countryCode == countryCode,
+    );
     return user;
   }
 
@@ -153,11 +157,16 @@ class UserProvider with ChangeNotifier {
     String? gender,
     String? profilePic,
   }) {
+    final String dialCode =
+        countries
+            .firstWhereOrNull((item) => item.code == countryCode)!
+            .dialCode;
     currentUser?.editProfile(
       newFullname: fullname,
-      newEmail: email,
+      newEmail: email.toLowerCase(),
       newPhone: phone,
       newCountryCode: countryCode,
+      newDialCode: dialCode,
       newBirthDate: birthDate,
       newGender: gender,
       newProfilePic: profilePic,
