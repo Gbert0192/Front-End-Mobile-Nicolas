@@ -429,7 +429,6 @@ class ActivityCard extends StatelessWidget {
         horizontal: isSmall ? 15 : 20,
         vertical: isSmall ? 8 : 12,
       ),
-      padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white,
@@ -442,42 +441,52 @@ class ActivityCard extends StatelessWidget {
           ),
         ],
       ),
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        onTap: () {
-          if (activity.onPressed != null) {
-            activity.onPressed!(context);
-          }
-        },
-        leading: Image.asset(
-          _getActivityIcon(activity.activityType),
-          width: isSmall ? 35 : 50,
-        ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(
-                _cardTitle(context, activity.activityType),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15),
+          onTap: () {
+            activity.onPressed(context);
+          },
+          child: Padding(
+            padding: EdgeInsets.all(10),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Image.asset(
+                _getActivityIcon(activity.activityType),
+                width: isSmall ? 35 : 50,
+              ),
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _cardTitle(context, activity.activityType),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: isSmall ? 14 : 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    formatDateTimeLabel(context, activity.date),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: isSmall ? 10 : 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              subtitle: Text(
+                _cardDescription(context, activity.activityType),
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: isSmall ? 14 : 18,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  fontSize: isSmall ? 12 : 14,
                 ),
               ),
             ),
-            Text(
-              formatDateTimeLabel(context, activity.date),
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: isSmall ? 10 : 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-        subtitle: Text(
-          _cardDescription(context, activity.activityType),
-          style: TextStyle(color: Colors.grey, fontSize: isSmall ? 12 : 14),
+          ),
         ),
       ),
     );

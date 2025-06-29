@@ -4,8 +4,13 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/payment_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
@@ -26,6 +31,8 @@ class _EnterQRState extends State<EnterQR> {
     final lotProvider = Provider.of<ParkingLotProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     User user = userProvider.currentUser!;
+    final historyProvider = Provider.of<HistoryProvider>(context);
+    final activityProvider = Provider.of<ActivityProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     String generateUniqueId() {
@@ -119,11 +126,10 @@ class _EnterQRState extends State<EnterQR> {
                             await Future.delayed(
                               const Duration(milliseconds: 800),
                             );
-                            Slot? slot = Slot("A01", "1");
-                            // lotProvider.occupyNearestSpot(
-                            //   widget.mall,
-                            //   user,
-                            // );
+                            Slot? slot = lotProvider.occupyNearestSpot(
+                              widget.mall,
+                              user,
+                            );
                             if (slot != null) {
                               showAlertDialog(
                                 context: context,
@@ -131,7 +137,7 @@ class _EnterQRState extends State<EnterQR> {
                                 icon: Icons.check_circle_outline,
                                 color: Colors.lightGreen,
                                 content: Text(
-                                  "Please proceed to your assigned spot:\n${formatFloorLabel(slot.floor)} (${slot.spot}).",
+                                  "Please proceed to your assigned spot:\n${formatFloorLabel(slot.floor)} (${slot.code}).",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey.shade800,
@@ -139,7 +145,47 @@ class _EnterQRState extends State<EnterQR> {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  final parking = historyProvider.addParking(
+                                    user: user,
+                                    lot: widget.mall,
+                                    floor: slot.floor,
+                                    code: slot.code,
+                                  );
+                                  activityProvider.addActivity(
+                                    user,
+                                    ActivityItem(
+                                      activityType: ActivityType.enterLot,
+                                      mall: widget.mall.name,
+                                    ),
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              MainLayout(TabValue.parknbook),
+                                    ),
+                                  );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) =>
+                                              HistoryList(HistoryType.parking),
+                                    ),
+                                  );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => PaymentQr(
+                                            history: parking,
+                                            type: HistoryType.parking,
+                                          ),
+                                    ),
+                                  );
+                                },
                               );
                             } else {
                               showAlertDialog(
@@ -183,49 +229,27 @@ class _EnterQRState extends State<EnterQR> {
                         ),
                       ),
                       Text(
-                        'Unique ID: $uniqueId',
+                        'Lot-ID: $uniqueId',
                         style: TextStyle(color: Colors.grey, fontSize: 16),
                       ),
                       SizedBox(height: isSmall ? 10 : 30),
 
-                      Card(
-                        elevation: 4,
-                        shadowColor: const Color.fromRGBO(0, 0, 0, 1),
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(color: Color(0xFFBFBFBF)),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: isSmall ? 20 : 30,
+                      DetailCard(
+                        title: "Parking Details",
+                        listData: [
+                          DetailItem(
+                            label: "Parking Area",
+                            value: widget.mall.name,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: const Text(
-                                  'Parking Details',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              DetailRow(
-                                label: 'Parking Area',
-                                value: widget.mall.name,
-                              ),
-                              DetailRow(
-                                label: 'Address',
-                                value: widget.mall.address,
-                              ),
-                              DetailRow(
-                                label: 'Available Slots',
-                                value: widget.mall.getFreeCount().toString(),
-                              ),
-                            ],
+                          DetailItem(
+                            label: "Address",
+                            value: widget.mall.address,
                           ),
-                        ),
+                          DetailItem(
+                            label: "Available Slots",
+                            value: widget.mall.getFreeCount().toString(),
+                          ),
+                        ],
                       ),
                     ],
                   ),

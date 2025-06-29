@@ -324,8 +324,8 @@ class ParkingLot {
 }
 
 class Slot {
-  final String spot;
+  final String code;
   final String floor;
 
-  Slot(this.spot, this.floor);
+  Slot(this.code, this.floor);
 }

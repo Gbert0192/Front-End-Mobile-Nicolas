@@ -271,9 +271,12 @@ class _EditProfileState extends State<EditProfile> {
                           }
                           User? userPhone = userProvider.findUserByPhone(
                             form.control("phone").text,
+                            country_code,
                           );
                           if (userPhone != null &&
-                              form.control("phone").text != widget.user.phone) {
+                              !(form.control("phone").text ==
+                                      widget.user.phone &&
+                                  country_code == widget.user.countryCode)) {
                             showFlexibleSnackbar(
                               context,
                               "Phone Number already used!",

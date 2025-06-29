@@ -58,7 +58,7 @@ class ParkingHistory extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) =>
-                                        HistoryList(historyType.parking),
+                                        HistoryList(HistoryType.parking),
                               ),
                             );
                           },
@@ -122,7 +122,7 @@ class ParkingHistory extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) =>
-                                        HistoryList(historyType.booking),
+                                        HistoryList(HistoryType.booking),
                               ),
                             );
                           },

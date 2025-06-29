@@ -37,6 +37,26 @@ class History {
     bookings.insert(0, booking);
   }
 
+  HistoryActive getActive() {
+    final activeParking =
+        parkings.where((item) => item.status == HistoryStatus.entered).toList();
+    final activeBooking =
+        bookings.where((item) => item.status == HistoryStatus.entered).toList();
+    return HistoryActive(activeParking, activeBooking);
+  }
+
+  HistoryActive getUnresolved() {
+    final activeParking =
+        parkings
+            .where((item) => item.status == HistoryStatus.unresolved)
+            .toList();
+    final activeBooking =
+        bookings
+            .where((item) => item.status == HistoryStatus.unresolved)
+            .toList();
+    return HistoryActive(activeParking, activeBooking);
+  }
+
   List<ParkingLot> getFrequentLots() {
     final Map<ParkingLot, int> counts = {};
 
@@ -81,4 +101,10 @@ class History {
 
     return History(user, parkings, bookings);
   }
+}
+
+class HistoryActive {
+  final List<Parking> parkings;
+  final List<Booking> bookings;
+  HistoryActive(this.parkings, this.bookings);
 }

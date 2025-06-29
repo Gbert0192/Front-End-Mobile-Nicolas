@@ -62,6 +62,7 @@ class User {
     required String newEmail,
     required String newPhone,
     required String newCountryCode,
+    required String newDialCode,
     String? newBirthDate,
     String? newGender,
     String? newProfilePic,
@@ -70,6 +71,7 @@ class User {
     fullname = newFullname;
     phone = newPhone;
     countryCode = newCountryCode;
+    dialCode = newDialCode;
     birthDate = newBirthDate;
     gender = newGender;
     profilePic = newProfilePic;

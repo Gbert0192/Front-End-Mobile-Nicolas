@@ -6,14 +6,14 @@ import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class Parking {
   final User user;
-  bool? isMember;
   final ParkingLot lot;
+  bool? isMember;
   DateTime? checkinTime;
   DateTime? checkoutTime;
-  DateTime createdAt;
+  DateTime createdAt = DateTime.now();
   final String floor;
   final String code;
-  HistoryStatus status = HistoryStatus.entered;
+  HistoryStatus status;
 
   int? hours;
   double? amount;
@@ -28,22 +28,30 @@ class Parking {
     required this.lot,
     required this.floor,
     required this.code,
-    DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+    this.status = HistoryStatus.entered,
+  });
 
-  void exitParking(Voucher voucher) {
+  Parking exitParking(Voucher? voucher) {
     isMember = user.checkStatusMember();
     status = HistoryStatus.exited;
     hours = calculateHour();
     amount = lot.calculateAmount(hours!);
     tax = amount! * 0.11;
     service = isMember! ? 0 : 6500;
-    this.voucher = voucher.useVoucher(amount!, hours!);
+
+    if (voucher != null) {
+      this.voucher = voucher.useVoucher(amount!, hours!);
+    } else {
+      this.voucher = 0;
+    }
+
     total = amount! + tax! + service! - this.voucher!;
+    checkoutTime = DateTime.now();
+    return this;
   }
 
   HistoryStatus checkStatus() {
-    if (status == HistoryStatus.entered && calculateHour() > 20) {
+    if (status == HistoryStatus.entered && calculateHour() >= 20) {
       isMember = user.checkStatusMember();
       status = HistoryStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
@@ -56,17 +64,17 @@ class Parking {
     return status;
   }
 
-  double? resolveUnresolve() {
+  Parking? resolveUnresolve() {
     if (status == HistoryStatus.unresolved) {
       status = HistoryStatus.exited;
-      return total!;
+      return this;
     }
     return null;
   }
 
   int calculateHour() {
-    final duration = checkoutTime?.difference(checkinTime!);
-    final hours = duration!.inMinutes / 60;
+    final duration = DateTime.now().difference(checkinTime!);
+    final hours = duration.inMinutes / 60;
 
     return hours.ceil();
   }
@@ -81,7 +89,6 @@ class Parking {
       'status': historyStatusToString(status),
     };
 
-    if (isMember != null) data['isMember'] = isMember;
     if (checkinTime != null) {
       data['checkinTime'] = checkinTime!.toIso8601String();
     }
@@ -107,10 +114,9 @@ class Parking {
       lot: ParkingLot.fromJson(json['lot']),
       floor: json['floor'],
       code: json['code'],
-      createdAt: DateTime.parse(json['createdAt']),
     );
 
-    parking.isMember = json['isMember'];
+    parking.createdAt = DateTime.parse(json['createdAt']);
     parking.checkinTime =
         json['checkinTime'] != null
             ? DateTime.parse(json['checkinTime'])

@@ -7,6 +7,7 @@ import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class HistoryProvider with ChangeNotifier {
@@ -39,25 +40,35 @@ class HistoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addParking(User user, ParkingLot lot, String floor, String spot) {
+  Parking addParking({
+    required User user,
+    required ParkingLot lot,
+    required String floor,
+    required String code,
+  }) {
     final index = histories.indexWhere((v) => v.user == user);
-    final parking = Parking(user: user, lot: lot, floor: floor, code: spot);
+    final parking = Parking(user: user, lot: lot, floor: floor, code: code);
+    parking.checkinTime = DateTime.now();
     if (index != -1) {
-      histories[index].parkings.insert(0, parking);
+      histories[index].addParking(parking);
+      saveHistoriesToPrefs();
+      notifyListeners();
+      return histories[index].parkings[0];
     } else {
       histories.add(History(user, [parking], []));
+      saveHistoriesToPrefs();
+      notifyListeners();
+      return histories.last.parkings[0];
     }
-    saveHistoriesToPrefs();
-    notifyListeners();
   }
 
-  void addBooking(
-    User user,
-    ParkingLot lot,
-    String floor,
-    String spot,
-    DateTime time,
-  ) {
+  Booking addBooking({
+    required User user,
+    required ParkingLot lot,
+    required String floor,
+    required String spot,
+    required DateTime time,
+  }) {
     final index = histories.indexWhere((v) => v.user == user);
     final booking = Booking(
       user: user,
@@ -67,36 +78,124 @@ class HistoryProvider with ChangeNotifier {
       bookingTime: time,
     );
     if (index != -1) {
-      histories[index].bookings.insert(0, booking);
+      histories[index].addBooking(booking);
+      saveHistoriesToPrefs();
+      notifyListeners();
+      return histories[index].bookings[0];
     } else {
       histories.add(History(user, [], [booking]));
+      saveHistoriesToPrefs();
+      notifyListeners();
+      return histories.last.bookings[0];
     }
-    saveHistoriesToPrefs();
-    notifyListeners();
   }
 
   List<Parking>? getParking(User user) {
-    chackAllStatus(user);
+    checkAllStatus(user);
     return histories.firstWhereOrNull((item) => item.user == user)?.parkings;
   }
 
   List<Parking>? getBooking(User user) {
-    chackAllStatus(user);
+    checkAllStatus(user);
     return histories.firstWhereOrNull((item) => item.user == user)?.bookings;
   }
 
   List<ParkingLot>? getFrequentLots(User user) {
-    chackAllStatus(user);
+    checkAllStatus(user);
+
     final frequent =
         histories
             .firstWhereOrNull((item) => item.user == user)
             ?.getFrequentLots();
-    return (frequent ?? []).isNotEmpty ? frequent!.take(5).toList() : null;
+
+    if (frequent == null || frequent.isEmpty) {
+      return null;
+    }
+
+    return frequent.take(5).toList();
   }
 
-  void chackAllStatus(User user) {
+  void checkAllStatus(User user) {
     histories.firstWhereOrNull((item) => item.user == user)?.checkAllStatus();
     saveHistoriesToPrefs();
     notifyListeners();
+  }
+
+  HistoryStatus? checkStatus(User user, Parking history) {
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    if (userHistory == null) return null;
+
+    HistoryStatus? status;
+
+    status =
+        userHistory.bookings
+            .firstWhereOrNull((item) => item == history)
+            ?.checkStatus();
+
+    status ??=
+        userHistory.parkings
+            .firstWhereOrNull((item) => item == history)
+            ?.checkStatus();
+
+    saveHistoriesToPrefs();
+    notifyListeners();
+
+    return status;
+  }
+
+  Booking? claimBooking(User user, Booking history) {
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    if (userHistory == null) return null;
+
+    final booking =
+        userHistory.bookings
+            .firstWhereOrNull((item) => item == history)
+            ?.claimBooking();
+
+    saveHistoriesToPrefs();
+    notifyListeners();
+    return booking;
+  }
+
+  Parking? exitParking(User user, Parking history, Voucher? voucher) {
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    if (userHistory == null) return null;
+
+    Parking? booking;
+
+    booking = userHistory.bookings
+        .firstWhereOrNull((item) => item == history)
+        ?.exitParking(voucher);
+
+    booking ??= userHistory.parkings
+        .firstWhereOrNull((item) => item == history)
+        ?.exitParking(voucher);
+
+    saveHistoriesToPrefs();
+    notifyListeners();
+
+    return booking;
+  }
+
+  Parking? resolveUnresolve(User user, Parking history) {
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    if (userHistory == null) return null;
+
+    Parking? booking;
+
+    booking =
+        userHistory.bookings
+            .firstWhereOrNull((item) => item == history)
+            ?.resolveUnresolve();
+
+    booking ??=
+        userHistory.parkings
+            .firstWhereOrNull((item) => item == history)
+            ?.resolveUnresolve();
+
+    saveHistoriesToPrefs();
+    notifyListeners();
+
+    return booking;
   }
 }

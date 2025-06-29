@@ -10,7 +10,7 @@ void showConfirmDialog({
   String title = "Confirm",
   String subtitle = "Are you sure?",
   VoidCallback? onContinue,
-  bool barrierDismissible = true,
+  bool barrierDismissible = false,
   Color color = const Color(0xFF1F1E5B),
 }) {
   final size = MediaQuery.of(context).size;
@@ -278,7 +278,7 @@ void showAlertDialog({
   Color color = Colors.blueAccent,
   String buttonText = "OK",
   VoidCallback? onPressed,
-  bool barrierDismissible = true,
+  bool barrierDismissible = false,
 }) {
   final size = MediaQuery.of(context).size;
   final isSmall = size.height < 700;
