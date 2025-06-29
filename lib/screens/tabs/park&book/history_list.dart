@@ -6,11 +6,11 @@ import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 
-enum historyType { parking, booking }
+enum HistoryType { parking, booking }
 
 class HistoryList extends StatefulWidget {
   const HistoryList(this.type);
-  final historyType type;
+  final HistoryType type;
 
   @override
   State<HistoryList> createState() => _HistoryListState();
@@ -25,7 +25,7 @@ class _HistoryListState extends State<HistoryList> {
     User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
-    final isBooking = widget.type == historyType.booking;
+    final isBooking = widget.type == HistoryType.booking;
     List<Parking> historyList =
         (isBooking
             ? historyProvider.getBooking(user)
@@ -85,7 +85,6 @@ class _HistoryListState extends State<HistoryList> {
                             fontSize: isSmall ? 30 : 36,
                             fontWeight: FontWeight.w700,
                             color: Colors.black,
-                            fontFamily: 'Poppins',
                           ),
                         ),
                       ),
@@ -126,7 +125,9 @@ class _HistoryListState extends State<HistoryList> {
                         ),
                       )
                     else
-                      ...historyList.map((item) => HistoryCard(item)).toList(),
+                      ...historyList.map(
+                        (item) => HistoryCard(item, widget.type),
+                      ),
                   ],
                 ),
               ),

@@ -176,3 +176,56 @@ class DataCard extends StatelessWidget {
     );
   }
 }
+
+class DetailCard extends StatelessWidget {
+  final List<DetailItem>? listData;
+  final String? title;
+
+  const DetailCard({super.key, this.listData, this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    final double fontSize = isSmall ? 13 : 16;
+
+    return Card(
+      elevation: 4,
+      shadowColor: const Color.fromRGBO(0, 0, 0, 1),
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: Color(0xFFBFBFBF)),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: isSmall ? 15 : 30,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (title != null) ...[
+              Center(
+                child: Text(
+                  title!,
+                  style: TextStyle(fontSize: isSmall ? 18 : 20),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+            if (listData != null && listData!.isNotEmpty)
+              ...List.generate(listData!.length, (index) {
+                final item = listData![index];
+                return DetailRow(
+                  label: item.label,
+                  value: item.value!,
+                  fontSize: fontSize,
+                );
+              }),
+          ],
+        ),
+      ),
+    );
+  }
+}

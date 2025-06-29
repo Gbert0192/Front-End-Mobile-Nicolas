@@ -260,7 +260,7 @@ class _EditProfileState extends State<EditProfile> {
                             form.control("email").text,
                           );
                           if (userEmail != null &&
-                              userEmail.email != widget.user.email) {
+                              form.control("email").text != widget.user.email) {
                             showFlexibleSnackbar(
                               context,
                               "Email already used!",
@@ -274,8 +274,9 @@ class _EditProfileState extends State<EditProfile> {
                             country_code,
                           );
                           if (userPhone != null &&
-                              !(userPhone.phone == widget.user.phone ||
-                                  userPhone.countryCode == country_code)) {
+                              !(form.control("phone").text ==
+                                      widget.user.phone &&
+                                  country_code == widget.user.countryCode)) {
                             showFlexibleSnackbar(
                               context,
                               "Phone Number already used!",

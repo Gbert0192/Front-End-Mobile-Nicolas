@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 enum ActivityType {
   bookSuccess,
@@ -93,7 +94,6 @@ class ActivityItem {
   final String? mall;
   final String? method;
   final double? nominal;
-  final Function(BuildContext)? onPressed;
   final DateTime date;
 
   ActivityItem({
@@ -101,9 +101,60 @@ class ActivityItem {
     this.mall,
     this.method,
     this.nominal,
-    this.onPressed,
     DateTime? date,
   }) : date = date ?? DateTime.now();
+
+  void onPressed(BuildContext context) {
+    switch (activityType) {
+      case ActivityType.topUp:
+        showFlexibleSnackbar(
+          context,
+          "Top-up of ${formatCurrency(nominal: nominal!)} via $method",
+        );
+        break;
+
+      case ActivityType.paySuccess:
+        showFlexibleSnackbar(
+          context,
+          "Payment of ${formatCurrency(nominal: nominal!)} at $mall was successful",
+        );
+        break;
+
+      case ActivityType.bookSuccess:
+        showFlexibleSnackbar(context, "Successfully booked parking at $mall");
+        break;
+
+      case ActivityType.bookCancel:
+        showFlexibleSnackbar(context, "Parking booking at $mall was canceled");
+        break;
+
+      case ActivityType.bookExp:
+        showFlexibleSnackbar(context, "Parking booking at $mall has expired");
+        break;
+
+      case ActivityType.unresolved:
+        showFlexibleSnackbar(
+          context,
+          "Unresolved parking session detected at $mall",
+        );
+        break;
+
+      case ActivityType.exitLot:
+        showFlexibleSnackbar(context, "Exited the parking lot at $mall");
+        break;
+
+      case ActivityType.enterLot:
+        showFlexibleSnackbar(context, "Entered the parking lot at $mall");
+        break;
+
+      case ActivityType.verify:
+        showFlexibleSnackbar(
+          context,
+          "Two-factor authentication has been set up",
+        );
+        break;
+    }
+  }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{
@@ -114,7 +165,6 @@ class ActivityItem {
     if (mall != null) data['mall'] = mall;
     if (method != null) data['method'] = method;
     if (nominal != null) data['nominal'] = nominal;
-    // onPressed tidak disimpan
 
     return data;
   }
@@ -126,7 +176,6 @@ class ActivityItem {
       method: json['method'],
       nominal: (json['nominal'] as num?)?.toDouble(),
       date: json['date'] != null ? DateTime.parse(json['date']) : null,
-      // onPressed cannot be restored from JSON
     );
   }
 }

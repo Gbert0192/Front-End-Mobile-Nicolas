@@ -202,6 +202,7 @@ class _ProfileState extends State<Profile> {
                               const SizedBox(height: 4),
                               Text(
                                 user.email,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: isSmall ? 14 : 16,
                                   color: Colors.white.withValues(alpha: 0.8),

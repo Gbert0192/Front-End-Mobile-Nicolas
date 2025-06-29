@@ -70,7 +70,7 @@ String formatDate(DateTime date) {
 }
 
 String formatDateTime(DateTime date) {
-  final datePart = DateFormat('dd MMMM yyyy, hh:mm', 'id_ID').format(date);
+  final datePart = DateFormat('dd MMMM yyyy, HH:mm', 'en_US').format(date);
   return datePart;
 }
 

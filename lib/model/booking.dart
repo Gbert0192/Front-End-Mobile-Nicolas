@@ -13,21 +13,20 @@ class Booking extends Parking {
     required super.floor,
     required super.code,
     required this.bookingTime,
-  }) {
-    status = HistoryStatus.pending;
-  }
+    super.status = HistoryStatus.pending,
+  });
 
-  HistoryStatus claimBooking() {
+  Booking claimBooking() {
     final now = DateTime.now();
     final diffExpired = now.difference(bookingTime).inMinutes;
 
-    isMember = user.checkStatusMember();
-    final expiredThreshold = isMember! ? 45 : 30;
+    final isMember = user.checkStatusMember();
+    final expiredThreshold = isMember ? 45 : 30;
 
     if ((status == HistoryStatus.pending || status == HistoryStatus.fixed) &&
         diffExpired > expiredThreshold) {
       status = HistoryStatus.expired;
-      if (!isMember!) {
+      if (!isMember) {
         noshowFee = lot.maxTotalEarning() * 0.35;
       }
     } else {
@@ -35,7 +34,7 @@ class Booking extends Parking {
       checkinTime = DateTime.now();
     }
 
-    return status;
+    return this;
   }
 
   @override
@@ -58,7 +57,7 @@ class Booking extends Parking {
         diffFixed <= fixedThreshold &&
         diffFixed > 0) {
       status = HistoryStatus.fixed;
-    } else if (status == HistoryStatus.entered && calculateHour() > 20) {
+    } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
       super.checkStatus();
     }
 
@@ -69,8 +68,8 @@ class Booking extends Parking {
     final now = DateTime.now();
     final diff = bookingTime.difference(now).inMinutes;
 
-    isMember = user.checkStatusMember();
-    final canCancel = isMember! ? diff > 15 : diff > 30;
+    final isMember = user.checkStatusMember();
+    final canCancel = isMember ? diff > 15 : diff > 30;
 
     if (status == HistoryStatus.pending && canCancel) {
       status = HistoryStatus.cancel;
@@ -106,7 +105,6 @@ class Booking extends Parking {
       bookingTime: DateTime.parse(json['bookingTime']),
     );
 
-    booking.isMember = parking.isMember;
     booking.checkinTime = parking.checkinTime;
     booking.createdAt = parking.createdAt;
     booking.checkoutTime = parking.checkoutTime;

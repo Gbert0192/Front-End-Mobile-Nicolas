@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/payment_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class HistoryCard extends StatelessWidget {
   final Parking history;
+  final HistoryType type;
 
-  const HistoryCard(this.history);
+  const HistoryCard(this.history, this.type);
 
   String _getStatusText(HistoryStatus status) {
     switch (status) {
@@ -71,7 +74,7 @@ class HistoryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 12,
             offset: const Offset(0, 4),
             spreadRadius: 0,
@@ -85,14 +88,22 @@ class HistoryCard extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              // Add tap functionality here if needed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => PaymentQr(
+                        history: history,
+                        type: HistoryType.parking,
+                      ),
+                ),
+              );
             },
             borderRadius: BorderRadius.circular(16),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Image container with enhanced styling
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
