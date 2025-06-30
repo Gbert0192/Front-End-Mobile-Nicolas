@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class DetailRow extends StatelessWidget {
   final String label;
-  final String value;
-  final Color? valueColor;
+  final Object value;
   final FontWeight? fontWeight;
   final double? fontSize;
+  final Color? color;
 
   const DetailRow({
     Key? key,
+    this.color,
     required this.label,
     required this.value,
-    this.valueColor,
     this.fontWeight,
     this.fontSize,
   }) : super(key: key);
@@ -20,31 +20,42 @@ class DetailRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          ConstrainedBox(
-            constraints: const BoxConstraints(minWidth: 100, maxWidth: 150),
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: fontSize ?? 15,
-                color: Colors.grey,
-                fontWeight: fontWeight,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ConstrainedBox(
+                constraints: const BoxConstraints(minWidth: 100, maxWidth: 150),
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: fontSize ?? 15,
+                    color: color ?? Colors.grey,
+                    fontWeight: fontWeight,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                fontSize: fontSize ?? 15,
-                color: valueColor ?? Colors.black,
-                fontWeight: fontWeight,
-              ),
-              textAlign: TextAlign.end,
-              softWrap: true,
-            ),
+              value is String
+                  ? Expanded(
+                    child: Text(
+                      value as String,
+                      style: TextStyle(
+                        fontSize: fontSize ?? 15,
+                        color: color ?? Colors.black,
+                        fontWeight: fontWeight,
+                      ),
+                      textAlign: TextAlign.end,
+                      softWrap: true,
+                    ),
+                  )
+                  : Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: value as Widget,
+                    ),
+                  ),
+            ],
           ),
         ],
       ),
@@ -56,12 +67,19 @@ class DetailItem {
   final String label;
   final String? value;
   final Widget? child;
+  final Color? color;
+  final bool bottomBorder;
 
-  DetailItem({required this.label, this.value, this.child})
-    : assert(
-        value == null || child == null,
-        'Cannot provide both value and child.',
-      );
+  DetailItem({
+    required this.label,
+    this.value,
+    this.child,
+    this.color,
+    this.bottomBorder = false,
+  }) : assert(
+         value == null || child == null,
+         'Cannot provide both value and child.',
+       );
 }
 
 class DataCard extends StatelessWidget {
@@ -95,7 +113,10 @@ class DataCard extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: Card(
-            margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            margin: EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: title == null ? 0 : 8,
+            ),
             color: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
@@ -107,37 +128,21 @@ class DataCard extends StatelessWidget {
                 children: [
                   if (listData != null && listData!.isNotEmpty) ...[
                     ...List.generate(listData!.length * 2 - 1, (index) {
+                      final i = index ~/ 2;
+                      final item = listData![i];
                       if (index.isEven) {
-                        final i = index ~/ 2;
-                        final item = listData![i];
-
-                        if (item.value != null) {
-                          return DetailRow(
-                            label: item.label,
-                            value: item.value!,
-                            fontSize: fontSize,
-                            fontWeight: fontWeight,
-                          );
-                        } else if (item.child != null) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.label,
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: fontWeight,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              item.child!,
-                            ],
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
+                        return DetailRow(
+                          label: item.label,
+                          value: (item.value ?? item.child)!,
+                          fontSize: fontSize,
+                          fontWeight: fontWeight,
+                          color: item.color,
+                        );
                       } else {
-                        return const SizedBox(height: 10);
+                        if (item.bottomBorder) {
+                          return Divider(thickness: 2, height: 30);
+                        }
+                        return SizedBox(height: 10);
                       }
                     }),
                     if (listInput != null && listInput!.isNotEmpty)
@@ -200,7 +205,7 @@ class DetailCard extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: 16.0,
-          vertical: isSmall ? 15 : 30,
+          vertical: isSmall ? 15 : 20,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -219,7 +224,7 @@ class DetailCard extends StatelessWidget {
                 final item = listData![index];
                 return DetailRow(
                   label: item.label,
-                  value: item.value!,
+                  value: (item.value ?? item.child)!,
                   fontSize: fontSize,
                 );
               }),
@@ -228,4 +233,26 @@ class DetailCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class StrikeThroughPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+
+  StrikeThroughPainter({this.color = Colors.red, this.strokeWidth = 2});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint =
+        Paint()
+          ..color = color
+          ..strokeWidth = strokeWidth
+          ..style = PaintingStyle.stroke;
+
+    final y = size.height / 2;
+    canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

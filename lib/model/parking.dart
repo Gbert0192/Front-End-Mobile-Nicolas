@@ -5,6 +5,7 @@ import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class Parking {
+  final String id;
   final User user;
   final ParkingLot lot;
   bool? isMember;
@@ -24,6 +25,7 @@ class Parking {
   double? unresolvedFee = 0;
 
   Parking({
+    required this.id,
     required this.user,
     required this.lot,
     required this.floor,
@@ -81,6 +83,7 @@ class Parking {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{
+      'id': id,
       'user': user.toJson(),
       'lot': lot.toJson(),
       'floor': floor,
@@ -110,6 +113,7 @@ class Parking {
 
   factory Parking.fromJson(Map<String, dynamic> json) {
     final parking = Parking(
+      id: json["id"],
       user: User.fromJson(json['user']),
       lot: ParkingLot.fromJson(json['lot']),
       floor: json['floor'],

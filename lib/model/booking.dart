@@ -8,6 +8,7 @@ class Booking extends Parking {
   double? noshowFee = 0;
 
   Booking({
+    required super.id,
     required super.user,
     required super.lot,
     required super.floor,
@@ -98,6 +99,7 @@ class Booking extends Parking {
     final parking = Parking.fromJson(json);
 
     final booking = Booking(
+      id: parking.id,
       user: parking.user,
       lot: parking.lot,
       floor: parking.floor,

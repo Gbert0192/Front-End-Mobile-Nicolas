@@ -189,3 +189,69 @@ Future<void> deleteImage(String fileName) async {
     await file.delete();
   }
 }
+
+String generateUnique({DateTime? dateTime, bool includeTime = false}) {
+  final dt = dateTime ?? DateTime.now();
+
+  final year = (dt.year % 100).toString().padLeft(2, '0');
+  final month = dt.month.toString().padLeft(2, '0');
+  final day = dt.day.toString().padLeft(2, '0');
+
+  if (!includeTime) return '$year$month$day';
+
+  final hour = dt.hour.toString().padLeft(2, '0');
+  final minute = dt.minute.toString().padLeft(2, '0');
+
+  return '$year$month$day$hour$minute';
+}
+
+String getStatusText(HistoryStatus status) {
+  switch (status) {
+    case HistoryStatus.pending:
+    case HistoryStatus.fixed:
+      return "Booking Succeed";
+    case HistoryStatus.entered:
+    case HistoryStatus.unresolved:
+      return "Currently Parking";
+    case HistoryStatus.exited:
+      return "Parking Completed";
+    case HistoryStatus.cancel:
+      return "Booking Canceled";
+    case HistoryStatus.expired:
+      return "Booking Expired";
+  }
+}
+
+IconData getStatusIcon(HistoryStatus status) {
+  switch (status) {
+    case HistoryStatus.pending:
+    case HistoryStatus.fixed:
+      return Icons.check_circle_outline;
+    case HistoryStatus.entered:
+    case HistoryStatus.unresolved:
+      return Icons.local_parking_outlined;
+    case HistoryStatus.exited:
+      return Icons.exit_to_app;
+    case HistoryStatus.cancel:
+      return Icons.cancel_outlined;
+    case HistoryStatus.expired:
+      return Icons.schedule;
+  }
+}
+
+Color getStatusColor(HistoryStatus status) {
+  switch (status) {
+    case HistoryStatus.pending:
+    case HistoryStatus.fixed:
+      return const Color(0xFF4CAF50);
+    case HistoryStatus.entered:
+    case HistoryStatus.unresolved:
+      return const Color(0xFF2196F3);
+    case HistoryStatus.exited:
+      return const Color(0xFF9C27B0);
+    case HistoryStatus.cancel:
+      return const Color(0xFFF44336);
+    case HistoryStatus.expired:
+      return const Color(0xFFFF9800);
+  }
+}

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tugas_front_end_nicolas/components/detail_component.dart';
+import 'package:tugas_front_end_nicolas/components/history_card.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
@@ -19,13 +22,23 @@ class PaymentDetail extends StatefulWidget {
 }
 
 class _PaymentDetailState extends State<PaymentDetail> {
+  Voucher? voucher;
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final historyProvider = Provider.of<HistoryProvider>(context);
     User user = userProvider.currentUser!;
+    final isMember = user.checkStatusMember();
+    final isBooking = widget.type == HistoryType.booking;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
+    final hour = widget.history.calculateHour();
+    final amount = widget.history.lot.calculateAmount(hour);
+    final discount =
+        voucher != null ? voucher!.calculateDiscount(amount, hour) : 0;
+    final tax = amount * 0.11;
+    final service = isMember ? 0 : 6500;
 
     return Scaffold(
       backgroundColor: const Color(0xFFEFF1F8),
@@ -149,7 +162,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
-                                padding: EdgeInsets.all(isSmall ? 5 : 10),
+                                padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   color: Color(0xFF98A5FD),
                                   borderRadius: BorderRadius.circular(12),
@@ -192,7 +205,135 @@ class _PaymentDetailState extends State<PaymentDetail> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: isSmall ? 10 : 20),
+                  DataCard(
+                    listData: [
+                      DetailItem(
+                        label: "Parking Area",
+                        value: widget.history.lot.name,
+                      ),
+                      DetailItem(
+                        label: "Address",
+                        value: widget.history.lot.address,
+                      ),
+                      DetailItem(
+                        label: "${isBooking ? "Booked" : "Parking"} Spot",
+                        value:
+                            '${formatFloorLabel(widget.history.floor)} (${widget.history.code})',
+                      ),
+                      DetailItem(
+                        label: "Check-in Time",
+                        value: formatDateTime(widget.history.checkinTime!),
+                      ),
+                      DetailItem(
+                        label: "Current Duration",
+                        value: "hour ${hour == 1 ? 'hour' : 'hours'}",
+                      ),
+                      DetailItem(
+                        label: "Current Status",
+                        child: StatusDisplay(widget.history.status),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isSmall ? 10 : 20),
+                  DataCard(
+                    listInput: [
+                      DetailItem(
+                        label: "Voucher",
+                        child: VoucherDisplay(
+                          selectedVoucher: voucher,
+                          onVoucherSelect: (val) {
+                            setState(() {
+                              voucher = val;
+                            });
+                          },
+                          onVoucherRemove: () {
+                            setState(() {
+                              voucher = null;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: isSmall ? 10 : 20),
+                  DataCard(
+                    listData: [
+                      DetailItem(
+                        label: "Amount",
+                        value: formatCurrency(nominal: amount),
+                      ),
+                      if (voucher != null)
+                        DetailItem(
+                          label: "Voucher",
+                          value: formatCurrency(nominal: discount),
+                          color: Colors.red,
+                        ),
+                      DetailItem(
+                        label: "Taxes (11%)",
+                        value: formatCurrency(nominal: tax),
+                      ),
+                      DetailItem(
+                        label: "Service Fee",
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            if (isMember)
+                              Row(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.centerLeft,
+                                    children: [
+                                      Text(
+                                        formatCurrency(nominal: 6500),
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: isSmall ? 13 : 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Positioned.fill(
+                                        child: CustomPaint(
+                                          painter: StrikeThroughPainter(
+                                            color: Colors.red,
+                                            strokeWidth: 2.5,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Text(
+                                    formatCurrency(nominal: 0),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: isSmall ? 13 : 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            else
+                              Text(
+                                formatCurrency(nominal: 6500),
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: isSmall ? 13 : 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                          ],
+                        ),
+                        bottomBorder: true,
+                      ),
+                      DetailItem(
+                        label: "Total",
+                        value: formatCurrency(
+                          nominal: amount + tax + service - discount,
+                        ),
+                      ),
+                    ],
+                  ),
                 ]),
               ),
             ),
@@ -208,15 +349,93 @@ void showFullscreenDialog(BuildContext context, Widget child) {
     context: context,
     barrierDismissible: true,
     barrierLabel: "Dismiss",
-    barrierColor: Colors.black.withValues(alpha: 0.5), // Background gelap
+    barrierColor: Colors.black.withValues(alpha: 0.5),
     transitionDuration: Duration(milliseconds: 300),
     pageBuilder: (_, __, ___) => SafeArea(child: child),
     transitionBuilder: (_, animation, __, child) {
       final offsetAnimation = Tween<Offset>(
-        begin: Offset(0, 1), // Mulai dari bawah
+        begin: Offset(0, 1),
         end: Offset.zero,
       ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut));
       return SlideTransition(position: offsetAnimation, child: child);
     },
   );
+}
+
+class VoucherDisplay extends StatelessWidget {
+  const VoucherDisplay({
+    super.key,
+    required this.onVoucherSelect,
+    this.selectedVoucher,
+    this.onVoucherRemove,
+  });
+
+  final Function(Voucher) onVoucherSelect;
+  final Voucher? selectedVoucher;
+  final VoidCallback? onVoucherRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        if (selectedVoucher == null) {
+          // Buka dialog pilih voucher di sini
+          // Contoh pemanggilan:
+          // onVoucherSelect(Voucher(...));
+        }
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Image.asset("assets/images/others/voucher_plat.png"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                // Voucher name or placeholder
+                Expanded(
+                  child: Text(
+                    selectedVoucher?.voucherName ?? "Choose a voucher",
+                    style: TextStyle(
+                      color:
+                          selectedVoucher != null ? Colors.black : Colors.grey,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                // Action button
+                if (selectedVoucher == null)
+                  TextButton(
+                    onPressed: () {
+                      // Misal buka dialog pilih voucher
+                      // atau panggil callback
+                      // onVoucherSelect(...)
+                    },
+                    child: const Text(
+                      "Choose",
+                      style: TextStyle(
+                        color: Color(0xFF6487EE),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  )
+                else
+                  TextButton(
+                    onPressed: onVoucherRemove,
+                    child: const Text(
+                      "Remove",
+                      style: TextStyle(
+                        color: Color(0xFF6487EE),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tugas_front_end_nicolas/components/bookingParking.dart';
+import 'package:tugas_front_end_nicolas/components/history_card.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
