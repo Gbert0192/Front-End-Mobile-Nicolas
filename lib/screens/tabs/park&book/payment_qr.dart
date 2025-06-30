@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
+import 'package:tugas_front_end_nicolas/components/history_card.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
@@ -36,10 +37,6 @@ class _PaymentQrState extends State<PaymentQr> {
     final isBooking = widget.type == HistoryType.booking;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
-
-    final formattedTime =
-        '${widget.history.checkinTime!.year % 100}${widget.history.checkinTime!.month.toString().padLeft(2, '0')}${widget.history.checkinTime!.day.toString().padLeft(2, '0')}';
-    final String uniqueId = "PAY${widget.history.lot.prefix}-$formattedTime";
 
     void payUp() {
       final history = historyProvider.exitParking(
@@ -139,7 +136,7 @@ class _PaymentQrState extends State<PaymentQr> {
                             borderRadius: BorderRadius.circular(16),
                           ),
                           child: QrImageView(
-                            data: encryptQR(uniqueId),
+                            data: encryptQR(widget.history.id),
                             version: QrVersions.auto,
                             size: isSmall ? 190 : 220,
                             embeddedImage: const AssetImage(
@@ -152,7 +149,7 @@ class _PaymentQrState extends State<PaymentQr> {
                         ),
                       ),
                       Text(
-                        'Payment-ID: $uniqueId',
+                        'Payment-ID: ${widget.history.id}',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: isSmall ? 14 : 16,
@@ -191,6 +188,10 @@ class _PaymentQrState extends State<PaymentQr> {
                             label: "Current Duration",
                             value:
                                 "${widget.history.calculateHour()} ${widget.history.calculateHour() == 1 ? 'hour' : 'hours'}",
+                          ),
+                          DetailItem(
+                            label: "Current Status",
+                            child: StatusDisplay(widget.history.status),
                           ),
                         ],
                       ),

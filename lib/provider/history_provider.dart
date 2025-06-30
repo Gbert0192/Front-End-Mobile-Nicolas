@@ -47,7 +47,14 @@ class HistoryProvider with ChangeNotifier {
     required String code,
   }) {
     final index = histories.indexWhere((v) => v.user == user);
-    final parking = Parking(user: user, lot: lot, floor: floor, code: code);
+    final parking = Parking(
+      id:
+          "PARK-${lot.prefix}-${index == -1 ? 1 : histories[index].bookings.length + 1}${generateUnique()}",
+      user: user,
+      lot: lot,
+      floor: floor,
+      code: code,
+    );
     parking.checkinTime = DateTime.now();
     if (index != -1) {
       histories[index].addParking(parking);
@@ -71,6 +78,8 @@ class HistoryProvider with ChangeNotifier {
   }) {
     final index = histories.indexWhere((v) => v.user == user);
     final booking = Booking(
+      id:
+          "BOOK-${lot.prefix}-${index == -1 ? 1 : histories[index].bookings.length + 1}${generateUnique()}",
       user: user,
       lot: lot,
       floor: floor,

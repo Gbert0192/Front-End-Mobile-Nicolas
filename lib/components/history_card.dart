@@ -11,57 +11,6 @@ class HistoryCard extends StatelessWidget {
 
   const HistoryCard(this.history, this.type);
 
-  String _getStatusText(HistoryStatus status) {
-    switch (status) {
-      case HistoryStatus.pending:
-      case HistoryStatus.fixed:
-        return "Booking Succeed";
-      case HistoryStatus.entered:
-      case HistoryStatus.unresolved:
-        return "Currently Parking";
-      case HistoryStatus.exited:
-        return "Parking Completed";
-      case HistoryStatus.cancel:
-        return "Booking Canceled";
-      case HistoryStatus.expired:
-        return "Booking Expired";
-    }
-  }
-
-  IconData _getStatusIcon(HistoryStatus status) {
-    switch (status) {
-      case HistoryStatus.pending:
-      case HistoryStatus.fixed:
-        return Icons.check_circle_outline;
-      case HistoryStatus.entered:
-      case HistoryStatus.unresolved:
-        return Icons.local_parking_outlined;
-      case HistoryStatus.exited:
-        return Icons.exit_to_app;
-      case HistoryStatus.cancel:
-        return Icons.cancel_outlined;
-      case HistoryStatus.expired:
-        return Icons.schedule;
-    }
-  }
-
-  Color _getStatusColor(HistoryStatus status) {
-    switch (status) {
-      case HistoryStatus.pending:
-      case HistoryStatus.fixed:
-        return const Color(0xFF4CAF50);
-      case HistoryStatus.entered:
-      case HistoryStatus.unresolved:
-        return const Color(0xFF2196F3);
-      case HistoryStatus.exited:
-        return const Color(0xFF9C27B0);
-      case HistoryStatus.cancel:
-        return const Color(0xFFF44336);
-      case HistoryStatus.expired:
-        return const Color(0xFFFF9800);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -182,39 +131,10 @@ class HistoryCard extends StatelessWidget {
                           ),
                         ),
 
+                        const SizedBox(height: 6),
+
                         // Status with icon (bottom)
-                        Container(
-                          margin: EdgeInsets.only(top: 6),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getStatusColor(
-                              history.status,
-                            ).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                _getStatusIcon(history.status),
-                                color: _getStatusColor(history.status),
-                                size: 16,
-                              ),
-                              const SizedBox(width: 6),
-                              Text(
-                                _getStatusText(history.status),
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: _getStatusColor(history.status),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        StatusDisplay(history.status),
                       ],
                     ),
                   ),
@@ -223,6 +143,39 @@ class HistoryCard extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class StatusDisplay extends StatelessWidget {
+  const StatusDisplay(this.status);
+  final HistoryStatus status;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: getStatusColor(status).withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(getStatusIcon(status), color: getStatusColor(status), size: 16),
+          const SizedBox(width: 6),
+          Text(
+            getStatusText(status),
+            style: TextStyle(
+              fontSize: isSmall ? 12 : 14,
+              color: getStatusColor(status),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -38,7 +38,7 @@ class Voucher {
     this.maxUse,
   });
 
-  double useVoucher(double total, int hours) {
+  double calculateDiscount(double total, int hours) {
     if (DateTime.now().isAfter(validUntil)) return 0;
     if (minHour != null && hours < minHour!) return 0;
     if (maxUse != null && maxUse! <= 0) return 0;
@@ -56,7 +56,11 @@ class Voucher {
         break;
     }
 
-    discount = discount > total ? total : discount;
+    return discount > total ? total : discount;
+  }
+
+  double useVoucher(double total, int hours) {
+    final discount = calculateDiscount(total, hours);
 
     if (maxUse != null) {
       maxUse = maxUse! - 1;

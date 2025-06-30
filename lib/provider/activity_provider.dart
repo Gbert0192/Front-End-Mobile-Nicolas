@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
@@ -94,6 +96,7 @@ class ActivityItem {
   final String? mall;
   final String? method;
   final double? nominal;
+  final String? historyId;
   final DateTime date;
 
   ActivityItem({
@@ -101,10 +104,13 @@ class ActivityItem {
     this.mall,
     this.method,
     this.nominal,
+    this.historyId,
     DateTime? date,
   }) : date = date ?? DateTime.now();
 
   void onPressed(BuildContext context) {
+    final historyProvider = Provider.of<HistoryProvider>(context);
+
     switch (activityType) {
       case ActivityType.topUp:
         showFlexibleSnackbar(

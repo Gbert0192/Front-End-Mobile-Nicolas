@@ -35,14 +35,9 @@ class _EnterQRState extends State<EnterQR> {
     final activityProvider = Provider.of<ActivityProvider>(context);
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
-    String generateUniqueId() {
-      final now = DateTime.now();
-      final formattedTime =
-          '${now.year % 100}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}';
-      return '${widget.mall.prefix}-$formattedTime';
-    }
 
-    final String uniqueId = generateUniqueId();
+    final String uniqueId =
+        '${widget.mall.prefix}-${generateUnique(includeTime: true)}';
 
     return Scaffold(
       body: SafeArea(
