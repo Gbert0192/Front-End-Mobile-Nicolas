@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class DetailRow extends StatelessWidget {
   final String label;
@@ -69,12 +70,14 @@ class DetailItem {
   final Widget? child;
   final Color? color;
   final bool bottomBorder;
+  final FontWeight? fontWeight;
 
   DetailItem({
     required this.label,
     this.value,
     this.child,
     this.color,
+    this.fontWeight,
     this.bottomBorder = false,
   }) : assert(
          value == null || child == null,
@@ -160,7 +163,7 @@ class DataCard extends StatelessWidget {
                               item.label,
                               style: TextStyle(
                                 fontSize: fontSize,
-                                fontWeight: fontWeight,
+                                fontWeight: (item.fontWeight ?? fontWeight),
                               ),
                             ),
                             const SizedBox(height: 4),
@@ -226,6 +229,8 @@ class DetailCard extends StatelessWidget {
                   label: item.label,
                   value: (item.value ?? item.child)!,
                   fontSize: fontSize,
+                  color: item.color,
+                  fontWeight: item.fontWeight,
                 );
               }),
           ],
@@ -255,4 +260,50 @@ class StrikeThroughPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class DiscountDisplay extends StatelessWidget {
+  const DiscountDisplay(this.originalPrice, this.dicsountPrice);
+  final double originalPrice;
+  final double dicsountPrice;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isSmall = size.height < 700;
+    return Row(
+      children: [
+        Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Text(
+              formatCurrency(nominal: originalPrice),
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: isSmall ? 13 : 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Positioned.fill(
+              child: CustomPaint(
+                painter: StrikeThroughPainter(
+                  color: Colors.red,
+                  strokeWidth: 2.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(width: 6),
+        Text(
+          formatCurrency(nominal: dicsountPrice),
+          style: TextStyle(
+            color: Colors.red,
+            fontSize: isSmall ? 13 : 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
 }

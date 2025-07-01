@@ -193,6 +193,12 @@ class _PaymentQrState extends State<PaymentQr> {
                             label: "Current Status",
                             child: StatusDisplay(widget.history.status),
                           ),
+                          if (voucher != null)
+                            DetailItem(
+                              label: "Current Status",
+                              value:
+                                  "${voucher!.voucherName} (${voucher!.type == VoucherFlag.flat ? formatCurrency(nominal: voucher!.nominal as double) : "${voucher!.nominal!.toInt()}%"})",
+                            ),
                         ],
                       ),
                       SizedBox(height: isSmall ? 15 : 30),
@@ -201,7 +207,6 @@ class _PaymentQrState extends State<PaymentQr> {
                           Expanded(
                             child: ResponsiveButton(
                               isLoading: isLoading,
-                              fontWeight: FontWeight.w500,
                               onPressed: () {},
                               backgroundColor: Color(0xFF7573EE),
                               text: "Pay Now",
@@ -211,18 +216,25 @@ class _PaymentQrState extends State<PaymentQr> {
                           Expanded(
                             child: ResponsiveButton(
                               isLoading: isLoading,
-                              onPressed:
-                                  () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => PaymentDetail(
-                                            widget.history,
-                                            widget.type,
-                                          ),
-                                    ),
+                              onPressed: () async {
+                                final result = await Navigator.push<Voucher?>(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => PaymentDetail(
+                                          history: widget.history,
+                                          type: widget.type,
+                                          selectVoucher: voucher,
+                                        ),
                                   ),
-                              fontWeight: FontWeight.w500,
+                                );
+
+                                if (mounted) {
+                                  setState(() {
+                                    voucher = result;
+                                  });
+                                }
+                              },
                               text: "Price Detail",
                             ),
                           ),
