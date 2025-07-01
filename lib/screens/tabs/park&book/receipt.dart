@@ -138,14 +138,14 @@ class _ReceiptState extends State<Receipt> {
         label: translate(context, 'Cancel Date', 'Tanggal Pembatalan', '取消日期'),
         value:
             widget.parking.checkinTime != null
-                ? formatDateTime(widget.parking.checkinTime!)
+                ? formatDate(widget.parking.cancelTime!)
                 : '-',
       ),
       DetailItem(
         label: translate(context, 'Cancel Hour', 'Waktu Pembatalan', '取消时间'),
         value:
             widget.parking.checkinTime != null
-                ? formatDateTime(widget.parking.checkinTime!)
+                ? formatTime(widget.parking.cancelTime!)
                 : '-',
       ),
     ];
@@ -183,7 +183,8 @@ class _ReceiptState extends State<Receipt> {
                       const SizedBox(height: 5),
                       DataCard(listData: cancelDetail),
                       const SizedBox(height: 20),
-                    ] else if (widget.parking.status == '')
+                    ] else if (widget.parking.status ==
+                        HistoryStatus.unresolved)
                       ...[
 
                     ] else if (widget.parking.status == HistoryStatus.exited) ...[
