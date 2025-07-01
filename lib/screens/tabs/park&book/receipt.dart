@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
+import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 
@@ -69,32 +70,83 @@ class _ReceiptState extends State<Receipt> {
 
     final List<DetailItem> prices = [
       DetailItem(
-        label: "Amount",
+        label: translate(context, 'Amount', 'Jumlah', '金额'),
         value: formatCurrency(
           nominal: widget.parking.amount ?? 0,
           decimalPlace: 0,
         ),
       ),
       DetailItem(
-        label: "Taxes (11%)",
+        label: translate(context, 'Taxes (11%)', 'Pajak (11%)', '税费 (11%)'),
         value: formatCurrency(
           nominal: widget.parking.tax ?? 0,
           decimalPlace: 0,
         ),
       ),
       DetailItem(
-        label: "Service Fee",
+        label: translate(context, 'Service Fee', 'Biaya Layanan', '服务费'),
         value: formatCurrency(
           nominal: widget.parking.service ?? 0,
           decimalPlace: 0,
         ),
       ),
       DetailItem(
-        label: "Total",
+        label: translate(context, 'Total', 'Total', '总计'),
         value: formatCurrency(
           nominal: widget.parking.total ?? 0,
           decimalPlace: 0,
         ),
+      ),
+    ];
+
+    final List<DetailItem> cancelInfo = [
+      DetailItem(
+        label: translate(context, 'Parking Area', 'Area Parkir', '停车场'),
+        value: widget.parking.lot.name,
+      ),
+      DetailItem(
+        label: translate(context, 'Address', 'Alamat', '地址'),
+        value: widget.parking.lot.address,
+      ),
+      DetailItem(
+        label: translate(context, 'Booking Spot', 'Pesan Tempat', '预订车位'),
+        value: "${formatFloorLabel(parts[0])} (${parts[1]})",
+      ),
+      DetailItem(
+        label: translate(context, 'Check-in Time', 'Waktu Masuk', '签到时间'),
+        value:
+            widget.parking.checkoutTime != null
+                ? formatDateTime(widget.parking.checkoutTime!)
+                : '-',
+      ),
+
+      DetailItem(
+        label: translate(context, 'Check-out Time', 'Waktu Keluar', '签出时间'),
+        value:
+            widget.parking.checkinTime != null
+                ? formatDateTime(widget.parking.checkinTime!)
+                : '-',
+      ),
+    ];
+
+    final List<DetailItem> cancelDetail = [
+      DetailItem(
+        label: translate(context, 'Booking Status', 'Status Pemesanan', '预订状态'),
+        value: widget.parking.status.toString(),
+      ),
+      DetailItem(
+        label: translate(context, 'Cancel Date', 'Tanggal Pembatalan', '取消日期'),
+        value:
+            widget.parking.checkinTime != null
+                ? formatDateTime(widget.parking.checkinTime!)
+                : '-',
+      ),
+      DetailItem(
+        label: translate(context, 'Cancel Hour', 'Waktu Pembatalan', '取消时间'),
+        value:
+            widget.parking.checkinTime != null
+                ? formatDateTime(widget.parking.checkinTime!)
+                : '-',
       ),
     ];
 
@@ -126,16 +178,28 @@ class _ReceiptState extends State<Receipt> {
                 ),
                 child: Column(
                   children: [
-                    DataCard(listData: bookInfo),
-                    const SizedBox(height: 5),
-                    DataCard(listData: prices),
-                    const SizedBox(height: 20),
+                    if (widget.parking.status == HistoryStatus.cancel) ...[
+                      DataCard(listData: cancelInfo),
+                      const SizedBox(height: 5),
+                      DataCard(listData: cancelDetail),
+                      const SizedBox(height: 20),
+                    ] else if (widget.parking.status == '')
+                      ...[
+
+                    ] else if (widget.parking.status == HistoryStatus.exited) ...[
+                      DataCard(listData: bookInfo),
+                      const SizedBox(height: 5),
+                      DataCard(listData: prices),
+                      const SizedBox(height: 20),
+                    ],
+
+                    // button
                     ResponsiveButton(
                       text: translate(
                         context,
                         'View Parking Area',
                         'Lihat Area Parkir',
-                        '',
+                        '查看停车场',
                       ),
                     ),
                   ],
