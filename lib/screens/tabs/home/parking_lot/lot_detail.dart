@@ -46,7 +46,7 @@ class SearchDetail extends StatelessWidget {
                             size: isSmall ? 25 : 30,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        SizedBox(width: isSmall ? 0 : 8),
                         Text(
                           translate(
                             context,

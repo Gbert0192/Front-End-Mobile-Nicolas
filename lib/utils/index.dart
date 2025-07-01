@@ -208,11 +208,13 @@ String generateUnique({DateTime? dateTime, bool includeTime = false}) {
 String getStatusText(HistoryStatus status) {
   switch (status) {
     case HistoryStatus.pending:
-    case HistoryStatus.fixed:
       return "Booking Succeed";
+    case HistoryStatus.fixed:
+      return "Booking Confirmed"; // Tidak bisa dicancel lagi
     case HistoryStatus.entered:
-    case HistoryStatus.unresolved:
       return "Currently Parking";
+    case HistoryStatus.unresolved:
+      return "Parking Overtime"; // Parking lebih dari waktu yang ditentukan
     case HistoryStatus.exited:
       return "Parking Completed";
     case HistoryStatus.cancel:
@@ -225,11 +227,13 @@ String getStatusText(HistoryStatus status) {
 IconData getStatusIcon(HistoryStatus status) {
   switch (status) {
     case HistoryStatus.pending:
-    case HistoryStatus.fixed:
       return Icons.check_circle_outline;
+    case HistoryStatus.fixed:
+      return Icons.lock_outline;
     case HistoryStatus.entered:
-    case HistoryStatus.unresolved:
       return Icons.local_parking_outlined;
+    case HistoryStatus.unresolved:
+      return Icons.warning_outlined; // Icon warning untuk overtime
     case HistoryStatus.exited:
       return Icons.exit_to_app;
     case HistoryStatus.cancel:
@@ -242,11 +246,13 @@ IconData getStatusIcon(HistoryStatus status) {
 Color getStatusColor(HistoryStatus status) {
   switch (status) {
     case HistoryStatus.pending:
-    case HistoryStatus.fixed:
       return const Color(0xFF4CAF50);
+    case HistoryStatus.fixed:
+      return const Color(0xFF607D8B);
     case HistoryStatus.entered:
-    case HistoryStatus.unresolved:
       return const Color(0xFF2196F3);
+    case HistoryStatus.unresolved:
+      return const Color(0xFFFF5722);
     case HistoryStatus.exited:
       return const Color(0xFF9C27B0);
     case HistoryStatus.cancel:
