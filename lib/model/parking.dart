@@ -11,6 +11,7 @@ class Parking {
   bool? isMember;
   DateTime? checkinTime;
   DateTime? checkoutTime;
+  DateTime? cancelTime;
   DateTime createdAt = DateTime.now();
   final String floor;
   final String code;
@@ -98,6 +99,9 @@ class Parking {
     if (checkoutTime != null) {
       data['checkoutTime'] = checkoutTime!.toIso8601String();
     }
+    if (cancelTime != null) {
+      data['cancelTime'] = cancelTime!.toIso8601String();
+    }
     if (hours != null) data['hours'] = hours;
     if (amount != null) data['amount'] = amount;
     if (tax != null) data['tax'] = tax;
@@ -129,6 +133,8 @@ class Parking {
         json['checkoutTime'] != null
             ? DateTime.parse(json['checkoutTime'])
             : null;
+    parking.cancelTime =
+        json['cancelTime'] != null ? DateTime.parse(json['cancelTime']) : null;
     parking.status = historyStatusFromString(json['status']);
     parking.hours = json['hours'];
     parking.amount = (json['amount'] as num?)?.toDouble();
