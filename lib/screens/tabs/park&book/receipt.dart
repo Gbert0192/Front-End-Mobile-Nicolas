@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
@@ -113,18 +114,18 @@ class _ReceiptState extends State<Receipt> {
         value: "${formatFloorLabel(parts[0])} (${parts[1]})",
       ),
       DetailItem(
-        label: translate(context, 'Check-in Time', 'Waktu Masuk', '签到时间'),
+        label: translate(context, 'Booking Time', 'Waktu Pemesanan', '预订时间'),
         value:
-            widget.parking.checkoutTime != null
-                ? formatDateTime(widget.parking.checkoutTime!)
+            widget.parking.checkinTime != null
+                ? formatDateTime(widget.parking.checkinTime!)
                 : '-',
       ),
 
       DetailItem(
-        label: translate(context, 'Check-out Time', 'Waktu Keluar', '签出时间'),
+        label: translate(context, 'Expired Time', 'Waktu Kedaluwarsa', '过期时间'),
         value:
-            widget.parking.checkinTime != null
-                ? formatDateTime(widget.parking.checkinTime!)
+            widget.parking.checkoutTime != null
+                ? formatDateTime(widget.parking.checkoutTime!)
                 : '-',
       ),
     ];
@@ -147,6 +148,27 @@ class _ReceiptState extends State<Receipt> {
             widget.parking.checkinTime != null
                 ? formatTime(widget.parking.cancelTime!)
                 : '-',
+      ),
+    ];
+
+    final List<DetailItem> expiredDetail = [
+      DetailItem(
+        label: translate(context, 'Booking Status', 'Status Pemesanan', '预订状态'),
+        value: widget.parking.status.toString(),
+      ),
+      DetailItem(
+        label: translate(context, 'Member Status', 'Status Member', '会员状态'),
+        value:
+            widget.parking.user.isMember
+                ? translate(context, 'Active', 'Aktif', '活跃')
+                : translate(context, 'Inactive', 'Tidak Aktif', '不活跃'),
+      ),
+      DetailItem(
+        label: translate(context, 'No-Show Fee', 'Denda Tidak Hadir', '未到场费用'),
+        value: formatCurrency(
+          nominal: widget.parking.unresolvedFee ?? 0,
+          decimalPlace: 0,
+        ),
       ),
     ];
 
@@ -184,10 +206,13 @@ class _ReceiptState extends State<Receipt> {
                       DataCard(listData: cancelDetail),
                       const SizedBox(height: 20),
                     ] else if (widget.parking.status ==
-                        HistoryStatus.unresolved)
-                      ...[
-
-                    ] else if (widget.parking.status == HistoryStatus.exited) ...[
+                        HistoryStatus.unresolved) ...[
+                      DataCard(listData: cancelInfo),
+                      const SizedBox(height: 5),
+                      DataCard(listData: expiredDetail),
+                      const SizedBox(height: 20),
+                    ] else if (widget.parking.status ==
+                        HistoryStatus.exited) ...[
                       DataCard(listData: bookInfo),
                       const SizedBox(height: 5),
                       DataCard(listData: prices),
