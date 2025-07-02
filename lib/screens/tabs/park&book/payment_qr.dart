@@ -225,6 +225,16 @@ class _PaymentQrState extends State<PaymentQr> {
                                           history: widget.history,
                                           type: widget.type,
                                           selectVoucher: voucher,
+                                          onSelectVoucher: (val) {
+                                            setState(() {
+                                              voucher = val;
+                                            });
+                                          },
+                                          onVoucherRemove: () {
+                                            setState(() {
+                                              voucher = null;
+                                            });
+                                          },
                                         ),
                                   ),
                                 );
