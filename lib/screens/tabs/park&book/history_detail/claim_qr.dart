@@ -4,29 +4,27 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/components/history_card.dart';
-import 'package:tugas_front_end_nicolas/model/parking.dart';
+import 'package:tugas_front_end_nicolas/model/booking.dart';
+import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
-import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/payment.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-class PaymentQr extends StatefulWidget {
-  final Parking history;
+class ClaimQr extends StatefulWidget {
+  final Booking history;
   final HistoryType type;
 
-  const PaymentQr({super.key, required this.history, required this.type});
+  const ClaimQr(this.history, this.type);
 
   @override
-  State<PaymentQr> createState() => _PaymentQrState();
+  State<ClaimQr> createState() => _ClaimQrState();
 }
 
-class _PaymentQrState extends State<PaymentQr> {
+class _ClaimQrState extends State<ClaimQr> {
   bool isLoading = false;
-  Voucher? voucher;
 
   @override
   Widget build(BuildContext context) {
@@ -34,25 +32,9 @@ class _PaymentQrState extends State<PaymentQr> {
     User user = userProvider.currentUser!;
     final historyProvider = Provider.of<HistoryProvider>(context);
     final lotProvider = Provider.of<ParkingLotProvider>(context);
-    final isBooking = widget.type == HistoryType.booking;
+    final isMember = user.checkStatusMember();
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
-
-    void payUp() {
-      final history = historyProvider.exitParking(
-        user,
-        widget.history,
-        voucher,
-      );
-      if (history != null) {
-        userProvider.purchase(history.total!);
-      }
-      lotProvider.freeSpot(
-        lot: widget.history.lot,
-        floorNumber: widget.history.floor,
-        spotCode: widget.history.code,
-      );
-    }
 
     return Scaffold(
       body: SafeArea(
@@ -117,7 +99,7 @@ class _PaymentQrState extends State<PaymentQr> {
                           ],
                         ),
                         child: Text(
-                          '${isBooking ? "Booking" : "Parking"} QR Scan',
+                          'Booking QR Scan',
                           style: TextStyle(
                             fontSize: isSmall ? 30 : 35,
                             color: Color(0xFF1F1E5B),
@@ -149,18 +131,18 @@ class _PaymentQrState extends State<PaymentQr> {
                         ),
                       ),
                       Text(
-                        'Payment-ID: ${widget.history.id}',
+                        'Booking-ID: ${widget.history.id}',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: isSmall ? 14 : 16,
                         ),
                       ),
-                      SizedBox(height: isSmall ? 10 : 30),
+                      SizedBox(height: isSmall ? 10 : 20),
 
                       DetailCard(
                         listData: [
                           DetailItem(
-                            label: "${isBooking ? "Booked" : "Parking"} Spot",
+                            label: "Booked Spot",
                             value:
                                 '${formatFloorLabel(widget.history.floor)} (${widget.history.code})',
                           ),
@@ -181,65 +163,32 @@ class _PaymentQrState extends State<PaymentQr> {
                             value: widget.history.lot.address,
                           ),
                           DetailItem(
-                            label: "Check-in Time",
-                            value: formatDateTime(widget.history.checkinTime!),
+                            label: 'Booking Time',
+                            value: formatDateTime(widget.history.bookingTime),
                           ),
                           DetailItem(
-                            label: "Current Duration",
-                            value:
-                                "${widget.history.calculateHour()} ${widget.history.calculateHour() == 1 ? 'hour' : 'hours'}",
+                            label: 'Expired Time',
+                            value: formatDateTime(
+                              widget.history.bookingTime.add(
+                                Duration(minutes: isMember ? 45 : 30),
+                              ),
+                            ),
+                            color: Colors.red,
                           ),
                           DetailItem(
                             label: "Current Status",
                             child: StatusDisplay(widget.history.status),
                           ),
-                          if (voucher != null)
-                            DetailItem(
-                              label: "Current Status",
-                              value:
-                                  "${voucher!.voucherName} (${voucher!.type == VoucherFlag.flat ? formatCurrency(nominal: voucher!.nominal as double) : "${voucher!.nominal!.toInt()}%"})",
-                            ),
                         ],
                       ),
                       SizedBox(height: isSmall ? 15 : 30),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ResponsiveButton(
-                              isLoading: isLoading,
-                              onPressed: () {},
-                              backgroundColor: Color(0xFF7573EE),
-                              text: "Pay Now",
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: ResponsiveButton(
-                              isLoading: isLoading,
-                              onPressed: () async {
-                                final result = await Navigator.push<Voucher?>(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => PaymentDetail(
-                                          history: widget.history,
-                                          type: widget.type,
-                                          selectVoucher: voucher,
-                                        ),
-                                  ),
-                                );
-
-                                if (mounted) {
-                                  setState(() {
-                                    voucher = result;
-                                  });
-                                }
-                              },
-                              text: "Price Detail",
-                            ),
-                          ),
-                        ],
-                      ),
+                      if (widget.history.status != HistoryStatus.fixed)
+                        ResponsiveButton(
+                          isLoading: isLoading,
+                          onPressed: () {},
+                          text: "Cancel Booking",
+                        ),
+                      SizedBox(height: isSmall ? 10 : 20),
                     ],
                   ),
                 ),

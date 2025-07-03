@@ -58,7 +58,7 @@ class Parking {
       isMember = user.checkStatusMember();
       status = HistoryStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
-      unresolvedFee = 10000;
+      unresolvedFee = isMember! ? 0 : 10000;
       amount = lot.calculateAmount(20);
       tax = amount! * 0.11;
       service = isMember! ? 0 : 6500;
@@ -76,7 +76,10 @@ class Parking {
   }
 
   int calculateHour() {
-    final duration = DateTime.now().difference(checkinTime!);
+    final duration =
+        status == HistoryStatus.unresolved
+            ? DateTime.now().difference(checkinTime!)
+            : (checkoutTime ?? DateTime.now()).difference(checkinTime!);
     final hours = duration.inMinutes / 60;
 
     return hours.ceil();

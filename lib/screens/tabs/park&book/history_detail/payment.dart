@@ -11,19 +11,23 @@ import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/voucher_dialog.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/voucher_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class PaymentDetail extends StatefulWidget {
   final Parking history;
   final HistoryType type;
   final Voucher? selectVoucher;
+  final Function(Voucher) onSelectVoucher;
+  final VoidCallback onVoucherRemove;
 
   const PaymentDetail({
     super.key,
     required this.history,
     required this.type,
     required this.selectVoucher,
+    required this.onSelectVoucher,
+    required this.onVoucherRemove,
   });
 
   @override
@@ -74,7 +78,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
               await Future.delayed(const Duration(seconds: 2));
               final status = historyProvider.checkStatus(user, widget.history);
               if (status == HistoryStatus.unresolved) {
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               }
             },
             child: CustomScrollView(
@@ -264,7 +268,8 @@ class _PaymentDetailState extends State<PaymentDetail> {
                           ),
                           DetailItem(
                             label: "Current Duration",
-                            value: "hour ${hour == 1 ? 'hour' : 'hours'}",
+                            value:
+                                "${widget.history.calculateHour()} ${hour == 1 ? 'hour' : 'hours'}",
                           ),
                           DetailItem(
                             label: "Current Status",
@@ -287,6 +292,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                     user: user,
                                     selectVoucher: widget.selectVoucher,
                                     onSelectVoucher: (val) {
+                                      widget.onSelectVoucher.call(val);
                                       setState(() {
                                         voucher = val;
                                       });
@@ -297,6 +303,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                               },
                               selectedVoucher: voucher,
                               onVoucherRemove: () {
+                                widget.onVoucherRemove.call();
                                 setState(() {
                                   voucher = null;
                                 });
@@ -355,7 +362,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                         child: ResponsiveButton(
                           onPressed: () {
                             historyProvider.checkStatus(user, widget.history);
-                            Navigator.pop(context, voucher);
+                            Navigator.pop(context);
                           },
                           fontWeight: FontWeight.w600,
                           text: "Proceed Payment",
