@@ -74,6 +74,11 @@ String formatDateTime(DateTime date) {
   return datePart;
 }
 
+String formatTime(DateTime data) {
+  final timePart = DateFormat('h.mm a').format(data);
+  return timePart;
+}
+
 String formatPhone(String code, String phone) {
   String part1 = phone.length >= 4 ? phone.substring(0, 4) : phone;
   String part2 =

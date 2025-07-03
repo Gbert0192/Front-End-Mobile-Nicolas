@@ -57,6 +57,14 @@ class History {
     return HistoryActive(activeParking, activeBooking);
   }
 
+  HistoryActive getCancelled() {
+    final activeParking =
+        parkings.where((item) => item.status == HistoryStatus.cancel).toList();
+    final activeBooking =
+        bookings.where((item) => item.status == HistoryStatus.cancel).toList();
+    return HistoryActive(activeParking, activeBooking);
+  }
+
   List<ParkingLot> getFrequentLots() {
     final Map<ParkingLot, int> counts = {};
 
