@@ -8,11 +8,14 @@ import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/payment.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class PaymentQr extends StatefulWidget {
@@ -35,24 +38,88 @@ class _PaymentQrState extends State<PaymentQr> {
     User user = userProvider.currentUser!;
     final historyProvider = Provider.of<HistoryProvider>(context);
     final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final activityProvider = Provider.of<ActivityProvider>(context);
     final isBooking = widget.type == HistoryType.booking;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
-    void payUp() {
-      final history = historyProvider.exitParking(
-        user,
-        widget.history,
-        voucher,
-      );
-      if (history != null) {
-        userProvider.purchase(history.total!);
+    void payUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      await Future.delayed(const Duration(seconds: 2));
+      final status = historyProvider.checkStatus(user, widget.history);
+
+      if (status == HistoryStatus.unresolved) {
+        final history = historyProvider.resolveUnresolve(user, widget.history);
+        if (history != null) {
+          userProvider.purchase(history.total!, true);
+        }
+        activityProvider.addActivity(
+          user,
+          ActivityItem(
+            activityType: ActivityType.exitLot,
+            mall: history?.lot.name,
+            historyId: history?.id,
+          ),
+        );
+      } else {
+        final total = widget.history.calculateTotal(voucher);
+        if (user.balance < total) {
+          showAlertDialog(
+            context: context,
+            title: "Insufficient Balance",
+            icon: Icons.account_balance_wallet_outlined,
+            color: Colors.redAccent,
+            content: Text(
+              "Your current balance is insufficient to proceed. Please top up your balance to continue.",
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade800,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TopUpPage()),
+              );
+            },
+          );
+
+          setState(() {
+            isLoading = false;
+          });
+          return;
+        }
+        final history = historyProvider.exitParking(
+          user,
+          widget.history,
+          voucher,
+        );
+        if (history != null) {
+          userProvider.purchase(history.total!);
+        }
+        activityProvider.addActivity(
+          user,
+          ActivityItem(
+            activityType: ActivityType.exitLot,
+            mall: history?.lot.name,
+            historyId: history?.id,
+          ),
+        );
       }
       lotProvider.freeSpot(
         lot: widget.history.lot,
         floorNumber: widget.history.floor,
         spotCode: widget.history.code,
       );
+      setState(() {
+        isLoading = false;
+      });
     }
 
     return Scaffold(
@@ -118,7 +185,7 @@ class _PaymentQrState extends State<PaymentQr> {
                           ],
                         ),
                         child: Text(
-                          'Payment QR Scan',
+                          '${isBooking ? "Booking" : "Parking"} QR Scan',
                           style: TextStyle(
                             fontSize: isSmall ? 30 : 35,
                             color: Color(0xFF1F1E5B),
@@ -129,7 +196,7 @@ class _PaymentQrState extends State<PaymentQr> {
                       SizedBox(height: isSmall ? 10 : 30),
 
                       GestureDetector(
-                        onTap: () async {},
+                        onTap: payUp,
                         child: Container(
                           padding: EdgeInsets.all(isSmall ? 8 : 16),
                           decoration: BoxDecoration(
@@ -205,54 +272,52 @@ class _PaymentQrState extends State<PaymentQr> {
                         ],
                       ),
                       SizedBox(height: isSmall ? 15 : 30),
-                      widget.history.status == HistoryStatus.unresolved
-                          ? ResponsiveButton(
-                            isLoading: isLoading,
-                            onPressed: () {},
-                            text: "Resolved Now",
-                          )
-                          : Row(
-                            children: [
-                              Expanded(
-                                child: ResponsiveButton(
-                                  isLoading: isLoading,
-                                  onPressed: () {},
-                                  backgroundColor: Color(0xFF7573EE),
-                                  text: "Pay Now",
-                                ),
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: ResponsiveButton(
-                                  isLoading: isLoading,
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => PaymentDetail(
-                                              history: widget.history,
-                                              type: widget.type,
-                                              selectVoucher: voucher,
-                                              onSelectVoucher: (val) {
-                                                setState(() {
-                                                  voucher = val;
-                                                });
-                                              },
-                                              onVoucherRemove: () {
-                                                setState(() {
-                                                  voucher = null;
-                                                });
-                                              },
-                                            ),
-                                      ),
-                                    );
-                                  },
-                                  text: "Price Detail",
-                                ),
-                              ),
-                            ],
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ResponsiveButton(
+                              isLoading: isLoading,
+                              onPressed: payUp,
+                              backgroundColor: Color(0xFF7573EE),
+                              text:
+                                  widget.history.status ==
+                                          HistoryStatus.unresolved
+                                      ? "Resolved Now"
+                                      : "Pay Now",
+                            ),
                           ),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: ResponsiveButton(
+                              isLoading: isLoading,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => PaymentDetail(
+                                          history: widget.history,
+                                          type: widget.type,
+                                          selectVoucher: voucher,
+                                          onSelectVoucher: (val) {
+                                            setState(() {
+                                              voucher = val;
+                                            });
+                                          },
+                                          onVoucherRemove: () {
+                                            setState(() {
+                                              voucher = null;
+                                            });
+                                          },
+                                        ),
+                                  ),
+                                );
+                              },
+                              text: "Price Detail",
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: isSmall ? 10 : 20),
                     ],
                   ),

@@ -356,7 +356,7 @@ class _AddBookingState extends State<AddBooking> {
                                     return;
                                   }
                                   final dateTime = stringToDate(date!, time);
-                                  historyProvider.addBooking(
+                                  final booking = historyProvider.addBooking(
                                     user: user,
                                     lot: widget.mall,
                                     floor: floor,
@@ -368,6 +368,7 @@ class _AddBookingState extends State<AddBooking> {
                                     ActivityItem(
                                       activityType: ActivityType.bookSuccess,
                                       mall: widget.mall.name,
+                                      historyId: booking.id,
                                     ),
                                   );
                                   Navigator.pushReplacement(

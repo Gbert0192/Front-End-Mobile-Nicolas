@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
@@ -20,7 +19,6 @@ enum ActivityType {
   exitLot,
   enterLot,
   verify,
-  // twoFactor,
   paySuccess,
   topUp,
 }
@@ -43,7 +41,6 @@ class ActivityProvider with ChangeNotifier {
     isLoading = true;
     final prefs = await SharedPreferences.getInstance();
     final encoded = prefs.getStringList('Activities');
-    print(encoded);
     if (encoded != null) {
       activities =
           encoded.map((s) {
@@ -113,8 +110,11 @@ class ActivityItem {
   }) : date = date ?? DateTime.now();
 
   void onPressed(BuildContext context) {
-    final historyProvider = Provider.of<HistoryProvider>(context);
-    final userProvider = Provider.of<UserProvider>(context);
+    final historyProvider = Provider.of<HistoryProvider>(
+      context,
+      listen: false,
+    );
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     User user = userProvider.currentUser!;
     final historyType =
         historyId != null
@@ -123,7 +123,9 @@ class ActivityItem {
                 : HistoryType.parking
             : null;
     final history =
-        historyId != null ? historyProvider.getHistory(user, historyId!) : null;
+        historyId != null
+            ? historyProvider.getHistoryDetail(user, historyId!)
+            : null;
 
     switch (activityType) {
       case ActivityType.topUp:
@@ -156,7 +158,7 @@ class ActivityItem {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{
-      'activityTypes': activityTypeToString(activityType),
+      'activityType': activityTypeToString(activityType),
       'date': date.toIso8601String(),
     };
 

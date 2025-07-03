@@ -49,7 +49,7 @@ class Booking extends Parking {
     final fixedThreshold = isMember! ? 15 : 30;
 
     if ((status == HistoryStatus.pending || status == HistoryStatus.fixed) &&
-        diffExpired > expiredThreshold) {
+        diffExpired >= expiredThreshold) {
       status = HistoryStatus.expired;
       if (!isMember!) {
         amount = lot.calculateAmount(hours ?? 1) * 0.35;

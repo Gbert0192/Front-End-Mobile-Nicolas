@@ -41,8 +41,7 @@ class HistoryCard extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder:
-                      (context) => HistoryDetail(history, HistoryType.booking),
+                  builder: (context) => HistoryDetail(history, type),
                 ),
               );
             },

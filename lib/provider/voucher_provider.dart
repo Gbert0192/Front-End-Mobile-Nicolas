@@ -81,7 +81,8 @@ class VoucherProvider with ChangeNotifier {
   List<VoucherRemain> getAvailableRemain(ParkingLot lot, int hour, User user) {
     final allAvailable =
         getAvailableVoucher().where((voucher) {
-          return voucher.lot == lot && voucher.minHour! <= hour;
+          return voucher.lot == lot &&
+              (voucher.minHour == null || voucher.minHour! <= hour);
         }).toList();
 
     final userHistory = vouchersHistories.firstWhereOrNull(

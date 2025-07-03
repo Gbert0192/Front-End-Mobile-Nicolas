@@ -188,9 +188,10 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void purchase(double nominal) {
-    currentUser?.purchase(nominal);
+  int purchase(double nominal, [bool allowedMinus = false]) {
+    final result = currentUser?.purchase(nominal, allowedMinus) ?? -1;
     saveUsersToPrefs();
     notifyListeners();
+    return result;
   }
 }

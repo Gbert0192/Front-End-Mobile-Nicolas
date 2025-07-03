@@ -32,7 +32,7 @@ class Parking {
     required this.floor,
     required this.code,
     this.status = HistoryStatus.entered,
-  });
+  }) : isMember = user.checkStatusMember();
 
   Parking exitParking(Voucher? voucher) {
     isMember = user.checkStatusMember();
@@ -53,23 +53,35 @@ class Parking {
     return this;
   }
 
+  double calculateTotal(Voucher? voucher) {
+    final bool member = user.checkStatusMember();
+    final int hour = calculateHour();
+    final double baseAmount = lot.calculateAmount(hour);
+    final double tax = baseAmount * 0.11;
+    final double service = member ? 0 : 6500;
+    final double voucherValue = voucher?.useVoucher(baseAmount, hour) ?? 0;
+
+    final double total = baseAmount + tax + service - voucherValue;
+    return total;
+  }
+
   HistoryStatus checkStatus() {
     if (status == HistoryStatus.entered && calculateHour() >= 20) {
-      isMember = user.checkStatusMember();
       status = HistoryStatus.unresolved;
       checkoutTime = checkinTime!.add(Duration(hours: 20));
-      unresolvedFee = isMember! ? 0 : 10000;
       amount = lot.calculateAmount(20);
       tax = amount! * 0.11;
-      service = isMember! ? 0 : 6500;
-      total = amount! + tax! + service!;
     }
     return status;
   }
 
   Parking? resolveUnresolve() {
     if (status == HistoryStatus.unresolved) {
+      isMember = user.checkStatusMember();
       status = HistoryStatus.exited;
+      unresolvedFee = isMember! ? 0 : 10000;
+      service = isMember! ? 0 : 6500;
+      total = amount! + tax! + service!;
       return this;
     }
     return null;

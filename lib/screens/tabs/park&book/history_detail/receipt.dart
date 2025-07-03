@@ -23,6 +23,9 @@ class _ReceiptState extends State<Receipt> {
   @override
   Widget build(BuildContext context) {
     final isBooking = widget.type == HistoryType.booking;
+    final booking =
+        widget.history is Booking ? widget.history as Booking : null;
+
     final isMember = widget.history.isMember;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -49,7 +52,6 @@ class _ReceiptState extends State<Receipt> {
         value:
             '${widget.history.hours} ${widget.history.hours == 1 ? 'hour' : 'hours'}',
       ),
-      DetailItem(label: "Status", child: StatusDisplay(widget.history.status)),
     ];
 
     final List<DetailItem> prices = [
@@ -87,7 +89,8 @@ class _ReceiptState extends State<Receipt> {
         ),
         bottomBorder: true,
       ),
-      if (widget.history.unresolvedFee != null)
+      if (widget.history.unresolvedFee != null &&
+          widget.history.unresolvedFee != 0)
         DetailItem(
           label: "Unresolved Fee",
           value: formatCurrency(nominal: widget.history.unresolvedFee!),
@@ -99,59 +102,66 @@ class _ReceiptState extends State<Receipt> {
       ),
     ];
 
-    final List<DetailItem> cancelInfo = [
-      DetailItem(label: 'Parking Area', value: widget.history.lot.name),
-      DetailItem(label: 'Address', value: widget.history.lot.address),
-      DetailItem(
-        label: 'Booking Spot',
-        value:
-            "${formatFloorLabel(widget.history.floor)} (${widget.history.code})",
-      ),
-      DetailItem(
-        label: 'Booking Time',
-        value: formatDateTime((widget.history as Booking).bookingTime),
-      ),
-      DetailItem(
-        label: 'Expired Time',
-        value: formatDateTime(
-          (widget.history as Booking).bookingTime.add(
-            Duration(minutes: isMember ? 45 : 30),
-          ),
-        ),
-        color: Colors.red,
-      ),
-      DetailItem(
-        label: 'Cancel Date',
-        value: formatDate(widget.history.cancelTime!),
-        color: Colors.red,
-      ),
-    ];
+    final List<DetailItem> cancelInfo =
+        booking != null
+            ? [
+              DetailItem(label: 'Parking Area', value: booking.lot.name),
+              DetailItem(label: 'Address', value: booking.lot.address),
+              DetailItem(
+                label: 'Booking Spot',
+                value: "${formatFloorLabel(booking.floor)} (${booking.code})",
+              ),
+              DetailItem(
+                label: 'Booking Time',
+                value: formatDateTime(booking.bookingTime),
+              ),
+              DetailItem(
+                label: 'Expired Time',
+                value: formatDateTime(
+                  booking.bookingTime.add(
+                    Duration(minutes: isMember ? 45 : 30),
+                  ),
+                ),
+                color: Colors.red,
+              ),
+              if (booking.cancelTime != null)
+                DetailItem(
+                  label: 'Cancel Date',
+                  value: formatDate(booking.cancelTime!),
+                  color: Colors.red,
+                ),
+              DetailItem(label: "Status", child: StatusDisplay(booking.status)),
+            ]
+            : [];
 
-    final List<DetailItem> expiredDetail = [
-      DetailItem(
-        label: 'Member Status',
-        value: isMember ? 'Active' : 'Inactive',
-      ),
-      DetailItem(
-        label: 'No-Show Fee',
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (isMember)
-              DiscountDisplay((widget.history as Booking).noshowFee!, 0)
-            else
-              Text(
-                formatCurrency(nominal: (widget.history as Booking).noshowFee!),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: isSmall ? 13 : 16,
-                  fontWeight: FontWeight.w600,
+    final List<DetailItem> expiredDetail =
+        booking != null
+            ? [
+              DetailItem(
+                label: 'Member Status',
+                value: isMember ? 'Active' : 'Inactive',
+              ),
+              DetailItem(
+                label: 'No-Show Fee',
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (isMember)
+                      DiscountDisplay(booking.noshowFee!, 0)
+                    else
+                      Text(
+                        formatCurrency(nominal: booking.noshowFee!),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: isSmall ? 13 : 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                  ],
                 ),
               ),
-          ],
-        ),
-      ),
-    ];
+            ]
+            : [];
 
     return Scaffold(
       backgroundColor: const Color(0xFFEFF1F8),
@@ -166,7 +176,7 @@ class _ReceiptState extends State<Receipt> {
               ),
               centerTitle: true,
               title: Text(
-                '${isBooking ? "Booking" : "parking"} Receipt',
+                '${isBooking ? "Booking" : "Parking"} Receipt',
                 style: const TextStyle(
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
@@ -181,26 +191,27 @@ class _ReceiptState extends State<Receipt> {
                 ),
                 child: Column(
                   children: [
-                    if (widget.history.status == HistoryStatus.cancel) ...[
+                    if (widget.history.status == HistoryStatus.cancel &&
+                        booking != null) ...[
                       DataCard(listData: cancelInfo),
-                      const SizedBox(height: 20),
-                    ] else if (widget.history.status ==
-                        HistoryStatus.unresolved) ...[
+                      const SizedBox(height: 140),
+                    ] else if (widget.history.status == HistoryStatus.expired &&
+                        booking != null) ...[
                       DataCard(listData: cancelInfo),
-                      const SizedBox(height: 5),
+                      SizedBox(height: isSmall ? 10 : 20),
                       DataCard(listData: expiredDetail),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 140),
                     ] else if (widget.history.status ==
                         HistoryStatus.exited) ...[
                       DataCard(listData: historyInfo),
-                      const SizedBox(height: 5),
+                      SizedBox(height: isSmall ? 10 : 20),
                       DataCard(listData: prices),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 140),
                     ],
 
-                    // button
                     ResponsiveButton(
                       text: 'View Parking Area',
+                      fontWeight: FontWeight.w600,
                       onPressed: () {
                         Navigator.push(
                           context,
