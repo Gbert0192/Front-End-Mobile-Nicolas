@@ -75,7 +75,10 @@ class Parking {
   }
 
   int calculateHour() {
-    final duration = DateTime.now().difference(checkinTime!);
+    final duration =
+        status == HistoryStatus.unresolved
+            ? DateTime.now().difference(checkinTime!)
+            : (checkoutTime ?? DateTime.now()).difference(checkinTime!);
     final hours = duration.inMinutes / 60;
 
     return hours.ceil();

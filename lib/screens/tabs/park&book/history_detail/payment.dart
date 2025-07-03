@@ -1,5 +1,3 @@
-import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
@@ -12,7 +10,7 @@ import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/history_list.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/voucher_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
@@ -20,8 +18,8 @@ class PaymentDetail extends StatefulWidget {
   final Parking history;
   final HistoryType type;
   final Voucher? selectVoucher;
-  final Function(Voucher)? onSelectVoucher;
-  final VoidCallback? onVoucherRemove;
+  final Function(Voucher) onSelectVoucher;
+  final VoidCallback onVoucherRemove;
 
   const PaymentDetail({
     super.key,
@@ -298,12 +296,14 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                       setState(() {
                                         voucher = val;
                                       });
+                                      Navigator.pop(context);
                                     },
                                   ),
                                 );
                               },
                               selectedVoucher: voucher,
                               onVoucherRemove: () {
+                                widget.onVoucherRemove.call();
                                 setState(() {
                                   voucher = null;
                                 });

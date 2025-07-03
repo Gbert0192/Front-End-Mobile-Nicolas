@@ -4,14 +4,15 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tugas_front_end_nicolas/components/button.dart';
 import 'package:tugas_front_end_nicolas/components/detail_component.dart';
 import 'package:tugas_front_end_nicolas/components/history_card.dart';
+import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/payment.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/payment.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class PaymentQr extends StatefulWidget {
@@ -195,61 +196,71 @@ class _PaymentQrState extends State<PaymentQr> {
                           ),
                           if (voucher != null)
                             DetailItem(
-                              label: "Current Status",
+                              label: "Voucher",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blueAccent,
                               value:
                                   "${voucher!.voucherName} (${voucher!.type == VoucherFlag.flat ? formatCurrency(nominal: voucher!.nominal as double) : "${voucher!.nominal!.toInt()}%"})",
                             ),
                         ],
                       ),
                       SizedBox(height: isSmall ? 15 : 30),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ResponsiveButton(
-                              isLoading: isLoading,
-                              onPressed: () {},
-                              backgroundColor: Color(0xFF7573EE),
-                              text: "Pay Now",
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: ResponsiveButton(
-                              isLoading: isLoading,
-                              onPressed: () async {
-                                final result = await Navigator.push<Voucher?>(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => PaymentDetail(
-                                          history: widget.history,
-                                          type: widget.type,
-                                          selectVoucher: voucher,
-                                          onSelectVoucher: (val) {
-                                            setState(() {
-                                              voucher = val;
-                                            });
-                                          },
-                                          onVoucherRemove: () {
-                                            setState(() {
-                                              voucher = null;
-                                            });
-                                          },
-                                        ),
-                                  ),
-                                );
+                      widget.history.status == HistoryStatus.unresolved
+                          ? ResponsiveButton(
+                            isLoading: isLoading,
+                            onPressed: () {},
+                            text: "Resolved Now",
+                          )
+                          : Row(
+                            children: [
+                              Expanded(
+                                child: ResponsiveButton(
+                                  isLoading: isLoading,
+                                  onPressed: () {},
+                                  backgroundColor: Color(0xFF7573EE),
+                                  text: "Pay Now",
+                                ),
+                              ),
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: ResponsiveButton(
+                                  isLoading: isLoading,
+                                  onPressed: () async {
+                                    final result =
+                                        await Navigator.push<Voucher?>(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) => PaymentDetail(
+                                                  history: widget.history,
+                                                  type: widget.type,
+                                                  selectVoucher: voucher,
+                                                  onSelectVoucher: (val) {
+                                                    setState(() {
+                                                      voucher = val;
+                                                    });
+                                                  },
+                                                  onVoucherRemove: () {
+                                                    setState(() {
+                                                      voucher = null;
+                                                    });
+                                                  },
+                                                ),
+                                          ),
+                                        );
 
-                                if (mounted) {
-                                  setState(() {
-                                    voucher = result;
-                                  });
-                                }
-                              },
-                              text: "Price Detail",
-                            ),
+                                    if (mounted) {
+                                      setState(() {
+                                        voucher = result;
+                                      });
+                                    }
+                                  },
+                                  text: "Price Detail",
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                      SizedBox(height: isSmall ? 10 : 20),
                     ],
                   ),
                 ),

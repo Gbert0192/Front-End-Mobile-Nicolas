@@ -9,8 +9,8 @@ import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/main_layout.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/payment_qr.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/payment_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
