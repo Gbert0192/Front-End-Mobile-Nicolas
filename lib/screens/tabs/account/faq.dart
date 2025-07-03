@@ -37,7 +37,7 @@ class FAQ extends StatelessWidget {
           "➤ You will only secure a parking spot **after scanning the entry QR code**.",
           "➤ If no slots are available upon scanning, you may exit immediately using the **same entry QR** — no fee will be charged.",
           "➤ If you exit before paying (by scanning the entry QR again), parking time will **continue to count** until manually resolved.",
-          "➤ Each booking is valid for a maximum of **20 hours**. Unresolved sessions beyond this limit may incur a **penalty**.",
+          "➤ Each booking is valid for a maximum of **20 hours**. Unresolved sessions beyond this limit may incur a **penalty of Rp10,000**.",
         ],
       ),
       FAQItem(
@@ -45,7 +45,7 @@ class FAQ extends StatelessWidget {
         content: [
           '➤ Cancel **up to 30 Minutes** before your booking — no charge.',
           '➤ Booking expires if not checked in **within 30 minutes**.',
-          '➤ A **no-show fee of Rp10,000** applies.',
+          '➤ A **no-show fee of 35% of the spot\'s max profit** applies.',
           '➤ If balance goes negative, you must **top up** to book again.',
         ],
       ),
@@ -56,7 +56,7 @@ class FAQ extends StatelessWidget {
           '',
           '🎉 **Current Member Perks**',
           '✔️ No service fee.',
-          '✔️ No-show fee waived.',
+          '✔️ No-show fee and No Unresolved fee waived.',
           '✔️ Late check-in up to **45 minutes**.',
           '✔️ Cancel up to **15 minutes** before booking.',
           '',

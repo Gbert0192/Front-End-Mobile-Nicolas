@@ -1,10 +1,14 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
@@ -39,7 +43,7 @@ class ActivityProvider with ChangeNotifier {
     isLoading = true;
     final prefs = await SharedPreferences.getInstance();
     final encoded = prefs.getStringList('Activities');
-
+    print(encoded);
     if (encoded != null) {
       activities =
           encoded.map((s) {
@@ -110,6 +114,16 @@ class ActivityItem {
 
   void onPressed(BuildContext context) {
     final historyProvider = Provider.of<HistoryProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    User user = userProvider.currentUser!;
+    final historyType =
+        historyId != null
+            ? historyId!.startsWith("BOOK")
+                ? HistoryType.booking
+                : HistoryType.parking
+            : null;
+    final history =
+        historyId != null ? historyProvider.getHistory(user, historyId!) : null;
 
     switch (activityType) {
       case ActivityType.topUp:
@@ -120,37 +134,15 @@ class ActivityItem {
         break;
 
       case ActivityType.paySuccess:
-        showFlexibleSnackbar(
-          context,
-          "Payment of ${formatCurrency(nominal: nominal!)} at $mall was successful",
-        );
-        break;
-
       case ActivityType.bookSuccess:
-        showFlexibleSnackbar(context, "Successfully booked parking at $mall");
-        break;
-
       case ActivityType.bookCancel:
-        showFlexibleSnackbar(context, "Parking booking at $mall was canceled");
-        break;
-
       case ActivityType.bookExp:
-        showFlexibleSnackbar(context, "Parking booking at $mall has expired");
-        break;
-
       case ActivityType.unresolved:
-        showFlexibleSnackbar(
-          context,
-          "Unresolved parking session detected at $mall",
-        );
-        break;
-
       case ActivityType.exitLot:
-        showFlexibleSnackbar(context, "Exited the parking lot at $mall");
-        break;
-
       case ActivityType.enterLot:
-        showFlexibleSnackbar(context, "Entered the parking lot at $mall");
+        MaterialPageRoute(
+          builder: (context) => HistoryDetail(history!, historyType!),
+        );
         break;
 
       case ActivityType.verify:
@@ -171,6 +163,7 @@ class ActivityItem {
     if (mall != null) data['mall'] = mall;
     if (method != null) data['method'] = method;
     if (nominal != null) data['nominal'] = nominal;
+    if (historyId != null) data['historyId'] = historyId;
 
     return data;
   }
@@ -179,9 +172,10 @@ class ActivityItem {
     return ActivityItem(
       activityType: activityTypeFromString(json['activityType']),
       mall: json['mall'],
+      historyId: json['historyId'],
       method: json['method'],
       nominal: (json['nominal'] as num?)?.toDouble(),
-      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+      date: DateTime.parse(json['date']),
     );
   }
 }

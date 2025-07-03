@@ -248,7 +248,7 @@ class _SearchState extends State<Search> {
                   () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SearchDetail(mall: mall),
+                      builder: (context) => LotDetail(mall: mall),
                     ),
                   ),
               child: Container(

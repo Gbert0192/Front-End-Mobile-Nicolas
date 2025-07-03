@@ -11,7 +11,7 @@ import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/payment.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
@@ -19,7 +19,7 @@ class PaymentQr extends StatefulWidget {
   final Parking history;
   final HistoryType type;
 
-  const PaymentQr({super.key, required this.history, required this.type});
+  const PaymentQr(this.history, this.type);
 
   @override
   State<PaymentQr> createState() => _PaymentQrState();
@@ -118,7 +118,7 @@ class _PaymentQrState extends State<PaymentQr> {
                           ],
                         ),
                         child: Text(
-                          '${isBooking ? "Booking" : "Parking"} QR Scan',
+                          'Payment QR Scan',
                           style: TextStyle(
                             fontSize: isSmall ? 30 : 35,
                             color: Color(0xFF1F1E5B),
@@ -156,7 +156,7 @@ class _PaymentQrState extends State<PaymentQr> {
                           fontSize: isSmall ? 14 : 16,
                         ),
                       ),
-                      SizedBox(height: isSmall ? 10 : 30),
+                      SizedBox(height: isSmall ? 10 : 20),
 
                       DetailCard(
                         listData: [
@@ -225,35 +225,28 @@ class _PaymentQrState extends State<PaymentQr> {
                               Expanded(
                                 child: ResponsiveButton(
                                   isLoading: isLoading,
-                                  onPressed: () async {
-                                    final result =
-                                        await Navigator.push<Voucher?>(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder:
-                                                (context) => PaymentDetail(
-                                                  history: widget.history,
-                                                  type: widget.type,
-                                                  selectVoucher: voucher,
-                                                  onSelectVoucher: (val) {
-                                                    setState(() {
-                                                      voucher = val;
-                                                    });
-                                                  },
-                                                  onVoucherRemove: () {
-                                                    setState(() {
-                                                      voucher = null;
-                                                    });
-                                                  },
-                                                ),
-                                          ),
-                                        );
-
-                                    if (mounted) {
-                                      setState(() {
-                                        voucher = result;
-                                      });
-                                    }
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => PaymentDetail(
+                                              history: widget.history,
+                                              type: widget.type,
+                                              selectVoucher: voucher,
+                                              onSelectVoucher: (val) {
+                                                setState(() {
+                                                  voucher = val;
+                                                });
+                                              },
+                                              onVoucherRemove: () {
+                                                setState(() {
+                                                  voucher = null;
+                                                });
+                                              },
+                                            ),
+                                      ),
+                                    );
                                   },
                                   text: "Price Detail",
                                 ),

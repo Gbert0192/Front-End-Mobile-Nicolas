@@ -8,10 +8,10 @@ import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/add_bookin
 import 'package:tugas_front_end_nicolas/screens/tabs/home/parking_lot/enter_qr.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
-class SearchDetail extends StatelessWidget {
+class LotDetail extends StatelessWidget {
   final ParkingLot mall;
 
-  const SearchDetail({super.key, required this.mall});
+  const LotDetail({super.key, required this.mall});
 
   @override
   Widget build(BuildContext context) {

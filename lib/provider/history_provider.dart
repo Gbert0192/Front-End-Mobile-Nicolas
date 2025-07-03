@@ -109,6 +109,17 @@ class HistoryProvider with ChangeNotifier {
     return histories.firstWhereOrNull((item) => item.user == user)?.bookings;
   }
 
+  Parking? getHistory(User user, String historyId) {
+    checkAllStatus(user);
+    final isBooking = historyId.startsWith("BOOK");
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    return isBooking
+        ? userHistory?.bookings.firstWhereOrNull((item) => item.id == historyId)
+        : userHistory?.parkings.firstWhereOrNull(
+          (item) => item.id == historyId,
+        );
+  }
+
   List<ParkingLot>? getFrequentLots(User user) {
     checkAllStatus(user);
 

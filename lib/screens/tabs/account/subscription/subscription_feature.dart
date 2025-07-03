@@ -57,8 +57,7 @@ class SubscriptionFeature extends StatelessWidget {
               SizedBox(height: 10),
               ...[
                 'No service fee',
-                'No-show fee waived',
-                'Extended early arrival time (e.g., up to 45 minutes before booking)',
+                'No-show fee and Unresolved fee waived',
                 'Extended late check-in window (up to 45 minutes late)',
                 'Shorter cancellation deadline (cancel up to 15 minutes before)',
               ].map(

@@ -10,8 +10,8 @@ import 'package:tugas_front_end_nicolas/model/voucher.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/home/topup/topup.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/history_list.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/voucher_dialog.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail/voucher_dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class PaymentDetail extends StatefulWidget {

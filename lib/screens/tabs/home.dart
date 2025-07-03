@@ -493,7 +493,7 @@ class _HomeState extends State<Home> {
                                             context,
                                             MaterialPageRoute(
                                               builder:
-                                                  (context) => SearchDetail(
+                                                  (context) => LotDetail(
                                                     mall:
                                                         frequent[_currentIndex],
                                                   ),
