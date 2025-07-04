@@ -26,6 +26,7 @@ class _HistoryListState extends State<HistoryList> {
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
     final isBooking = widget.type == HistoryType.booking;
+    historyProvider.checkAllStatus(user, context);
     List<Parking> historyList =
         (isBooking
             ? historyProvider.getBooking(user)

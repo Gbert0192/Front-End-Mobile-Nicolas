@@ -363,6 +363,12 @@ class _AddBookingState extends State<AddBooking> {
                                     spot: spot,
                                     time: dateTime,
                                   );
+                                  lotProvider.bookSpot(
+                                    lot: widget.mall,
+                                    user: user,
+                                    floorNumber: floor,
+                                    spotCode: spot,
+                                  );
                                   activityProvider.addActivity(
                                     user,
                                     ActivityItem(

@@ -233,7 +233,7 @@ class ParkingLot {
             final diffExpired = now.difference(spot.date!).inMinutes;
             final expiredThreshold = isMember ? 45 : 30;
 
-            if (diffExpired > expiredThreshold) {
+            if (diffExpired >= expiredThreshold) {
               spot.status = SpotStatus.free;
               spotCount += 1;
             }

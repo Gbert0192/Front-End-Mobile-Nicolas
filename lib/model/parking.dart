@@ -8,6 +8,7 @@ class Parking {
   final String id;
   final User user;
   final ParkingLot lot;
+  bool hasAlerted;
   bool? isMember;
   DateTime? checkinTime;
   DateTime? checkoutTime;
@@ -30,6 +31,7 @@ class Parking {
     required this.user,
     required this.lot,
     required this.floor,
+    this.hasAlerted = false,
     required this.code,
     this.status = HistoryStatus.entered,
   }) : isMember = user.checkStatusMember();
@@ -104,6 +106,7 @@ class Parking {
       'lot': lot.toJson(),
       'floor': floor,
       'code': code,
+      'hasAlerted': hasAlerted,
       'createdAt': createdAt.toIso8601String(),
       'status': historyStatusToString(status),
     };
@@ -137,6 +140,7 @@ class Parking {
       lot: ParkingLot.fromJson(json['lot']),
       floor: json['floor'],
       code: json['code'],
+      hasAlerted: json['hasAlerted'],
     );
 
     parking.createdAt = DateTime.parse(json['createdAt']);

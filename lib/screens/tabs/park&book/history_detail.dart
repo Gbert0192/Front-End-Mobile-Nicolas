@@ -28,6 +28,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
     User user = userProvider.currentUser!;
     return Consumer<HistoryProvider>(
       builder: (context, provider, _) {
+        provider.checkAllStatus(user, context);
         final updatedHistory =
             provider.getHistoryDetail(user, widget.history.id)!;
 
