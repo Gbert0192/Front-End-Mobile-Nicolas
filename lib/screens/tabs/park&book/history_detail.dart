@@ -28,9 +28,18 @@ class _HistoryDetailState extends State<HistoryDetail> {
     User user = userProvider.currentUser!;
     return Consumer<HistoryProvider>(
       builder: (context, provider, _) {
-        provider.checkAllStatus(user, context);
+        provider.checkStatus(user, widget.history);
         final updatedHistory =
             provider.getHistoryDetail(user, widget.history.id)!;
+        // updatedHistory.lot.spots.forEach((item) {
+        //   item.areas.forEach((area) {
+        //     area.spots.forEach((spot) {
+        //       print(spot.code);
+        //       print(spot.status);
+        //       print("====");
+        //     });
+        //   });
+        // });
 
         switch (updatedHistory.status) {
           case HistoryStatus.exited:

@@ -1,15 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
-import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
-import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail.dart';
-import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
-import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 enum ActivityType {
   bookSuccess,
@@ -108,54 +102,6 @@ class ActivityItem {
     this.historyId,
     DateTime? date,
   }) : date = date ?? DateTime.now();
-
-  void onPressed(BuildContext context) {
-    final historyProvider = Provider.of<HistoryProvider>(
-      context,
-      listen: false,
-    );
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    User user = userProvider.currentUser!;
-    historyProvider.checkAllStatus(user, context);
-    final historyType =
-        historyId != null
-            ? historyId!.startsWith("BOOK")
-                ? HistoryType.booking
-                : HistoryType.parking
-            : null;
-    final history =
-        historyId != null
-            ? historyProvider.getHistoryDetail(user, historyId!)
-            : null;
-
-    switch (activityType) {
-      case ActivityType.topUp:
-        showFlexibleSnackbar(
-          context,
-          "Top-up of ${formatCurrency(nominal: nominal!)} via $method",
-        );
-        break;
-
-      case ActivityType.paySuccess:
-      case ActivityType.bookSuccess:
-      case ActivityType.bookCancel:
-      case ActivityType.bookExp:
-      case ActivityType.unresolved:
-      case ActivityType.exitLot:
-      case ActivityType.enterLot:
-        MaterialPageRoute(
-          builder: (context) => HistoryDetail(history!, historyType!),
-        );
-        break;
-
-      case ActivityType.verify:
-        showFlexibleSnackbar(
-          context,
-          "Two-factor authentication has been set up",
-        );
-        break;
-    }
-  }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{

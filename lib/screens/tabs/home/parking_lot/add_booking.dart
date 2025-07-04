@@ -279,7 +279,6 @@ class _AddBookingState extends State<AddBooking> {
                                   if (!validateDatetime()) {
                                     showAlertDialog(
                                       onPressed: () {
-                                        Navigator.pop(context);
                                         setState(() {
                                           date = null;
                                           time = null;
@@ -330,7 +329,6 @@ class _AddBookingState extends State<AddBooking> {
                                   if (!isFree) {
                                     showAlertDialog(
                                       onPressed: () {
-                                        Navigator.pop(context);
                                         _controller.animateToPage(
                                           1,
                                           duration: const Duration(

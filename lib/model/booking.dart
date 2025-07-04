@@ -39,6 +39,23 @@ class Booking extends Parking {
     return this;
   }
 
+  Booking cancelBooking() {
+    final now = DateTime.now();
+    final diff = bookingTime.difference(now).inMinutes;
+
+    final isMember = user.checkStatusMember();
+    final canCancel = isMember ? diff > 15 : diff > 30;
+
+    if (status == HistoryStatus.pending && canCancel) {
+      status = HistoryStatus.cancel;
+      cancelTime = now;
+    } else if (status == HistoryStatus.pending) {
+      status = HistoryStatus.fixed;
+    }
+
+    return this;
+  }
+
   @override
   HistoryStatus checkStatus() {
     final now = DateTime.now();
@@ -59,23 +76,6 @@ class Booking extends Parking {
       status = HistoryStatus.fixed;
     } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
       super.checkStatus();
-    }
-
-    return status;
-  }
-
-  HistoryStatus cancelBooking() {
-    final now = DateTime.now();
-    final diff = bookingTime.difference(now).inMinutes;
-
-    final isMember = user.checkStatusMember();
-    final canCancel = isMember ? diff > 15 : diff > 30;
-
-    if (status == HistoryStatus.pending && canCancel) {
-      status = HistoryStatus.cancel;
-      cancelTime = now;
-    } else if (status == HistoryStatus.pending) {
-      status = HistoryStatus.fixed;
     }
 
     return status;
@@ -108,6 +108,7 @@ class Booking extends Parking {
     );
 
     booking.checkinTime = parking.checkinTime;
+    booking.isMember = parking.isMember;
     booking.createdAt = parking.createdAt;
     booking.checkoutTime = parking.checkoutTime;
     booking.status = parking.status;
@@ -123,7 +124,7 @@ class Booking extends Parking {
       booking.cancelTime = DateTime.parse(json['cancelTime']);
     }
 
-    booking.noshowFee = (json['noshowFee'] as num?)?.toDouble() ?? 0;
+    booking.noshowFee = (json['noshowFee'] as num?)?.toDouble();
 
     return booking;
   }

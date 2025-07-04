@@ -75,12 +75,12 @@ class _HomeState extends State<Home> {
         });
       } else {
         _controller.animateToPage(
-          frequent!.length - 1,
+          frequent.length - 1,
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
         setState(() {
-          _currentIndex = frequent!.length - 1;
+          _currentIndex = frequent.length - 1;
         });
       }
     }

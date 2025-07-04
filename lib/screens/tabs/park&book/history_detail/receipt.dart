@@ -131,25 +131,19 @@ class _ReceiptState extends State<Receipt> {
                 ),
                 color: Colors.red,
               ),
-              if (booking.cancelTime != null)
-                DetailItem(
-                  label: 'Cancel Date',
-                  value: formatDate(booking.cancelTime!),
-                  color: Colors.red,
-                ),
               DetailItem(label: "Status", child: StatusDisplay(booking.status)),
             ]
             : [];
 
-    final List<DetailItem> expiredDetail =
+    final List<DetailItem> cancelExpired =
         booking != null
             ? [
               DetailItem(
                 label: 'Member Status',
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: isSmall ? 6 : 12,
+                    vertical: isSmall ? 3 : 6,
                   ),
                   decoration: BoxDecoration(
                     color:
@@ -162,12 +156,13 @@ class _ReceiptState extends State<Receipt> {
                       Icon(
                         isMember ? Icons.check_circle : Icons.cancel,
                         color: isMember ? Colors.green : Colors.red,
-                        size: 18,
+                        size: isSmall ? 12 : 18,
                       ),
-                      const SizedBox(width: 6),
+                      SizedBox(width: isSmall ? 3 : 6),
                       Text(
                         isMember ? 'Active' : 'Inactive',
                         style: TextStyle(
+                          fontSize: isSmall ? 12 : null,
                           color:
                               isMember
                                   ? Colors.green.shade800
@@ -179,25 +174,32 @@ class _ReceiptState extends State<Receipt> {
                   ),
                 ),
               ),
-              DetailItem(
-                label: 'No-Show Fee',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (isMember)
-                      DiscountDisplay(booking.noshowFee!, 0)
-                    else
-                      Text(
-                        formatCurrency(nominal: booking.noshowFee!),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: isSmall ? 13 : 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                  ],
+              if (booking.cancelTime != null)
+                DetailItem(
+                  label: 'Cancel Date',
+                  value: formatDateTime(booking.cancelTime!),
+                  color: Colors.red,
                 ),
-              ),
+              if (booking.noshowFee != null)
+                DetailItem(
+                  label: 'No-Show Fee',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (isMember)
+                        DiscountDisplay(booking.noshowFee!, 0)
+                      else
+                        Text(
+                          formatCurrency(nominal: booking.noshowFee!),
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: isSmall ? 13 : 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
             ]
             : [];
 
@@ -206,21 +208,6 @@ class _ReceiptState extends State<Receipt> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              backgroundColor: const Color(0xFFEFF1F8),
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back),
-              ),
-              centerTitle: true,
-              title: Text(
-                '${isBooking ? "Booking" : "Parking"} Receipt',
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -229,22 +216,44 @@ class _ReceiptState extends State<Receipt> {
                 ),
                 child: Column(
                   children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            size: isSmall ? 25 : 30,
+                          ),
+                        ),
+                        SizedBox(width: isSmall ? 0 : 8),
+                        Text(
+                          '${isBooking ? "Booking" : "Parking"} Receipt',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: isSmall ? 20 : 25,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
                     if (widget.history.status == HistoryStatus.cancel &&
                         booking != null) ...[
                       DataCard(listData: cancelInfo),
-                      const SizedBox(height: 140),
+                      SizedBox(height: isSmall ? 10 : 20),
+                      DataCard(listData: cancelExpired),
+                      SizedBox(height: isSmall ? 40 : 140),
                     ] else if (widget.history.status == HistoryStatus.expired &&
                         booking != null) ...[
                       DataCard(listData: cancelInfo),
                       SizedBox(height: isSmall ? 10 : 20),
-                      DataCard(listData: expiredDetail),
-                      const SizedBox(height: 280),
+                      DataCard(listData: cancelExpired),
+                      SizedBox(height: isSmall ? 40 : 140),
                     ] else if (widget.history.status ==
                         HistoryStatus.exited) ...[
                       DataCard(listData: historyInfo),
                       SizedBox(height: isSmall ? 10 : 20),
                       DataCard(listData: prices),
-                      const SizedBox(height: 140),
+                      SizedBox(height: isSmall ? 20 : 140),
                     ],
 
                     ResponsiveButton(

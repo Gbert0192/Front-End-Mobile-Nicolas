@@ -60,7 +60,7 @@ class _MainAppState extends State<MainApp> {
       return const SplashScreen();
     }
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
@@ -76,6 +76,7 @@ class _MainAppState extends State<MainApp> {
             );
           },
         ),
+        (Route<dynamic> route) => false,
       );
     });
     return const SplashScreen();

@@ -89,13 +89,11 @@ class _PaymentQrState extends State<PaymentQr> {
               ),
               textAlign: TextAlign.center,
             ),
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TopUpPage()),
-              );
-            },
+            onPressed:
+                () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TopUpPage()),
+                ),
           );
 
           setState(() {
@@ -121,11 +119,11 @@ class _PaymentQrState extends State<PaymentQr> {
         );
         showAlertDialog(
           context: context,
-          title: "Payment Sucess",
-          icon: Icons.account_balance_wallet_outlined,
-          color: Colors.redAccent,
+          title: "Payment Success",
+          icon: Icons.check_circle_outline,
+          color: Colors.blueAccent,
           content: Text(
-            "Your current balance is insufficient to proceed. Please top up your balance to continue.",
+            "Your payment has been completed successfully. Thank you for your transaction!",
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey.shade800,
@@ -133,13 +131,6 @@ class _PaymentQrState extends State<PaymentQr> {
             ),
             textAlign: TextAlign.center,
           ),
-          onPressed: () {
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TopUpPage()),
-            );
-          },
         );
       }
       lotProvider.freeSpot(

@@ -112,6 +112,20 @@ class HistoryProvider with ChangeNotifier {
     return histories.firstWhereOrNull((item) => item.user == user)?.bookings;
   }
 
+  List<Parking> getActive(User user) {
+    return histories
+            .firstWhereOrNull((item) => item.user == user)
+            ?.getActive() ??
+        [];
+  }
+
+  List<Parking> getUnresolved(User user) {
+    return histories
+            .firstWhereOrNull((item) => item.user == user)
+            ?.getUnresolved() ??
+        [];
+  }
+
   Parking? getHistoryDetail(User user, String historyId) {
     final isBooking = historyId.startsWith("BOOK");
     final userHistory = histories.firstWhereOrNull((item) => item.user == user);
@@ -150,8 +164,7 @@ class HistoryProvider with ChangeNotifier {
     final userHistory = histories.firstWhereOrNull((item) => item.user == user);
     if (userHistory == null) return;
     userHistory.checkAllStatus();
-    userHistory.parkings.forEach((item) {
-      final booking = item is Booking ? item : null;
+    userHistory.bookings.forEach((item) {
       if (!item.hasAlerted &&
           [
             ActivityType.bookExp,
@@ -162,18 +175,39 @@ class HistoryProvider with ChangeNotifier {
           floorNumber: item.floor,
           spotCode: item.code,
         );
-        if (booking != null && item.status == HistoryStatus.expired) {
-          userProvider.purchase(booking.noshowFee!);
+        if (item.status == HistoryStatus.expired) {
+          userProvider.purchase(item.noshowFee!);
         }
         activityProvider.addActivity(
           user,
           ActivityItem(
             date:
-                item.status == HistoryStatus.expired && booking != null
-                    ? booking.bookingTime.add(
+                item.status == HistoryStatus.expired
+                    ? item.bookingTime.add(
                       Duration(minutes: item.isMember! ? 45 : 30),
                     )
                     : item.checkinTime!.add(Duration(hours: 20)),
+            mall: item.lot.name,
+            activityType:
+                item.status == HistoryStatus.expired
+                    ? ActivityType.bookExp
+                    : ActivityType.unresolved,
+          ),
+        );
+        item.hasAlerted = true;
+      }
+    });
+    userHistory.parkings.forEach((item) {
+      if (!item.hasAlerted && [ActivityType.unresolved].contains(item.status)) {
+        lotProvider.freeSpot(
+          lot: item.lot,
+          floorNumber: item.floor,
+          spotCode: item.code,
+        );
+        activityProvider.addActivity(
+          user,
+          ActivityItem(
+            date: item.checkinTime!.add(Duration(hours: 20)),
             mall: item.lot.name,
             activityType:
                 item.status == HistoryStatus.expired
@@ -219,6 +253,20 @@ class HistoryProvider with ChangeNotifier {
         userHistory.bookings
             .firstWhereOrNull((item) => item == history)
             ?.claimBooking();
+
+    saveHistoriesToPrefs();
+    notifyListeners();
+    return booking;
+  }
+
+  Booking? cancelBooking(User user, Booking history) {
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    if (userHistory == null) return null;
+
+    final booking =
+        userHistory.bookings
+            .firstWhereOrNull((item) => item == history)
+            ?.cancelBooking();
 
     saveHistoriesToPrefs();
     notifyListeners();

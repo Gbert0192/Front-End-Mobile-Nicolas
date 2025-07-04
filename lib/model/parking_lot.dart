@@ -183,13 +183,12 @@ class ParkingLot {
     return null;
   }
 
-  Slot? claimSpot(String floorNumber, String spotCode, User user) {
+  Slot? claimSpot(String floorNumber, String spotCode) {
     final floor = spots.firstWhereOrNull((f) => f.number == floorNumber);
     final spot = floor?.findSpot(spotCode);
     if (spot != null && spot.status == SpotStatus.booked) {
       spot.status = SpotStatus.occupied;
       spot.date = DateTime.now();
-      spot.user = user;
       return Slot(spot.code, floor!.number);
     }
     return null;

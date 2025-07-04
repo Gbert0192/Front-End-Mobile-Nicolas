@@ -105,10 +105,7 @@ class _TopUpDetailPageState extends State<TopUpDetailPage> {
         title: "Top-up Successful!",
         icon: Icons.check_circle,
         color: Colors.green,
-        onPressed: () {
-          Navigator.of(context).pop();
-          Navigator.of(context).pop();
-        },
+        onPressed: () => Navigator.of(context).pop(),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

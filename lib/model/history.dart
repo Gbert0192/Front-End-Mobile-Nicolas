@@ -37,32 +37,32 @@ class History {
     bookings.insert(0, booking);
   }
 
-  HistoryActive getActive() {
+  List<Parking> getActive() {
     final activeParking =
         parkings.where((item) => item.status == HistoryStatus.entered).toList();
     final activeBooking =
         bookings.where((item) => item.status == HistoryStatus.entered).toList();
-    return HistoryActive(activeParking, activeBooking);
+    final combined = [...activeBooking, ...activeParking];
+
+    combined.sort((a, b) => a.checkinTime!.compareTo(b.checkinTime!));
+
+    return combined;
   }
 
-  HistoryActive getUnresolved() {
-    final activeParking =
+  List<Parking> getUnresolved() {
+    final unresolvedParking =
         parkings
             .where((item) => item.status == HistoryStatus.unresolved)
             .toList();
-    final activeBooking =
+    final unresolvedBooking =
         bookings
             .where((item) => item.status == HistoryStatus.unresolved)
             .toList();
-    return HistoryActive(activeParking, activeBooking);
-  }
+    final combined = [...unresolvedBooking, ...unresolvedParking];
 
-  HistoryActive getCancelled() {
-    final activeParking =
-        parkings.where((item) => item.status == HistoryStatus.cancel).toList();
-    final activeBooking =
-        bookings.where((item) => item.status == HistoryStatus.cancel).toList();
-    return HistoryActive(activeParking, activeBooking);
+    combined.sort((a, b) => a.checkinTime!.compareTo(b.checkinTime!));
+
+    return combined;
   }
 
   List<ParkingLot> getFrequentLots() {
@@ -109,10 +109,4 @@ class History {
 
     return History(user, parkings, bookings);
   }
-}
-
-class HistoryActive {
-  final List<Parking> parkings;
-  final List<Booking> bookings;
-  HistoryActive(this.parkings, this.bookings);
 }

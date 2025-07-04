@@ -120,6 +120,7 @@ class Parking {
     if (cancelTime != null) {
       data['cancelTime'] = cancelTime!.toIso8601String();
     }
+    if (isMember != null) data["isMember"] = isMember;
     if (hours != null) data['hours'] = hours;
     if (amount != null) data['amount'] = amount;
     if (tax != null) data['tax'] = tax;
@@ -140,10 +141,11 @@ class Parking {
       lot: ParkingLot.fromJson(json['lot']),
       floor: json['floor'],
       code: json['code'],
-      hasAlerted: json['hasAlerted'],
+      hasAlerted: json['hasAlerted'] ?? false,
     );
 
     parking.createdAt = DateTime.parse(json['createdAt']);
+    parking.isMember = json['isMember'];
     parking.checkinTime =
         json['checkinTime'] != null
             ? DateTime.parse(json['checkinTime'])

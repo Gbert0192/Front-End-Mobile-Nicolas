@@ -107,7 +107,7 @@ class _EditProfileState extends State<EditProfile> {
                           title: "Go Back",
                           cancelText: "Back",
                           continueText: "Discard",
-                          subtitle:
+                          content:
                               "Are you sure want to go back, all the changes will be discarded?",
                           icon: Icons.warning,
                           color: Color(0xFFFFC107),
