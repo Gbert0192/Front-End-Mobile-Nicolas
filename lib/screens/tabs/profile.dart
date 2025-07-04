@@ -358,7 +358,7 @@ class _ProfileState extends State<Profile> {
                                     "Keluar",
                                     "登出",
                                   ),
-                                  subtitle: translate(
+                                  content: translate(
                                     context,
                                     "Are you sure you want to logout from your account?",
                                     "Apakah Anda yakin ingin keluar dari akun Anda?",

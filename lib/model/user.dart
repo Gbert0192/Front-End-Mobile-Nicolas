@@ -114,8 +114,8 @@ class User {
     balance += nominal;
   }
 
-  int purchase(double nominal) {
-    if (nominal > balance) {
+  int purchase(double nominal, [bool allowedMinus = false]) {
+    if (nominal > balance && !allowedMinus) {
       return -1;
     }
     balance -= nominal;

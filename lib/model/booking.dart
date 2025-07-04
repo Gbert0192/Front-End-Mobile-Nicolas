@@ -12,6 +12,7 @@ class Booking extends Parking {
     required super.user,
     required super.lot,
     required super.floor,
+    super.hasAlerted = false,
     required super.code,
     required this.bookingTime,
     super.status = HistoryStatus.pending,
@@ -38,34 +39,7 @@ class Booking extends Parking {
     return this;
   }
 
-  @override
-  HistoryStatus checkStatus() {
-    final now = DateTime.now();
-    final diffExpired = now.difference(bookingTime).inMinutes;
-    final diffFixed = bookingTime.difference(now).inMinutes;
-
-    isMember = user.checkStatusMember();
-    final expiredThreshold = isMember! ? 45 : 30;
-    final fixedThreshold = isMember! ? 15 : 30;
-
-    if ((status == HistoryStatus.pending || status == HistoryStatus.fixed) &&
-        diffExpired > expiredThreshold) {
-      status = HistoryStatus.expired;
-      if (!isMember!) {
-        amount = lot.calculateAmount(hours ?? 1) * 0.35;
-      }
-    } else if (status == HistoryStatus.pending &&
-        diffFixed <= fixedThreshold &&
-        diffFixed > 0) {
-      status = HistoryStatus.fixed;
-    } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
-      super.checkStatus();
-    }
-
-    return status;
-  }
-
-  HistoryStatus cancelBooking() {
+  Booking cancelBooking() {
     final now = DateTime.now();
     final diff = bookingTime.difference(now).inMinutes;
 
@@ -77,6 +51,31 @@ class Booking extends Parking {
       cancelTime = now;
     } else if (status == HistoryStatus.pending) {
       status = HistoryStatus.fixed;
+    }
+
+    return this;
+  }
+
+  @override
+  HistoryStatus checkStatus() {
+    final now = DateTime.now();
+    final diffExpired = now.difference(bookingTime).inMinutes;
+    final diffFixed = bookingTime.difference(now).inMinutes;
+
+    isMember = user.checkStatusMember();
+    final expiredThreshold = isMember! ? 45 : 30;
+    final fixedThreshold = isMember! ? 15 : 30;
+
+    if ((status == HistoryStatus.pending || status == HistoryStatus.fixed) &&
+        diffExpired >= expiredThreshold) {
+      status = HistoryStatus.expired;
+      if (!isMember!) {
+        noshowFee = lot.maxTotalEarning() * 0.35;
+      }
+    } else if (status == HistoryStatus.pending && diffFixed <= fixedThreshold) {
+      status = HistoryStatus.fixed;
+    } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
+      super.checkStatus();
     }
 
     return status;
@@ -104,10 +103,12 @@ class Booking extends Parking {
       lot: parking.lot,
       floor: parking.floor,
       code: parking.code,
+      hasAlerted: parking.hasAlerted,
       bookingTime: DateTime.parse(json['bookingTime']),
     );
 
     booking.checkinTime = parking.checkinTime;
+    booking.isMember = parking.isMember;
     booking.createdAt = parking.createdAt;
     booking.checkoutTime = parking.checkoutTime;
     booking.status = parking.status;
@@ -123,7 +124,7 @@ class Booking extends Parking {
       booking.cancelTime = DateTime.parse(json['cancelTime']);
     }
 
-    booking.noshowFee = (json['noshowFee'] as num?)?.toDouble() ?? 0;
+    booking.noshowFee = (json['noshowFee'] as num?)?.toDouble();
 
     return booking;
   }

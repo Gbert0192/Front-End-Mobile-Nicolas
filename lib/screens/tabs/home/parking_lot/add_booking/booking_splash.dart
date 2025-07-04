@@ -16,7 +16,7 @@ class _BookingSplashState extends State<BookingSplash> {
     final isSmall = size.height < 700;
 
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 700),
@@ -32,6 +32,7 @@ class _BookingSplashState extends State<BookingSplash> {
             );
           },
         ),
+        (Route<dynamic> route) => false,
       );
     });
 

@@ -7,10 +7,12 @@ import 'package:tugas_front_end_nicolas/components/history_card.dart';
 import 'package:tugas_front_end_nicolas/model/booking.dart';
 import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ClaimQr extends StatefulWidget {
@@ -32,6 +34,7 @@ class _ClaimQrState extends State<ClaimQr> {
     User user = userProvider.currentUser!;
     final historyProvider = Provider.of<HistoryProvider>(context);
     final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final activityProvider = Provider.of<ActivityProvider>(context);
     final isMember = user.checkStatusMember();
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -110,7 +113,73 @@ class _ClaimQrState extends State<ClaimQr> {
                       SizedBox(height: isSmall ? 10 : 30),
 
                       GestureDetector(
-                        onTap: () async {},
+                        onTap: () async {
+                          if (isLoading) {
+                            return;
+                          }
+                          final status = historyProvider.checkStatus(
+                            user,
+                            widget.history,
+                          );
+                          if (status == HistoryStatus.expired) {
+                            showAlertDialog(
+                              context: context,
+                              title: "Booking Expired",
+                              icon: Icons.schedule_outlined,
+                              color: Colors.redAccent,
+                              content: Text(
+                                "Unfortunately, your booking has expired and can no longer be claimed. Please make a new booking if you still wish to reserve a parking spot.",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade800,
+                                  height: 1.5,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            );
+                          }
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await Future.delayed(
+                            const Duration(milliseconds: 800),
+                          );
+                          historyProvider.claimBooking(user, widget.history);
+                          lotProvider.claimSpot(
+                            lot: widget.history.lot,
+                            floorNumber: widget.history.floor,
+                            spotCode: widget.history.code,
+                          );
+                          showAlertDialog(
+                            context: context,
+                            title: "You're All Set!",
+                            icon: Icons.check_circle,
+                            color: Colors.green.shade600,
+                            content: Text(
+                              "Thank you! Your booking has been successfully claimed.\nPlease proceed to your assigned spot:\n${formatFloorLabel(widget.history.floor)} (${widget.history.code}).",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade800,
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              activityProvider.addActivity(
+                                user,
+                                ActivityItem(
+                                  activityType: ActivityType.enterLot,
+                                  mall: widget.history.lot.name,
+                                  historyId: widget.history.id,
+                                ),
+                              );
+                            },
+                          );
+
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
                         child: Container(
                           padding: EdgeInsets.all(isSmall ? 8 : 16),
                           decoration: BoxDecoration(
@@ -185,7 +254,90 @@ class _ClaimQrState extends State<ClaimQr> {
                       if (widget.history.status != HistoryStatus.fixed)
                         ResponsiveButton(
                           isLoading: isLoading,
-                          onPressed: () {},
+                          onPressed: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            final status = historyProvider.checkStatus(
+                              user,
+                              widget.history,
+                            );
+                            if (status == HistoryStatus.fixed) {
+                              showAlertDialog(
+                                context: context,
+                                title: "Booking Confirmed!",
+                                icon: Icons.lock_clock,
+                                color: Colors.indigo,
+                                content: Text(
+                                  "Your booking has been confirmed and can no longer be canceled.",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade800,
+                                    height: 1.5,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                onPressed: () {
+                                  activityProvider.addActivity(
+                                    user,
+                                    ActivityItem(
+                                      activityType: ActivityType.enterLot,
+                                      mall: widget.history.lot.name,
+                                      historyId: widget.history.id,
+                                    ),
+                                  );
+                                },
+                              );
+                              return;
+                            }
+                            await Future.delayed(const Duration(seconds: 1));
+                            historyProvider.cancelBooking(user, widget.history);
+                            lotProvider.freeSpot(
+                              lot: widget.history.lot,
+                              floorNumber: widget.history.floor,
+                              spotCode: widget.history.code,
+                            );
+                            activityProvider.addActivity(
+                              user,
+                              ActivityItem(
+                                activityType: ActivityType.bookCancel,
+                                mall: widget.history.lot.name,
+                                historyId: widget.history.id,
+                              ),
+                            );
+                            setState(() {
+                              isLoading = false;
+                            });
+                            showAlertDialog(
+                              context: context,
+                              title: "Booking Cancelled",
+                              icon: Icons.cancel_outlined,
+                              color: Colors.redAccent,
+                              content: Text(
+                                "Your booking has been successfully cancelled. We hope to see you again. Feel free to book another spot anytime.",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade800,
+                                  height: 1.5,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              onPressed: () {
+                                Navigator.of(
+                                  context,
+                                  rootNavigator: true,
+                                ).pop();
+                                activityProvider.addActivity(
+                                  user,
+                                  ActivityItem(
+                                    activityType: ActivityType.bookCancel,
+                                    mall: widget.history.lot.name,
+                                    historyId: widget.history.id,
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           text: "Cancel Booking",
                         ),
                       SizedBox(height: isSmall ? 10 : 20),

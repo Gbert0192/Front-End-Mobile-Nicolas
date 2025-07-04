@@ -164,12 +164,11 @@ class ParkingLotProvider with ChangeNotifier {
 
   Slot? claimSpot({
     required ParkingLot lot,
-    required User user,
     required String floorNumber,
     required String spotCode,
   }) {
     final index = lots.indexWhere((item) => item == lot);
-    final slot = lots[index].claimSpot(floorNumber, spotCode, user);
+    final slot = lots[index].claimSpot(floorNumber, spotCode);
     saveParkingLotToPrefs();
     notifyListeners();
     return slot;

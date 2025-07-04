@@ -8,8 +8,9 @@ void showConfirmDialog({
   String cancelText = "Cancel",
   String continueText = "Sure",
   String title = "Confirm",
-  String subtitle = "Are you sure?",
+  String content = "Are you sure?",
   VoidCallback? onContinue,
+  VoidCallback? onCancel,
   bool barrierDismissible = false,
   Color color = const Color(0xFF1F1E5B),
 }) {
@@ -112,7 +113,7 @@ void showConfirmDialog({
                         ),
                         SizedBox(height: isSmall ? 8 : 12),
                         Text(
-                          subtitle,
+                          content,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: isSmall ? 15 : 16,
@@ -122,138 +123,94 @@ void showConfirmDialog({
                           ),
                         ),
                         SizedBox(height: isSmall ? 28 : 32),
+                        // Simple right-aligned buttons
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Expanded(
-                              child: Container(
-                                height: isSmall ? 48 : 52,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(
-                                    color: const Color(0xFFE5E5E5),
-                                    width: 1.5,
-                                  ),
+                            // Cancel button
+                            TextButton(
+                              onPressed:
+                                  isLoading
+                                      ? null
+                                      : () {
+                                        Navigator.pop(context);
+                                        if (onCancel != null) {
+                                          onCancel();
+                                        }
+                                      },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 12,
                                 ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap:
-                                        isLoading
-                                            ? null
-                                            : () => Navigator.pop(context),
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        cancelText,
-                                        style: TextStyle(
-                                          fontSize: isSmall ? 15 : 16,
-                                          fontWeight: FontWeight.w600,
-                                          color:
-                                              isLoading
-                                                  ? const Color(0xFFB0B0B0)
-                                                  : const Color(0xFF333333),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: Text(
+                                cancelText,
+                                style: TextStyle(
+                                  color:
+                                      isLoading
+                                          ? Colors.grey
+                                          : Colors.grey.shade600,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
                             const SizedBox(width: 12),
-                            Expanded(
-                              child: Container(
-                                height: isSmall ? 48 : 52,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors:
-                                        isLoading
-                                            ? [
-                                              color.withValues(alpha: 0.6),
-                                              color.withValues(alpha: 0.4),
-                                            ]
-                                            : [
-                                              color,
-                                              Color.lerp(
-                                                    color,
-                                                    Colors.black,
-                                                    0.1,
-                                                  ) ??
-                                                  color,
-                                            ],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                  ),
-                                  borderRadius: BorderRadius.circular(16),
-                                  boxShadow:
-                                      isLoading
-                                          ? []
-                                          : [
-                                            BoxShadow(
-                                              color: color.withValues(
-                                                alpha: 0.3,
-                                              ),
-                                              blurRadius: 12,
-                                              offset: const Offset(0, 4),
-                                            ),
-                                          ],
-                                ),
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap:
-                                        isLoading
-                                            ? null
-                                            : () {
-                                              if (loading) {
-                                                setState(
-                                                  () => isLoading = true,
-                                                );
-                                                Future.delayed(
-                                                  Duration(seconds: time),
-                                                  () {
-                                                    if (onContinue != null) {
-                                                      onContinue();
-                                                    }
-                                                    setState(
-                                                      () => isLoading = false,
-                                                    );
-                                                  },
-                                                );
-                                              } else {
-                                                if (onContinue != null) {
-                                                  onContinue();
-                                                }
+                            // Continue button
+                            ElevatedButton(
+                              onPressed:
+                                  isLoading
+                                      ? null
+                                      : () {
+                                        if (loading) {
+                                          setState(() => isLoading = true);
+                                          Future.delayed(
+                                            Duration(seconds: time),
+                                            () {
+                                              if (onContinue != null) {
+                                                onContinue();
                                               }
+                                              setState(() => isLoading = false);
                                             },
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      child:
-                                          isLoading
-                                              ? SizedBox(
-                                                width: 20,
-                                                height: 20,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                      strokeWidth: 2.5,
-                                                      color: Colors.white,
-                                                      strokeCap:
-                                                          StrokeCap.round,
-                                                    ),
-                                              )
-                                              : Text(
-                                                continueText,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: isSmall ? 15 : 16,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                    ),
-                                  ),
+                                          );
+                                        } else {
+                                          if (onContinue != null) onContinue();
+                                        }
+                                      },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: color,
+                                foregroundColor: Colors.white,
+                                elevation: 2,
+                                shadowColor: color.withValues(alpha: 0.3),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
+                              child:
+                                  isLoading
+                                      ? SizedBox(
+                                        width: 18,
+                                        height: 18,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2.5,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                      : Text(
+                                        continueText,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                             ),
                           ],
                         ),
@@ -330,7 +287,13 @@ void showAlertDialog({
           content: content,
           actions: [
             TextButton(
-              onPressed: onPressed ?? () => Navigator.pop(context),
+              onPressed:
+                  onPressed != null
+                      ? () {
+                        Navigator.pop(context);
+                        onPressed();
+                      }
+                      : () => Navigator.pop(context),
               style: TextButton.styleFrom(
                 backgroundColor: color,
                 foregroundColor: Colors.white,

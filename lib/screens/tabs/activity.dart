@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_detail.dart';
+import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
+import 'package:tugas_front_end_nicolas/utils/snackbar.dart';
 
 class Activity extends StatefulWidget {
   const Activity({super.key});
@@ -102,6 +106,8 @@ class _ActivityState extends State<Activity> {
     final isSmall = size.height < 700;
     final userProvider = Provider.of<UserProvider>(context);
     User user = userProvider.currentUser!;
+    final historyProvider = Provider.of<HistoryProvider>(context);
+    historyProvider.checkAllStatus(user, context);
     final activityProvider = Provider.of<ActivityProvider>(context);
 
     UserActivity? activities = activityProvider.getActivity(user);
@@ -421,6 +427,9 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final historyProvider = Provider.of<HistoryProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    User user = userProvider.currentUser!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -446,7 +455,50 @@ class ActivityCard extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(15),
           onTap: () {
-            activity.onPressed(context);
+            final history =
+                activity.historyId != null
+                    ? historyProvider.getHistoryDetail(
+                      user,
+                      activity.historyId!,
+                    )
+                    : null;
+            final historyType =
+                activity.historyId != null
+                    ? activity.historyId!.startsWith("BOOK")
+                        ? HistoryType.booking
+                        : HistoryType.parking
+                    : null;
+
+            switch (activity.activityType) {
+              case ActivityType.topUp:
+                showFlexibleSnackbar(
+                  context,
+                  "Top-up of ${formatCurrency(nominal: activity.nominal!)} via ${activity.method}",
+                );
+                break;
+
+              case ActivityType.paySuccess:
+              case ActivityType.bookSuccess:
+              case ActivityType.bookCancel:
+              case ActivityType.bookExp:
+              case ActivityType.unresolved:
+              case ActivityType.exitLot:
+              case ActivityType.enterLot:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HistoryDetail(history!, historyType!),
+                  ),
+                );
+                break;
+
+              case ActivityType.verify:
+                showFlexibleSnackbar(
+                  context,
+                  "Two-factor authentication has been set up",
+                );
+                break;
+            }
           },
           child: Padding(
             padding: EdgeInsets.all(10),

@@ -279,7 +279,6 @@ class _AddBookingState extends State<AddBooking> {
                                   if (!validateDatetime()) {
                                     showAlertDialog(
                                       onPressed: () {
-                                        Navigator.pop(context);
                                         setState(() {
                                           date = null;
                                           time = null;
@@ -330,7 +329,6 @@ class _AddBookingState extends State<AddBooking> {
                                   if (!isFree) {
                                     showAlertDialog(
                                       onPressed: () {
-                                        Navigator.pop(context);
                                         _controller.animateToPage(
                                           1,
                                           duration: const Duration(
@@ -356,18 +354,25 @@ class _AddBookingState extends State<AddBooking> {
                                     return;
                                   }
                                   final dateTime = stringToDate(date!, time);
-                                  historyProvider.addBooking(
+                                  final booking = historyProvider.addBooking(
                                     user: user,
                                     lot: widget.mall,
                                     floor: floor,
                                     spot: spot,
                                     time: dateTime,
                                   );
+                                  lotProvider.bookSpot(
+                                    lot: widget.mall,
+                                    user: user,
+                                    floorNumber: floor,
+                                    spotCode: spot,
+                                  );
                                   activityProvider.addActivity(
                                     user,
                                     ActivityItem(
                                       activityType: ActivityType.bookSuccess,
                                       mall: widget.mall.name,
+                                      historyId: booking.id,
                                     ),
                                   );
                                   Navigator.pushReplacement(
