@@ -26,7 +26,7 @@ class _ReceiptState extends State<Receipt> {
     final booking =
         widget.history is Booking ? widget.history as Booking : null;
 
-    final isMember = widget.history.isMember;
+    final isMember = (booking ?? widget.history).isMember!;
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
 
@@ -38,68 +38,75 @@ class _ReceiptState extends State<Receipt> {
         value:
             "${formatFloorLabel(widget.history.floor)} (${widget.history.code})",
       ),
-      DetailItem(
-        label: 'Check-in Time',
-        value: formatDateTime(widget.history.checkinTime!),
-      ),
-      DetailItem(
-        label: 'Check-out Time',
-        value: formatDateTime(widget.history.checkoutTime!),
-        color: Colors.red,
-      ),
-      DetailItem(
-        label: 'Duration',
-        value:
-            '${widget.history.hours} ${widget.history.hours == 1 ? 'hour' : 'hours'}',
-      ),
+      if (widget.history.status == HistoryStatus.exited) ...[
+        DetailItem(
+          label: 'Check-in Time',
+          value: formatDateTime(widget.history.checkinTime!),
+        ),
+        DetailItem(
+          label: 'Check-out Time',
+          value: formatDateTime(widget.history.checkoutTime!),
+          color: Colors.red,
+        ),
+
+        DetailItem(
+          label: 'Duration',
+          value:
+              '${widget.history.hours} ${widget.history.hours == 1 ? 'hour' : 'hours'}',
+        ),
+      ],
     ];
 
     final List<DetailItem> prices = [
-      DetailItem(
-        label: 'Amount',
-        value: formatCurrency(nominal: widget.history.amount!),
-      ),
-      if (widget.history.voucher != null)
+      if (widget.history.status == HistoryStatus.exited) ...[
         DetailItem(
-          label: "Voucher",
-          value: formatCurrency(nominal: widget.history.voucher!),
-          color: Colors.red,
+          label: 'Amount',
+          value: formatCurrency(nominal: widget.history.amount!),
         ),
-      DetailItem(
-        label: 'Taxes (11%)',
-        value: formatCurrency(nominal: widget.history.tax!),
-      ),
-      DetailItem(
-        label: 'Service Fee',
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            if (isMember!)
-              DiscountDisplay(6500, 0)
-            else
-              Text(
-                formatCurrency(nominal: 6500),
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: isSmall ? 13 : 16,
-                  fontWeight: FontWeight.w600,
+        if (widget.history.voucher != null)
+          DetailItem(
+            label: "Voucher",
+            value: formatCurrency(nominal: widget.history.voucher!),
+            color: Colors.red,
+          ),
+
+        DetailItem(
+          label: 'Taxes (11%)',
+          value: formatCurrency(nominal: widget.history.tax!),
+        ),
+        DetailItem(
+          label: 'Service Fee',
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (isMember)
+                DiscountDisplay(6500, 0)
+              else
+                Text(
+                  formatCurrency(nominal: 6500),
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: isSmall ? 13 : 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
+          bottomBorder: true,
         ),
-        bottomBorder: true,
-      ),
-      if (widget.history.unresolvedFee != null &&
-          widget.history.unresolvedFee != 0)
-        DetailItem(
-          label: "Unresolved Fee",
-          value: formatCurrency(nominal: widget.history.unresolvedFee!),
-          color: Colors.red,
-        ),
-      DetailItem(
-        label: 'Total',
-        value: formatCurrency(nominal: widget.history.total!),
-      ),
+        if (widget.history.unresolvedFee != null &&
+            widget.history.unresolvedFee != 0)
+          DetailItem(
+            label: "Unresolved Fee",
+            value: formatCurrency(nominal: widget.history.unresolvedFee!),
+            color: Colors.red,
+          ),
+        if (widget.history.total != null)
+          DetailItem(
+            label: 'Total',
+            value: formatCurrency(nominal: widget.history.total!),
+          ),
+      ],
     ];
 
     final List<DetailItem> cancelInfo =
@@ -139,7 +146,38 @@ class _ReceiptState extends State<Receipt> {
             ? [
               DetailItem(
                 label: 'Member Status',
-                value: isMember ? 'Active' : 'Inactive',
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        isMember ? Colors.green.shade100 : Colors.red.shade100,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isMember ? Icons.check_circle : Icons.cancel,
+                        color: isMember ? Colors.green : Colors.red,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        isMember ? 'Active' : 'Inactive',
+                        style: TextStyle(
+                          color:
+                              isMember
+                                  ? Colors.green.shade800
+                                  : Colors.red.shade800,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               DetailItem(
                 label: 'No-Show Fee',
@@ -200,7 +238,7 @@ class _ReceiptState extends State<Receipt> {
                       DataCard(listData: cancelInfo),
                       SizedBox(height: isSmall ? 10 : 20),
                       DataCard(listData: expiredDetail),
-                      const SizedBox(height: 140),
+                      const SizedBox(height: 280),
                     ] else if (widget.history.status ==
                         HistoryStatus.exited) ...[
                       DataCard(listData: historyInfo),

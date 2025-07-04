@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tugas_front_end_nicolas/model/booking.dart';
 import 'package:tugas_front_end_nicolas/model/history.dart';
@@ -8,6 +10,9 @@ import 'package:tugas_front_end_nicolas/model/parking.dart';
 import 'package:tugas_front_end_nicolas/model/parking_lot.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
 import 'package:tugas_front_end_nicolas/model/voucher.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
+import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class HistoryProvider with ChangeNotifier {
@@ -100,17 +105,14 @@ class HistoryProvider with ChangeNotifier {
   }
 
   List<Parking>? getParking(User user) {
-    checkAllStatus(user);
     return histories.firstWhereOrNull((item) => item.user == user)?.parkings;
   }
 
   List<Parking>? getBooking(User user) {
-    checkAllStatus(user);
     return histories.firstWhereOrNull((item) => item.user == user)?.bookings;
   }
 
   Parking? getHistoryDetail(User user, String historyId) {
-    checkAllStatus(user);
     final isBooking = historyId.startsWith("BOOK");
     final userHistory = histories.firstWhereOrNull((item) => item.user == user);
 
@@ -129,8 +131,6 @@ class HistoryProvider with ChangeNotifier {
   }
 
   List<ParkingLot>? getFrequentLots(User user) {
-    checkAllStatus(user);
-
     final frequent =
         histories
             .firstWhereOrNull((item) => item.user == user)
@@ -143,8 +143,48 @@ class HistoryProvider with ChangeNotifier {
     return frequent.take(5).toList();
   }
 
-  void checkAllStatus(User user) {
-    histories.firstWhereOrNull((item) => item.user == user)?.checkAllStatus();
+  void checkAllStatus(User user, BuildContext context) {
+    final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final activityProvider = Provider.of<ActivityProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
+    final userHistory = histories.firstWhereOrNull((item) => item.user == user);
+    if (userHistory == null) return;
+    userHistory.checkAllStatus();
+    userHistory.parkings.forEach((item) {
+      final booking = item is Booking ? item : null;
+      if (!item.hasAlerted &&
+          [
+            ActivityType.bookExp,
+            ActivityType.unresolved,
+          ].contains(item.status)) {
+        lotProvider.freeSpot(
+          lot: item.lot,
+          floorNumber: item.floor,
+          spotCode: item.code,
+        );
+        if (booking != null && item.status == HistoryStatus.expired) {
+          userProvider.purchase(booking.noshowFee!);
+        }
+        activityProvider.addActivity(
+          user,
+          ActivityItem(
+            date:
+                item.status == HistoryStatus.expired && booking != null
+                    ? booking.bookingTime.add(
+                      Duration(minutes: item.isMember! ? 45 : 30),
+                    )
+                    : item.checkinTime!.add(Duration(hours: 20)),
+            mall: item.lot.name,
+            activityType:
+                item.status == HistoryStatus.expired
+                    ? ActivityType.bookExp
+                    : ActivityType.unresolved,
+          ),
+        );
+        item.hasAlerted = true;
+      }
+    });
+
     saveHistoriesToPrefs();
     notifyListeners();
   }

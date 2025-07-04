@@ -64,6 +64,14 @@ class _PaymentQrState extends State<PaymentQr> {
             historyId: history?.id,
           ),
         );
+        activityProvider.addActivity(
+          user,
+          ActivityItem(
+            activityType: ActivityType.paySuccess,
+            mall: history?.lot.name,
+            historyId: history?.id,
+          ),
+        );
       } else {
         final total = widget.history.calculateTotal(voucher);
         if (user.balance < total) {
@@ -110,6 +118,28 @@ class _PaymentQrState extends State<PaymentQr> {
             mall: history?.lot.name,
             historyId: history?.id,
           ),
+        );
+        showAlertDialog(
+          context: context,
+          title: "Payment Sucess",
+          icon: Icons.account_balance_wallet_outlined,
+          color: Colors.redAccent,
+          content: Text(
+            "Your current balance is insufficient to proceed. Please top up your balance to continue.",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey.shade800,
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TopUpPage()),
+            );
+          },
         );
       }
       lotProvider.freeSpot(

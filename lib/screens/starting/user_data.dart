@@ -207,7 +207,6 @@ class _UserDataState extends State<UserData> {
                             form.control("phone").text,
                             country_code,
                           );
-                          print(country_code);
                           if (user != null) {
                             showFlexibleSnackbar(
                               context,

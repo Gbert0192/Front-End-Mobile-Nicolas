@@ -116,6 +116,7 @@ class ActivityItem {
     );
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     User user = userProvider.currentUser!;
+    historyProvider.checkAllStatus(user, context);
     final historyType =
         historyId != null
             ? historyId!.startsWith("BOOK")

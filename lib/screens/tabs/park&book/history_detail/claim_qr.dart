@@ -7,10 +7,12 @@ import 'package:tugas_front_end_nicolas/components/history_card.dart';
 import 'package:tugas_front_end_nicolas/model/booking.dart';
 import 'package:tugas_front_end_nicolas/model/history.dart';
 import 'package:tugas_front_end_nicolas/model/user.dart';
+import 'package:tugas_front_end_nicolas/provider/activity_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/history_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/parking_lot_provider.dart';
 import 'package:tugas_front_end_nicolas/provider/user_provider.dart';
 import 'package:tugas_front_end_nicolas/screens/tabs/park&book/history_list.dart';
+import 'package:tugas_front_end_nicolas/utils/dialog.dart';
 import 'package:tugas_front_end_nicolas/utils/index.dart';
 
 class ClaimQr extends StatefulWidget {
@@ -32,6 +34,7 @@ class _ClaimQrState extends State<ClaimQr> {
     User user = userProvider.currentUser!;
     final historyProvider = Provider.of<HistoryProvider>(context);
     final lotProvider = Provider.of<ParkingLotProvider>(context);
+    final activityProvider = Provider.of<ActivityProvider>(context);
     final isMember = user.checkStatusMember();
     final size = MediaQuery.of(context).size;
     final isSmall = size.height < 700;
@@ -110,7 +113,54 @@ class _ClaimQrState extends State<ClaimQr> {
                       SizedBox(height: isSmall ? 10 : 30),
 
                       GestureDetector(
-                        onTap: () async {},
+                        onTap: () async {
+                          if (isLoading) {
+                            return;
+                          }
+                          historyProvider.checkStatus(user, widget.history);
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await Future.delayed(
+                            const Duration(milliseconds: 800),
+                          );
+                          historyProvider.claimBooking(user, widget.history);
+                          lotProvider.claimSpot(
+                            lot: widget.history.lot,
+                            user: user,
+                            floorNumber: widget.history.floor,
+                            spotCode: widget.history.code,
+                          );
+                          showAlertDialog(
+                            context: context,
+                            title: "You're All Set!",
+                            icon: Icons.check_circle,
+                            color: Colors.green.shade600,
+                            content: Text(
+                              "Thank you! Your booking has been successfully claimed.\nPlease proceed to your assigned spot:\n${formatFloorLabel(widget.history.floor)} (${widget.history.code}).",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey.shade800,
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              activityProvider.addActivity(
+                                user,
+                                ActivityItem(
+                                  activityType: ActivityType.enterLot,
+                                  mall: widget.history.lot.name,
+                                  historyId: widget.history.id,
+                                ),
+                              );
+                            },
+                          );
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
                         child: Container(
                           padding: EdgeInsets.all(isSmall ? 8 : 16),
                           decoration: BoxDecoration(
@@ -185,7 +235,29 @@ class _ClaimQrState extends State<ClaimQr> {
                       if (widget.history.status != HistoryStatus.fixed)
                         ResponsiveButton(
                           isLoading: isLoading,
-                          onPressed: () {},
+                          onPressed: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            historyProvider.checkStatus(user, widget.history);
+                            await Future.delayed(const Duration(seconds: 2));
+                            lotProvider.freeSpot(
+                              lot: widget.history.lot,
+                              floorNumber: widget.history.floor,
+                              spotCode: widget.history.code,
+                            );
+                            activityProvider.addActivity(
+                              user,
+                              ActivityItem(
+                                activityType: ActivityType.bookCancel,
+                                mall: widget.history.lot.name,
+                                historyId: widget.history.id,
+                              ),
+                            );
+                            setState(() {
+                              isLoading = false;
+                            });
+                          },
                           text: "Cancel Booking",
                         ),
                       SizedBox(height: isSmall ? 10 : 20),

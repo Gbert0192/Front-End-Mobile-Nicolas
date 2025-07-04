@@ -12,6 +12,7 @@ class Booking extends Parking {
     required super.user,
     required super.lot,
     required super.floor,
+    super.hasAlerted = false,
     required super.code,
     required this.bookingTime,
     super.status = HistoryStatus.pending,
@@ -52,11 +53,9 @@ class Booking extends Parking {
         diffExpired >= expiredThreshold) {
       status = HistoryStatus.expired;
       if (!isMember!) {
-        amount = lot.calculateAmount(hours ?? 1) * 0.35;
+        noshowFee = lot.maxTotalEarning() * 0.35;
       }
-    } else if (status == HistoryStatus.pending &&
-        diffFixed <= fixedThreshold &&
-        diffFixed > 0) {
+    } else if (status == HistoryStatus.pending && diffFixed <= fixedThreshold) {
       status = HistoryStatus.fixed;
     } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
       super.checkStatus();
@@ -104,6 +103,7 @@ class Booking extends Parking {
       lot: parking.lot,
       floor: parking.floor,
       code: parking.code,
+      hasAlerted: parking.hasAlerted,
       bookingTime: DateTime.parse(json['bookingTime']),
     );
 

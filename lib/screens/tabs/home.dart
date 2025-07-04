@@ -36,14 +36,20 @@ class _HomeState extends State<Home> {
     User user = userProvider.currentUser!;
     final activityProvider = Provider.of<ActivityProvider>(context);
     final historyProvider = Provider.of<HistoryProvider>(context);
+    historyProvider.checkAllStatus(user, context);
     final frequent = historyProvider.getFrequentLots(user);
 
     void nextSpot() {
-      if (_currentIndex < frequent!.length) {
+      if (frequent == null || frequent.length <= 1) return;
+
+      if (_currentIndex < frequent.length - 1) {
         _controller.nextPage(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
+        setState(() {
+          _currentIndex++;
+        });
       } else {
         _controller.animateToPage(
           0,
@@ -57,19 +63,24 @@ class _HomeState extends State<Home> {
     }
 
     void prevSpot() {
+      if (frequent == null || frequent.length <= 1) return;
+
       if (_currentIndex > 0) {
         _controller.previousPage(
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
+        setState(() {
+          _currentIndex--;
+        });
       } else {
         _controller.animateToPage(
-          frequent!.length,
+          frequent!.length - 1,
           duration: Duration(milliseconds: 300),
           curve: Curves.easeInOut,
         );
         setState(() {
-          _currentIndex = frequent.length;
+          _currentIndex = frequent!.length - 1;
         });
       }
     }
