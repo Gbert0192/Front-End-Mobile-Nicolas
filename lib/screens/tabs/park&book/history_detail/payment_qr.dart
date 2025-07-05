@@ -217,7 +217,14 @@ class _PaymentQrState extends State<PaymentQr> {
                       SizedBox(height: isSmall ? 10 : 30),
 
                       GestureDetector(
-                        onTap: payUp,
+                        onTap: () {
+                          final status = historyProvider.checkStatus(
+                            user,
+                            widget.history,
+                          );
+                          if (status == HistoryStatus.unresolved) return;
+                          payUp();
+                        },
                         child: Container(
                           padding: EdgeInsets.all(isSmall ? 8 : 16),
                           decoration: BoxDecoration(
