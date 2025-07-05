@@ -62,20 +62,27 @@ class Booking extends Parking {
     final diffExpired = now.difference(bookingTime).inMinutes;
     final diffFixed = bookingTime.difference(now).inMinutes;
 
-    isMember = user.checkStatusMember();
-    final expiredThreshold = isMember! ? 45 : 30;
-    final fixedThreshold = isMember! ? 15 : 30;
+    if (![
+      HistoryStatus.cancel,
+      HistoryStatus.expired,
+      HistoryStatus.exited,
+    ].contains(status)) {
+      isMember = user.checkStatusMember();
+      final expiredThreshold = isMember! ? 45 : 30;
+      final fixedThreshold = isMember! ? 15 : 30;
 
-    if ((status == HistoryStatus.pending || status == HistoryStatus.fixed) &&
-        diffExpired >= expiredThreshold) {
-      status = HistoryStatus.expired;
-      if (!isMember!) {
-        noshowFee = lot.maxTotalEarning() * 0.35;
+      if ((status == HistoryStatus.pending || status == HistoryStatus.fixed) &&
+          diffExpired >= expiredThreshold) {
+        status = HistoryStatus.expired;
+        if (!isMember!) {
+          noshowFee = lot.maxTotalEarning() * 0.35;
+        }
+      } else if (status == HistoryStatus.pending &&
+          diffFixed <= fixedThreshold) {
+        status = HistoryStatus.fixed;
+      } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
+        super.checkStatus();
       }
-    } else if (status == HistoryStatus.pending && diffFixed <= fixedThreshold) {
-      status = HistoryStatus.fixed;
-    } else if (status == HistoryStatus.entered && calculateHour() >= 20) {
-      super.checkStatus();
     }
 
     return status;
